@@ -9,8 +9,7 @@ using UnityEngine.UI;
 
 public class NetworkController : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private GameObject RoomListElementPrefab = null;
-    [SerializeField] private GameObject RoomListPanel = null;
+    [SerializeField] private LobbyPanel RoomListPanel = null;
 
     void Awake()
     {
@@ -24,17 +23,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        foreach (Transform child in RoomListPanel.transform) {
-            Destroy(child.gameObject);
-        }
+        RoomListPanel.ClearElements();
 
-        int i = 0;
         roomList.ForEach((roomInfo) => {
-            GameObject roomListElement = Instantiate(RoomListElementPrefab, RoomListPanel.transform);
-            roomListElement.transform.localPosition = new Vector3(RoomListPanel.GetComponent<RectTransform>().rect.x, RoomListPanel.GetComponent<RectTransform>().rect.y + RoomListPanel.GetComponent<RectTransform>().rect.height - i * 25);
-            roomListElement.transform.Find("RoomName").GetComponent<Text>().text = roomInfo.Name;
-            roomListElement.transform.Find("JoinButton").GetComponent<Button>().onClick.AddListener(() => { PhotonNetwork.JoinRoom(roomInfo.Name); });
-            i++;
+            RoomListPanel.AddElement(roomInfo.Name, () => { PhotonNetwork.JoinRoom(roomInfo.Name); });
         });
     }
 
