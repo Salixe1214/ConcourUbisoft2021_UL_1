@@ -20,8 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1ce81e1b-6568-4712-9269-7f5662a20025" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.ConcourUbisoft/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ConcourUbisoft/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ConcourUbisoft/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ConcourUbisoft/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CameraScript/CameraMovement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CameraScript/CameraMovement.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CharacterScripts/CharacterControl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CharacterScripts/CharacterControl.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,8 +38,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Assets/CharacterScripts/CharacterControl.cs" />
         <option value="$PROJECT_DIR$/Assets/CameraScript/CameraMovement.cs" />
+        <option value="$PROJECT_DIR$/Assets/CharacterScripts/CharacterControl.cs" />
       </list>
     </option>
   </component>
@@ -84,7 +85,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1612366130431</updated>
-      <workItem from="1612366140661" duration="4120000" />
+      <workItem from="1612366140661" duration="11117000" />
     </task>
     <servers />
   </component>

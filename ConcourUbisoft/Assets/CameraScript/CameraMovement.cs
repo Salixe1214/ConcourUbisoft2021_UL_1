@@ -6,7 +6,7 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] private Transform cameraTarget;
+    [SerializeField] private Rigidbody cameraTarget;
     [SerializeField] private Vector3 cameraTargetOffset;
     [SerializeField] private float cameraSmoothSpeed;
     
@@ -26,8 +26,10 @@ public class CameraMovement : MonoBehaviour
     void LateUpdate()
     {
         Vector3 desiredPosition = cameraTarget.position + cameraTargetOffset;
-        Vector3 smoothedPosition = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity, cameraSmoothSpeed);
+        Vector3 smoothedPosition = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity, cameraSmoothSpeed *Time.deltaTime);
         transform.position = smoothedPosition;
-        transform.LookAt(cameraTarget);
+        var targetRotation = Quaternion.LookRotation(cameraTarget.transform.position - transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, cameraSmoothSpeed * Time.deltaTime);
+        //transform.LookAt(cameraTarget.transform);
     }
 }

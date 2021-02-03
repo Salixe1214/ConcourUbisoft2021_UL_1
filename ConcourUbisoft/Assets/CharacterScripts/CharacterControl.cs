@@ -19,11 +19,15 @@ public class CharacterControl : MonoBehaviour
     void Update()
     {
         inputVector = new Vector3(Input.GetAxis("Horizontal") * playerMovementSpeed,playerBody.velocity.y,Input.GetAxis("Vertical")*playerMovementSpeed);
-        transform.LookAt(playerBody.position + new Vector3(inputVector.x,0,inputVector.z));
+        playerBody.velocity = inputVector;
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+        {
+            transform.LookAt(playerBody.position + new Vector3(inputVector.x,0,inputVector.z));
+        }
     }
 
     private void FixedUpdate()
     {
-        playerBody.velocity = inputVector;
+        
     }
 }
