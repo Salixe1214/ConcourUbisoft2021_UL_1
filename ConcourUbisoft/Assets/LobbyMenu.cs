@@ -10,8 +10,8 @@ public class LobbyMenu : MonoBehaviour
     [SerializeField] private GameObject ContentPanel = null;
     [SerializeField] private GameObject LobbyPanel = null;
     [SerializeField] private GameObject CreateRoomPanel = null;
-    [SerializeField] private GameObject CreateRoomNameInputField = null;
     [SerializeField] private GameObject TogglePrivate = null;
+    [SerializeField] private GameObject JoinRoomPanel = null;
 
     private NetworkController networkController = null;
 
@@ -20,10 +20,11 @@ public class LobbyMenu : MonoBehaviour
         networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
     }
 
-    public void AddElement(string name, UnityAction action) {
+    public void AddElement(string name, int playerCount, UnityAction action) {
         GameObject roomListElement = Instantiate(RoomListElementPrefab, ContentPanel.transform);
         roomListElement.transform.Find("RoomName").GetComponent<Text>().text = name;
         roomListElement.transform.Find("JoinButton").GetComponent<Button>().onClick.AddListener(action);
+        roomListElement.transform.Find("PlayerCount").GetComponent<Text>().text = $"{playerCount.ToString()}/2";
     }
 
     public void ClearElements()
@@ -36,18 +37,31 @@ public class LobbyMenu : MonoBehaviour
 
     public void CreateRoom() {
         Debug.Log(TogglePrivate.GetComponent<Toggle>().isOn);
-        networkController.CreateRoom(CreateRoomNameInputField.GetComponent<InputField>().text, TogglePrivate.GetComponent<Toggle>().isOn);
+        networkController.CreateRoom(CreateRoomPanel.transform.Find("RoomNameInputField").GetComponent<InputField>().text, TogglePrivate.GetComponent<Toggle>().isOn);
     }
 
-    public void OnCreateRoomFromLobbyClicked()
+    public void OpenCreateRoomPanel()
     {
-        //LobbyPanel.SetActive(false);
         CreateRoomPanel.SetActive(true);
     }
 
-    public void OnBackFromCreateRoom()
+    public void OpenJoinRoomPanel()
     {
-        //LobbyPanel.SetActive(true);
+        JoinRoomPanel.SetActive(true);
+    }
+
+    public void BackFromCreateRoom()
+    {
         CreateRoomPanel.SetActive(false);
+    }
+
+    public void BackFromJoinRoom()
+    {
+        JoinRoomPanel.SetActive(false);
+    }
+
+    public void JoinRoom()
+    {
+        networkController.JoinRoom(JoinRoomPanel.transform.Find("RoomNameInputField").GetComponent<InputField>().text);
     }
 }

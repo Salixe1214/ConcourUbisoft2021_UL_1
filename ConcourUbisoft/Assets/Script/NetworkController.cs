@@ -23,16 +23,19 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        Debug.Log(roomList.Count);
         LobbyMenu.ClearElements();
 
         roomList.ForEach((roomInfo) => {
-            LobbyMenu.AddElement(roomInfo.Name, () => { PhotonNetwork.JoinRoom(roomInfo.Name); });
+            LobbyMenu.AddElement(roomInfo.Name, roomInfo.PlayerCount, () => { PhotonNetwork.JoinRoom(roomInfo.Name); });
         });
     }
 
     public void CreateRoom(string roomName, bool privateGame) {
         PhotonNetwork.CreateRoom(roomName, new RoomOptions() { MaxPlayers = 2, IsVisible = !privateGame });
+    }
+
+    public void JoinRoom(string roomName) {
+        PhotonNetwork.JoinRoom(roomName);
     }
 
     public override void OnJoinedRoom()
