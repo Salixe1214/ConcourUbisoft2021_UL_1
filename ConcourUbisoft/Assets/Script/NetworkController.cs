@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class NetworkController : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private LobbyPanel RoomListPanel = null;
+    [SerializeField] private LobbyMenu LobbyMenu = null;
 
     void Awake()
     {
@@ -23,15 +23,16 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        RoomListPanel.ClearElements();
+        Debug.Log(roomList.Count);
+        LobbyMenu.ClearElements();
 
         roomList.ForEach((roomInfo) => {
-            RoomListPanel.AddElement(roomInfo.Name, () => { PhotonNetwork.JoinRoom(roomInfo.Name); });
+            LobbyMenu.AddElement(roomInfo.Name, () => { PhotonNetwork.JoinRoom(roomInfo.Name); });
         });
     }
 
-    public void CreateRandomRoom() {
-        PhotonNetwork.CreateRoom(Random.Range(0,100).ToString());
+    public void CreateRoom(string roomName, bool privateGame) {
+        PhotonNetwork.CreateRoom(roomName, new RoomOptions() { MaxPlayers = 2, IsVisible = !privateGame });
     }
 
     public override void OnJoinedRoom()
