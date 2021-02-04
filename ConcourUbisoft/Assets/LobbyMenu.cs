@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using System.Linq;
+using Photon.Pun;
 
 public class LobbyMenu : MonoBehaviour
 {
@@ -20,14 +22,33 @@ public class LobbyMenu : MonoBehaviour
         networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
     }
 
-    public void AddElement(string name, int playerCount, UnityAction action) {
+    private void OnEnable()
+    {
+        networkController.OnLobbyRoomListUpdate += NetworkController_OnLobbyRoomListUpdate;
+    }
+
+    private void OnDisable()
+    {
+        networkController.OnLobbyRoomListUpdate -= NetworkController_OnLobbyRoomListUpdate;
+    }
+
+    private void NetworkController_OnLobbyRoomListUpdate(IEnumerable<NetworkController.RoomInformation> roomInformations)
+    {
+        ClearElements();
+
+        roomInformations.All((roomInfo) => {
+            AddElement(roomInfo.RoomName, roomInfo.PlayerCount, () => { PhotonNetwork.JoinRoom(roomInfo.RoomName); } ); return true;
+        });
+    }
+
+    private void AddElement(string name, int playerCount, UnityAction action) {
         GameObject roomListElement = Instantiate(RoomListElementPrefab, ContentPanel.transform);
         roomListElement.transform.Find("RoomName").GetComponent<Text>().text = name;
         roomListElement.transform.Find("JoinButton").GetComponent<Button>().onClick.AddListener(action);
         roomListElement.transform.Find("PlayerCount").GetComponent<Text>().text = $"{playerCount.ToString()}/2";
     }
 
-    public void ClearElements()
+    private void ClearElements()
     {
         foreach (Transform child in ContentPanel.transform)
         {
@@ -36,8 +57,8 @@ public class LobbyMenu : MonoBehaviour
     }
 
     public void CreateRoom() {
-        Debug.Log(TogglePrivate.GetComponent<Toggle>().isOn);
         networkController.CreateRoom(CreateRoomPanel.transform.Find("RoomNameInputField").GetComponent<InputField>().text, TogglePrivate.GetComponent<Toggle>().isOn);
+        CreateRoomPanel.SetActive(false);
     }
 
     public void OpenCreateRoomPanel()
@@ -62,6 +83,10 @@ public class LobbyMenu : MonoBehaviour
 
     public void JoinRoom()
     {
-        networkController.JoinRoom(JoinRoomPanel.transform.Find("RoomNameInputField").GetComponent<InputField>().text);
+
+        string text = JoinRoomPanel.transform.Find("RoomNameInputField").GetComponent<InputField>().textComponent.text;
+        Debug.Log(text);
+        networkController.JoinRoom(text);
+        JoinRoomPanel.SetActive(false);
     }
 }
