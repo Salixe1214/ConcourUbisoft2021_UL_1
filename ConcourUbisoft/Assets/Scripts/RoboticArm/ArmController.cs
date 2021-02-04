@@ -27,27 +27,7 @@ public class ArmController : FastIKFabric
     {
         if (scheme == ControlScheme.WASD)
         {
-            Vector3 translation = Vector3.zero;
-
-            if (Input.GetKey(KeyCode.W))
-            {
-                translation += Vector3.forward;
-            }
-
-            if (Input.GetKey(KeyCode.S))
-            {
-                translation += Vector3.back;
-            }
-
-            if (Input.GetKey(KeyCode.A))
-            {
-                translation += Vector3.left;
-            }
-
-            if (Input.GetKey(KeyCode.D))
-            {
-                translation += Vector3.right;
-            }
+            Vector3 translation = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
             Target.transform.Translate(Time.deltaTime * speed * translation);
             float distanceToTarget = Vector3.Distance(Root.position, Target.position);
@@ -71,17 +51,8 @@ public class ArmController : FastIKFabric
         }
         else if (scheme == ControlScheme.ROTATION)
         {
-            float translation = 0;
-
-            if (Input.GetKey(KeyCode.W))
-                translation += 1;
-            if (Input.GetKey(KeyCode.S))
-                translation -= 1;
-
-            if (Input.GetKey(KeyCode.D))
-                targetRoot.Rotate(new Vector3(0, 1, 0), Mathf.Rad2Deg * rotationSpeed * Time.deltaTime);
-            if (Input.GetKey(KeyCode.A))
-                targetRoot.Rotate(new Vector3(0, 1, 0), Mathf.Rad2Deg * -rotationSpeed * Time.deltaTime);
+            float translation = Input.GetAxis("Vertical");
+            targetRoot.Rotate(new Vector3(0, 1, 0), Mathf.Rad2Deg * Input.GetAxis("Horizontal") * Time.deltaTime);
 
             Target.Translate(new Vector3(translation * speed * Time.deltaTime, 0, 0));
 
