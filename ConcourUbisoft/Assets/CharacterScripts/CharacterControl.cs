@@ -23,6 +23,12 @@ public class CharacterControl : MonoBehaviour
         Vector3 gravityVector = new Vector3(0,playerBody.velocity.y,0);
         //inputVector = new Vector3(Input.GetAxis("Horizontal") * playerMovementSpeed,playerBody.velocity.y,Input.GetAxis("Vertical")*playerMovementSpeed);
         inputVector = controllerInputVector + keyboardInputVector + gravityVector;
+
+        if (inputVector.magnitude > playerMovementSpeed)
+        {
+            inputVector = Vector3.ClampMagnitude(inputVector,playerMovementSpeed);
+        }
+
         playerBody.velocity = inputVector;
         
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Mathf.Abs(Input.GetAxis("LeftJoystickHorizontal")) > 0.1 || Mathf.Abs(Input.GetAxis("LeftJoystickVertical")) > 0.1)
