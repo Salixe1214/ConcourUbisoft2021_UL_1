@@ -5,23 +5,12 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
     [SerializeField] private Transform cameraTarget;
     [SerializeField] private Vector3 cameraTargetOffset;
     [SerializeField] private float cameraSmoothSpeed;
     
     private Vector3 velocity = Vector3.zero;
-    
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   
 
     void LateUpdate()
     {

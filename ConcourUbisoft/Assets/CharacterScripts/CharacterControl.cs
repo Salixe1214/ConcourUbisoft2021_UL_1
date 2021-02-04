@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CharacterControl : MonoBehaviour
 {
-    // Start is called before the first frame update
+
     [SerializeField] private float playerMovementSpeed = 1f; 
     private Rigidbody playerBody;
     private Vector3 inputVector;
@@ -14,8 +14,7 @@ public class CharacterControl : MonoBehaviour
     {
         playerBody = GetComponent<Rigidbody>();
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         Vector3 controllerInputVector = new Vector3(Input.GetAxis("LeftJoystickHorizontal")*playerMovementSpeed,0,Input.GetAxis("LeftJoystickVertical")*playerMovementSpeed);
@@ -36,9 +35,5 @@ public class CharacterControl : MonoBehaviour
             transform.LookAt(playerBody.position + new Vector3(inputVector.x,0,inputVector.z));
         }
     }
-
-    private void FixedUpdate()
-    {
-        
-    }
+    
 }
