@@ -5,7 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/PhotonTesting.unity
     guid: 5a38f57f114373b4f8f8195a942ed0e3
+  - enabled: 1
+    path: Assets/Scenes/VoiceChatTesting.unity
+    guid: da80dccd99d299b4582871f7fee2534b
   m_configObjects: {}
