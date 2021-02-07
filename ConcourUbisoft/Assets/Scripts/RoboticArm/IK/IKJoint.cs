@@ -2,21 +2,13 @@
 
 namespace DitzelGames.FastIK
 {
-    public class FastIKLook : MonoBehaviour
+    public class IKJoint : MonoBehaviour
     {
-        /// <summary>
-        /// Look at target
-        /// </summary>
-        public Transform Target;
 
-        /// <summary>
-        /// Initial direction
-        /// </summary>
+        public Transform Target;
+        
         protected Vector3 StartDirection;
 
-        /// <summary>
-        /// Initial Rotation
-        /// </summary>
         protected Quaternion StartRotation;
 
         void Awake()
