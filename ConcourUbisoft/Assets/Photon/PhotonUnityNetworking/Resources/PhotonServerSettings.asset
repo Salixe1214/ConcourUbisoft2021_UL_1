@@ -16,9 +16,9 @@ MonoBehaviour:
     AppIdRealtime: 1c1cdbd5-e30f-496f-a8b9-eb3d809ab5b8
     AppIdChat: 1c1cdbd5-e30f-496f-a8b9-eb3d809ab5b8
     AppIdVoice: 1c1cdbd5-e30f-496f-a8b9-eb3d809ab5b8
-    AppVersion: 
+    AppVersion: 1
     UseNameServer: 1
-    FixedRegion: 
+    FixedRegion: us
     Server: 
     Port: 0
     ProxyServer: 
@@ -27,7 +27,7 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: cae
+  DevRegion: us
   PunLogging: 2
   EnableSupportLogger: 0
   RunInBackground: 1

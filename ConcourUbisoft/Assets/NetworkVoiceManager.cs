@@ -1,46 +1,34 @@
-/*
- * Source: https://github.com/silidragos/TCG/blob/master/Assets/Scripts/Networking/NetworkVoiceManager.cs
- */
-
 using Photon.Pun;
 using Photon.Voice.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using Photon.Voice.Unity.UtilityScripts;
 using UnityEngine;
 
 [RequireComponent(typeof(VoiceConnection))]
 public class NetworkVoiceManager : MonoBehaviour
 {
-    public Transform RemoteVoiceParent;
-
-    private VoiceConnection voiceConnection;
+    private Recorder recorder;
+    private ConnectAndJoin conAndJoin;
+    private bool l = true;
     
-    void Awake()
+    private void Awake()
     {
-        voiceConnection = GetComponent<VoiceConnection>();
+        recorder = GetComponent<Recorder>();
+        recorder.IsRecording = false;
     }
 
-    private void OnEnable()
+    private void Update()
     {
-        voiceConnection.SpeakerLinked += this.OnSpeakerCreated;
-    }
-    
-    private void OnDisable()
-    {
-        voiceConnection.SpeakerLinked -= this.OnSpeakerCreated;
-    }
-
-    private void OnSpeakerCreated(Speaker pSpeaker)
-    {
-        pSpeaker.transform.SetParent(RemoteVoiceParent);
-        pSpeaker.OnRemoteVoiceRemoveAction += OnRemoteVoiceRemove;
-    }
-
-    private void OnRemoteVoiceRemove(Speaker pSpeaker)
-    {
-        if(pSpeaker != null)
-            Destroy(pSpeaker.gameObject);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            recorder.IsRecording = true;
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            recorder.IsRecording = false;
+        }
     }
 }
