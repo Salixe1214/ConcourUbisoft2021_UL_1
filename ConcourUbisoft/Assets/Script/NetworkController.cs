@@ -10,125 +10,112 @@ using UnityEngine.Events;
 
 public class NetworkController : MonoBehaviourPunCallbacks
 {
+    #region Events
+    public delegate void OnJoinedLobbyHandler();
+    public event OnJoinedLobbyHandler OnJoinedLobbyEvent;
+
     public class RoomInformation
     {
         public string RoomName { get; set; }
         public int PlayerCount { get; set; }
         public UnityAction Action { get; set; }
     }
+    public delegate void OnRoomListUpdateHandler(IEnumerable<RoomInformation> roomInformations);
+    public event OnRoomListUpdateHandler OnRoomListUpdateEvent;
 
-    public class PlayerInfo
-    {
-        public string Name { get; set; }
-        public string Id { get; set; }
-        public bool RoomOwner { get; set; }
-    }
+    public delegate void OnNetworkErrorHandler(string errorTitle, string errorMessage);
+    public event OnNetworkErrorHandler OnNetworkErrorEvent;
 
-    [SerializeField] private GameObject LobbyMenu = null;
-    [SerializeField] private GameObject RoomMenu = null;
-    [SerializeField] private GameObject ErrorPanelErrorPrefab = null;
-    [SerializeField] private GameObject Canvas = null;
+    public delegate void OnJoinedRoomHandler();
+    public event OnJoinedRoomHandler OnJoinedRoomEvent;
 
-    public delegate void OnNumberPlayerChangeRoomHandler();
-    public event OnNumberPlayerChangeRoomHandler OnPlayerJoin;
-    public event OnNumberPlayerChangeRoomHandler OnPlayerLeft;
+    public delegate void OnPlayerJoinRoomHandler();
+    public event OnPlayerJoinRoomHandler OnPlayerJoin;
 
-    public delegate void OnLobbyRoomListUpdateHandler(IEnumerable<RoomInformation> roomInformations);
-    public event OnLobbyRoomListUpdateHandler OnLobbyRoomListUpdate;
+    public delegate void OnPlayerLeftRoomHandler();
+    public event OnPlayerLeftRoomHandler OnPlayerLeft;
 
-    public delegate void OnPlayerObjectCreateHandler();
-    public event OnPlayerObjectCreateHandler OnPlayerObjectCreate;
+    public delegate void OnLeftRoomHandler();
+    public event OnLeftRoomHandler OnLeftRoomEvent;
 
-    void Awake()
-    {
-        PhotonNetwork.ConnectUsingSettings();
-    }
-
+    public delegate void OnPlayerNetworkInstantiateHandler();
+    public event OnPlayerNetworkInstantiateHandler OnPlayerObjectCreate;
+    #endregion
+    #region Photon Callbacks
     public override void OnConnectedToMaster()
     {
         PhotonNetwork.JoinLobby(TypedLobby.Default);
     }
-
+    public override void OnJoinedLobby()
+    {
+        OnJoinedLobbyEvent?.Invoke();
+    }
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        OnLobbyRoomListUpdate?.Invoke(roomList.Select(roomInfo => new RoomInformation() { RoomName = roomInfo.Name, PlayerCount = roomInfo.PlayerCount, Action = () => { PhotonNetwork.JoinRoom(roomInfo.Name); } }));
+        OnRoomListUpdateEvent?.Invoke(roomList.Select(roomInfo => new RoomInformation() { RoomName = roomInfo.Name, PlayerCount = roomInfo.PlayerCount, Action = () => { PhotonNetwork.JoinRoom(roomInfo.Name); } }));
     }
-
-    public void CreateRoom(string roomName, bool privateGame) {
-        PhotonNetwork.CreateRoom(roomName, new RoomOptions() { MaxPlayers = 2, IsVisible = !privateGame, PublishUserId = true });
-    }
-
-    public void JoinRoom(string roomName) {
-        if (roomName != "") {
-            PhotonNetwork.JoinRoom(roomName);
-        }
-        else
-        {
-            GameObject errorPanelError = Instantiate(ErrorPanelErrorPrefab, Canvas.transform);
-            ErrorPromptController errorPromptController = errorPanelError.GetComponent<ErrorPromptController>();
-            errorPromptController.ErrorTitle = "An error occured while joining a room.";
-            errorPromptController.ErrorMessage = "You must specify an Id to connect to room.";
-        }
-    }
-
     public override void OnJoinedRoom()
     {
         Debug.Log($"Joined Room: {PhotonNetwork.CurrentRoom.Name}");
         PhotonNetwork.Instantiate("Player", new Vector3(0, 0, 0), Quaternion.identity, 0);
-        RoomMenu.SetActive(true);
-        LobbyMenu.SetActive(false);
+        OnJoinedRoomEvent?.Invoke();
     }
-
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        OnNetworkErrorEvent?.Invoke("An error occured while joining a room.", message);
+    }
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        OnNetworkErrorEvent?.Invoke("An error occured while creating a room.", message);
+    }
+    public override void OnLeftRoom()
+    {
+        OnLeftRoomEvent?.Invoke();
+    }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         OnPlayerJoin?.Invoke();
     }
-
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         OnPlayerLeft?.Invoke();
     }
-
-    public bool IsMasterClient()
+    #endregion
+    #region Public Functions
+    public void JoinLobby()
     {
-        return PhotonNetwork.IsMasterClient;
+        PhotonNetwork.ConnectUsingSettings();
     }
-
-    public void KickPlayer(string userId)
+    public void CreateRoom(string roomName, bool privateGame)
     {
-        Debug.Log("KickPlayer");
-        PhotonNetwork.CloseConnection(PhotonNetwork.PlayerList.Where(x => x.UserId == userId).First());
+        PhotonNetwork.CreateRoom(roomName, new RoomOptions() { MaxPlayers = 2, IsVisible = !privateGame, PublishUserId = true });
     }
-
-    public void InvokePlayerObjectCreate()
+    public void JoinRoom(string roomName)
     {
-        OnPlayerObjectCreate?.Invoke();
+        if (roomName != "")
+        {
+            PhotonNetwork.JoinRoom(roomName);
+        }
+        else
+        {
+            OnNetworkErrorEvent?.Invoke("An error occured while joining a room.", "You must specify an Id to connect to room.");
+        }
     }
-
-    public override void OnLeftRoom()
-    {
-        LobbyMenu.SetActive(true);
-        RoomMenu.SetActive(false);
-    }
-
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
     }
-
-    public override void OnJoinRoomFailed(short returnCode, string message)
+    public bool IsMasterClient()
     {
-        GameObject errorPanelError = Instantiate(ErrorPanelErrorPrefab, Canvas.transform);
-        ErrorPromptController errorPromptController = errorPanelError.GetComponent<ErrorPromptController>();
-        errorPromptController.ErrorTitle = "An error occured while joining a room.";
-        errorPromptController.ErrorMessage = message;
+        return PhotonNetwork.IsMasterClient;
     }
-
-    public override void OnCreateRoomFailed(short returnCode, string message)
+    public void KickPlayer(string userId)
     {
-        GameObject errorPanelError = Instantiate(ErrorPanelErrorPrefab, Canvas.transform);
-        ErrorPromptController errorPromptController = errorPanelError.GetComponent<ErrorPromptController>();
-        errorPromptController.ErrorTitle = "An error occured while creating a room.";
-        errorPromptController.ErrorMessage = message;
+        PhotonNetwork.CloseConnection(PhotonNetwork.PlayerList.Where(x => x.UserId == userId).First());
     }
+    public void InvokePlayerNetworkInstantiate()
+    {
+        OnPlayerObjectCreate?.Invoke();
+    }
+    #endregion
 }

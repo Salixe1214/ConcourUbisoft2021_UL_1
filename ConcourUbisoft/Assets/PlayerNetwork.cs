@@ -17,27 +17,19 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     private PhotonView photonView = null;
     private NetworkController networkController = null;
 
+    #region Unity Callbacks
     private void Awake()
     {
         photonView = GetComponent<PhotonView>();
         networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
-        Name = photonView.Owner.UserId;
+        Name = $"Player {(photonView.Owner.IsMasterClient ? "1" : "2")}";
     }
-
     private void Start()
     {
-        networkController.InvokePlayerObjectCreate();
+        networkController.InvokePlayerNetworkInstantiate();
     }
-
-    public bool IsMasterClient() {
-        return photonView.Owner.IsMasterClient;
-    }
-
-    public bool IsMine()
-    {
-        return photonView.IsMine;
-    }
-
+    #endregion
+    #region Photon Callbacks
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
@@ -51,4 +43,15 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
             this.Name = (string)stream.ReceiveNext();
         }
     }
+    #endregion
+    #region Public Functions
+    public bool IsMasterClient()
+    {
+        return photonView.Owner.IsMasterClient;
+    }
+    public bool IsMine()
+    {
+        return photonView.IsMine;
+    }
+    #endregion
 }

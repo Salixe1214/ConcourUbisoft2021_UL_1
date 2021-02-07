@@ -14,7 +14,13 @@ public class RoomElementController : MonoBehaviour
     private RawImage OwnerImage = null;
     private Dropdown DropdownRole = null;
 
-
+    #region UI Actions
+    public void OnRoleModify()
+    {
+        PlayerNetwork.PlayerRole = (PlayerNetwork.Role)gameObject.transform.Find("DropdownRole").GetComponent<Dropdown>().value;
+    }
+    #endregion
+    #region Unity Callbacks
     private void Awake()
     {
         networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
@@ -23,7 +29,6 @@ public class RoomElementController : MonoBehaviour
         OwnerImage = gameObject.transform.Find("OwnerImage").GetComponent<RawImage>();
         DropdownRole = gameObject.transform.Find("DropdownRole").GetComponent<Dropdown>();
     }
-
     private void Update()
     {
         if (PlayerNetwork != null)
@@ -65,9 +70,5 @@ public class RoomElementController : MonoBehaviour
         }
         
     }
-
-    public void OnRoleModify()
-    {
-        PlayerNetwork.PlayerRole = (PlayerNetwork.Role)gameObject.transform.Find("DropdownRole").GetComponent<Dropdown>().value;
-    }
+    #endregion
 }
