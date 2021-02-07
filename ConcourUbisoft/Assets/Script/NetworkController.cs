@@ -38,6 +38,9 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public delegate void OnPlayerObjectCreateHandler();
     public event OnPlayerObjectCreateHandler OnPlayerObjectCreate;
+    
+    // For Voice Chat
+    [SerializeField] private NetworkVoiceManager networkVoiceManger;
 
     void Awake()
     {
@@ -74,7 +77,8 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log($"Joined Room: {PhotonNetwork.CurrentRoom.Name}");
-        PhotonNetwork.Instantiate("Player", new Vector3(0, 0, 0), Quaternion.identity, 0);
+        var newPLayer = PhotonNetwork.Instantiate("Player", new Vector3(0, 0, 0), Quaternion.identity, 0);
+        networkVoiceManger.RemoteVoiceParent = newPLayer.transform;
         RoomMenu.SetActive(true);
         LobbyMenu.SetActive(false);
     }
