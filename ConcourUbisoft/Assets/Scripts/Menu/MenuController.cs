@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject Canvas = null;
 
     private NetworkController networkController = null;
+    private GameController gameController = null;
 
     #region UI Actions
     public void EnterLobby()
@@ -25,6 +27,7 @@ public class MenuController : MonoBehaviour
     private void Awake()
     {
         networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
     }
     private void OnEnable()
     {
@@ -32,6 +35,8 @@ public class MenuController : MonoBehaviour
         networkController.OnJoinedLobbyEvent += OnJoinedLobby;
         networkController.OnJoinedRoomEvent += OnJoinedRoom;
         networkController.OnLeftRoomEvent += OnLeftRoom;
+        gameController.OnLoadGameEvent += OnLoadGame;
+        gameController.OnFinishLoadGameEvent += OnFinishLoadGame;
     }
     private void OnDisable()
     {
@@ -39,6 +44,8 @@ public class MenuController : MonoBehaviour
         networkController.OnJoinedLobbyEvent -= OnJoinedLobby;
         networkController.OnJoinedRoomEvent -= OnJoinedRoom;
         networkController.OnLeftRoomEvent -= OnLeftRoom;
+        gameController.OnLoadGameEvent -= OnLoadGame;
+        gameController.OnFinishLoadGameEvent -= OnFinishLoadGame;
     }
     #endregion
     #region Event Callbacks
@@ -64,6 +71,16 @@ public class MenuController : MonoBehaviour
         ErrorPromptController errorPromptController = errorPanelError.GetComponent<ErrorPromptController>();
         errorPromptController.ErrorTitle = errorTitle;
         errorPromptController.ErrorMessage = errorMessage;
+    }
+    private void OnLoadGame()
+    {
+        LoadScreenMenuController.Show("Loading Level...");
+        LobbyMenu.SetActive(false);
+        RoomMenu.SetActive(false);
+    }
+    private void OnFinishLoadGame()
+    {
+        LoadScreenMenuController.Hide();
     }
     #endregion
 }

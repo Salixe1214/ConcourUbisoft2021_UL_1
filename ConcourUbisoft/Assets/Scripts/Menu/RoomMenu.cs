@@ -13,6 +13,7 @@ public class RoomMenu : MonoBehaviour
     [SerializeField] private GameObject ErrorText = null;
 
     private NetworkController networkController = null;
+    private GameController gameController = null;
     private Button startButton = null;
     private Text errorText = null;
 
@@ -25,26 +26,29 @@ public class RoomMenu : MonoBehaviour
     {
         IEnumerable<PlayerNetwork> playerNetworks = GameObject.FindGameObjectsWithTag("Player").Select(x => x.GetComponent<PlayerNetwork>());
 
-        if (playerNetworks.Count() != 2)
-        {
-            errorText.text = "You must have two players to proceed.";
-            return;
-        }
+        //if (playerNetworks.Count() != 2)
+        //{
+        //    errorText.text = "You must have two players to proceed.";
+        //    return;
+        //}
 
-        IEnumerable<PlayerNetwork> playerNetworksDistinctRole = playerNetworks.GroupBy(x => x.PlayerRole).Select(x => x.First());
-        if (playerNetworksDistinctRole.Count() != playerNetworks.Count())
-        {
-            errorText.text = "You cannot have players with the same role.";
-            return;
-        }
+        //IEnumerable<PlayerNetwork> playerNetworksDistinctRole = playerNetworks.GroupBy(x => x.PlayerRole).Select(x => x.First());
+        //if (playerNetworksDistinctRole.Count() != playerNetworks.Count())
+        //{
+        //    errorText.text = "You cannot have players with the same role.";
+        //    return;
+        //}
 
         errorText.text = "";
+
+        gameController.StartGame();
     }
     #endregion
     #region Unity Callbacks
     private void Awake()
     {
         networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         startButton = StartButton.GetComponent<Button>();
         errorText = ErrorText.GetComponent<Text>();
     }

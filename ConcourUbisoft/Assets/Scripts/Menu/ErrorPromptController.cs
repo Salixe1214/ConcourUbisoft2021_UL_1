@@ -17,5 +17,4 @@ public class ErrorPromptController : MonoBehaviour
         Destroy(this.gameObject);
     }
     #endregion
-
 }
