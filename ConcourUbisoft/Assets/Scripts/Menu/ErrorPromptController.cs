@@ -11,8 +11,10 @@ public class ErrorPromptController : MonoBehaviour
     [SerializeField] private Text Title = null;
     [SerializeField] private Text Message = null;
 
+    #region UI Actions
     public void Close()
     {
         Destroy(this.gameObject);
     }
+    #endregion
 }
