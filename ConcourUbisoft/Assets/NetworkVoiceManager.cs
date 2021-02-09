@@ -11,8 +11,6 @@ using UnityEngine;
 public class NetworkVoiceManager : MonoBehaviour
 {
     private Recorder recorder;
-    private ConnectAndJoin conAndJoin;
-    private bool l = true;
     
     private void Awake()
     {
