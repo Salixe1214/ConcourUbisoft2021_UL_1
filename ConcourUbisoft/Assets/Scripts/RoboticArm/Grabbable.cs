@@ -1,8 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
-public class Grabbable : MonoBehaviour
+namespace Arm
 {
+    public class Grabbable : MonoBehaviour
+    {
     
+    }
 }
+

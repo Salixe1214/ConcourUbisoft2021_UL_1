@@ -6,15 +6,15 @@ using UnityEngine;
 public class IKSolver : MonoBehaviour
 {
     [SerializeField] int ChainLength = 2;
-    
-    [SerializeField]public Transform Target;
 
-    [SerializeField]public Transform Pole;
+    [SerializeField] public Transform Target;
+
+    [SerializeField] public Transform Pole;
 
     [Header("Solver Parameters")] public int Iterations = 10;
-    
+
     public float threshold = 0.001f;
-    
+
     //Strength of going back to the start position.
     [Range(0, 1)] public float SnapBackStrength = 1f;
 
@@ -22,6 +22,7 @@ public class IKSolver : MonoBehaviour
     protected float[] BonesLength; //Target to Origin
     protected float CompleteLength;
     protected Transform[] Bones;
+    protected IKJoint[] joints;
     protected Vector3[] Positions;
     protected Vector3[] StartDirectionSucc;
     protected Quaternion[] StartRotationBone;
@@ -29,7 +30,7 @@ public class IKSolver : MonoBehaviour
     protected Transform Root;
 
     public float TotalLength => CompleteLength;
-    
+
     void Awake()
     {
         Init();
@@ -39,6 +40,7 @@ public class IKSolver : MonoBehaviour
     {
         //initial array
         Bones = new Transform[ChainLength + 1];
+        joints = new IKJoint[ChainLength];
         Positions = new Vector3[ChainLength + 1];
         BonesLength = new float[ChainLength];
         StartDirectionSucc = new Vector3[ChainLength + 1];
@@ -64,11 +66,13 @@ public class IKSolver : MonoBehaviour
 
 
         //init data
-        var current = transform;
+        Transform current = transform;
         CompleteLength = 0;
         for (int i = Bones.Length - 1; i >= 0; i--)
         {
             Bones[i] = current;
+            if (i < ChainLength)
+                joints[i] = current.GetComponent<IKJoint>();
             StartRotationBone[i] = GetRotationRootSpace(current);
 
             if (i == Bones.Length - 1)
@@ -88,8 +92,13 @@ public class IKSolver : MonoBehaviour
         }
     }
 
-    void LateUpdate()
+    void Update()
     {
+        for (int i = 0; i < joints.Length; i++)
+        {
+            joints[i].RotateToTarget();
+        }
+
         ResolveIK();
     }
 

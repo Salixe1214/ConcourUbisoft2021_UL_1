@@ -1,147 +1,169 @@
 ﻿using System;
-using DitzelGames.FastIK;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-enum ControlScheme
+namespace Arm
 {
-    WASD,
-    ROTATION,
-}
-
-enum GrabState
-{
-    none,
-    decending,
-    grabbing,
-    grabbed,
-    realeasing,
-}
-
-public class ArmController : MonoBehaviour
-{
-    [SerializeField] private Transform head;
-    [SerializeField] private IKSolver armIKSolver;
-    [SerializeField] private ControlScheme scheme;
-    [SerializeField] float speed = 3f;
-    [SerializeField] private float grabSpeed = 3f;
-    [SerializeField] private Transform targetRotationRoot;
-    [SerializeField] private Transform armRotationRoot;
-    [SerializeField] private float rotationSpeed = 2f;
-
-    private float maxRange;
-    private float minRange;
-    private GrabState grabState = GrabState.none;
-    private Grabbable grabTarget = null;
-
-    private void Start()
+    enum ControlScheme
     {
-        maxRange = armIKSolver.TotalLength - (armIKSolver.TotalLength / 5);
-        minRange = armIKSolver.TotalLength / 4;
+        WASD,
+        ROTATION,
     }
 
-    void Update()
+    enum GrabState
     {
-        UpdateArmTarget();
-        UpdateHead();
+        NONE,
+        MOVE_TO_TARGET,
+        GRABBING,
+        GRABBED,
+        RESET_POSITION,
     }
 
-    private void UpdateArmTarget()
+    public class ArmController : MonoBehaviour
     {
-        if (grabState == GrabState.none)
+        [SerializeField] private Transform head;
+        [SerializeField] private IKSolver armIKSolver;
+        [SerializeField] private ControlScheme scheme;
+        [SerializeField] float speed = 3f;
+        [SerializeField] private float grabSpeed = 3f;
+        [SerializeField] private Transform targetRotationRoot;
+        [SerializeField] private Transform armRotationRoot;
+        [SerializeField] private float rotationSpeed = 2f;
+        [SerializeField] private float headRotation = 180;
+        private float maxRange;
+        private float minRange;
+        private GrabState grabState = GrabState.NONE;
+        private Transform armTarget = null;
+        private Grabbable grabbedObject;
+
+        private void Start()
         {
-            if (scheme == ControlScheme.WASD)
+            maxRange = armIKSolver.TotalLength; //- (armIKSolver.TotalLength / 5);
+            minRange = armIKSolver.TotalLength / 4;
+            armTarget = armIKSolver.Target;
+        }
+
+        void LateUpdate()
+        {
+            UpdateArm();
+            UpdateHead();
+        }
+
+        private void UpdateArm()
+        {
+            if (grabState == GrabState.NONE)
             {
-                Vector3 translation = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-
-                armIKSolver.Target.transform.Translate(Time.deltaTime * speed * translation);
-                float distanceToTarget = Vector3.Distance(transform.position, armIKSolver.Target.position);
-                if (distanceToTarget > maxRange)
+                if (scheme == ControlScheme.WASD)
                 {
-                    Vector3 dirToTarget = (armIKSolver.Target.transform.position - transform.position).normalized;
-                    armIKSolver.Target.transform.position = new Vector3(
-                        dirToTarget.x * maxRange,
-                        armIKSolver.Target.transform.position.y,
-                        dirToTarget.z * maxRange);
+                    Vector3 translation = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+
+                    armTarget.transform.Translate(Time.deltaTime * speed * translation);
+                    float distanceToTarget = Vector3.Distance(transform.position, armIKSolver.Target.position);
+                    if (distanceToTarget > maxRange)
+                    {
+                        Vector3 dirToTarget = (armTarget.position - transform.position).normalized;
+                        armTarget.position = new Vector3(
+                            dirToTarget.x * maxRange,
+                            armTarget.position.y,
+                            dirToTarget.z * maxRange);
+                    }
+
+                    if (distanceToTarget < minRange)
+                    {
+                        Vector3 dirToTarget = (armTarget.position - transform.position).normalized;
+                        armTarget.position = new Vector3(
+                            dirToTarget.x * minRange,
+                            armTarget.position.y,
+                            dirToTarget.z * minRange);
+                    }
                 }
-
-                if (distanceToTarget < minRange)
+                else if (scheme == ControlScheme.ROTATION)
                 {
-                    Vector3 dirToTarget = (armIKSolver.Target.transform.position - transform.position).normalized;
-                    armIKSolver.Target.transform.position = new Vector3(
-                        dirToTarget.x * minRange,
-                        armIKSolver.Target.transform.position.y,
-                        dirToTarget.z * minRange);
+                    float translation = Input.GetAxis("Vertical");
+                    targetRotationRoot.Rotate(new Vector3(0, 1, 0),
+                        Mathf.Rad2Deg * Input.GetAxis("Horizontal") * Time.deltaTime);
+
+                    armTarget.Translate(new Vector3(translation * speed * Time.deltaTime, 0, 0));
+
+                    if (armTarget.localPosition.x > maxRange)
+                    {
+                        armTarget.localPosition = Vector3.right * maxRange;
+                    }
+                    else if (armTarget.localPosition.x < minRange)
+                    {
+                        armTarget.localPosition = Vector3.right * minRange;
+                    }
                 }
             }
-            else if (scheme == ControlScheme.ROTATION)
+
+            //arm base look at target
+            Vector3 direction = armTarget.position - transform.position;
+            direction.y = 0;
+            direction.Normalize();
+            float rotationY = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+            armRotationRoot.rotation = Quaternion.Euler(0f, rotationY - 90, 0f);
+        }
+
+        private void UpdateHead()
+        {
+            head.transform.Rotate(new Vector3(0, 0, 1), headRotation - head.transform.eulerAngles.z);
+            Grabbable grabTarget = GetGrabTarget();
+            if (grabState != GrabState.NONE && grabTarget == null)
             {
-                float translation = Input.GetAxis("Vertical");
-                targetRotationRoot.Rotate(new Vector3(0, 1, 0),
-                    Mathf.Rad2Deg * Input.GetAxis("Horizontal") * Time.deltaTime);
+                grabState = GrabState.RESET_POSITION;
+            }
 
-                armIKSolver.Target.Translate(new Vector3(translation * speed * Time.deltaTime, 0, 0));
-
-                if (armIKSolver.Target.localPosition.x > maxRange)
-                {
-                    armIKSolver.Target.localPosition = Vector3.right * maxRange;
-                }
-                else if (armIKSolver.Target.localPosition.x < minRange)
-                {
-                    armIKSolver.Target.localPosition = Vector3.right * minRange;
-                }
+            switch (grabState)
+            {
+                case GrabState.NONE:
+                    if (Input.GetKeyDown(KeyCode.Space)) grabState = GrabState.MOVE_TO_TARGET;
+                    break;
+                case GrabState.MOVE_TO_TARGET:
+                    MoveToGrabTarget(grabTarget);
+                    break;
+                case GrabState.GRABBING:
+                    break;
+                case GrabState.RESET_POSITION:
+                    break;
+                case GrabState.GRABBED:
+                    if (Input.GetKeyDown(KeyCode.Space)) Release();
+                    break;
+                default:
+                    grabState = GrabState.NONE;
+                    break;
             }
         }
 
-        //arm base look at target
-        Vector3 direction = armIKSolver.Target.position - transform.position;
-        direction.y = 0;
-        direction.Normalize();
-        float rotationY = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-        armRotationRoot.rotation = Quaternion.Euler(0f, rotationY - 90, 0f);
-    }
+        private void Release()
+        {
+        }
 
-    private void UpdateHead()
-    {
-        head.transform.rotation = Quaternion.Euler(0, head.transform.localRotation.y, 180);
-        if (grabState == GrabState.none || grabState == GrabState.decending)
+        private void MoveToGrabTarget(Grabbable grabTarget)
+        {
+            if (armTarget.transform.position.y - grabTarget.transform.position.y < 0.01)
+            {
+                grabState = GrabState.GRABBING;
+            }
+
+            armTarget.Translate(Time.deltaTime * grabSpeed * Vector3.down);
+        }
+
+        private void ResetPosition()
+        {
+            //if (Math.Abs(armTarget.transform.localPosition.y -))
+        }
+
+        private Grabbable GetGrabTarget()
         {
             RaycastHit hit;
-            if (Physics.Raycast(head.transform.position, Vector3.down, out hit, Mathf.Infinity))
+            Vector3 headDirection = head.transform.up;
+            if (Physics.Raycast(head.transform.position, headDirection, out hit, Mathf.Infinity))
             {
-                Grabbable target = hit.transform.GetComponent<Grabbable>();
-                if (target != null)
-                {
-                    if (grabState == GrabState.none && Input.GetKeyDown(KeyCode.Space))
-                    {
-                        grabState = GrabState.grabbing;
-                        grabTarget = target;
-                    }
-                    else if (grabState == GrabState.decending)
-                    {
-                    }
-
-                    Debug.DrawRay(head.transform.position, Vector3.down * hit.distance,
-                        Color.green);
-                }
-                else if (grabState == GrabState.decending)
-                {
-                }
-            }
-            else
-            {
-                Debug.DrawRay(head.transform.position, Vector3.down * 1000, Color.red);
-            }
-        }
-        else if (grabState == GrabState.grabbing)
-        {
-            if (Vector3.Distance(grabTarget.transform.position, transform.position) > maxRange)
-            {
-                grabState = GrabState.none;
-                grabTarget = null;
+                Debug.DrawRay(head.transform.position, headDirection * hit.distance,
+                    Color.green);
+                return hit.transform.GetComponent<Grabbable>();
             }
 
-            //armIKSolver.Target.position -= Vector3.down * Time.deltaTime;
+            return null;
         }
     }
 }

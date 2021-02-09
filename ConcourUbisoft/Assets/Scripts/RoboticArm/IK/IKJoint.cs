@@ -1,32 +1,29 @@
 ﻿using UnityEngine;
 
-namespace DitzelGames.FastIK
+public class IKJoint : MonoBehaviour
 {
-    public class IKJoint : MonoBehaviour
+    public Transform Target;
+
+    protected Vector3 StartDirection;
+
+    protected Quaternion StartRotation;
+
+    void Awake()
     {
+        if (Target == null)
+            return;
 
-        public Transform Target;
-        
-        protected Vector3 StartDirection;
+        StartDirection = Target.position - transform.position;
+        StartRotation = transform.rotation;
+    }
 
-        protected Quaternion StartRotation;
-
-        void Awake()
-        {
-            if (Target == null)
-                return;
-
-            StartDirection = Target.position - transform.position;
-            StartRotation = transform.rotation;
-        }
-
-        void Update()
-        {
-            if (Target == null)
-                return;
+    public void RotateToTarget()
+    {
+        if (Target == null)
+            return;
 
 
-            transform.rotation = Quaternion.FromToRotation(StartDirection, Target.position - transform.position) * StartRotation;
-        }
+        transform.rotation = Quaternion.FromToRotation(StartDirection, Target.position - transform.position) *
+                             StartRotation;
     }
 }
