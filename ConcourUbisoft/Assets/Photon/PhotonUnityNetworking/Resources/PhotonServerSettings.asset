@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AppSettings:
     AppIdRealtime: a238d3ee-7974-4407-a69a-950afe608ef1
-    AppIdChat: 
-    AppIdVoice: 
+    AppIdChat: a238d3ee-7974-4407-a69a-950afe608ef1
+    AppIdVoice: a238d3ee-7974-4407-a69a-950afe608ef1
     AppVersion: 
     UseNameServer: 1
     FixedRegion: 
@@ -35,5 +35,5 @@ MonoBehaviour:
   RpcList:
   - StartGame
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
   DevRegionSetOnce: 1
