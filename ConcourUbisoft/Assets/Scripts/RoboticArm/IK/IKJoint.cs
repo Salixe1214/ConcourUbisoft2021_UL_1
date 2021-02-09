@@ -2,7 +2,7 @@
 
 public class IKJoint : MonoBehaviour
 {
-    public Transform Target;
+    [SerializeField]private Transform Target;
 
     protected Vector3 StartDirection;
 
@@ -21,8 +21,7 @@ public class IKJoint : MonoBehaviour
     {
         if (Target == null)
             return;
-
-
+        
         transform.rotation = Quaternion.FromToRotation(StartDirection, Target.position - transform.position) *
                              StartRotation;
     }

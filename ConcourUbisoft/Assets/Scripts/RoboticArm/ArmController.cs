@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Arm
 {
@@ -68,8 +67,7 @@ namespace Arm
                         dirToTarget.z * minRange);
                 }
             }
-
-            //arm base look at target
+            
             Vector3 direction = armTarget.position - transform.position;
             direction.y = 0;
             direction.Normalize();

@@ -109,20 +109,14 @@ public class IKSolver : MonoBehaviour
         if (BonesLength.Length != ChainLength)
             Init();
 
-        //Fabric
 
-        //  root
-        //  (bone0) (bonelen 0) (bone1) (bonelen 1) (bone2)...
-        //   x--------------------x--------------------x---...
-
-        //get position
         for (int i = 0; i < Bones.Length; i++)
             Positions[i] = GetPositionRootSpace(Bones[i]);
 
         Vector3 targetPosition = GetPositionRootSpace(Target);
         Quaternion targetRotation = GetRotationRootSpace(Target);
 
-        //1st is possible to reach?
+        //possible to reach?
         if ((targetPosition - GetPositionRootSpace(Bones[0])).sqrMagnitude >= CompleteLength * CompleteLength)
         {
             //just strech it
@@ -139,7 +133,6 @@ public class IKSolver : MonoBehaviour
 
             for (int iteration = 0; iteration < Iterations; iteration++)
             {
-                //https://www.youtube.com/watch?v=UNoX65PRehA
                 //back
                 for (int i = Positions.Length - 1; i > 0; i--)
                 {
@@ -178,7 +171,6 @@ public class IKSolver : MonoBehaviour
             }
         }
 
-        //set position & rotation
         for (int i = 0; i < Positions.Length; i++)
         {
             if (i == Positions.Length - 1)
