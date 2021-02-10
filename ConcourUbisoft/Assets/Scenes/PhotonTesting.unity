@@ -4644,9 +4644,37 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3090998696193688474, guid: f8bad582eb401ba4ea814d5734a1521e, type: 3}
+      propertyPath: autoStart
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3090998696193688474, guid: f8bad582eb401ba4ea814d5734a1521e, type: 3}
+      propertyPath: reliableMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3090998696193688474, guid: f8bad582eb401ba4ea814d5734a1521e, type: 3}
+      propertyPath: debugEchoMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3090998696193688474, guid: f8bad582eb401ba4ea814d5734a1521e, type: 3}
+      propertyPath: frameDuration
+      value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3090998696193688474, guid: f8bad582eb401ba4ea814d5734a1521e, type: 3}
+      propertyPath: transmitEnabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3090998696193688475, guid: f8bad582eb401ba4ea814d5734a1521e, type: 3}
       propertyPath: m_Name
       value: NetworkVoiceController
+      objectReference: {fileID: 0}
+    - target: {fileID: 3090998696193688549, guid: f8bad582eb401ba4ea814d5734a1521e, type: 3}
+      propertyPath: RandomRoom
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3090998696193688549, guid: f8bad582eb401ba4ea814d5734a1521e, type: 3}
+      propertyPath: autoTransmit
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3090998696193688551, guid: f8bad582eb401ba4ea814d5734a1521e, type: 3}
       propertyPath: m_RootOrder
