@@ -4,7 +4,7 @@ using UnityEngine.Animations;
 
 namespace Arm
 {
-    public class Grabbable : MonoBehaviour
+    public class Pickable : MonoBehaviour
     {
         private Rigidbody rigidbody;
         private Collider collider;

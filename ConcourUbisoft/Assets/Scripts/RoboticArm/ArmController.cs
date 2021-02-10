@@ -25,7 +25,7 @@ namespace Arm
         private float targetStartY;
         private GrabState grabState = GrabState.NONE;
         private Transform armTarget = null;
-        private Grabbable grabTarget;
+        private Pickable grabTarget;
 
         private void Start()
         {
@@ -114,7 +114,7 @@ namespace Arm
             grabTarget = null;
         }
 
-        private void MoveToGrabTarget(Grabbable grabTarget)
+        private void MoveToGrabTarget(Pickable grabTarget)
         {
             if (grabTarget.Constains(grabPoint.position))
             {
@@ -147,7 +147,7 @@ namespace Arm
             Vector3 headDirection = head.transform.up;
             if (Physics.Raycast(grabPoint.position, headDirection, out hit, Mathf.Infinity))
             {
-                grabTarget = hit.transform.GetComponent<Grabbable>();
+                grabTarget = hit.transform.GetComponent<Pickable>();
                 if (grabTarget)
                     Debug.DrawRay(grabPoint.position, headDirection * hit.distance,
                         Color.green);
