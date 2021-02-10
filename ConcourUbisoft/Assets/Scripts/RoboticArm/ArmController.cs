@@ -35,7 +35,7 @@ namespace Arm
             targetStartY = armTarget.transform.localPosition.y;
         }
 
-        void LateUpdate()
+        void Update()
         {
             UpdateArm();
             UpdateHead();
@@ -83,7 +83,7 @@ namespace Arm
             {
                 case GrabState.NONE:
                     GetGrabTarget();
-                    if (Input.GetKeyDown(KeyCode.Space) && grabTarget)
+                    if (Input.GetButton("Grab") && grabTarget)
                         grabState = GrabState.MOVE_TO_TARGET;
                     break;
                 case GrabState.MOVE_TO_TARGET:
@@ -123,7 +123,6 @@ namespace Arm
                 this.grabTarget = grabTarget;
                 grabTarget.OnGrab();
             }
-
             armTarget.Translate(Time.deltaTime * grabSpeed * Vector3.down);
         }
 

@@ -1,9 +1,9 @@
-using System;
 using UnityEngine;
-using UnityEngine.Animations;
 
 namespace Arm
 {
+    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(Collider))]
     public class Pickable : MonoBehaviour
     {
         private Rigidbody rigidbody;
