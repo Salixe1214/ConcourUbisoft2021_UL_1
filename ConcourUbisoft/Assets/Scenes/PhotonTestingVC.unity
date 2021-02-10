@@ -3327,7 +3327,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4cc0e9bf109da3469915959d009fab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SceneToStartName: CharacterTestScene
+  SceneToStartName: AreaOneTest
 --- !u!4 &1209276559
 Transform:
   m_ObjectHideFlags: 0
