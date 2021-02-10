@@ -21,7 +21,7 @@ public class CameraMovement : MonoBehaviour
 
     //PS = playstation
     //XBO = xbox one
-    void Update()
+    void FixedUpdate()
     {
 
         float mouseX = Input.GetAxis("Mouse X") * mouseSensivity * Time.deltaTime;
