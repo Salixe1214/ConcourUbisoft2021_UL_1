@@ -3,26 +3,20 @@ using UnityEngine;
 
 namespace TechSupport
 {
-    public class CameraSplit : MonoBehaviour
+    public class GridSystem
     {
-        [SerializeField] private List<Camera> cameras;
-
         private Vector2Int _size = Vector2Int.one;
 
-        void Start()
-        {
-            _size = CalculateGridSize(cameras.Count);
-            Grid(cameras, _size);
-        }
-
-        private Vector2Int CalculateGridSize(int size)
+        #region Grid
+    
+        public Vector2Int CalculateGridSize(int size)
         {
             float rLenght = Mathf.Sqrt(size);
 
             return new Vector2Int(Mathf.CeilToInt(rLenght), Mathf.RoundToInt(rLenght));
         }
-        
-        private void Grid(List<Camera> cams, Vector2Int size)
+    
+        public void Grid(List<Camera> cams, Vector2Int size)
         {
             float x = 0;
             float y = 0;
@@ -39,5 +33,21 @@ namespace TechSupport
                 }
             }
         }
+    
+        #endregion
+
+        #region Getter Setter
+
+        public void SearchGridSize(int elementNbr)
+        {
+            _size = CalculateGridSize(elementNbr);
+        }
+
+        public Vector2Int GetGridSize()
+        {
+            return _size;
+        }
+
+        #endregion
     }
 }
