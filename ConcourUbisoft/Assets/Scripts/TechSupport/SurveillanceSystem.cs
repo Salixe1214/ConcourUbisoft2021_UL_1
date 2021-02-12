@@ -11,7 +11,6 @@ namespace TechSupport
     }
     public class SurveillanceSystem : MonoBehaviour
     {
-        [Header("General")]
         [SerializeField] private SurveillanceMode mode = SurveillanceMode.Grid; // Default mode : grid
         private readonly GridSystem _gridSystem = new GridSystem();
         private readonly FullScreenSystem _fullScreenSystem = new FullScreenSystem();
