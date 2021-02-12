@@ -53,21 +53,21 @@ namespace Arm
                 {
                     Vector3 dirToTarget = (armTarget.position - transform.position).normalized;
                     armTarget.position = new Vector3(
-                        dirToTarget.x * maxRange,
+                        transform.position.x + dirToTarget.x * maxRange,
                         armTarget.position.y,
-                        dirToTarget.z * maxRange);
+                        transform.position.z + dirToTarget.z * maxRange);
                 }
 
                 if (distanceToTarget < minRange)
                 {
                     Vector3 dirToTarget = (armTarget.position - transform.position).normalized;
                     armTarget.position = new Vector3(
-                        dirToTarget.x * minRange,
+                        transform.position.x + dirToTarget.x * minRange,
                         armTarget.position.y,
-                        dirToTarget.z * minRange);
+                        transform.position.z + dirToTarget.z * minRange);
                 }
             }
-            
+
             Vector3 direction = armTarget.position - transform.position;
             direction.y = 0;
             direction.Normalize();
@@ -123,6 +123,7 @@ namespace Arm
                 this.grabTarget = grabTarget;
                 grabTarget.OnGrab();
             }
+
             armTarget.Translate(Time.deltaTime * grabSpeed * Vector3.down);
         }
 
