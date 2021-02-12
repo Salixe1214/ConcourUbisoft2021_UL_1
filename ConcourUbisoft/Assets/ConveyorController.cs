@@ -8,7 +8,7 @@ public class ConveyorController : MonoBehaviour
     [SerializeField] private float Speed = 0.0f;
     [SerializeField] private bool ClockWise = true;
 
-    private HashSet<Rigidbody> objectsOnConveyor = new HashSet<Rigidbody>();
+    private Dictionary<Rigidbody, int> objectsOnConveyor = new Dictionary<Rigidbody, int>();
     private List<Rigidbody> toRemoveNullReference = new List<Rigidbody>();
 
     private void OnCollisionEnter(Collision collision)
@@ -17,8 +17,13 @@ public class ConveyorController : MonoBehaviour
         Rigidbody rigidbody = null;
         if (collision.gameObject.TryGetComponent(out transportableByConveyor) && collision.gameObject.TryGetComponent(out rigidbody))
         {
-            Debug.Log($"{collision.gameObject.name} has entered the conveyor");
-            objectsOnConveyor.Add(rigidbody);
+            transportableByConveyor.HasBeenPickUp = false;
+            if (!objectsOnConveyor.ContainsKey(rigidbody))
+            {
+                objectsOnConveyor[rigidbody] = 0;
+            }
+            objectsOnConveyor[rigidbody] = objectsOnConveyor[rigidbody] + 1;
+            Debug.Log($"{collision.gameObject.name} has entered the conveyor. ({objectsOnConveyor[rigidbody]})");
         }
     }
 
@@ -28,23 +33,27 @@ public class ConveyorController : MonoBehaviour
         Rigidbody rigidbody = null;
         if (collision.gameObject.TryGetComponent(out transportableByConveyor) && collision.gameObject.TryGetComponent(out rigidbody))
         {
-            Debug.Log($"{collision.gameObject.name} has left the conveyor");
-            objectsOnConveyor.Remove(rigidbody);
+            objectsOnConveyor[rigidbody] = objectsOnConveyor[rigidbody] - 1;
+            Debug.Log($"{collision.gameObject.name} has left the conveyor. ({objectsOnConveyor[rigidbody]})");
+            if (objectsOnConveyor[rigidbody] == 0)
+            {
+                objectsOnConveyor.Remove(rigidbody);
+            }
         }
     }
 
     private void FixedUpdate()
     {
         toRemoveNullReference.Clear();
-        foreach (Rigidbody objectOnConveyor in objectsOnConveyor)
+        foreach (KeyValuePair<Rigidbody, int> objectOnConveyor in objectsOnConveyor)
         {
-            if(objectOnConveyor != null)
+            if(objectOnConveyor.Key != null)
             {
-                MoveObject(objectOnConveyor);
+                MoveObject(objectOnConveyor.Key);
             }
             else
             {
-                toRemoveNullReference.Add(objectOnConveyor);
+                toRemoveNullReference.Add(objectOnConveyor.Key);
             }
         }
         toRemoveNullReference.ForEach(x => objectsOnConveyor.Remove(x));
@@ -62,6 +71,9 @@ public class ConveyorController : MonoBehaviour
         float angleInRadian = angle * Mathf.Deg2Rad * (ClockWise ? -1 : 1);
         Vector2 rotateVector = new Vector2(centerToObject2D.x * Mathf.Cos(angleInRadian) - centerToObject2D.y * Mathf.Sin(angleInRadian), centerToObject2D.x * Mathf.Sin(angleInRadian) + centerToObject2D.y * Mathf.Cos(angleInRadian));
 
-        rigidbody.MovePosition(transform.position + new Vector3(rotateVector.x, rigidbody.position.y, rotateVector.y));
+        Vector3 newPosition = transform.position + new Vector3(rotateVector.x, rigidbody.position.y - transform.position.y, rotateVector.y);
+
+        rigidbody.transform.LookAt(newPosition, Vector3.up);
+        rigidbody.MovePosition(newPosition);
     }
 }
