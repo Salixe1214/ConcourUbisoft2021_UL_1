@@ -72,7 +72,7 @@ namespace Arm
                         dirToTarget.z * minRange);
                 }
             }
-            
+
             Vector3 direction = armTarget.position - transform.position;
             direction.y = 0;
             direction.Normalize();
@@ -88,7 +88,9 @@ namespace Arm
             {
                 case GrabState.NONE:
                     GetGrabTarget();
-                    if (Input.GetButtonDown("Grab") && grabTarget)
+                    if ((Input.GetButtonDown("Grab") ||
+                         Input.GetButtonDown("GrabControllerXBO") ||
+                         Input.GetButtonDown("GrabControllerPS")) && grabTarget)
                         grabState = GrabState.MOVE_TO_TARGET;
                     break;
                 case GrabState.MOVE_TO_TARGET:
@@ -128,6 +130,7 @@ namespace Arm
                 this.grabTarget = grabTarget;
                 grabTarget.OnGrab();
             }
+            //todo lerp
             armTarget.Translate(Time.deltaTime * grabSpeed * Vector3.down);
         }
 
@@ -153,8 +156,7 @@ namespace Arm
             {
                 grabTarget = hit.transform.GetComponent<Pickable>();
                 if (grabTarget)
-                    Debug.DrawRay(grabPoint.position, headDirection * hit.distance,
-                        Color.green);
+                    Debug.DrawRay(grabPoint.position, headDirection * hit.distance, Color.green);
             }
         }
     }
