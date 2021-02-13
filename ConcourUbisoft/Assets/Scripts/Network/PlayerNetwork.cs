@@ -5,18 +5,14 @@ using UnityEngine;
 
 public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 {
-    public enum Role {
-        A,
-        B
-    }
-
-    public Role PlayerRole { get; set; }
+    public GameController.Role PlayerRole { get; set; }
     public string Name { set; get; }
     public string Id { get { return photonView.Owner.UserId; } }
 
     private PhotonView photonView = null;
     private NetworkController networkController = null;
     private GameController gameController = null;
+    private GameObject playerA = null;
 
     #region Unity Callbacks
     private void Awake()
@@ -24,6 +20,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         photonView = GetComponent<PhotonView>();
         networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        
         Name = $"Player {(photonView.Owner.IsMasterClient ? "1" : "2")}";
     }
     private void Start()
@@ -33,7 +30,15 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     private void OnEnable()
     {
         gameController.OnLoadGameEvent += OnLoadGameEvent;
+        gameController.OnFinishLoadGameEvent += OnFinishLoadGameEvent;
     }
+    private void OnDisable()
+    {
+        gameController.OnLoadGameEvent -= OnLoadGameEvent;
+        gameController.OnFinishLoadGameEvent -= OnFinishLoadGameEvent;
+    }
+
+
     #endregion
     #region Photon Callbacks
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -42,11 +47,23 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         {
             stream.SendNext((int)PlayerRole);
             stream.SendNext(Name);
+
+            if(gameController.IsGameStart && PlayerRole == GameController.Role.A)
+            {
+                stream.SendNext(playerA.transform.position);
+                stream.SendNext(playerA.transform.rotation);
+            }
         }
         else
         {
-            this.PlayerRole = (Role)(int)stream.ReceiveNext();
+            this.PlayerRole = (GameController.Role)(int)stream.ReceiveNext();
             this.Name = (string)stream.ReceiveNext();
+
+            if (gameController.IsGameStart && PlayerRole == GameController.Role.A)
+            {
+                playerA.transform.position = (Vector3)stream.ReceiveNext();
+                playerA.transform.rotation = (Quaternion)stream.ReceiveNext();
+            }
         }
     }
     #endregion
@@ -66,7 +83,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     {
         if (!(gameController.IsGameLoading || gameController.IsGameStart))
         {
-            gameController.StartGame();
+            gameController.StartGame(networkController.GetLocalRole());
         }
     }
     #endregion
@@ -74,6 +91,10 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     private void OnLoadGameEvent()
     {
         photonView.RPC("StartGame", RpcTarget.Others);
+    }
+    private void OnFinishLoadGameEvent()
+    {
+        playerA = GameObject.FindGameObjectWithTag("Player");
     }
     #endregion
 }
