@@ -117,5 +117,9 @@ public class NetworkController : MonoBehaviourPunCallbacks
     {
         OnPlayerObjectCreate?.Invoke();
     }
+    public GameController.Role GetLocalRole()
+    {
+        return GameObject.FindGameObjectsWithTag("PlayerNetwork").Select(x => x.GetComponent<PlayerNetwork>()).Where(x => x.IsMine()).First().PlayerRole;
+    }
     #endregion
 }

@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - NetworkController
+  - PlayerNetwork
+  - PlayerA
   layers:
   - Default
   - TransparentFX
@@ -12,8 +14,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Transportable
+  - Conveyor
   - 
   - 
   - 

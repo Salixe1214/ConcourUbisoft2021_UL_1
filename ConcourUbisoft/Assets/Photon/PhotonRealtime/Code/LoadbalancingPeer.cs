@@ -49,7 +49,10 @@ namespace Photon.Realtime
         }
 
 
-        private readonly Pool<Dictionary<byte, object>> paramDictionaryPool = new Pool<Dictionary<byte, object>>(() => new Dictionary<byte, object>(), x => x.Clear(), 1); // used in OpRaiseEvent() (avoids lots of new Dictionary() calls)
+        private readonly Pool<ParameterDictionary> paramDictionaryPool = new Pool<ParameterDictionary>(
+            () => new ParameterDictionary(),
+            x => x.Clear(),
+            1); // used in OpRaiseEvent() (avoids lots of new Dictionary() calls)
 
 
         /// <summary>
@@ -79,7 +82,7 @@ namespace Photon.Realtime
         private void ConfigUnitySockets()
         {
             Type websocketType = null;
-            #if UNITY_XBOXONE && !UNITY_EDITOR
+            #if (UNITY_XBOXONE || UNITY_GAMECORE) && !UNITY_EDITOR
             websocketType = Type.GetType("ExitGames.Client.Photon.SocketNativeSource, PhotonRealtime", false);
             if (websocketType == null)
             {
@@ -165,7 +168,7 @@ namespace Photon.Realtime
                 this.Listener.DebugReturn(DebugLevel.INFO, "OpLeaveLobby()");
             }
 
-            return this.SendOperation(OperationCode.LeaveLobby, null, SendOptions.SendReliable);
+            return this.SendOperation(OperationCode.LeaveLobby, (Dictionary<byte, object>)null, SendOptions.SendReliable);
         }
 
 
@@ -237,6 +240,11 @@ namespace Photon.Realtime
                 flags = flags | (int)RoomOptionBit.SuppressRoomEvents;
                 op[ParameterCode.SuppressRoomEvents] = true;
             }
+            if (roomOptions.SuppressPlayerInfo)
+            {
+                flags = flags | (int)RoomOptionBit.SuppressPlayerInfo;
+            }
+
             if (roomOptions.Plugins != null)
             {
                 op[ParameterCode.Plugins] = roomOptions.Plugins;
@@ -297,8 +305,8 @@ namespace Photon.Realtime
                 if (opParams.PlayerProperties != null && opParams.PlayerProperties.Count > 0)
                 {
                     op[ParameterCode.PlayerProperties] = opParams.PlayerProperties;
-                    op[ParameterCode.Broadcast] = true; // TODO: check if this also makes sense when creating a room?! // broadcast actor properties
                 }
+                op[ParameterCode.Broadcast] = true; // broadcast actor properties
 
                 this.RoomOptionsToOpParameters(op, opParams.RoomOptions);
             }
@@ -332,7 +340,7 @@ namespace Photon.Realtime
                 op[ParameterCode.RoomName] = opParams.RoomName;
             }
 
-            if (opParams.CreateIfNotExists)
+            if (opParams.JoinMode == JoinMode.CreateIfNotExists)
             {
                 op[ParameterCode.JoinMode] = (byte)JoinMode.CreateIfNotExists;
                 if (opParams.Lobby != null && !opParams.Lobby.IsDefault)
@@ -340,9 +348,8 @@ namespace Photon.Realtime
                     op[ParameterCode.LobbyName] = opParams.Lobby.Name;
                     op[ParameterCode.LobbyType] = (byte)opParams.Lobby.Type;
                 }
-            }
-
-            if (opParams.RejoinOnly)
+            } 
+            else if (opParams.JoinMode == JoinMode.RejoinOnly)
             {
                 op[ParameterCode.JoinMode] = (byte)JoinMode.RejoinOnly; // changed from JoinMode.JoinOrRejoin
             }
@@ -357,10 +364,10 @@ namespace Photon.Realtime
                 if (opParams.PlayerProperties != null && opParams.PlayerProperties.Count > 0)
                 {
                     op[ParameterCode.PlayerProperties] = opParams.PlayerProperties;
-                    op[ParameterCode.Broadcast] = true; // broadcast actor properties
                 }
+                op[ParameterCode.Broadcast] = true; // broadcast actor properties
 
-                if (opParams.CreateIfNotExists)
+                if (opParams.JoinMode == JoinMode.CreateIfNotExists)
                 {
                     this.RoomOptionsToOpParameters(op, opParams.RoomOptions);
                 }
@@ -736,7 +743,7 @@ namespace Photon.Realtime
             // shortcut, if we have a Token
             if (authValues != null && authValues.Token != null)
             {
-                opParameters[ParameterCode.Secret] = authValues.Token;
+                opParameters[ParameterCode.Token] = authValues.Token;
                 return this.SendOperation(OperationCode.Authenticate, opParameters, SendOptions.SendReliable); // we don't have to encrypt, when we have a token (which is encrypted)
             }
 
@@ -806,7 +813,7 @@ namespace Photon.Realtime
             // shortcut, if we have a Token
             if (authValues != null && authValues.Token != null)
             {
-                opParameters[ParameterCode.Secret] = authValues.Token;
+                opParameters[ParameterCode.Token] = authValues.Token;
                 return this.SendOperation(OperationCode.AuthenticateOnce, opParameters, SendOptions.SendReliable); // we don't have to encrypt, when we have a token (which is encrypted)
             }
 
@@ -837,9 +844,9 @@ namespace Photon.Realtime
                 if (authValues.AuthType != CustomAuthenticationType.None)
                 {
                     opParameters[ParameterCode.ClientAuthenticationType] = (byte)authValues.AuthType;
-                    if (!string.IsNullOrEmpty(authValues.Token))
+                    if (authValues.Token != null)
                     {
-                        opParameters[ParameterCode.Secret] = authValues.Token;
+                        opParameters[ParameterCode.Token] = authValues.Token;
                     }
                     else
                     {
@@ -911,7 +918,7 @@ namespace Photon.Realtime
                 {
                     if (raiseEventOptions.CachingOption != EventCaching.DoNotCache)
                     {
-                        paramDict[(byte)ParameterCode.Cache] = (byte)raiseEventOptions.CachingOption;
+                        paramDict.Add(ParameterCode.Cache, (byte)raiseEventOptions.CachingOption);
                     }
                     switch (raiseEventOptions.CachingOption)
                     {
@@ -927,33 +934,33 @@ namespace Photon.Realtime
                         case EventCaching.RemoveFromRoomCache:
                             if (raiseEventOptions.TargetActors != null)
                             {
-                                paramDict[(byte)ParameterCode.ActorList] = raiseEventOptions.TargetActors;
+                                paramDict.Add(ParameterCode.ActorList, raiseEventOptions.TargetActors);
                             }
                             break;
                         default:
                             if (raiseEventOptions.TargetActors != null)
                             {
-                                paramDict[(byte)ParameterCode.ActorList] = raiseEventOptions.TargetActors;
+                                paramDict.Add(ParameterCode.ActorList, raiseEventOptions.TargetActors);
                             }
                             else if (raiseEventOptions.InterestGroup != 0)
                             {
-                                paramDict[(byte)ParameterCode.Group] = raiseEventOptions.InterestGroup;
+                                paramDict.Add(ParameterCode.Group, (byte)raiseEventOptions.InterestGroup);
                             }
                             else if (raiseEventOptions.Receivers != ReceiverGroup.Others)
                             {
-                                paramDict[(byte)ParameterCode.ReceiverGroup] = (byte)raiseEventOptions.Receivers;
+                                paramDict.Add(ParameterCode.ReceiverGroup, (byte)raiseEventOptions.Receivers);
                             }
                             if (raiseEventOptions.Flags.HttpForward)
                             {
-                                paramDict[(byte)ParameterCode.EventForward] = raiseEventOptions.Flags.WebhookFlags;
+                                paramDict.Add(ParameterCode.EventForward, (byte)raiseEventOptions.Flags.WebhookFlags);
                             }
                             break;
                     }
                 }
-                paramDict[(byte)ParameterCode.Code] = (byte)eventCode;
+                paramDict.Add(ParameterCode.Code, (byte)eventCode);
                 if (customEventContent != null)
                 {
-                    paramDict[(byte)ParameterCode.Data] = customEventContent;
+                    paramDict.Add(ParameterCode.Data, (object)customEventContent);
                 }
                 return this.SendOperation(OperationCode.RaiseEvent, paramDict, sendOptions);
             }
@@ -1003,6 +1010,7 @@ namespace Photon.Realtime
         PublishUserId = 0x08,  // signals that we should publish userId
         DeleteNullProps = 0x10,  // signals that we should remove property if its value was set to null. see RoomOption to Delete Null Properties
         BroadcastPropsChangeToAll = 0x20,  // signals that we should send PropertyChanged event to all room players including initiator
+        SuppressPlayerInfo = 0x40,  // disables events join and leave from the server as well as property broadcasts in a room (to minimize traffic)
     }
 
     /// <summary>
@@ -1075,10 +1083,8 @@ namespace Photon.Realtime
         public Hashtable PlayerProperties;
         /// <summary>Internally used value to skip some values when the operation is sent to the Master Server.</summary>
         protected internal bool OnGameServer = true; // defaults to true! better send more parameter than too few (GS needs all)
-        /// <summary>Matchmaking can optionally create a room if it is not existing. Also useful, when joining a room with a team: It does not matter who is first.</summary>
-        public bool CreateIfNotExists;
-        /// <summary>Signals, if the user attempts to return to a room or joins one. Set by the methods that call an operation.</summary>
-        public bool RejoinOnly;
+        /// <summary>Internally used value to check which join mode we should call.</summary>
+        protected internal JoinMode JoinMode;
         /// <summary>A list of users who are expected to join the room along with this client. Reserves slots for rooms with MaxPlayers value.</summary>
         public string[] ExpectedUsers;
     }
@@ -1430,7 +1436,7 @@ namespace Photon.Realtime
         public const byte GameList = 222;
 
         /// <summary>(221) Internally used to establish encryption</summary>
-        public const byte Secret = 221;
+        public const byte Token = 221;
 
         /// <summary>(220) Version of your application</summary>
         public const byte AppVersion = 220;
@@ -1873,6 +1879,9 @@ namespace Photon.Realtime
         /// </remarks>
         public bool SuppressRoomEvents { get; set; }
 
+        /// <summary>Disables events join and leave from the server as well as property broadcasts in a room (to minimize traffic)</summary>
+        public bool SuppressPlayerInfo { get; set; }
+
         /// <summary>
         /// Defines if the UserIds of players get "published" in the room. Useful for FindFriends, if players want to play another game together.
         /// </summary>
@@ -2130,7 +2139,7 @@ namespace Photon.Realtime
 
         /// <summary>Internal <b>Photon token</b>. After initial authentication, Photon provides a token for this client, subsequently used as (cached) validation.</summary>
         /// <remarks>Any token for custom authentication should be set via SetAuthPostData or AddAuthParameter.</remarks>
-        public string Token { get; protected internal set; }
+        public object Token { get; protected internal set; }
 
         /// <summary>The UserId should be a unique identifier per user. This is for finding friends, etc..</summary>
         /// <remarks>See remarks of AuthValues for info about how this is set and used.</remarks>
@@ -2186,10 +2195,29 @@ namespace Photon.Realtime
         /// <summary>
         /// Transform this object into string.
         /// </summary>
-        /// <returns>string representation of this object.</returns>
+        /// <returns>String info about this object's values.</returns>
         public override string ToString()
         {
-            return string.Format("AuthenticationValues Type: {3} UserId: {0}, GetParameters: {1} Token available: {2}", this.UserId, this.AuthGetParameters, !string.IsNullOrEmpty(this.Token), this.AuthType);
+            return string.Format("AuthenticationValues = AuthType: {0} UserId: {1}{2}{3}{4}",
+                                 this.AuthType,
+                                 this.UserId,
+                                 string.IsNullOrEmpty(this.AuthGetParameters) ? " GetParameters: yes" : "",
+                                 this.AuthPostData == null ? "" : " PostData: yes",
+                                 this.Token == null ? "" : " Token: yes");
+        }
+
+        /// <summary>
+        /// Make a copy of the current object.
+        /// </summary>
+        /// <param name="copy">The object to be copied into.</param>
+        /// <returns>The copied object.</returns>
+        public AuthenticationValues CopyTo(AuthenticationValues copy)
+        {
+            copy.AuthType = this.AuthType;
+            copy.AuthGetParameters = this.AuthGetParameters;
+            copy.AuthPostData = this.AuthPostData;
+            copy.UserId = this.UserId;
+            return copy;
         }
     }
 }
