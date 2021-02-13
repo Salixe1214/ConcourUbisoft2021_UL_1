@@ -48,7 +48,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
             stream.SendNext((int)PlayerRole);
             stream.SendNext(Name);
 
-            if(gameController.IsGameStart && PlayerRole == GameController.Role.A)
+            if(gameController.IsGameStart && PlayerRole == GameController.Role.SecurityGuard)
             {
                 stream.SendNext(playerA.transform.position);
                 stream.SendNext(playerA.transform.rotation);
@@ -59,7 +59,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
             this.PlayerRole = (GameController.Role)(int)stream.ReceiveNext();
             this.Name = (string)stream.ReceiveNext();
 
-            if (gameController.IsGameStart && PlayerRole == GameController.Role.A)
+            if (gameController.IsGameStart && PlayerRole == GameController.Role.SecurityGuard)
             {
                 playerA.transform.position = (Vector3)stream.ReceiveNext();
                 playerA.transform.rotation = (Quaternion)stream.ReceiveNext();

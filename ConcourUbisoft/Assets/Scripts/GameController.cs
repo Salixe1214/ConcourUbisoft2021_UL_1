@@ -7,8 +7,8 @@ public class GameController : MonoBehaviour
 {
     public enum Role
     {
-        A,
-        B
+        SecurityGuard,
+        Technician
     }
 
     [SerializeField] private string SceneToStartName = "";
@@ -37,25 +37,31 @@ public class GameController : MonoBehaviour
         IsGameLoading = false;
         OnFinishLoadGameEvent?.Invoke();
         IsGameStart = true;
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(SceneToStartName));
 
-        if (GameRole == Role.A)
+        if (GameRole == Role.SecurityGuard)
         {
-            SetUpA();
+            SetUpSecurityGuard();
         }
-        else if(GameRole == Role.B)
+        else if(GameRole == Role.Technician)
         {
-            SetUpB();
+            SetUpTechnician();
         }
     }
-    private void SetUpA()
+
+    private void SetUpSecurityGuard()
     {
-        
+        GameObject playerTech = GameObject.FindGameObjectWithTag("PlayerTech");
+        playerTech.SetActive(false);
+
+        GameObject player = GameObject.FindGameObjectWithTag("PlayerGuard");
+        player.GetComponent<CharacterControl>().enabled = true;
+        player.transform.Find("Main Camera").gameObject.SetActive(true);
     }
-    private void SetUpB()
+    private void SetUpTechnician()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        player.GetComponent<CharacterControl>().enabled = false;
-        player.transform.Find("Main Camera").gameObject.SetActive(false);
+        GameObject playerTech = GameObject.FindGameObjectWithTag("PlayerTech");
+        playerTech.SetActive(true);
     }
     #endregion
     #region Public Functions
