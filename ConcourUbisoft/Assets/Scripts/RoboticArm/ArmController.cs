@@ -13,6 +13,7 @@ namespace Arm
 
     public class ArmController : MonoBehaviour
     {
+        [SerializeField] private bool controlled;
         [SerializeField] private Transform head;
         [SerializeField] private IKSolver armIKSolver;
         [SerializeField] private Transform grabPoint;
@@ -33,12 +34,16 @@ namespace Arm
             minRange = armIKSolver.TotalLength / 4;
             armTarget = armIKSolver.Target;
             targetStartY = armTarget.transform.localPosition.y;
+            head.transform.Rotate(new Vector3(0, 0, 1), headRotation - head.transform.eulerAngles.z);
         }
 
         void Update()
         {
-            UpdateArm();
-            UpdateHead();
+            if (controlled)
+            {
+                UpdateArm();
+                UpdateHead();
+            }
         }
 
         private void UpdateArm()
@@ -83,7 +88,7 @@ namespace Arm
             {
                 case GrabState.NONE:
                     GetGrabTarget();
-                    if (Input.GetButton("Grab") && grabTarget)
+                    if (Input.GetButtonDown("Grab") && grabTarget)
                         grabState = GrabState.MOVE_TO_TARGET;
                     break;
                 case GrabState.MOVE_TO_TARGET:
