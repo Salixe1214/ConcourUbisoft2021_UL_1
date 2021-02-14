@@ -16,14 +16,17 @@ public class RoomMenu : MonoBehaviour
     private GameController gameController = null;
     private Button startButton = null;
     private Text errorText = null;
+    private MenuSoundController menuSoundController = null;
 
     #region UI Action
     public void LeaveRoom()
     {
+        menuSoundController.PlayButtonSound();
         networkController.LeaveRoom();
     }
     public void StartGame()
     {
+        menuSoundController.PlayButtonSound();
         IEnumerable<PlayerNetwork> playerNetworks = GameObject.FindGameObjectsWithTag("Player").Select(x => x.GetComponent<PlayerNetwork>());
 
         //if (playerNetworks.Count() != 2)
@@ -41,6 +44,7 @@ public class RoomMenu : MonoBehaviour
 
         errorText.text = "";
 
+        menuSoundController.StopMenuSong();
         gameController.StartGame(networkController.GetLocalRole());
     }
     #endregion
@@ -49,6 +53,7 @@ public class RoomMenu : MonoBehaviour
     {
         networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        menuSoundController = GameObject.FindGameObjectWithTag("MenuSound").GetComponent<MenuSoundController>();
         startButton = StartButton.GetComponent<Button>();
         errorText = ErrorText.GetComponent<Text>();
     }
@@ -90,7 +95,7 @@ public class RoomMenu : MonoBehaviour
         {
             GameObject roomElement = Instantiate(RoomMenuElementPrefab, Content.transform);
             roomElement.GetComponent<RoomElementController>().PlayerNetwork = playerNetwork;
-            roomElement.transform.Find("KickButton").GetComponent<Button>().onClick.AddListener(new UnityAction(() => networkController.KickPlayer(playerNetwork.Id)));
+            roomElement.transform.Find("KickButton").GetComponent<Button>().onClick.AddListener(new UnityAction(() => { menuSoundController.PlayButtonSound(); networkController.KickPlayer(playerNetwork.Id); }));
         }
     }
     private void OnJoinedRoomEvent()

@@ -14,10 +14,12 @@ public class MenuController : MonoBehaviour
 
     private NetworkController networkController = null;
     private GameController gameController = null;
+    private MenuSoundController menuSoundController = null;
 
     #region UI Actions
     public void EnterLobby()
     {
+        menuSoundController.PlayButtonSound();
         StartMenu.SetActive(false);
         LoadScreenMenuController.Show("Joining Lobby...");
         networkController.JoinLobby();
@@ -28,6 +30,8 @@ public class MenuController : MonoBehaviour
     {
         networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        menuSoundController = GameObject.FindGameObjectWithTag("MenuSound").GetComponent<MenuSoundController>();
+        menuSoundController.PlayMenuSong();
     }
     private void OnEnable()
     {

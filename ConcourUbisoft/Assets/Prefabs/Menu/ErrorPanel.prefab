@@ -91,6 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b15b6e198fdf6c4ab341abc6d68c457, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ButtonSound: {fileID: 8300000, guid: c7721155daef0d2428ede1fce56a1334, type: 3}
   Title: {fileID: 2748151840994056441}
   Message: {fileID: 2847741770385253519}
 --- !u!1 &4217190682605315836
@@ -127,7 +128,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 1.5, y: -7.0000305}
+  m_AnchoredPosition: {x: 1.5, y: -7}
   m_SizeDelta: {x: -95, y: -98.000015}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &793864485848262929
@@ -296,7 +297,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -45.92, y: 5.5}
+  m_AnchoredPosition: {x: -45.920044, y: 5.5}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &2959990101017828748

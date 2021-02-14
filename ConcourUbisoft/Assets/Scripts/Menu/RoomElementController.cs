@@ -13,17 +13,20 @@ public class RoomElementController : MonoBehaviour
     private Button KickButton = null;
     private RawImage OwnerImage = null;
     private Dropdown DropdownRole = null;
+    private MenuSoundController menuSoundController = null;
 
     #region UI Actions
     public void OnRoleModify()
     {
         PlayerNetwork.PlayerRole = (GameController.Role)gameObject.transform.Find("DropdownRole").GetComponent<Dropdown>().value;
+        menuSoundController.PlayButtonSound();
     }
     #endregion
     #region Unity Callbacks
     private void Awake()
     {
         networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+        menuSoundController = GameObject.FindGameObjectWithTag("MenuSound").GetComponent<MenuSoundController>();
         PlayerName = gameObject.transform.Find("PlayerName").GetComponent<Text>();
         KickButton = gameObject.transform.Find("KickButton").GetComponent<Button>();
         OwnerImage = gameObject.transform.Find("OwnerImage").GetComponent<RawImage>();
