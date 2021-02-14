@@ -18,7 +18,7 @@ namespace Arm
         [SerializeField] private IKSolver armIKSolver;
         [SerializeField] private Transform grabPoint;
         [SerializeField] private Transform armRotationRoot;
-        [SerializeField] float speed = 3f;
+        [SerializeField] float controlSpeed = 3f;
         [SerializeField] private float grabSpeed = 3f;
         [SerializeField] private float headRotation = 180;
         private float maxRange;
@@ -27,6 +27,8 @@ namespace Arm
         private GrabState grabState = GrabState.NONE;
         private Transform armTarget = null;
         private Pickable grabTarget;
+        private Vector3 grabTargetPosition;
+        private AudioSource audioSource;
 
         private void Start()
         {
@@ -35,6 +37,7 @@ namespace Arm
             armTarget = armIKSolver.Target;
             targetStartY = armTarget.transform.localPosition.y;
             head.transform.Rotate(new Vector3(0, 0, 1), headRotation - head.transform.eulerAngles.z);
+            audioSource = GetComponent<AudioSource>();
         }
 
         void Update()
@@ -51,8 +54,8 @@ namespace Arm
             if (grabState == GrabState.NONE || grabState == GrabState.GRABBED)
             {
                 Vector3 translation = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-
-                armTarget.transform.Translate(Time.deltaTime * speed * translation);
+                audioSource.volume = translation.magnitude;
+                armTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
                 float distanceToTarget = Vector3.Distance(transform.position, armIKSolver.Target.position);
                 if (distanceToTarget > maxRange)
                 {
@@ -130,17 +133,34 @@ namespace Arm
                 this.grabTarget = grabTarget;
                 grabTarget.OnGrab();
             }
-
-            //todo lerp
-            armTarget.Translate(Time.deltaTime * grabSpeed * Vector3.down);
+            float speed = SpeedFunction(0.2f,0.8f,(armTarget.transform.localPosition.y-grabTargetPosition.y)/(targetStartY-grabTargetPosition.y));
+            armTarget.transform.Translate(speed * grabSpeed * Time.deltaTime * Vector3.down);
+            audioSource.volume = speed;
         }
 
+        private float SpeedFunction(float a,float b,float x)
+        {
+            if (x < a)
+            {
+                return Mathf.SmoothStep(0.1f, 1, x / a);
+            }
+            if (x < b)
+            {
+                return 1.0f;
+            }
+            return Mathf.SmoothStep(1, 0.1f, (x - b) / a);
+        }
         private void ResetPosition()
         {
-            armTarget.Translate(Time.deltaTime * grabSpeed * Vector3.up);
+            float speed = SpeedFunction(0.2f,0.8f,(armTarget.transform.localPosition.y-grabTargetPosition.y)/(targetStartY-grabTargetPosition.y));
+            armTarget.transform.Translate(speed * grabSpeed * Time.deltaTime * Vector3.up);
+            audioSource.volume = speed;
             if (armTarget.transform.localPosition.y >= targetStartY)
             {
-                armTarget.transform.localPosition = new Vector3(armTarget.transform.localPosition.x, targetStartY,
+                audioSource.volume = 0;
+                armTarget.transform.localPosition = new Vector3(
+                    armTarget.transform.localPosition.x,
+                    targetStartY,
                     armTarget.transform.localPosition.z);
                 if (grabTarget != null)
                     grabState = GrabState.GRABBED;
@@ -156,6 +176,7 @@ namespace Arm
             if (Physics.Raycast(grabPoint.position, headDirection, out hit, Mathf.Infinity))
             {
                 grabTarget = hit.transform.GetComponent<Pickable>();
+                grabTargetPosition = hit.point;
                 if (grabTarget)
                     Debug.DrawRay(grabPoint.position, headDirection * hit.distance, Color.green);
             }
