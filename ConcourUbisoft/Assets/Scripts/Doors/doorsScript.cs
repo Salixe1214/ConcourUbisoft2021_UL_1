@@ -5,25 +5,33 @@ using System.IO.MemoryMappedFiles;
 using UnityEngine;
 using UnityEngine.Video;
 
-public class doorsScript : MonoBehaviour
+public class DoorsScript : MonoBehaviour
 {
-    private enum Direction { Up, Right, Down, Left, Err }
-    [SerializeField] private List<Direction> baseSequence;
-    private List<Direction> _sequence;
+    public enum ButtonType { Err, Up, Right, Down, Left, Confirm }
+    [SerializeField] private List<ButtonType> unlockSequence;
+    private List<ButtonType> _sequence;
 
     [SerializeField] private GameObject indicator;
-    private Material _matIndicator;
+    private Material _matIndicator, _matConfirmLight;
     private Color _color;
+
+    [SerializeField] private List<DoorsButton> buttonsList;
+    [SerializeField] private GameObject confirmButton;
+    [SerializeField] private GameObject confirmLight;
+
+    public static Action DoorUnlock;
     
     // Start is called before the first frame update
     void Awake()
     {
         _matIndicator = indicator.GetComponent<Renderer>().material;
-        _color = _matIndicator.color;
-        _sequence = new List<Direction>();
-        foreach (var i in baseSequence)
+        _matConfirmLight = confirmLight.GetComponent<Renderer>().material;
+        _color = _matConfirmLight.color;
+        _sequence = new List<ButtonType>();
+
+        foreach (var button in buttonsList)
         {
-            _sequence.Add(i);
+            button.ButtonPressed += ButtonPressed;
         }
     }
 
@@ -33,73 +41,90 @@ public class doorsScript : MonoBehaviour
         
     }
 
-    public void ButtonPressed(string name)
+    public void ButtonPressed(ButtonType bType)
     {
-        Direction direction;
-        switch (name)
+        switch (bType)
         {
-            case "Up":
-                direction = Direction.Up;
+            case ButtonType.Err:
+                Debug.Log("Erreur, ce bouton ne correspond pas à auccun boutton");
                 break;
-            case "Right":
-                direction = Direction.Right;
-                break;
-            case "Down":
-                direction = Direction.Down;
-                break;
-            case "Left":
-                direction = Direction.Left;
+            case ButtonType.Confirm:
+                OnConfirm();
                 break;
             default:
-                direction = Direction.Err;
+                _sequence.Add(bType);
                 break;
         }
+    }
+
+    private void OnConfirm()
+    {
+        bool isSequenceGood;
         
-        if(direction == Direction.Err)
-            Debug.Log("Erreur, ce bouton ne correspond pas à auccun boutton");
-        else if(_sequence.Count > 0)
+        if (_sequence.Count == unlockSequence.Count)
         {
-            if (direction == _sequence[0])
+            isSequenceGood = true;
+            for (int i = 0; i < unlockSequence.Count; i++)
             {
-                _matIndicator.SetColor("_Color", Color.green);
-                _sequence.RemoveAt(0);
-                
-                // The door open
-                if (_sequence.Count <= 0)
-                {
-                    OnDoorUnlock();
-                }
-                
-                StartCoroutine(Flash(_color, _matIndicator));
-            }
-            else
-            {
-                _matIndicator.SetColor("_Color", Color.red);
-                
-                // Resetting the sequence
-                _sequence.Clear();
-                foreach (var i in baseSequence)
-                {
-                    _sequence.Add(i);
-                }
-                
-                StartCoroutine(Flash(_color, _matIndicator));
+                if (unlockSequence[i] != _sequence[i])
+                    isSequenceGood = false;
             }
         }
+        else
+        {
+            isSequenceGood = false;
+        }
+
+
+        
+        if (isSequenceGood)
+        {
+            _matConfirmLight.SetColor("_Color", Color.green);
+                
+            // The door open
+            OnDoorUnlock();
+        }
+        else
+        {
+            _matConfirmLight.SetColor("_Color", Color.red);
+                
+            // Resetting the sequence
+            _sequence.Clear();
+        }
+                
+        StartCoroutine(Flash(_color, _matConfirmLight));
     }
 
     private void OnDoorUnlock()
     {
-        _color = Color.magenta;
-        
         Debug.Log("Unlocked");
 
         GetComponent<Collider>().isTrigger = true;
+        _matIndicator.SetColor("_Color", Color.green);
+        
+        if(DoorUnlock != null)
+            DoorUnlock.Invoke();
     }
 
     IEnumerator Flash(Color pColor, Material pMaterial)
     {
-        yield return new WaitForSeconds(0.33f);
+        Color flashColor = pMaterial.color;
+        
+        foreach (var button in buttonsList)
+        {
+            button.clickable = false;
+        }
+        
+        yield return new WaitForSeconds(1f);
         pMaterial.SetColor("_Color", pColor);
+
+        if (flashColor != Color.green)
+        {
+            foreach (var button in buttonsList)
+            { 
+                button.clickable = true;
+            }
+            
+        }
     }
 }
