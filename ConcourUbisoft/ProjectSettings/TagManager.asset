@@ -8,7 +8,7 @@ TagManager:
   - PlayerNetwork
   - PlayerTech
   - PlayerGuard
-  - MenuSound
+  - SoundController
   layers:
   - Default
   - TransparentFX

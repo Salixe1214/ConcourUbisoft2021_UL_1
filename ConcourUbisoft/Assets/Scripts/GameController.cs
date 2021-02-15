@@ -12,6 +12,9 @@ public class GameController : MonoBehaviour
     }
 
     [SerializeField] private string SceneToStartName = "";
+    [SerializeField] private GameObject AudioListener = null;
+
+    private SoundController soundController = null;
 
     public bool IsGameLoading { get; private set; }
     public bool IsGameStart { get; private set; }
@@ -24,6 +27,12 @@ public class GameController : MonoBehaviour
     public delegate void OnFinishLoadGameHander();
     public event OnFinishLoadGameHander OnFinishLoadGameEvent;
     #endregion
+    #region Unity Callbacks
+    private void Awake()
+    {
+        soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
+    }
+    #endregion
     #region Private Functions
     private IEnumerator LoadAsyncLevel()
     {
@@ -32,7 +41,7 @@ public class GameController : MonoBehaviour
         OnLoadGameEvent?.Invoke();
         while (!operation.isDone)
         {
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
         IsGameLoading = false;
         OnFinishLoadGameEvent?.Invoke();
@@ -57,11 +66,16 @@ public class GameController : MonoBehaviour
         GameObject player = GameObject.FindGameObjectWithTag("PlayerGuard");
         player.GetComponent<CharacterControl>().enabled = true;
         player.transform.Find("Main Camera").gameObject.SetActive(true);
+        AudioListener.transform.parent = player.transform;
+        AudioListener.transform.localPosition = Vector3.zero;
+        soundController.PlayAmbientSound();
     }
     private void SetUpTechnician()
     {
         GameObject playerTech = GameObject.FindGameObjectWithTag("PlayerTech");
         playerTech.SetActive(true);
+        AudioListener.transform.parent = playerTech.transform;
+        AudioListener.transform.localPosition = Vector3.zero;
     }
     #endregion
     #region Public Functions

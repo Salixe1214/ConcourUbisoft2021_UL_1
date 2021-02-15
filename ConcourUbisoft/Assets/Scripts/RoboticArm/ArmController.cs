@@ -21,6 +21,7 @@ namespace Arm
         [SerializeField] float speed = 3f;
         [SerializeField] private float grabSpeed = 3f;
         [SerializeField] private float headRotation = 180;
+        [SerializeField] private AudioSource RoboticArmSound = null;
         private float maxRange;
         private float minRange;
         private float targetStartY;
@@ -51,6 +52,16 @@ namespace Arm
             if (grabState == GrabState.NONE || grabState == GrabState.GRABBED)
             {
                 Vector3 translation = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+
+                if (translation != Vector3.zero && !RoboticArmSound.isPlaying) {
+                    RoboticArmSound.Play();
+                   
+                }
+                else if(translation == Vector3.zero && RoboticArmSound.isPlaying)
+                {
+                    RoboticArmSound.Pause();
+                    RoboticArmSound.time = 0;
+                }
 
                 armTarget.transform.Translate(Time.deltaTime * speed * translation);
                 float distanceToTarget = Vector3.Distance(transform.position, armIKSolver.Target.position);

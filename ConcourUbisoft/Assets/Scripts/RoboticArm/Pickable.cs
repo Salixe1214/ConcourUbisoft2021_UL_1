@@ -6,8 +6,8 @@ namespace Arm
     [RequireComponent(typeof(Collider))]
     public class Pickable : MonoBehaviour
     {
-        private Rigidbody rigidbody;
-        private Collider collider;
+        private new Rigidbody rigidbody;
+        private new Collider collider;
 
         private void Start()
         {

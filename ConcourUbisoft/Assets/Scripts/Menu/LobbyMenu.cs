@@ -10,14 +10,13 @@ public class LobbyMenu : MonoBehaviour
 {
     [SerializeField] private GameObject RoomListElementPrefab = null;
     [SerializeField] private GameObject ContentPanel = null;
-    [SerializeField] private GameObject LobbyPanel = null;
     [SerializeField] private GameObject CreateRoomPanel = null;
     [SerializeField] private GameObject TogglePrivate = null;
     [SerializeField] private GameObject JoinRoomPanel = null;
     [SerializeField] private LoadScreenMenuController LoadScreenMenuController = null;
 
     private NetworkController networkController = null;
-    private MenuSoundController menuSoundController = null;
+    private SoundController menuSoundController = null;
 
     #region UI Actions
     public void OpenCreateRoomPanel()
@@ -64,7 +63,7 @@ public class LobbyMenu : MonoBehaviour
     private void Awake()
     {
         networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
-        menuSoundController = GameObject.FindGameObjectWithTag("MenuSound").GetComponent<MenuSoundController>();
+        menuSoundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
     }
     private void OnEnable()
     {

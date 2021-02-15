@@ -14,7 +14,7 @@ public class MenuController : MonoBehaviour
 
     private NetworkController networkController = null;
     private GameController gameController = null;
-    private MenuSoundController menuSoundController = null;
+    private SoundController menuSoundController = null;
 
     #region UI Actions
     public void EnterLobby()
@@ -30,7 +30,7 @@ public class MenuController : MonoBehaviour
     {
         networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        menuSoundController = GameObject.FindGameObjectWithTag("MenuSound").GetComponent<MenuSoundController>();
+        menuSoundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         menuSoundController.PlayMenuSong();
     }
     private void OnEnable()

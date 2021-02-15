@@ -8,7 +8,7 @@ namespace TechSupport
     {
         private Camera _camera;
 
-        private void Start()
+        private void Awake()
         {
             _camera = GetComponent<Camera>();
         }

@@ -11,12 +11,12 @@ public class ErrorPromptController : MonoBehaviour
     [SerializeField] private Text Title = null;
     [SerializeField] private Text Message = null;
 
-    private MenuSoundController menuSoundController = null;
+    private SoundController menuSoundController = null;
 
     #region Unity Callbacks
     private void Start()
     {
-        menuSoundController = GameObject.FindGameObjectWithTag("MenuSound").GetComponent<MenuSoundController>();
+        menuSoundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
     }
     #endregion
     #region UI Actions

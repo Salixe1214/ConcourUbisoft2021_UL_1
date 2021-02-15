@@ -16,7 +16,7 @@ public class RoomMenu : MonoBehaviour
     private GameController gameController = null;
     private Button startButton = null;
     private Text errorText = null;
-    private MenuSoundController menuSoundController = null;
+    private SoundController menuSoundController = null;
 
     #region UI Action
     public void LeaveRoom()
@@ -53,7 +53,7 @@ public class RoomMenu : MonoBehaviour
     {
         networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        menuSoundController = GameObject.FindGameObjectWithTag("MenuSound").GetComponent<MenuSoundController>();
+        menuSoundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         startButton = StartButton.GetComponent<Button>();
         errorText = ErrorText.GetComponent<Text>();
     }

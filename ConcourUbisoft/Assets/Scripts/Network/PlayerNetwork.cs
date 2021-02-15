@@ -9,7 +9,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     public string Name { set; get; }
     public string Id { get { return photonView.Owner.UserId; } }
 
-    private PhotonView photonView = null;
+    private new PhotonView photonView = null;
     private NetworkController networkController = null;
     private GameController gameController = null;
     private GameObject playerA = null;
