@@ -171,5 +171,15 @@ namespace Arm
                     Debug.DrawRay(grabPoint.position, headDirection * hit.distance, Color.green);
             }
         }
+        
+        public void ControlConvoyer(bool control)
+        {
+            controlled = !control;
+        }
+
+        public bool IsControlled()
+        {
+            return controlled;
+        }
     }
 }

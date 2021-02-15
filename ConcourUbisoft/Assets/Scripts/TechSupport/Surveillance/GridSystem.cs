@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TechSupport
+namespace TechSupport.Surveillance
 {
     public class GridSystem
     {
