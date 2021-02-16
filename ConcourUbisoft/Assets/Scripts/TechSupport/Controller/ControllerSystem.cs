@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Arm;
-using TechSupport.Surveillance;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +8,7 @@ namespace TechSupport.Controller
 {
     public class ControllerSystem : MonoBehaviour
     {
-        private IEnumerable<ArmController> _controllers;
+        private IEnumerable<Controllable> _controllers;
         private IEnumerable<GameObject> _buttons = new GameObject[]{};
 
         [Header("Button")]
@@ -26,9 +23,9 @@ namespace TechSupport.Controller
         {
             Vector3 position = buttonPrefabs.transform.position;
             int index = 1;
-            _controllers = FindObjectsOfType<ArmController>();
+            _controllers = FindObjectsOfType<Controllable>();
 
-            foreach (ArmController controller in _controllers)
+            foreach (Controllable controller in _controllers)
             {
                 CreateButton("Controller " + index,controller, position);
                 position += offset;
@@ -37,7 +34,7 @@ namespace TechSupport.Controller
         }
 
 
-        void CreateButton(string controllerName, ArmController controller, Vector3 position)
+        void CreateButton(string controllerName, Controllable controller, Vector3 position)
         {
             GameObject buttonGameObject = Instantiate(buttonPrefabs, position, _rotation, parent);
 
@@ -51,22 +48,22 @@ namespace TechSupport.Controller
         #region Control
 
         // TODO:
-        private void ControlConvoyer(ArmController controller)
+        private void ControlConvoyer(Controllable controller)
         {
-            if (controller.IsControlled())
+            if (controller.IsControlled)
             {
                 return; // No need to reset if the chosen controller is already on control
             }
 
             Reset();
-            controller.ControlConvoyer(true);
+            controller.IsControlled = true;
         }
 
         private void Reset()
         {
-            foreach (ArmController c in _controllers)
+            foreach (Controllable c in _controllers)
             {
-                c.ControlConvoyer(false);
+                c.IsControlled = false;
             }
         }
 

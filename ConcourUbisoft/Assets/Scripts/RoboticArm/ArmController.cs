@@ -56,15 +56,5 @@ namespace Arm
             float rotationY = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             armRotationRoot.rotation = Quaternion.Euler(0f, rotationY - 90, 0f);
         }
-        
-        public void ControlConvoyer(bool control)
-        {
-            controlled = control;
-        }
-
-        public bool IsControlled()
-        {
-            return controlled;
-        }
     }
 }
