@@ -24,11 +24,13 @@ namespace Arm
         private float maxRange;
         private float minRange;
         private float targetStartY;
+
+        public float ControlSpeed => controlSpeed;
+
         private GrabState grabState = GrabState.NONE;
         private Transform armTarget = null;
         private Pickable grabTarget;
         private Vector3 grabTargetPosition;
-        private AudioSource audioSource;
 
         private void Start()
         {
@@ -37,7 +39,6 @@ namespace Arm
             armTarget = armIKSolver.Target;
             targetStartY = armTarget.transform.localPosition.y;
             head.transform.Rotate(new Vector3(0, 0, 1), headRotation - head.transform.eulerAngles.z);
-            audioSource = GetComponent<AudioSource>();
         }
 
         void Update()
@@ -54,7 +55,6 @@ namespace Arm
             if (grabState == GrabState.NONE || grabState == GrabState.GRABBED)
             {
                 Vector3 translation = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-                audioSource.volume = translation.magnitude;
                 armTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
                 float distanceToTarget = Vector3.Distance(transform.position, armIKSolver.Target.position);
                 if (distanceToTarget > maxRange)
@@ -135,7 +135,6 @@ namespace Arm
             }
             float speed = SpeedFunction(0.2f,0.8f,(armTarget.transform.localPosition.y-grabTargetPosition.y)/(targetStartY-grabTargetPosition.y));
             armTarget.transform.Translate(speed * grabSpeed * Time.deltaTime * Vector3.down);
-            audioSource.volume = speed;
         }
 
         private float SpeedFunction(float a,float b,float x)
@@ -154,10 +153,8 @@ namespace Arm
         {
             float speed = SpeedFunction(0.2f,0.8f,(armTarget.transform.localPosition.y-grabTargetPosition.y)/(targetStartY-grabTargetPosition.y));
             armTarget.transform.Translate(speed * grabSpeed * Time.deltaTime * Vector3.up);
-            audioSource.volume = speed;
             if (armTarget.transform.localPosition.y >= targetStartY)
             {
-                audioSource.volume = 0;
                 armTarget.transform.localPosition = new Vector3(
                     armTarget.transform.localPosition.x,
                     targetStartY,
