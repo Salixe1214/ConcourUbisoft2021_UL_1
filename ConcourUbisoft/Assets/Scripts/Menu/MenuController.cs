@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class MenuController : MonoBehaviour
     [SerializeField] private LoadScreenMenuController LoadScreenMenuController = null;
     [SerializeField] private GameObject ErrorPanelErrorPrefab = null;
     [SerializeField] private GameObject Canvas = null;
+    [SerializeField] private GameObject OptionMenu = null;
+
 
     private NetworkController networkController = null;
     private GameController gameController = null;
@@ -23,6 +26,24 @@ public class MenuController : MonoBehaviour
         StartMenu.SetActive(false);
         LoadScreenMenuController.Show("Joining Lobby...");
         networkController.JoinLobby();
+    }
+    public void OnBackOptionButtonClicked()
+    {
+        menuSoundController.PlayButtonSound();
+        OptionMenu.SetActive(false);
+        StartMenu.SetActive(true);
+    }
+    public void OnOptionButtonClicked()
+    {
+        menuSoundController.PlayButtonSound();
+        StartMenu.SetActive(false);
+        OptionMenu.SetActive(true);
+    }
+    public void OnLobbyBackButtonClicked()
+    {
+        menuSoundController.PlayButtonSound();
+        LoadScreenMenuController.Show("Disconnecting...");
+        networkController.LeaveLobby();
     }
     #endregion
     #region Unity Callbacks
@@ -39,20 +60,29 @@ public class MenuController : MonoBehaviour
         networkController.OnJoinedLobbyEvent += OnJoinedLobby;
         networkController.OnJoinedRoomEvent += OnJoinedRoom;
         networkController.OnLeftRoomEvent += OnLeftRoom;
+        networkController.OnDisconnectEvent += OnDisconnectEvent;
         gameController.OnLoadGameEvent += OnLoadGame;
         gameController.OnFinishLoadGameEvent += OnFinishLoadGame;
     }
+
     private void OnDisable()
     {
         networkController.OnNetworkErrorEvent -= CreateMainMenuError;
         networkController.OnJoinedLobbyEvent -= OnJoinedLobby;
         networkController.OnJoinedRoomEvent -= OnJoinedRoom;
         networkController.OnLeftRoomEvent -= OnLeftRoom;
+        networkController.OnDisconnectEvent -= OnDisconnectEvent;
         gameController.OnLoadGameEvent -= OnLoadGame;
         gameController.OnFinishLoadGameEvent -= OnFinishLoadGame;
     }
     #endregion
     #region Event Callbacks
+    private void OnDisconnectEvent()
+    {
+        StartMenu.SetActive(true);
+        LobbyMenu.SetActive(false);
+        LoadScreenMenuController.Hide();
+    }
     private void OnJoinedLobby()
     {
         LobbyMenu.SetActive(true);

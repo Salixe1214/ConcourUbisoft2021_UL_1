@@ -13,12 +13,14 @@ public class GameController : MonoBehaviour
 
     [SerializeField] private string SceneToStartName = "";
     [SerializeField] private GameObject AudioListener = null;
+    [SerializeField] private OptionController optionController = null;
 
     private SoundController soundController = null;
 
     public bool IsGameLoading { get; private set; }
     public bool IsGameStart { get; private set; }
     public Role GameRole { get; set; }
+    public OptionController OptionController { get => optionController; }
 
     #region Events
     public delegate void OnLoadGameHandler();

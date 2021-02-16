@@ -38,10 +38,17 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public delegate void OnLeftRoomHandler();
     public event OnLeftRoomHandler OnLeftRoomEvent;
 
+    public delegate void OnDisconnectHandler();
+    public event OnDisconnectHandler OnDisconnectEvent;
+
     public delegate void OnPlayerNetworkInstantiateHandler();
     public event OnPlayerNetworkInstantiateHandler OnPlayerObjectCreate;
     #endregion
     #region Photon Callbacks
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        OnDisconnectEvent?.Invoke();
+    }
     public override void OnConnectedToMaster()
     {
         PhotonNetwork.JoinLobby(TypedLobby.Default);
@@ -85,6 +92,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public void JoinLobby()
     {
         PhotonNetwork.ConnectUsingSettings();
+    }
+    public void LeaveLobby()
+    {
+        PhotonNetwork.Disconnect();
     }
     public void CreateRoom(string roomName, bool privateGame)
     {
