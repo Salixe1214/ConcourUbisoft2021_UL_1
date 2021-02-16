@@ -9,6 +9,7 @@ TagManager:
   - PlayerTech
   - PlayerGuard
   - SoundController
+  - door
   layers:
   - Default
   - TransparentFX
