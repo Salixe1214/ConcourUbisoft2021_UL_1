@@ -9,8 +9,7 @@ namespace Arm
         [SerializeField] private Transform armRotationRoot;
         [SerializeField] float controlSpeed = 3f;
         private Transform armTarget = null;
-
-
+        
         private float maxRange;
         private float minRange;
 
