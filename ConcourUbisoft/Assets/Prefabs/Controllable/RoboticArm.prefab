@@ -47,7 +47,7 @@ MonoBehaviour:
   target: {fileID: 6459741911338417668}
   armController: {fileID: 1097129798252018090}
   smoothIterationCount: 10
-  volumeMultiplier: 1
+  volumeMultiplier: 0.3
 --- !u!82 &1277716173
 AudioSource:
   m_ObjectHideFlags: 0
@@ -61,7 +61,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: be762050e5fc860469e055cb477af79d, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0
-  m_Pitch: 0.15
+  m_Pitch: 1.25
   Loop: 1
   Mute: 0
   Spatialize: 0
