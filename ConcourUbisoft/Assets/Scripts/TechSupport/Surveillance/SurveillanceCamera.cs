@@ -7,7 +7,7 @@ namespace TechSupport.Surveillance
     {
         private Camera _camera;
 
-        private void Awake()
+        public void Init()
         {
             _camera = GetComponent<Camera>();
         }

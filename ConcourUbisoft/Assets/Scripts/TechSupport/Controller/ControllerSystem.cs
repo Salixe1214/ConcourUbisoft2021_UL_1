@@ -22,7 +22,7 @@ namespace TechSupport.Controller
 
         #region Init
 
-        private void Start()
+        private void Awake()
         {
             Vector3 position = buttonPrefabs.transform.position;
             int index = 1;

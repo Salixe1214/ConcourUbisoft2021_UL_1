@@ -46,11 +46,11 @@ namespace TechSupport.Surveillance
         private void Awake()
         {
             _cameras = FindObjectsOfType<SurveillanceCamera>();
+            foreach (SurveillanceCamera camera in _cameras)
+            {
+                camera.Init(); 
+            }
             _gridSystem.SearchGridSize(_cameras.Count());
-        }
-
-        private void Start()
-        {
             _fullScreenSystem.SetTarget(_cameras.First().GetCamera());
             SystemSwitch(mode);
         }
