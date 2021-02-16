@@ -8,6 +8,7 @@ TagManager:
   - PlayerNetwork
   - PlayerA
   - Magnet
+  - door
   layers:
   - Default
   - TransparentFX
@@ -15,8 +16,8 @@ TagManager:
   - 
   - Water
   - UI
-  - Transportable
-  - Conveyor
+  - 
+  - 
   - 
   - 
   - 
