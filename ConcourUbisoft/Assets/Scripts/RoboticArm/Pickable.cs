@@ -10,8 +10,6 @@ namespace Arm
     public class Pickable : MonoBehaviour
     {
         [SerializeField] private AudioClip magnetCollisionSound;
-        [SerializeField] private AudioClip conveyorCollisionSound;
-        [SerializeField] private AudioClip groundCollisionSound;
         private AudioSource audioSource;
         private Rigidbody rigidbody;
 
