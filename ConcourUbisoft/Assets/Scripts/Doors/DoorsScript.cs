@@ -16,7 +16,6 @@ public class DoorsScript : MonoBehaviour
     private Color _color;
 
     [SerializeField] private List<DoorsButton> buttonsList;
-    [SerializeField] private GameObject confirmButton;
     [SerializeField] private GameObject confirmLight;
 
     public static Action DoorUnlock;
@@ -40,7 +39,7 @@ public class DoorsScript : MonoBehaviour
         switch (bType)
         {
             case ButtonType.Err:
-                Debug.Log("Erreur, ce bouton ne correspond pas à auccun boutton");
+                Debug.Log("Err");
                 break;
             case ButtonType.Confirm:
                 OnConfirm();
