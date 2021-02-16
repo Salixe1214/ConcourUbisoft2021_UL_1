@@ -21,7 +21,6 @@ namespace TechSupport.Surveillance
         {
             float x = 0;
             float y = 0;
-            Debug.Log("<GridSystem::Grid> Grid Size before contruct: " + _size);
 
             foreach (Camera camera in cams)
             {
@@ -43,7 +42,6 @@ namespace TechSupport.Surveillance
         public void SearchGridSize(int elementNbr)
         {
             _size = CalculateGridSize(elementNbr);
-            Debug.Log("<GridSystem::SearchGridSize> Size calculated: " + _size);
         }
 
         public Vector2Int GetGridSize()

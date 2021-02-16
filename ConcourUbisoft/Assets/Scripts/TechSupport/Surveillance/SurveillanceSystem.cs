@@ -20,19 +20,31 @@ namespace TechSupport.Surveillance
 
         #region Callbacks
 
-        public Action<SurveillanceMode, SurveillanceMode> OnSwitchMode;
         public Action OnModeSwitched;
-        public Action OnGridMode;
-        public Action OnFullScreenMode;
-        
+
+        public readonly IDictionary<SurveillanceMode, Action> _onSwitchMethods;
+        public readonly IDictionary<SurveillanceMode, Action> _exitMethods;
+
+        public SurveillanceSystem()
+        {
+            _onSwitchMethods
+                = new Dictionary<SurveillanceMode, Action>()
+                {
+                    { SurveillanceMode.Focused, OnFullScreen },
+                    { SurveillanceMode.Grid, OnGrid },
+                };
+            _exitMethods
+                = new Dictionary<SurveillanceMode, Action>()
+                {
+                    { SurveillanceMode.Focused, ExitFullScreen },
+                    { SurveillanceMode.Grid, ExitGrid },
+                };
+        }
+
         #endregion
 
         private void Awake()
         {
-            OnGridMode += OnGrid;
-            OnFullScreenMode += OnFullScreen;
-            OnSwitchMode += OnSwitch;
-            
             _cameras = FindObjectsOfType<SurveillanceCamera>();
             _gridSystem.SearchGridSize(_cameras.Count());
         }
@@ -71,50 +83,32 @@ namespace TechSupport.Surveillance
             }
         }
 
-        public bool IsTarget(GameObject obj)
-        {
-            return _fullScreenSystem.GetTarget().gameObject.GetInstanceID() == obj.GetInstanceID();
-        }
-        
         #endregion
 
         #region General System
 
         private void SystemSwitch(SurveillanceMode newMode)
         {
-            OnSwitchMode?.Invoke(mode, newMode);
-            // TODO: Make a tab of it
-            switch (mode = newMode)
+            if (mode != newMode)
             {
-                case SurveillanceMode.Grid:
-                    OnGridMode?.Invoke();
-                    break;
-                case SurveillanceMode.Focused:
-                    OnFullScreenMode?.Invoke();
-                    break;
+                _exitMethods[mode]?.Invoke();
             }
+            _onSwitchMethods[mode = newMode]?.Invoke();
             OnModeSwitched?.Invoke();
         }
 
-        private void OnSwitch(SurveillanceMode oldMode, SurveillanceMode newMode)
+        private void ExitFullScreen()
         {
-            if (oldMode == newMode)
+            _fullScreenSystem.EscapeFullScreen();
+        }
+
+        private void ExitGrid()
+        {
+            SurveillanceCamera selected =
+                _cameras.First(surveillanceCamera => surveillanceCamera.Contains(Input.mousePosition));
+            if (selected != null)
             {
-                return;
-            }
-            switch (oldMode)
-            {
-                case SurveillanceMode.Focused:
-                    _fullScreenSystem.EscapeFullScreen();
-                    break;
-                case SurveillanceMode.Grid:
-                    SurveillanceCamera selected =
-                        _cameras.First(surveillanceCamera => surveillanceCamera.Contains(Input.mousePosition));
-                    if (selected != null)
-                    {
-                        _fullScreenSystem.SetTarget(selected.GetCamera());
-                    }
-                    break;
+                _fullScreenSystem.SetTarget(selected.GetCamera());
             }
         }
 
