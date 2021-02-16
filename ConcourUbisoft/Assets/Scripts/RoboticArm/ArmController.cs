@@ -21,20 +21,20 @@ namespace Arm
         [SerializeField] float controlSpeed = 3f;
         [SerializeField] private float grabSpeed = 3f;
         [SerializeField] private float headRotation = 180;
+        private Transform armTarget = null;
+        private Pickable currentPickable = null;
+        private Vector3 currentPickableHitPosition;
         private float maxRange;
         private float minRange;
         private float targetStartY;
+        private GrabState grabState = GrabState.NONE;
 
         public float ControlSpeed => controlSpeed;
 
-        private GrabState grabState = GrabState.NONE;
-        private Transform armTarget = null;
-        private Pickable grabTarget;
-        private Vector3 grabTargetPosition;
 
         private void Start()
         {
-            maxRange = armIKSolver.TotalLength; //- (armIKSolver.TotalLength / 5);
+            maxRange = armIKSolver.TotalLength;
             minRange = armIKSolver.TotalLength / 4;
             armTarget = armIKSolver.Target;
             targetStartY = armTarget.transform.localPosition.y;
@@ -45,6 +45,7 @@ namespace Arm
         {
             if (controlled)
             {
+                UpdateCurrentPickable();
                 UpdateArm();
                 UpdateHead();
             }
@@ -90,14 +91,13 @@ namespace Arm
             switch (grabState)
             {
                 case GrabState.NONE:
-                    GetGrabTarget();
                     if ((Input.GetButtonDown("Grab") ||
                          Input.GetButtonDown("GrabControllerXBO") ||
-                         Input.GetButtonDown("GrabControllerPS")) && grabTarget)
+                         Input.GetButtonDown("GrabControllerPS")) && currentPickable)
                         grabState = GrabState.MOVE_TO_TARGET;
                     break;
                 case GrabState.MOVE_TO_TARGET:
-                    MoveToGrabTarget(grabTarget);
+                    MoveToCurrentPickable();
                     break;
                 case GrabState.GRABBING:
 
@@ -107,7 +107,9 @@ namespace Arm
                     ResetPosition();
                     break;
                 case GrabState.GRABBED:
-                    if (Input.GetKeyDown(KeyCode.Space))
+                    if ((Input.GetButtonDown("Grab") ||
+                         Input.GetButtonDown("GrabControllerXBO") ||
+                         Input.GetButtonDown("GrabControllerPS")))
                         Release();
                     break;
                 default:
@@ -118,40 +120,54 @@ namespace Arm
 
         private void Release()
         {
-            grabTarget.transform.SetParent(null);
+            currentPickable.transform.SetParent(null);
             grabState = GrabState.NONE;
-            grabTarget.OnRelease();
-            grabTarget = null;
+            currentPickable.OnRelease();
+            currentPickable = null;
         }
 
-        private void MoveToGrabTarget(Pickable grabTarget)
+        private void MoveToCurrentPickable()
         {
-            if (grabTarget.Constains(grabPoint.position))
+            if (currentPickable)
+            {
+                if (currentPickable.Contains(grabPoint.position))
+                {
+                    grabState = GrabState.RESET_POSITION;
+                    currentPickable.transform.SetParent(grabPoint.transform);
+                    currentPickable.OnGrab();
+                }
+
+                float speed = SpeedFunction(0.2f, 0.8f,
+                    (armTarget.transform.localPosition.y - currentPickableHitPosition.y) /
+                    (targetStartY - currentPickableHitPosition.y));
+                armTarget.transform.Translate(speed * grabSpeed * Time.deltaTime * Vector3.down);
+            }
+            else
             {
                 grabState = GrabState.RESET_POSITION;
-                grabTarget.transform.SetParent(grabPoint.transform);
-                this.grabTarget = grabTarget;
-                grabTarget.OnGrab();
             }
-            float speed = SpeedFunction(0.2f,0.8f,(armTarget.transform.localPosition.y-grabTargetPosition.y)/(targetStartY-grabTargetPosition.y));
-            armTarget.transform.Translate(speed * grabSpeed * Time.deltaTime * Vector3.down);
         }
 
-        private float SpeedFunction(float a,float b,float x)
+        private float SpeedFunction(float a, float b, float x)
         {
             if (x < a)
             {
                 return Mathf.SmoothStep(0.1f, 1, x / a);
             }
+
             if (x < b)
             {
                 return 1.0f;
             }
+
             return Mathf.SmoothStep(1, 0.1f, (x - b) / a);
         }
+
         private void ResetPosition()
         {
-            float speed = SpeedFunction(0.2f,0.8f,(armTarget.transform.localPosition.y-grabTargetPosition.y)/(targetStartY-grabTargetPosition.y));
+            float speed = SpeedFunction(0.2f, 0.8f,
+                (armTarget.transform.localPosition.y - currentPickableHitPosition.y) /
+                (targetStartY - currentPickableHitPosition.y));
             armTarget.transform.Translate(speed * grabSpeed * Time.deltaTime * Vector3.up);
             if (armTarget.transform.localPosition.y >= targetStartY)
             {
@@ -159,23 +175,29 @@ namespace Arm
                     armTarget.transform.localPosition.x,
                     targetStartY,
                     armTarget.transform.localPosition.z);
-                if (grabTarget != null)
+                if (currentPickable != null)
                     grabState = GrabState.GRABBED;
                 else
                     grabState = GrabState.NONE;
             }
         }
 
-        private void GetGrabTarget()
+        private void UpdateCurrentPickable()
         {
             RaycastHit hit;
             Vector3 headDirection = head.transform.up;
             if (Physics.Raycast(grabPoint.position, headDirection, out hit, Mathf.Infinity))
             {
-                grabTarget = hit.transform.GetComponent<Pickable>();
-                grabTargetPosition = hit.point;
-                if (grabTarget)
+                currentPickable = hit.transform.GetComponent<Pickable>();
+                if (currentPickable)
+                {
+                    currentPickable.OnHover();
                     Debug.DrawRay(grabPoint.position, headDirection * hit.distance, Color.green);
+                }
+                else
+                {
+                    currentPickable = null;
+                }
             }
         }
     }
