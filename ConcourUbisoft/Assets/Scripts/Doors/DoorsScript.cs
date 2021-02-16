@@ -39,7 +39,7 @@ public class DoorsScript : MonoBehaviour
         switch (bType)
         {
             case ButtonType.Err:
-                Debug.Log("Err");
+                Debug.Log("Erreur, ce boutton n'en est pas un.");
                 break;
             case ButtonType.Confirm:
                 OnConfirm();
@@ -90,7 +90,7 @@ public class DoorsScript : MonoBehaviour
 
     private void OnDoorUnlock()
     {
-        Debug.Log("Unlocked");
+        Debug.Log("La porte s'est débarrée");
 
         GetComponent<Collider>().isTrigger = true;
         _matIndicator.SetColor("_Color", Color.green);
