@@ -23,7 +23,7 @@ public class ConveyorController : MonoBehaviour
                 objectsOnConveyor[rigidbody] = 0;
             }
             objectsOnConveyor[rigidbody] = objectsOnConveyor[rigidbody] + 1;
-            Debug.Log($"{collision.gameObject.name} has entered the conveyor. ({objectsOnConveyor[rigidbody]})");
+//            Debug.Log($"{collision.gameObject.name} has entered the conveyor. ({objectsOnConveyor[rigidbody]})");
         }
     }
 
@@ -34,7 +34,7 @@ public class ConveyorController : MonoBehaviour
         if (collision.gameObject.TryGetComponent(out transportableByConveyor) && collision.gameObject.TryGetComponent(out rigidbody))
         {
             objectsOnConveyor[rigidbody] = objectsOnConveyor[rigidbody] - 1;
-            Debug.Log($"{collision.gameObject.name} has left the conveyor. ({objectsOnConveyor[rigidbody]})");
+//            Debug.Log($"{collision.gameObject.name} has left the conveyor. ({objectsOnConveyor[rigidbody]})");
             if (objectsOnConveyor[rigidbody] == 0)
             {
                 objectsOnConveyor.Remove(rigidbody);

@@ -16,7 +16,7 @@ namespace TechSupport.Surveillance
         private readonly GridSystem _gridSystem = new GridSystem();
         private readonly FullScreenSystem _fullScreenSystem = new FullScreenSystem();
 
-        private List<SurveillanceCamera> _cameras = new List<SurveillanceCamera>();
+        private IEnumerable<SurveillanceCamera> _cameras = new List<SurveillanceCamera>();
 
         #region Callbacks
 
@@ -27,16 +27,19 @@ namespace TechSupport.Surveillance
         
         #endregion
 
-        private void Start()
+        private void Awake()
         {
-            _cameras = FindObjectsOfType<SurveillanceCamera>().ToList();
-            _gridSystem.SearchGridSize(_cameras.Count);
-            _fullScreenSystem.SetTarget(_cameras.First().GetCamera());
-
             OnGridMode += OnGrid;
             OnFullScreenMode += OnFullScreen;
             OnSwitchMode += OnSwitch;
             
+            _cameras = FindObjectsOfType<SurveillanceCamera>();
+            _gridSystem.SearchGridSize(_cameras.Count());
+        }
+
+        private void Start()
+        {
+            _fullScreenSystem.SetTarget(_cameras.First().GetCamera());
             SystemSwitch(mode);
         }
 
@@ -79,11 +82,6 @@ namespace TechSupport.Surveillance
 
         private void SystemSwitch(SurveillanceMode newMode)
         {
-            if (mode == newMode)
-            {
-                return;
-            }
-
             OnSwitchMode?.Invoke(mode, newMode);
             // TODO: Make a tab of it
             switch (mode = newMode)
@@ -100,7 +98,10 @@ namespace TechSupport.Surveillance
 
         private void OnSwitch(SurveillanceMode oldMode, SurveillanceMode newMode)
         {
-            // TODO: 
+            if (oldMode == newMode)
+            {
+                return;
+            }
             switch (oldMode)
             {
                 case SurveillanceMode.Focused:
@@ -108,7 +109,7 @@ namespace TechSupport.Surveillance
                     break;
                 case SurveillanceMode.Grid:
                     SurveillanceCamera selected =
-                        _cameras.Find(surveillanceCamera => surveillanceCamera.Contains(Input.mousePosition));
+                        _cameras.First(surveillanceCamera => surveillanceCamera.Contains(Input.mousePosition));
                     if (selected != null)
                     {
                         _fullScreenSystem.SetTarget(selected.GetCamera());
@@ -120,7 +121,7 @@ namespace TechSupport.Surveillance
         private void OnGrid()
         {
             EnableAll(true);
-            _gridSystem.Grid(_cameras.ConvertAll(input => input.GetCamera()),
+            _gridSystem.Grid(_cameras.Select(input => input.GetCamera()),
                 _gridSystem.GetGridSize());
         }
 

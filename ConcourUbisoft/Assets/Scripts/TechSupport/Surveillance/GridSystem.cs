@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace TechSupport.Surveillance
@@ -16,14 +17,15 @@ namespace TechSupport.Surveillance
             return new Vector2Int(Mathf.CeilToInt(rLenght), Mathf.RoundToInt(rLenght));
         }
     
-        public void Grid(List<Camera> cams, Vector2Int size)
+        public void Grid(IEnumerable<Camera> cams, Vector2Int size)
         {
             float x = 0;
             float y = 0;
+            Debug.Log("<GridSystem::Grid> Grid Size before contruct: " + _size);
 
-            for (int i = 0; i < cams.Count; i++)
+            foreach (Camera camera in cams)
             {
-                cams[i].rect = new Rect(x * (1f / size.x), y * (1f / size.y),
+                camera.rect = new Rect(x * (1f / size.x), y * (1f / size.y),
                     1f / size.x, 1f / size.y);
                 x++;
                 if (x % size.x == 0)
@@ -41,6 +43,7 @@ namespace TechSupport.Surveillance
         public void SearchGridSize(int elementNbr)
         {
             _size = CalculateGridSize(elementNbr);
+            Debug.Log("<GridSystem::SearchGridSize> Size calculated: " + _size);
         }
 
         public Vector2Int GetGridSize()

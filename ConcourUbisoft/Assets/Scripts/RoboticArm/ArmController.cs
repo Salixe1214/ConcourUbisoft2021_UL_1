@@ -174,7 +174,7 @@ namespace Arm
         
         public void ControlConvoyer(bool control)
         {
-            controlled = !control;
+            controlled = control;
         }
 
         public bool IsControlled()
