@@ -106,12 +106,21 @@ namespace Arm
             if (pickables.Count != 0)
             {
                 float minDist = float.MaxValue;
-                foreach (var pickable in pickables)
+                Pickable pickable=null;
+                for (int i = pickables.Count - 1; i >= 0; i-- )
                 {
-                    float dist = Vector3.Distance(pickable.transform.position, transform.position);
-                    if (minDist > dist)
+                    pickable = pickables[i];
+                    if (pickable != null)
                     {
-                        currentPickable = pickable;
+                        float dist = Vector3.Distance(pickable.transform.position, transform.position);
+                        if (minDist > dist)
+                        {
+                            currentPickable = pickable;
+                        }
+                    }
+                    else
+                    {
+                        pickables.RemoveAt(i);
                     }
                 }
             }
