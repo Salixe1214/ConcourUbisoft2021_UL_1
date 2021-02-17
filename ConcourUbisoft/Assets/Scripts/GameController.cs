@@ -28,16 +28,20 @@ public class GameController : MonoBehaviour
 
     public delegate void OnFinishLoadGameHander();
     public event OnFinishLoadGameHander OnFinishLoadGameEvent;
+
+    public event System.Action OnFinishGameEvent;
     #endregion
     #region Unity Callbacks
     private void Awake()
     {
-        soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
+       Random.InitState(0);
+       soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
     }
     #endregion
     #region Private Functions
     private IEnumerator LoadAsyncLevel()
     {
+        soundController.StopMenuSong();
         AsyncOperation operation = SceneManager.LoadSceneAsync(SceneToStartName, LoadSceneMode.Additive);
         IsGameLoading = true;
         OnLoadGameEvent?.Invoke();
@@ -66,11 +70,10 @@ public class GameController : MonoBehaviour
         playerTech.SetActive(false);
 
         GameObject player = GameObject.FindGameObjectWithTag("PlayerGuard");
-        player.GetComponent<CharacterControl>().enabled = true;
-        player.transform.Find("Main Camera").gameObject.SetActive(true);
-        AudioListener.transform.parent = player.transform;
-        AudioListener.transform.localPosition = Vector3.zero;
+        AudioListener.SetActive(false);
         soundController.PlayAmbientSound();
+        Transform playerCamera = player.transform.Find("Main Camera");
+        playerCamera.GetComponent<CameraMovement>().enabled = true;
     }
     private void SetUpTechnician()
     {
@@ -78,6 +81,12 @@ public class GameController : MonoBehaviour
         playerTech.SetActive(true);
         AudioListener.transform.parent = playerTech.transform;
         AudioListener.transform.localPosition = Vector3.zero;
+
+        GameObject player = GameObject.FindGameObjectWithTag("PlayerGuard");
+        player.GetComponent<CharacterControl>().enabled = false;
+        Transform playerCamera = player.transform.Find("Main Camera");
+        playerCamera.gameObject.SetActive(false);
+        playerCamera.GetComponent<AudioListener>().enabled = false;
     }
     #endregion
     #region Public Functions

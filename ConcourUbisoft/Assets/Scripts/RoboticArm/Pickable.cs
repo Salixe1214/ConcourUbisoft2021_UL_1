@@ -10,6 +10,7 @@ namespace Arm
     public class Pickable : MonoBehaviour
     {
         [SerializeField] private AudioClip magnetCollisionSound;
+        [SerializeField] private bool hasBeenPickup = false;
         private AudioSource audioSource;
         private Rigidbody rigidbody;
 
@@ -17,6 +18,8 @@ namespace Arm
         private Outline outline;
         private bool hovered;
         public Rigidbody RB => rigidbody;
+
+        public bool HasBeenPickup { get => hasBeenPickup; set => hasBeenPickup = value; }
 
         private void Start()
         {
@@ -44,6 +47,7 @@ namespace Arm
         public void OnGrab()
         {
             rigidbody.isKinematic = true;
+            hasBeenPickup = true;
         }
 
         public void OnHover()

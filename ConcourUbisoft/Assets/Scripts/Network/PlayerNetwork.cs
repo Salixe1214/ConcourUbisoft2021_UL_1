@@ -1,7 +1,10 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 {
@@ -20,7 +23,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         photonView = GetComponent<PhotonView>();
         networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        
+
         Name = $"Player {(photonView.Owner.IsMasterClient ? "1" : "2")}";
     }
     private void Start()
@@ -31,13 +34,15 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     {
         gameController.OnLoadGameEvent += OnLoadGameEvent;
         gameController.OnFinishLoadGameEvent += OnFinishLoadGameEvent;
+        gameController.OnFinishGameEvent += OnFinishGameEvent;
     }
+
     private void OnDisable()
     {
         gameController.OnLoadGameEvent -= OnLoadGameEvent;
         gameController.OnFinishLoadGameEvent -= OnFinishLoadGameEvent;
+        gameController.OnFinishGameEvent -= OnFinishGameEvent;
     }
-
 
     #endregion
     #region Photon Callbacks
@@ -48,7 +53,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
             stream.SendNext((int)PlayerRole);
             stream.SendNext(Name);
 
-            if(gameController.IsGameStart && PlayerRole == GameController.Role.SecurityGuard)
+            if (gameController.IsGameStart && PlayerRole == GameController.Role.SecurityGuard)
             {
                 stream.SendNext(playerA.transform.position);
                 stream.SendNext(playerA.transform.rotation);
@@ -86,6 +91,15 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
             gameController.StartGame(networkController.GetLocalRole());
         }
     }
+    [PunRPC]
+    private void UnlockDoor(object[] parameters)
+    {
+        DoorsScript doorsScript = FindObjectsOfType<DoorsScript>().Where(x => x.DoorId == (int)parameters[0]).FirstOrDefault();
+        if (doorsScript != null)
+        {
+            doorsScript.UnlockDoor();
+        }
+    }
     #endregion
     #region Private Functions
     private void OnLoadGameEvent()
@@ -94,7 +108,32 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     }
     private void OnFinishLoadGameEvent()
     {
-        playerA = GameObject.FindGameObjectWithTag("Player");
+        playerA = GameObject.FindGameObjectWithTag("PlayerGuard");
+
+        if (IsMine())
+        {
+            DoorsScript[] doorsScripts = FindObjectsOfType<DoorsScript>();
+            foreach (DoorsScript door in doorsScripts)
+            {
+                door.OnDoorUnlockEvent += OnDoorUnlockEvent;
+            }
+        }
     }
+
+    private void OnDoorUnlockEvent(DoorsScript doorsScript)
+    {
+        object[] parameters = new object[] { doorsScript.DoorId };
+        photonView.RPC("UnlockDoor", RpcTarget.Others, parameters as object);
+    }
+
+    private void OnFinishGameEvent()
+    {
+        DoorsScript[] doorsScripts = FindObjectsOfType<DoorsScript>();
+        foreach (DoorsScript door in doorsScripts)
+        {
+            door.OnDoorUnlockEvent -= OnDoorUnlockEvent;
+        }
+    }
+
     #endregion
 }

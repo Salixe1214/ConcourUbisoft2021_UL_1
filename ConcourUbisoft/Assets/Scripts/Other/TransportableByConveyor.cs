@@ -1,22 +1,29 @@
+using Arm;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Renderer))]
+[RequireComponent(typeof(Pickable))]
+[RequireComponent(typeof(Collider))]
 public class TransportableByConveyor : MonoBehaviour
 {
-    [SerializeField] public bool HasBeenPickUp = false;
+    public bool HasBeenPickUp { get { return pickable.HasBeenPickup; } set { pickable.HasBeenPickup = value; } }
 
-    private new Renderer renderer = null;
     public Color Color { get { return renderer.material.color; } set { renderer.material.color = value; } }
-    public bool Consumed { get; set; }
 
     private SortedList<int, object> priorityConveyor = new SortedList<int, object>();
+
+    private new Renderer renderer = null;
+    private new Collider collider = null;
+    private Pickable pickable = null;
 
     private void Awake()
     {
         renderer = GetComponent<Renderer>();
+        pickable = GetComponent<Pickable>();
+        collider = GetComponent<Collider>();
     }
 
     public void AddConveyor(int priority, object conveyor)
@@ -39,5 +46,10 @@ public class TransportableByConveyor : MonoBehaviour
         {
             return priorityConveyor.First().Value;
         }
+    }
+
+    public void Consume()
+    {
+        collider.enabled = false;
     }
 }

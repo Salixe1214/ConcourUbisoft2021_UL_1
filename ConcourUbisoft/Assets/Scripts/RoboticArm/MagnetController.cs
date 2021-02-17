@@ -100,7 +100,7 @@ namespace Arm
             RaycastHit hit;
             Vector3 direction = transform.up;
 
-            if (Physics.Raycast(transform.position, direction, out hit, Mathf.Infinity, 1 << 6))
+            if (Physics.Raycast(transform.position, direction, out hit, Mathf.Infinity, 1 << 3))
             {
                 currentPickable = hit.transform.GetComponent<Pickable>();
                 if (currentPickable)

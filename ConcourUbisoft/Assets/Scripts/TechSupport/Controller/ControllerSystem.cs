@@ -38,7 +38,7 @@ namespace TechSupport.Controller
         {
             GameObject buttonGameObject = Instantiate(buttonPrefabs, position, _rotation, parent);
 
-            buttonGameObject.gameObject.GetComponentInChildren<TextMeshProUGUI>(true)?.SetText(controllerName);
+            buttonGameObject.gameObject.GetComponentInChildren<Text>(true).text = controllerName;
             buttonGameObject.GetComponent<Button>()?.onClick.AddListener(delegate { ControlConvoyer(controller); });
             _buttons = _buttons.Append(buttonGameObject);
         }

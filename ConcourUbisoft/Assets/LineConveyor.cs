@@ -6,6 +6,6 @@ public class LineConveyor : Conveyor
 {
     protected override void MoveObject(Rigidbody rigidbody)
     {
-        rigidbody.MovePosition(rigidbody.position + this.transform.forward * Speed);
+        rigidbody.MovePosition(rigidbody.position + this.transform.forward * Speed * Time.deltaTime);
     }
 }

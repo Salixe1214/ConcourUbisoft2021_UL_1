@@ -44,7 +44,6 @@ public class RoomMenu : MonoBehaviour
 
         errorText.text = "";
 
-        menuSoundController.StopMenuSong();
         gameController.StartGame(networkController.GetLocalRole());
     }
     #endregion
