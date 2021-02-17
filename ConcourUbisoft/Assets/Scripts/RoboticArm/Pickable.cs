@@ -9,6 +9,7 @@ namespace Arm
     [RequireComponent(typeof(AudioSource))]
     public class Pickable : MonoBehaviour
     {
+        [SerializeField] private float volumeMultiplier=0.3f;
         [SerializeField] private AudioClip magnetCollisionSound;
         [SerializeField] private bool hasBeenPickup = false;
         private AudioSource audioSource;
@@ -48,20 +49,14 @@ namespace Arm
         {
             rigidbody.isKinematic = true;
             hasBeenPickup = true;
+            audioSource.clip = magnetCollisionSound;
+            audioSource.volume = volumeMultiplier;
+            audioSource.Play();
         }
 
         public void OnHover()
         {
             hovered = true;
-        }
-
-        public void OnCollisionEnter(Collision other)
-        {
-            if (other.transform.CompareTag("Magnet"))
-            {
-                audioSource.clip = magnetCollisionSound;
-                audioSource.Play();
-            }
         }
 
         public void OnRelease()
