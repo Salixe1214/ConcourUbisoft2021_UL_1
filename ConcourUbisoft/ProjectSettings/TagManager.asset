@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - NetworkController
+  - PlayerNetwork
+  - PlayerA
+  - Magnet
   - door
   layers:
   - Default

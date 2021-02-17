@@ -41,7 +41,7 @@ public class RoomMenu : MonoBehaviour
 
         errorText.text = "";
 
-        gameController.StartGame();
+        gameController.StartGame(networkController.GetLocalRole());
     }
     #endregion
     #region Unity Callbacks
@@ -84,7 +84,7 @@ public class RoomMenu : MonoBehaviour
         }
 
         IEnumerable<PlayerNetwork> elements = children.Select(x => x.GetComponent<RoomElementController>().PlayerNetwork );
-        IEnumerable<PlayerNetwork> playerNetworksNotFoundInScene = GameObject.FindGameObjectsWithTag("Player").Select(x => x.GetComponent<PlayerNetwork>()).Where(y => elements.Count(z => z == y) == 0).OrderBy(x => !x.IsMasterClient());
+        IEnumerable<PlayerNetwork> playerNetworksNotFoundInScene = GameObject.FindGameObjectsWithTag("PlayerNetwork").Select(x => x.GetComponent<PlayerNetwork>()).Where(y => elements.Count(z => z == y) == 0).OrderBy(x => !x.IsMasterClient());
 
         foreach (PlayerNetwork playerNetwork in playerNetworksNotFoundInScene)
         {
