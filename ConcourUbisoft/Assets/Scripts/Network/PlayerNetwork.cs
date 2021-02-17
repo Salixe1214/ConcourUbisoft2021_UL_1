@@ -69,8 +69,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
                 stream.SendNext(playerA.transform.position);
                 stream.SendNext(playerA.transform.rotation);
             }
-
-            if (gameController.IsGameStart && PlayerRole == GameController.Role.Technician)
+            else if (gameController.IsGameStart && PlayerRole == GameController.Role.Technician)
             {
                 for (int i = 0; i < Arms.Length; i++)
                 {
