@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Arm
@@ -7,11 +9,14 @@ namespace Arm
         [SerializeField] private float pullForce = 1;
         [SerializeField] private Controllable controllable;
         [SerializeField] private float magnetRotation = 180;
+        [SerializeField] private MagnetTrigger magnetTrigger;
         private Pickable currentPickable = null;
         private Vector3 currentPickableHitPosition;
         private bool grabbed = false;
         private bool magnetActive = false;
         public bool IsMagnetActive => magnetActive;
+        private List<Pickable> pickables;
+
 
         private void Update()
         {
@@ -97,24 +102,22 @@ namespace Arm
 
         private void UpdateCurrentPickable()
         {
-            RaycastHit hit;
-            Vector3 direction = transform.up;
-
-            if (Physics.Raycast(transform.position, direction, out hit, Mathf.Infinity, 1 << 6))
+            List<Pickable> pickables = magnetTrigger.GetPickables();
+            if (pickables.Count != 0)
             {
-                currentPickable = hit.transform.GetComponent<Pickable>();
-                if (currentPickable)
+                float minDist = float.MaxValue;
+                foreach (var pickable in pickables)
                 {
-                    Debug.DrawRay(transform.position, direction * hit.distance, Color.green);
-                }
-                else
-                {
-                    Debug.DrawRay(transform.position, direction * hit.distance, Color.red);
+                    float dist = Vector3.Distance(pickable.transform.position, transform.position);
+                    if (minDist > dist)
+                    {
+                        currentPickable = pickable;
+                    }
                 }
             }
             else
             {
-                Debug.DrawRay(transform.position, direction * 100, Color.red);
+                currentPickable = null;
             }
         }
     }
