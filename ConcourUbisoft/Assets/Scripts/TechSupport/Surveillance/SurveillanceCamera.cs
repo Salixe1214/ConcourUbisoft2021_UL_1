@@ -1,14 +1,13 @@
-using System;
 using UnityEngine;
 
-namespace TechSupport
+namespace TechSupport.Surveillance
 {
     [RequireComponent(typeof(Camera))]
     public class SurveillanceCamera : MonoBehaviour
     {
         private Camera _camera;
 
-        private void Awake()
+        public void Init()
         {
             _camera = GetComponent<Camera>();
         }

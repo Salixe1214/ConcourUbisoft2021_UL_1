@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace TechSupport
+namespace TechSupport.Surveillance
 {
     public class FullScreenSystem
     {
@@ -29,6 +29,11 @@ namespace TechSupport
         public void SetTarget(Camera camera)
         {
             _target = camera;
+        }
+
+        public Camera GetTarget()
+        {
+            return _target;
         }
 
         #endregion

@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-namespace TechSupport
+namespace TechSupport.Surveillance
 {
     public class GridSystem
     {
@@ -16,14 +17,14 @@ namespace TechSupport
             return new Vector2Int(Mathf.CeilToInt(rLenght), Mathf.RoundToInt(rLenght));
         }
     
-        public void Grid(List<Camera> cams, Vector2Int size)
+        public void Grid(IEnumerable<Camera> cams, Vector2Int size)
         {
             float x = 0;
             float y = 0;
 
-            for (int i = 0; i < cams.Count; i++)
+            foreach (Camera camera in cams)
             {
-                cams[i].rect = new Rect(x * (1f / size.x), y * (1f / size.y),
+                camera.rect = new Rect(x * (1f / size.x), y * (1f / size.y),
                     1f / size.x, 1f / size.y);
                 x++;
                 if (x % size.x == 0)
