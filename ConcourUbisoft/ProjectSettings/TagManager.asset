@@ -12,6 +12,8 @@ TagManager:
   - PlayerA
   - Magnet
   - door
+  - Arm1
+  - Arm2
   layers:
   - Default
   - TransparentFX

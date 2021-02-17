@@ -2705,45 +2705,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 951279064}
     m_Modifications:
-    - target: {fileID: 1277716171, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 353267051543892602, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1474667025179735639, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5059453101719938359, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6459741911338417671, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6459741911343865436, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6459741911634675205, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
       propertyPath: m_RootOrder
       value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6459741911634675205, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6459741911634675205, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6459741911634675205, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6459741911634675205, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2789,33 +2753,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoboticArm
       objectReference: {fileID: 0}
-    - target: {fileID: 6459741911634675207, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6459741911925363599, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6459741912759123414, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6459741912999751858, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6818363701004083424, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8360864145031390083, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
+      propertyPath: m_TagString
+      value: Arm1
       objectReference: {fileID: 0}
-    - target: {fileID: 8561695362701657157, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: isControlled
-      value: 0
+    - target: {fileID: 9038037867875215746, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
+      propertyPath: viewIdField
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
@@ -4582,6 +4526,14 @@ PrefabInstance:
     - target: {fileID: 6459741911634675207, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6459741912074681073, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
+      propertyPath: viewIdField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9038037867875215746, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
+      propertyPath: viewIdField
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
