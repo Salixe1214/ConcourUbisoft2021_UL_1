@@ -17,7 +17,7 @@ public class RoomElementController : MonoBehaviour
     #region UI Actions
     public void OnRoleModify()
     {
-        PlayerNetwork.PlayerRole = (PlayerNetwork.Role)gameObject.transform.Find("DropdownRole").GetComponent<Dropdown>().value;
+        PlayerNetwork.PlayerRole = (GameController.Role)gameObject.transform.Find("DropdownRole").GetComponent<Dropdown>().value;
     }
     #endregion
     #region Unity Callbacks

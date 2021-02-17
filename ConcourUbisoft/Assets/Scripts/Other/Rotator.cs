@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class rotator : MonoBehaviour
+public class Rotator : MonoBehaviour
 {
-    [SerializeField] private float speed=25;
+    [SerializeField] private float speed = 25;
+
     void Update()
     {
-        transform.Rotate(Vector3.up*Time.deltaTime*speed);
+        transform.Rotate(Time.deltaTime * speed * Vector3.up);
     }
 }
