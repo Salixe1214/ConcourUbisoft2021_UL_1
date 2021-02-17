@@ -575,7 +575,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2117791984, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
       propertyPath: m_IsTrigger
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2623515369534163177, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
       propertyPath: Loop
