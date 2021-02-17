@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AppSettings:
     AppIdRealtime: a238d3ee-7974-4407-a69a-950afe608ef1
-    AppIdChat: 
-    AppIdVoice: 
+    AppIdChat: a238d3ee-7974-4407-a69a-950afe608ef1
+    AppIdVoice: a238d3ee-7974-4407-a69a-950afe608ef1
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: 
+    FixedRegion: cae
     Server: 
     Port: 0
     ProxyServer: 
@@ -27,7 +27,7 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: cae
+  DevRegion: us
   PunLogging: 2
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -35,5 +35,5 @@ MonoBehaviour:
   RpcList:
   - StartGame
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
   DevRegionSetOnce: 1

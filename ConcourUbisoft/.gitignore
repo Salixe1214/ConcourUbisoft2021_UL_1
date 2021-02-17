@@ -2,6 +2,8 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
+EditorUserSettings.asset
+
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
@@ -9,6 +11,14 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Mm]emoryCaptures/
+
+#PhotonVoice
+/Assets/Photon/PhotonChat/Demos
+/Assets/Photon/PhotonVoice/Demos
+/Assets/Photon/PhotonVoice/PhotonVoiceLibs/Android
+/Assets/Photon/PhotonVoice/PhotonVoiceLibs/IOS
+/Assets/Photon/PhotonVoice/PhotonVoiceLibs/OSX
+/Assets/Photon/PhotonUnityNetworking/Demos
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta

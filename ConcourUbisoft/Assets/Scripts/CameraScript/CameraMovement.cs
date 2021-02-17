@@ -7,7 +7,8 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
     [SerializeField] private Rigidbody playerBody;
-    [SerializeField] private float mouseSensivity;
+    [SerializeField] private float mouseSensivityX =100;
+    [SerializeField] private float mouseSensivityY =100;
     [SerializeField] private float controllerSensivity;
     
     private Vector3 velocity = Vector3.zero;
@@ -21,11 +22,11 @@ public class CameraMovement : MonoBehaviour
 
     //PS = playstation
     //XBO = xbox one
-    void Update()
+    void FixedUpdate()
     {
 
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensivity * Time.deltaTime;
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensivityX * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensivityY * Time.deltaTime;
         float controllerX_PS = Input.GetAxis("RightJoystickHorizontalPS")*controllerSensivity*Time.deltaTime;
         float controllerY_PS = Input.GetAxis("RightJoystickVerticalPS")*controllerSensivity*Time.deltaTime;
         float controllerX_XBO = Input.GetAxis("RightJoystickHorizontalXBO")*controllerSensivity*Time.deltaTime;
