@@ -573,26 +573,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2117791984, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2623515369534163177, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: Loop
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2623515369534163177, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_Pitch
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2623515369534163177, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_Volume
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2623515369534163177, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_audioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 298e0d1290bcbd14994a1ac42d6d9a84, type: 3}
     - target: {fileID: 6459741911634675205, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -641,9 +621,53 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoboticArm
       objectReference: {fileID: 0}
-    - target: {fileID: 6818363701004083424, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: m_TagString
-      value: Magnet
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
+--- !u!1 &6459741912074681071 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6459741911634675207, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
+  m_PrefabInstance: {fileID: 6459741912074681070}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6459741912074681072 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6459741911338417671, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
+  m_PrefabInstance: {fileID: 6459741912074681070}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6459741912074681073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6459741912074681071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  observableSearch: 2
+  Synchronization: 3
+  OwnershipTransfer: 0
+  ObservedComponents: []
+  viewIdField: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &6459741912074681074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6459741912074681072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
