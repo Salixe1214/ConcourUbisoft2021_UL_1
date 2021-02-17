@@ -10,14 +10,25 @@ public class Level1Controller : MonoBehaviour
 
     [SerializeField] private FurnaceController FurnaceController = null;
     [SerializeField] private TransportableSpawner TransportableSpawner = null;
+    [SerializeField] private DoorsScript Level1Door = null;
 
-    public void Awake()
+    public void Start()
     {
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
     }
 
-    public void Start()
+    private void OnEnable()
+    {
+        Level1Door.OnDoorUnlockEvent += OnDoorUnlockEvent;
+    }
+
+    private void OnDisable()
+    {
+        Level1Door.OnDoorUnlockEvent -= OnDoorUnlockEvent;
+    }
+
+    private void OnDoorUnlockEvent(DoorsScript doorsScript)
     {
         StartLevel();
     }
@@ -26,6 +37,7 @@ public class Level1Controller : MonoBehaviour
     {
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
+        TransportableSpawner.gameObject.SetActive(false);
     }
 
     public void StartLevel()

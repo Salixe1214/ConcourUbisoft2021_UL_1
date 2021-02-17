@@ -18,9 +18,12 @@ public class DoorsScript : MonoBehaviour
     [SerializeField] private List<DoorsButton> buttonsList;
     [SerializeField] private GameObject confirmLight;
 
-    public static Action DoorUnlock;
-    
-    // Start is called before the first frame update
+    public delegate void OnDoorUnlockHandler(DoorsScript doorsScript);
+    public event OnDoorUnlockHandler OnDoorUnlockEvent;
+
+    public bool DoorUnlocked { get; set; }
+    [SerializeField] public int DoorId = 0;
+
     void Awake()
     {
         _matIndicator = indicator.GetComponent<Renderer>().material;
@@ -52,51 +55,51 @@ public class DoorsScript : MonoBehaviour
 
     private void OnConfirm()
     {
-        bool isSequenceGood;
-        
-        if (_sequence.Count == unlockSequence.Count)
+        if(!DoorUnlocked)
         {
-            isSequenceGood = true;
-            for (int i = 0; i < unlockSequence.Count; i++)
+            bool isSequenceGood;
+
+            if (_sequence.Count == unlockSequence.Count)
             {
-                if (unlockSequence[i] != _sequence[i])
-                    isSequenceGood = false;
+                isSequenceGood = true;
+                for (int i = 0; i < unlockSequence.Count; i++)
+                {
+                    if (unlockSequence[i] != _sequence[i])
+                        isSequenceGood = false;
+                }
             }
-        }
-        else
-        {
-            isSequenceGood = false;
-        }
+            else
+            {
+                isSequenceGood = false;
+            }
 
 
-        
-        if (isSequenceGood)
-        {
-            _matConfirmLight.SetColor("_Color", Color.green);
-                
-            // The door open
-            OnDoorUnlock();
+
+            if (isSequenceGood)
+            {
+                _matConfirmLight.SetColor("_Color", Color.green);
+
+                // The door open
+                UnlockDoor();
+            }
+            else
+            {
+                _matConfirmLight.SetColor("_Color", Color.red);
+
+                // Resetting the sequence
+                _sequence.Clear();
+            }
+
+            StartCoroutine(Flash(_color, _matConfirmLight));
         }
-        else
-        {
-            _matConfirmLight.SetColor("_Color", Color.red);
-                
-            // Resetting the sequence
-            _sequence.Clear();
-        }
-                
-        StartCoroutine(Flash(_color, _matConfirmLight));
     }
 
-    private void OnDoorUnlock()
+    public void UnlockDoor()
     {
-        Debug.Log("La porte s'est débarrée");
-
         GetComponent<Collider>().isTrigger = true;
         _matIndicator.SetColor("_Color", Color.green);
-        
-        if(DoorUnlock != null)
-            DoorUnlock.Invoke();
+
+        OnDoorUnlockEvent?.Invoke(this);
     }
 
     IEnumerator Flash(Color pColor, Material pMaterial)

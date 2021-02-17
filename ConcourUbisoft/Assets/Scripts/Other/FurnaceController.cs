@@ -13,14 +13,14 @@ public class FurnaceController : MonoBehaviour
     }
 
     [SerializeField] private SequenceOfColor[] SequencesOfColor = null;
-    private int SucceedSequences = 0;
-
     [SerializeField] private Level1Controller Level1Controller = null;
+    [SerializeField] private float TimeToConsume = 0.0f;
+    private int SucceedSequences = 0;
 
     private void OnTriggerEnter(Collider other)
     {
         TransportableByConveyor transportableByConveyor = null;
-        if (other.gameObject.TryGetComponent(out transportableByConveyor) && !transportableByConveyor.Consumed && transportableByConveyor.HasBeenPickUp)
+        if (other.gameObject.TryGetComponent(out transportableByConveyor) && transportableByConveyor.HasBeenPickUp)
         {
             Consume(transportableByConveyor);
         }
@@ -28,17 +28,17 @@ public class FurnaceController : MonoBehaviour
 
     private void Consume(TransportableByConveyor transportableByConveyor)
     {
-        transportableByConveyor.Consumed = true;
-        Destroy(transportableByConveyor.gameObject);
+        transportableByConveyor.Consume();
+        Destroy(transportableByConveyor.gameObject, TimeToConsume);
 
         SequenceOfColor currentSequence = SequencesOfColor[SucceedSequences];
         if (currentSequence.ColorsSequence[currentSequence.SucceedColors] == transportableByConveyor.Color)
         {
             currentSequence.SucceedColors++;
-            if(currentSequence.SucceedColors == currentSequence.ColorsSequence.Length)
+            if (currentSequence.SucceedColors == currentSequence.ColorsSequence.Length)
             {
                 SucceedSequences++;
-                if(SucceedSequences == SequencesOfColor.Length)
+                if (SucceedSequences == SequencesOfColor.Length)
                 {
                     Level1Controller.FinishLevel();
                 }

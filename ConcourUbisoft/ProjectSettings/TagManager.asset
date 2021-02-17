@@ -6,17 +6,22 @@ TagManager:
   tags:
   - NetworkController
   - PlayerNetwork
+  - PlayerTech
+  - PlayerGuard
+  - SoundController
   - PlayerA
   - Magnet
   - door
+  - Arm1
+  - Arm2
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Pickable
   - Water
   - UI
-  - 
+  - PickableTrigger
   - 
   - 
   - 
