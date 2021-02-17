@@ -36,7 +36,7 @@ namespace Arm
             return collider.bounds.Contains(point);
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (outline.enabled && !hovered)
                 outline.enabled = false;
