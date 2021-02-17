@@ -1,18 +1,55 @@
+using Arm;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Renderer))]
+[RequireComponent(typeof(Pickable))]
+[RequireComponent(typeof(Collider))]
 public class TransportableByConveyor : MonoBehaviour
 {
-    [SerializeField] public bool HasBeenPickUp = false;
+    public bool HasBeenPickUp { get { return pickable.HasBeenPickup; } set { pickable.HasBeenPickup = value; } }
+
+    public Color Color { get { return renderer.material.color; } set { renderer.material.color = value; } }
+
+    private SortedList<int, object> priorityConveyor = new SortedList<int, object>();
 
     private new Renderer renderer = null;
-    public Color Color { get { return renderer.material.color; } set { renderer.material.color = value; } }
-    public bool Consumed { get; set; }
+    private new Collider collider = null;
+    private Pickable pickable = null;
 
     private void Awake()
     {
         renderer = GetComponent<Renderer>();
+        pickable = GetComponent<Pickable>();
+        collider = GetComponent<Collider>();
+    }
+
+    public void AddConveyor(int priority, object conveyor)
+    {
+        priorityConveyor.Add(priority, conveyor);
+    }
+
+    public void RemoveConveyor(object conveyor)
+    {
+        priorityConveyor.Remove(priorityConveyor.IndexOfValue(conveyor));
+    }
+
+    public object GetFirstConveyorToAffectObject()
+    {
+        if (priorityConveyor.Count == 0)
+        {
+            return null;
+        }
+        else
+        {
+            return priorityConveyor.First().Value;
+        }
+    }
+
+    public void Consume()
+    {
+        collider.enabled = false;
     }
 }

@@ -25,11 +25,6 @@ namespace Arm
 
             if (controllable.IsControlled)
             {
-                if (!grabbed)
-                {
-                    UpdateCurrentPickable();
-                }
-
                 if (currentPickable)
                 {
                     currentPickable.OnHover();
@@ -56,9 +51,11 @@ namespace Arm
         {
             if (controllable.IsControlled)
             {
-                if (!grabbed && magnetActive && currentPickable)
+                if (!grabbed)
                 {
-                    MovePickableToMagnet();
+                    UpdateCurrentPickable();
+                    if (magnetActive && currentPickable)
+                        MovePickableToMagnet();
                 }
             }
         }
@@ -77,6 +74,7 @@ namespace Arm
                 if (currentPickable)
                 {
                     currentPickable.OnGrab();
+                    currentPickable.RB.velocity = Vector3.zero;
                     currentPickable.transform.parent = this.transform;
                     grabbed = true;
                 }
@@ -102,22 +100,28 @@ namespace Arm
 
         private void UpdateCurrentPickable()
         {
+            currentPickable = null;
             List<Pickable> pickables = magnetTrigger.GetPickables();
             if (pickables.Count != 0)
             {
                 float minDist = float.MaxValue;
-                foreach (var pickable in pickables)
+                Pickable pickable = null;
+                for (int i = pickables.Count - 1; i >= 0; i--)
                 {
-                    float dist = Vector3.Distance(pickable.transform.position, transform.position);
-                    if (minDist > dist)
+                    pickable = pickables[i];
+                    if (pickable != null)
                     {
-                        currentPickable = pickable;
+                        float dist = Vector3.Distance(pickable.transform.position, transform.position);
+                        if (minDist > dist)
+                        {
+                            currentPickable = pickable;
+                        }
+                    }
+                    else
+                    {
+                        pickables.RemoveAt(i);
                     }
                 }
-            }
-            else
-            {
-                currentPickable = null;
             }
         }
     }

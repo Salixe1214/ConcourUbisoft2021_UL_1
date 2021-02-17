@@ -16,6 +16,7 @@ namespace Arm
 
         public float ControlSpeed => controlSpeed;
 
+        public Transform ArmTarget => armTarget;
 
         private void Start()
         {
