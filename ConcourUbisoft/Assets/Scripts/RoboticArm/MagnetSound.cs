@@ -2,6 +2,7 @@ using System;
 using Arm;
 using UnityEngine;
 
+[RequireComponent(typeof(MagnetController))]
 [RequireComponent(typeof(AudioSource))]
 public class MagnetSound : MonoBehaviour
 {

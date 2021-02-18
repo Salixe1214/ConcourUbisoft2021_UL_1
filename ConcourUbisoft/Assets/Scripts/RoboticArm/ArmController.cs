@@ -9,7 +9,7 @@ namespace Arm
         [SerializeField] private Transform armRotationRoot;
         [SerializeField] float controlSpeed = 3f;
         private Transform armTarget = null;
-        
+
         private float maxRange;
         private float minRange;
 
@@ -20,8 +20,8 @@ namespace Arm
 
         private void Start()
         {
-            maxRange = armIKSolver.TotalLength;
-            minRange = armIKSolver.TotalLength / 4;
+            minRange = armIKSolver.TotalLength / 6;
+            maxRange = armIKSolver.TotalLength - minRange;
             armTarget = armIKSolver.Target;
         }
 
@@ -29,9 +29,11 @@ namespace Arm
         {
             if (controllable.IsControlled)
             {
-                Vector3 translation = Vector3.ClampMagnitude(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")),controlSpeed);
+                Vector3 translation =
+                    Vector3.ClampMagnitude(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")),
+                        controlSpeed);
                 armTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
-                float distanceToTarget = Vector3.Distance(transform.position, armIKSolver.Target.position);
+                float distanceToTarget = Vector3.Distance(transform.position, armTarget.position);
                 if (distanceToTarget > maxRange)
                 {
                     Vector3 dirToTarget = (armTarget.position - transform.position).normalized;
@@ -41,9 +43,14 @@ namespace Arm
                         transform.position.z + dirToTarget.z * maxRange);
                 }
 
-                if (distanceToTarget < minRange)
+                float flatDistanceToTarget =
+                    Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z),
+                        new Vector3(armIKSolver.Target.position.x, 0, armIKSolver.Target.position.z));
+                if (flatDistanceToTarget < minRange)
                 {
-                    Vector3 dirToTarget = (armTarget.position - transform.position).normalized;
+                    Vector3 dirToTarget = (armTarget.position - transform.position);
+                    dirToTarget.y = 0;
+                    dirToTarget.Normalize();
                     armTarget.position = new Vector3(
                         transform.position.x + dirToTarget.x * minRange,
                         armTarget.position.y,
@@ -55,7 +62,7 @@ namespace Arm
             direction.y = 0;
             direction.Normalize();
             float rotationY = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-            armRotationRoot.rotation = Quaternion.Euler(0f, rotationY - 90, 0f);
+            armRotationRoot.rotation = Quaternion.Euler(0f, rotationY + 180, 0f);
         }
     }
 }

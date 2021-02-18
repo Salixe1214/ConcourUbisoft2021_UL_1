@@ -8,23 +8,42 @@ namespace Arm
     {
         [SerializeField] private float pullForce = 1;
         [SerializeField] private Controllable controllable;
-        [SerializeField] private float magnetRotation = 180;
+        [SerializeField] private Transform magnetPullPoint;
         [SerializeField] private MagnetTrigger magnetTrigger;
+        [SerializeField] private Transform magnetRotationRoot;
         private Pickable currentPickable = null;
         private Vector3 currentPickableHitPosition;
         private bool grabbed = false;
         private bool magnetActive = false;
         public bool IsMagnetActive => magnetActive;
-        private List<Pickable> pickables;
 
+        private void Start()
+        {
+            controllable.OnControlStateChange += OnControlStateChange;
+        }
+
+        void OnControlStateChange(bool controlled)
+        {
+            if (!controlled)
+            {
+                TurnMagnetOff();
+            }
+        }
 
         private void Update()
         {
-            transform.Rotate(new Vector3(0, 0, 1), magnetRotation - transform.eulerAngles.z);
+            magnetRotationRoot.rotation = Quaternion.Euler(190, 0, 0);
+        }
 
-
+        private void FixedUpdate()
+        {
             if (controllable.IsControlled)
             {
+                if (!grabbed)
+                {
+                    UpdateCurrentPickable();
+                }
+
                 if (currentPickable)
                 {
                     currentPickable.OnHover();
@@ -40,30 +59,16 @@ namespace Arm
                 {
                     TurnMagnetOff();
                 }
-            }
-            else
-            {
-                TurnMagnetOff();
-            }
-        }
 
-        private void FixedUpdate()
-        {
-            if (controllable.IsControlled)
-            {
-                if (!grabbed)
-                {
-                    UpdateCurrentPickable();
-                    if (magnetActive && currentPickable)
-                        MovePickableToMagnet();
-                }
+                if (!grabbed && magnetActive && currentPickable)
+                    MovePickableToMagnet();
             }
         }
 
         private void MovePickableToMagnet()
         {
             currentPickable.RB.velocity += Time.fixedTime * pullForce *
-                                           (transform.position - currentPickable.transform.position).normalized;
+                                           (magnetPullPoint.position - currentPickable.transform.position).normalized;
         }
 
         private void OnCollisionEnter(Collision other)
@@ -111,7 +116,7 @@ namespace Arm
                     pickable = pickables[i];
                     if (pickable != null)
                     {
-                        float dist = Vector3.Distance(pickable.transform.position, transform.position);
+                        float dist = Vector3.Distance(pickable.transform.position, magnetPullPoint.position);
                         if (minDist > dist)
                         {
                             currentPickable = pickable;
