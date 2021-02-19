@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using Photon.Pun;
 using UnityEngine;
 
 namespace Arm
@@ -33,10 +34,10 @@ namespace Arm
                     float positionZ = binaryReader.ReadSingle();
 
                     Debug.Log($"Difference between position (" +
-                        $"{(ArmTarget.position.x - positionX).ToString("n4")}," +
-                        $"{(ArmTarget.position.y - positionY).ToString("n4")}," +
-                        $"{(ArmTarget.position.z - positionZ).ToString("n4")})");
-                    ArmTarget.position = new Vector3(positionX, positionY, positionZ);
+                              $"{(ArmTarget.position.x - positionX).ToString("n4")}," +
+                              $"{(ArmTarget.position.y - positionY).ToString("n4")}," +
+                              $"{(ArmTarget.position.z - positionZ).ToString("n4")})");
+                    //ArmTarget.position = new Vector3(positionX, positionY, positionZ);
                 }
             }
         }
@@ -52,22 +53,35 @@ namespace Arm
                     binaryWriter.Write(ArmTarget.position.y);
                     binaryWriter.Write(ArmTarget.position.z);
                 }
+
                 return memoryStream.ToArray();
             }
         }
 
-        public override void Smooth(byte[] _oldData, byte[] _newData)
+        public override void Smooth(byte[] oldData, byte[] newData, float lag)
         {
             //Debug.Log($"{Time.timeAsDouble} Smooth");
-            using (MemoryStream memoryStreamOld = new MemoryStream(_oldData), memoryStreamNew = new MemoryStream(_newData))
+            using (MemoryStream memoryStreamOld = new MemoryStream(oldData),
+                memoryStreamNew = new MemoryStream(newData))
             {
-                using (BinaryReader binaryReaderOld = new BinaryReader(memoryStreamOld), binaryReaderNew = new BinaryReader(memoryStreamNew))
+                using (BinaryReader binaryReaderOld = new BinaryReader(memoryStreamOld),
+                    binaryReaderNew = new BinaryReader(memoryStreamNew))
                 {
-                    float deltaX = binaryReaderNew.ReadSingle() - binaryReaderOld.ReadSingle();
-                    float deltaY = binaryReaderNew.ReadSingle() - binaryReaderOld.ReadSingle();
-                    float deltaZ = binaryReaderNew.ReadSingle() - binaryReaderOld.ReadSingle();
-
-                    ArmTarget.Translate(new Vector3(deltaX, deltaY, deltaZ).normalized * Time.deltaTime * controlSpeed);
+                    Vector3 newPosition = new Vector3(
+                        binaryReaderNew.ReadSingle(),
+                        binaryReaderNew.ReadSingle(),
+                        binaryReaderNew.ReadSingle());
+                    Vector3 oldPosition = new Vector3(
+                        binaryReaderOld.ReadSingle(),
+                        binaryReaderOld.ReadSingle(),
+                        binaryReaderOld.ReadSingle());
+                    Vector3 deltaPosition = newPosition - ArmTarget.position;
+                    Vector3 deltaOldNew = newPosition - oldPosition;
+                    else
+                    {
+                        ArmTarget.Translate(ControlSpeed * Time.deltaTime * deltaOldNew.normalized);
+                    }
+            
                 }
             }
         }
