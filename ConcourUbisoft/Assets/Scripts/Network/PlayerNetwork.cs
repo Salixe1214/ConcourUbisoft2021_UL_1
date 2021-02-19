@@ -9,7 +9,7 @@ using UnityEngine.Events;
 
 public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 {
-    public GameController.Role PlayerRole { get; set; }
+    public GameController.Role PlayerRole { get => _playerRole; set => _playerRole = value; }
     public string Name { set; get; }
 
     public string Id
@@ -20,8 +20,9 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     private new PhotonView photonView = null;
     private NetworkController networkController = null;
     private GameController gameController = null;
-    private GameObject playerA = null;
-    private ArmController[] Arms;
+
+    private IEnumerable<NetworkSync> objectsToSync = null;
+    [SerializeField] private GameController.Role _playerRole;
 
     #region Unity Callbacks
 
@@ -30,7 +31,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         photonView = GetComponent<PhotonView>();
         networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-
+        objectsToSync = GameObject.FindObjectsOfType<NetworkSync>();
         Name = $"Player {(photonView.Owner.IsMasterClient ? "1" : "2")}";
     }
 
@@ -53,6 +54,17 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         gameController.OnFinishGameEvent -= OnFinishGameEvent;
     }
 
+    private void Update()
+    {
+        foreach (NetworkSync syncObject in objectsToSync)
+        {
+            if (PlayerRole != syncObject.Owner)
+            {
+                syncObject.Smooth();
+            }
+        }
+    }
+
     #endregion
 
     #region Photon Callbacks
@@ -61,40 +73,19 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     {
         if (stream.IsWriting)
         {
-            stream.SendNext((int) PlayerRole);
-            stream.SendNext(Name);
-
-            if (gameController.IsGameStart && PlayerRole == GameController.Role.SecurityGuard)
+            foreach (NetworkSync syncObject in objectsToSync)
             {
-                stream.SendNext(playerA.transform.position);
-                stream.SendNext(playerA.transform.rotation);
-            }
-            else if (gameController.IsGameStart && PlayerRole == GameController.Role.Technician)
-            {
-                for (int i = 0; i < Arms.Length; i++)
+                if (PlayerRole == syncObject.Owner)
                 {
-                    stream.SendNext(Arms[i].transform.position);
-                    stream.SendNext(Arms[i].transform.rotation);
+                    stream.SendNext(syncObject.Serialize());
                 }
             }
         }
         else
         {
-            this.PlayerRole = (GameController.Role) (int) stream.ReceiveNext();
-            this.Name = (string) stream.ReceiveNext();
-
-            if (gameController.IsGameStart && PlayerRole == GameController.Role.SecurityGuard)
+            foreach (NetworkSync syncObject in objectsToSync)
             {
-                playerA.transform.position = (Vector3) stream.ReceiveNext();
-                playerA.transform.rotation = (Quaternion) stream.ReceiveNext();
-            }
-            else if (gameController.IsGameStart && PlayerRole == GameController.Role.Technician)
-            {
-                for (int i = 0; i < Arms.Length; i++)
-                {
-                    Arms[i].transform.position = (Vector3) stream.ReceiveNext();
-                    Arms[i].transform.rotation = (Quaternion) stream.ReceiveNext();
-                }
+                syncObject.Deserialize((byte[])stream.ReceiveNext());
             }
         }
     }
@@ -129,7 +120,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     [PunRPC]
     private void UnlockDoor(object[] parameters)
     {
-        DoorsScript doorsScript = FindObjectsOfType<DoorsScript>().Where(x => x.DoorId == (int) parameters[0])
+        DoorsScript doorsScript = FindObjectsOfType<DoorsScript>().Where(x => x.DoorId == (int)parameters[0])
             .FirstOrDefault();
         if (doorsScript != null)
         {
@@ -148,9 +139,9 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 
     private void OnFinishLoadGameEvent()
     {
-        playerA = GameObject.FindGameObjectWithTag("PlayerGuard");
-        Arms = new ArmController[1];
-        Arms[0] = GameObject.FindGameObjectWithTag("Arm1").GetComponent<ArmController>();
+        //playerA = GameObject.FindGameObjectWithTag("PlayerGuard");
+        //Arms = new ArmController[1];
+        //Arms[0] = GameObject.FindGameObjectWithTag("Arm1").GetComponent<ArmController>();
         //Arms[1] = GameObject.FindGameObjectWithTag("Arm2").GetComponent<ArmController>();
 
         if (IsMine())
@@ -165,7 +156,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 
     private void OnDoorUnlockEvent(DoorsScript doorsScript)
     {
-        object[] parameters = new object[] {doorsScript.DoorId};
+        object[] parameters = new object[] { doorsScript.DoorId };
         photonView.RPC("UnlockDoor", RpcTarget.Others, parameters as object);
     }
 

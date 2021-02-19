@@ -18,7 +18,7 @@ public class GameController : MonoBehaviour
     private SoundController soundController = null;
 
     public bool IsGameLoading { get; private set; }
-    public bool IsGameStart { get; private set; }
+    public bool IsGameStart { get; set; }
     public Role GameRole { get; set; }
     public OptionController OptionController { get => optionController; }
 

@@ -10,6 +10,17 @@ using UnityEngine.Events;
 
 public class NetworkController : MonoBehaviourPunCallbacks
 {
+    [SerializeField] private bool QuickSetup = false;
+
+    #region Unity Callbacks
+    private void Start()
+    {
+        if(QuickSetup)
+        {
+            JoinLobby();
+        }
+    }
+    #endregion
     #region Events
     public delegate void OnJoinedLobbyHandler();
     public event OnJoinedLobbyHandler OnJoinedLobbyEvent;
@@ -56,6 +67,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         OnJoinedLobbyEvent?.Invoke();
+        if (QuickSetup)
+        {
+            PhotonNetwork.JoinOrCreateRoom("DEFAULT_TEST", new RoomOptions() {IsVisible = false, MaxPlayers = 2 }, null);
+        }
     }
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
@@ -64,7 +79,18 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log($"Joined Room: {PhotonNetwork.CurrentRoom.Name}");
-        PhotonNetwork.Instantiate("Player", new Vector3(0, 0, 0), Quaternion.identity, 0);
+        GameObject playerNetwork = PhotonNetwork.Instantiate("Player", new Vector3(0, 0, 0), Quaternion.identity, 0);
+        if (QuickSetup)
+        {
+            GameController.Role role = PhotonNetwork.IsMasterClient ? GameController.Role.SecurityGuard : GameController.Role.Technician;
+
+            playerNetwork.GetComponent<PlayerNetwork>().PlayerRole = role;
+
+            GameController gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+            gameController.GameRole = role;
+            gameController.IsGameStart = true;
+        }
+
         OnJoinedRoomEvent?.Invoke();
     }
     public override void OnJoinRoomFailed(short returnCode, string message)
