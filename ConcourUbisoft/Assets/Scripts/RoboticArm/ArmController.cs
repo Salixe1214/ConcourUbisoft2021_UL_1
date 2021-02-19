@@ -58,7 +58,7 @@ namespace Arm
             }
         }
 
-        public override void Smooth(byte[] oldData, byte[] newData, float lag)
+        public override void Smooth(byte[] oldData, byte[] newData, float lag, float lastTime, float currentTime)
         {
             //Debug.Log($"{Time.timeAsDouble} Smooth");
             using (MemoryStream memoryStreamOld = new MemoryStream(oldData),
@@ -71,17 +71,12 @@ namespace Arm
                         binaryReaderNew.ReadSingle(),
                         binaryReaderNew.ReadSingle(),
                         binaryReaderNew.ReadSingle());
-                    Vector3 oldPosition = new Vector3(
-                        binaryReaderOld.ReadSingle(),
-                        binaryReaderOld.ReadSingle(),
-                        binaryReaderOld.ReadSingle());
                     Vector3 deltaPosition = newPosition - ArmTarget.position;
-                    Vector3 deltaOldNew = newPosition - oldPosition;
-                    else
-                    {
-                        ArmTarget.Translate(ControlSpeed * Time.deltaTime * deltaOldNew.normalized);
-                    }
-            
+
+                    Vector3 predictionPosition = newPosition + deltaPosition;
+                    float deltaTimeRefresh = currentTime - lastTime - lag;
+
+                    ArmTarget.position = Vector3.MoveTowards(transform.position, newPosition, Time.deltaTime * controlSpeed);
                 }
             }
         }
