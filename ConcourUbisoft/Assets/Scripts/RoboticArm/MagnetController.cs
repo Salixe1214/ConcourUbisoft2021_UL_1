@@ -6,13 +6,12 @@ namespace Arm
 {
     public class MagnetController : MonoBehaviour
     {
-        [SerializeField] private float pullForce = 1;
+        [SerializeField] private float pullForce = 0.1f;
         [SerializeField] private Controllable controllable;
         [SerializeField] private Transform magnetPullPoint;
         [SerializeField] private MagnetTrigger magnetTrigger;
         [SerializeField] private Transform magnetRotationRoot;
         private Pickable currentPickable = null;
-        private Vector3 currentPickableHitPosition;
         private bool grabbed = false;
         private bool magnetActive = false;
         public bool IsMagnetActive => magnetActive;
@@ -39,7 +38,7 @@ namespace Arm
         {
             if (controllable.IsControlled)
             {
-                if (!grabbed)
+                if (!grabbed && !currentPickable)
                 {
                     UpdateCurrentPickable();
                 }
@@ -60,7 +59,10 @@ namespace Arm
                     TurnMagnetOff();
                 }
 
-                if (!grabbed && magnetActive && currentPickable)
+                if (!grabbed && 
+                    magnetActive && 
+                    currentPickable &&
+                    magnetTrigger.GetPickables().Contains(currentPickable))
                     MovePickableToMagnet();
             }
         }

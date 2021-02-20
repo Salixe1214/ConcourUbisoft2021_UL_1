@@ -16,16 +16,20 @@ public class Level1Controller : MonoBehaviour
     {
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
+        if (Level1Door == null)
+            StartLevel();
     }
 
     private void OnEnable()
     {
-        Level1Door.OnDoorUnlockEvent += OnDoorUnlockEvent;
+        if (Level1Door != null)
+            Level1Door.OnDoorUnlockEvent += OnDoorUnlockEvent;
     }
 
     private void OnDisable()
     {
-        Level1Door.OnDoorUnlockEvent -= OnDoorUnlockEvent;
+        if (Level1Door != null)
+            Level1Door.OnDoorUnlockEvent -= OnDoorUnlockEvent;
     }
 
     private void OnDoorUnlockEvent(DoorsScript doorsScript)
