@@ -41,14 +41,14 @@ public class NetworkSync : MonoBehaviour
         _lag = lag;
         _oldData = _newData;
         _newData = data;
-        _lastTime = currentTime;
+        _lastTime = _currentTime;
         _currentTime = currentTime;
         (_componentToSync as Serializable).Deserialize(data);
     }
 
     public void Smooth()
     {
-        if (_oldData != null && _smooth)
+        if (_oldData != null && _smooth && _lastTime != 0)
         {
             (_componentToSync as Serializable).Smooth(_oldData, _newData, _lag, _lastTime, _currentTime);
         }

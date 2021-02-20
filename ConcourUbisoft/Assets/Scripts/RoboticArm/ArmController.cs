@@ -14,6 +14,10 @@ namespace Arm
         [SerializeField] private IKSolver armIKSolver;
         [SerializeField] private Transform armRotationRoot;
         [SerializeField] float controlSpeed = 3f;
+        [SerializeField] private bool _extrapolation = false;
+        [SerializeField] private bool _lerping = false;
+        [SerializeField] private float _lerpingValue = 0.1f;
+        [SerializeField] private bool _lagCompensation = false;
         private float maxRange;
         private float minRange;
 
@@ -63,7 +67,24 @@ namespace Arm
                         binaryReaderNew.ReadSingle(),
                         binaryReaderNew.ReadSingle());
 
-                    ArmTarget.position = Vector3.MoveTowards(ArmTarget.position, newPosition, Time.deltaTime * controlSpeed);
+                    Vector3 oldPosition = new Vector3(
+                        binaryReaderOld.ReadSingle(),
+                        binaryReaderOld.ReadSingle(),
+                        binaryReaderOld.ReadSingle());
+
+                    Vector3 deltaPosition = newPosition - oldPosition;
+                    Vector3 lagCompensation = _lagCompensation ? (deltaPosition / (currentTime - lastTime)) * lag : Vector3.zero;
+                    Vector3 predicatedPosition = newPosition + deltaPosition * 2;
+                    Vector3 valueToUse = (_extrapolation ? predicatedPosition : newPosition) + lagCompensation;
+
+                    if (_lerping)
+                    {
+                        ArmTarget.position = Vector3.MoveTowards(ArmTarget.position, Vector3.Lerp(ArmTarget.position, valueToUse, _lerpingValue), Time.deltaTime * controlSpeed);
+                    }
+                    else
+                    {
+                        ArmTarget.position = Vector3.MoveTowards(ArmTarget.position, valueToUse, Time.deltaTime * controlSpeed);
+                    }
                 }
             }
         }

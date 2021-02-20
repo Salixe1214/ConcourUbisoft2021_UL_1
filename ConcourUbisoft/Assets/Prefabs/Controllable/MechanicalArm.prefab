@@ -1160,6 +1160,10 @@ MonoBehaviour:
   armIKSolver: {fileID: 1865101538738871938}
   armRotationRoot: {fileID: 6610768617839303362}
   controlSpeed: 4
+  _extrapolation: 0
+  _lerping: 0
+  _lerpingValue: 0.1
+  _lagCompensation: 0
 --- !u!114 &7748708573357444043
 MonoBehaviour:
   m_ObjectHideFlags: 0

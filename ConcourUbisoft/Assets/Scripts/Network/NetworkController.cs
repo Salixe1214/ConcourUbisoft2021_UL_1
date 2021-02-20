@@ -12,13 +12,27 @@ public class NetworkController : MonoBehaviourPunCallbacks
 {
     [SerializeField] private bool QuickSetup = false;
 
+    public float photonPing = 0;
+    public int photonSendRate = 30;
+    public int photonSendRateSerialize = 30;
+
     #region Unity Callbacks
+    private void Awake()
+    {
+        PhotonNetwork.SendRate = photonSendRate;
+        PhotonNetwork.SerializationRate = photonSendRateSerialize;
+    }
+
     private void Start()
     {
         if(QuickSetup)
         {
             JoinLobby();
         }
+    }
+    private void Update()
+    {
+        photonPing = PhotonNetwork.GetPing();
     }
     #endregion
     #region Events

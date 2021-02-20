@@ -214,6 +214,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   QuickSetup: 1
+  photonPing: 0
+  photonSendRate: 30
+  photonSendRateSerialize: 30
 --- !u!1 &127102981 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8875939281911053909, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}

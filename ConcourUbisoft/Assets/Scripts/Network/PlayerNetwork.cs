@@ -86,7 +86,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         {
             foreach (NetworkSync syncObject in objectsToSync)
             {
-                syncObject.Deserialize((byte[])stream.ReceiveNext(), lag, (float)info.timestamp);
+                syncObject.Deserialize((byte[])stream.ReceiveNext(), lag, (float)info.SentServerTime);
             }
         }
     }
