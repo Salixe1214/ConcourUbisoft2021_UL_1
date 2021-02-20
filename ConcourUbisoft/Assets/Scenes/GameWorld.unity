@@ -1679,7 +1679,7 @@ GameObject:
   - component: {fileID: 554653483}
   - component: {fileID: 554653481}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: CameraArea1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1692,13 +1692,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 554653479}
-  m_LocalRotation: {x: 0.16065644, y: 0, z: 0, w: 0.9870104}
-  m_LocalPosition: {x: 42.85, y: 9.15, z: -10.77}
+  m_LocalRotation: {x: 0.21263108, y: -0.67437977, z: 0.21263108, w: 0.67437977}
+  m_LocalPosition: {x: 60.5, y: 15, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 751556754}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 18.49, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 35, y: -90, z: 0}
 --- !u!114 &554653481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2715,6 +2715,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 951279064}
     m_Modifications:
+    - target: {fileID: 2121669986793875469, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
+      propertyPath: controlSpeed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6459741911634675205, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -3697,7 +3701,7 @@ GameObject:
   - component: {fileID: 1309117626}
   - component: {fileID: 1309117624}
   m_Layer: 0
-  m_Name: Camera (1)
+  m_Name: CameraHub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -32,7 +32,8 @@ public class FurnaceController : MonoBehaviour
         Destroy(transportableByConveyor.gameObject, TimeToConsume);
 
         SequenceOfColor currentSequence = SequencesOfColor[SucceedSequences];
-        if (currentSequence.ColorsSequence[currentSequence.SucceedColors].maxColorComponent == transportableByConveyor.Color.maxColorComponent)
+        
+        if (currentSequence.ColorsSequence[currentSequence.SucceedColors].r == ( transportableByConveyor.Color).r && currentSequence.ColorsSequence[currentSequence.SucceedColors].g == ( transportableByConveyor.Color).g &&currentSequence.ColorsSequence[currentSequence.SucceedColors].b == ( transportableByConveyor.Color).b  )
         {
             currentSequence.SucceedColors++;
             if (currentSequence.SucceedColors == currentSequence.ColorsSequence.Length)
