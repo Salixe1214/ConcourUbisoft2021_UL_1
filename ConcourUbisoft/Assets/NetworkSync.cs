@@ -18,8 +18,8 @@ public class NetworkSync : MonoBehaviour
     }
 
     private float _lag;
-    private float _lastTime = 0;
-    private float _currentTime = 0;
+    private double _lastTime = 0;
+    private double _currentTime = 0;
     private byte[] _oldData = null;
     private byte[] _newData = null;
 
@@ -36,7 +36,7 @@ public class NetworkSync : MonoBehaviour
         return (_componentToSync as Serializable).Serialize();
     }
 
-    public void Deserialize(byte[] data, float lag, float currentTime)
+    public void Deserialize(byte[] data, float lag, double currentTime)
     {
         _lag = lag;
         _oldData = _newData;

@@ -71,7 +71,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.timestamp));
+        float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.SentServerTime));
         if (stream.IsWriting)
         {
             foreach (NetworkSync syncObject in objectsToSync)
@@ -86,7 +86,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         {
             foreach (NetworkSync syncObject in objectsToSync)
             {
-                syncObject.Deserialize((byte[])stream.ReceiveNext(), lag, (float)info.SentServerTime);
+                syncObject.Deserialize((byte[])stream.ReceiveNext(), lag, info.SentServerTime);
             }
         }
     }

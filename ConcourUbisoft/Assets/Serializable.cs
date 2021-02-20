@@ -9,6 +9,6 @@ public abstract class Serializable : MonoBehaviour
 {
     public abstract byte[] Serialize();
     public abstract void Deserialize(byte[] data);
-    public abstract void Smooth(byte[] oldData, byte[] newData, float lag, float _lastTime, float _currentTime);
+    public abstract void Smooth(byte[] oldData, byte[] newData, float lag, double _lastTime, double _currentTime);
 }
 
