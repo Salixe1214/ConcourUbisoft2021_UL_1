@@ -242,6 +242,12 @@ MonoBehaviour:
   SequencesOfColor:
   - ColorsSequence:
     - {r: 0, g: 0, b: 1, a: 1}
+    - {r: 1, g: 0, b: 0, a: 1}
+    - {r: 0, g: 1, b: 0, a: 1}
+    - {r: 1, g: 0.54509807, b: 0, a: 1}
+    - {r: 1, g: 0.9529412, b: 0, a: 1}
+    - {r: 1, g: 0, b: 0.8745098, a: 1}
+    - {r: 1, g: 1, b: 1, a: 1}
     SucceedColors: 0
   Level1Controller: {fileID: 216300352}
   TimeToConsume: 3
@@ -572,9 +578,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PossibleColors:
-  - {r: 0, g: 0, b: 1, a: 1}
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 0, g: 1, b: 0, a: 1}
+  - {r: 0, g: 0, b: 1, a: 0.00000020992007}
+  - {r: 1, g: 0, b: 0, a: 4.1726537e+21}
+  - {r: 0, g: 1, b: 0, a: 0.0007487743}
+  - {r: 1, g: 0.54509807, b: 0, a: 0.00000066019425}
+  - {r: 1, g: 0.9529412, b: 0, a: 0.00017107798}
+  - {r: 1, g: 0, b: 0.8745098, a: 2.658924e+23}
+  - {r: 1, g: 1, b: 1, a: 7.922331e+34}
   FurnaceController: {fileID: 71284029}
   TransportableSpawner: {fileID: 1728446350}
   Level1Door: {fileID: 773527634}
