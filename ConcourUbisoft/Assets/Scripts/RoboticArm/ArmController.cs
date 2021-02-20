@@ -24,7 +24,6 @@ namespace Arm
 
         public override void Deserialize(byte[] data)
         {
-            //Debug.Log($"{Time.timeAsDouble} Deserialize");
             using (MemoryStream memoryStream = new MemoryStream(data))
             {
                 using (BinaryReader binaryReader = new BinaryReader(memoryStream))
@@ -32,19 +31,12 @@ namespace Arm
                     float positionX = binaryReader.ReadSingle();
                     float positionY = binaryReader.ReadSingle();
                     float positionZ = binaryReader.ReadSingle();
-
-                    Debug.Log($"Difference between position (" +
-                              $"{(ArmTarget.position.x - positionX).ToString("n4")}," +
-                              $"{(ArmTarget.position.y - positionY).ToString("n4")}," +
-                              $"{(ArmTarget.position.z - positionZ).ToString("n4")})");
-                    //ArmTarget.position = new Vector3(positionX, positionY, positionZ);
                 }
             }
         }
 
         public override byte[] Serialize()
         {
-            //Debug.Log($"{Time.timeAsDouble} Serialize");
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
@@ -60,7 +52,6 @@ namespace Arm
 
         public override void Smooth(byte[] oldData, byte[] newData, float lag, float lastTime, float currentTime)
         {
-            //Debug.Log($"{Time.timeAsDouble} Smooth");
             using (MemoryStream memoryStreamOld = new MemoryStream(oldData),
                 memoryStreamNew = new MemoryStream(newData))
             {
@@ -71,12 +62,8 @@ namespace Arm
                         binaryReaderNew.ReadSingle(),
                         binaryReaderNew.ReadSingle(),
                         binaryReaderNew.ReadSingle());
-                    Vector3 deltaPosition = newPosition - ArmTarget.position;
 
-                    Vector3 predictionPosition = newPosition + deltaPosition;
-                    float deltaTimeRefresh = currentTime - lastTime - lag;
-
-                    ArmTarget.position = Vector3.MoveTowards(transform.position, newPosition, Time.deltaTime * controlSpeed);
+                    ArmTarget.position = Vector3.MoveTowards(ArmTarget.position, newPosition, Time.deltaTime * controlSpeed);
                 }
             }
         }
