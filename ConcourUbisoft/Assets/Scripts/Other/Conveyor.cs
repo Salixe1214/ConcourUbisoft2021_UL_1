@@ -73,6 +73,11 @@ public abstract class Conveyor : MonoBehaviour
         toRemoveNullReference.ForEach(x => objectsOnConveyor.Remove(x));
     }
 
+    public void SetSpeed(float speed)
+    {
+        Speed = speed;
+    }
+
     protected abstract void MoveObject(Rigidbody rigidbody);
 }
 

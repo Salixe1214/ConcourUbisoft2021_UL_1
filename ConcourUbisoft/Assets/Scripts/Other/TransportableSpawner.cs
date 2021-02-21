@@ -9,6 +9,7 @@ public class TransportableSpawner : MonoBehaviour
     [SerializeField] private Transform PointB = null;
     [SerializeField] private Level1Controller Level1Controller = null;
     [SerializeField] private Vector2 DelayBetweenSpawnsInSeconds = new Vector2(0.5f, 1);
+    [SerializeField] private bool CanSpawn = false;
     
     // Control conveyor speed according to needs. Ex: Slow conveyor speed might need a speed boost when items are spawned the first time in order to avoid item drought.
     [SerializeField] private Conveyor[] conveyors = null;
@@ -20,7 +21,7 @@ public class TransportableSpawner : MonoBehaviour
 
     private void Update()
     {
-        if (Time.time - lastSpawnTime > currentDelay)
+        if (CanSpawn &&Time.time - lastSpawnTime > currentDelay)
         {
             Spawn();
             lastSpawnTime = Time.time;
@@ -57,4 +58,23 @@ public class TransportableSpawner : MonoBehaviour
         }
         
     }
+
+    public void ActivateSpawning(bool canSpawn)
+    {
+        CanSpawn = canSpawn;
+    }
+
+    public void SetConveyorsSpeed(float speed)
+    {
+        foreach (Conveyor c in conveyors)
+        {
+            c.SetSpeed(speed);
+        }
+    }
+
+    public void SetDelayBetweenSpawns(Vector2 delay)
+    {
+        DelayBetweenSpawnsInSeconds = delay;
+    }
+
 }

@@ -61,6 +61,10 @@ public class FurnaceController : MonoBehaviour
                 {
                     Level1Controller.FinishLevel();
                 }
+                else
+                {
+                    Level1Controller.InitiateNextSequence();
+                }
             }
         }
     }
