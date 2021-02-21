@@ -388,6 +388,7 @@ GameObject:
   - component: {fileID: 2102806967959086279}
   - component: {fileID: 3781746175027255345}
   - component: {fileID: 269260054604294023}
+  - component: {fileID: 6105836392550221127}
   - component: {fileID: 3231111929472674229}
   - component: {fileID: 8073996934413831119}
   m_Layer: 0
@@ -493,6 +494,21 @@ MonoBehaviour:
   magnetPullPoint: {fileID: 4391199953618283473}
   magnetTrigger: {fileID: 2789119806684443227}
   magnetRotationRoot: {fileID: 5374279495962164282}
+--- !u!114 &6105836392550221127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4035281835689248998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f32fa626c1773fc478f9f233067cdfe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentToSync: {fileID: 269260054604294023}
+  _owner: 0
+  _smooth: 1
 --- !u!82 &3231111929472674229
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1156,14 +1172,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acd7979280a146e5abf96ab9028c8d6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minRange: 1.5
+  controlSpeed: 4
   controllable: {fileID: 7748708573357444043}
   armIKSolver: {fileID: 1865101538738871938}
   armRotationRoot: {fileID: 6610768617839303362}
-  controlSpeed: 4
-  _extrapolation: 0
-  _lerping: 0
-  _lerpingValue: 0.1
-  _lagCompensation: 0
 --- !u!114 &7748708573357444043
 MonoBehaviour:
   m_ObjectHideFlags: 0

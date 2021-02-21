@@ -8,7 +8,8 @@ public class GameController : MonoBehaviour
     public enum Role
     {
         SecurityGuard,
-        Technician
+        Technician,
+        None
     }
 
     [SerializeField] private string SceneToStartName = "";

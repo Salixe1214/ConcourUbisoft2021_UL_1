@@ -15,24 +15,11 @@ namespace Arm
         [SerializeField] private Controllable controllable;
         [SerializeField] private IKSolver armIKSolver;
         [SerializeField] private Transform armRotationRoot;
-        [SerializeField] private bool _extrapolation = false;
-        [SerializeField] private float _percentPrediction = 1f;
-        [SerializeField] private bool _lerping = false;
-        [SerializeField] private bool _clampLerping = false;
-        [SerializeField] private float _lerpingValue = 0.1f;
-        [SerializeField] private Vector3 _error = Vector3.zero;
-        [SerializeField] private float _errorAverage = 0;
-        [SerializeField] private int _numberOfError = 0;
-        [SerializeField] private float _averageLag = 0;
-        [SerializeField] private int _numberAverageLag = 0;
-        [SerializeField] private bool _lagCompensation = false;
+
         private float maxRange;
-
-
         public float ControlSpeed => controlSpeed;
 
         public Transform ArmTarget { get; private set; } = null;
-
 
         #region Network
 
@@ -42,17 +29,7 @@ namespace Arm
             {
                 using (BinaryReader binaryReader = new BinaryReader(memoryStream))
                 {
-                    float positionX = binaryReader.ReadSingle();
-                    float positionY = binaryReader.ReadSingle();
-                    float positionZ = binaryReader.ReadSingle();
 
-                    _error = new Vector3(positionX, positionY, positionZ) - ArmTarget.position;
-
-                    if (_error.magnitude > float.Epsilon)
-                    {
-                        _numberOfError++;
-                        _errorAverage = _errorAverage + (_error.magnitude - _errorAverage) / _numberOfError;
-                    }
                 }
             }
         }
@@ -74,8 +51,6 @@ namespace Arm
 
         public override void Smooth(byte[] oldData, byte[] newData, float lag, double lastTime, double currentTime)
         {
-            _numberAverageLag++;
-            _averageLag = _averageLag + (lag - _averageLag) / _numberAverageLag;
             using (MemoryStream memoryStreamOld = new MemoryStream(oldData),
                 memoryStreamNew = new MemoryStream(newData))
             {
@@ -87,34 +62,7 @@ namespace Arm
                         binaryReaderNew.ReadSingle(),
                         binaryReaderNew.ReadSingle());
 
-                    Vector3 oldPosition = new Vector3(
-                        binaryReaderOld.ReadSingle(),
-                        binaryReaderOld.ReadSingle(),
-                        binaryReaderOld.ReadSingle());
-
-                    Vector3 deltaPosition = newPosition - oldPosition;
-
-                    double deltaT = currentTime - lastTime;
-                    Vector3 predicatedPosition = newPosition + deltaPosition * _percentPrediction;
-                    Vector3 valueToUse = (_extrapolation ? predicatedPosition : newPosition) +
-                                         (_lagCompensation && (float) deltaT != 0
-                                             ? (deltaPosition / (float) deltaT * lag)
-                                             : Vector3.zero);
-
-                    if (_lerping)
-                    {
-                        ArmTarget.position = Vector3.Lerp(ArmTarget.position, valueToUse, _lerpingValue);
-                    }
-                    else if (_clampLerping)
-                    {
-                        ArmTarget.position = Vector3.MoveTowards(ArmTarget.position,
-                            Vector3.Lerp(ArmTarget.position, valueToUse, _lerpingValue), Time.deltaTime * controlSpeed);
-                    }
-                    else
-                    {
-                        ArmTarget.position = Vector3.MoveTowards(ArmTarget.position, valueToUse,
-                            Time.deltaTime * controlSpeed);
-                    }
+                    ArmTarget.position = Vector3.MoveTowards(ArmTarget.position,newPosition, Time.deltaTime * controlSpeed);
                 }
             }
         }

@@ -10,6 +10,7 @@ public class NetworkSync : MonoBehaviour
     [SerializeField] private Component _componentToSync = null;
     [SerializeField] private GameController.Role _owner = GameController.Role.SecurityGuard;
     [SerializeField] private bool _smooth = true;
+    [SerializeField] public int Id = 0;
 
     public GameController.Role Owner
     {

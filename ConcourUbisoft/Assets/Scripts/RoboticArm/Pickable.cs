@@ -13,7 +13,7 @@ namespace Arm
         [SerializeField] private AudioClip magnetCollisionSound;
         [SerializeField] private bool hasBeenPickup = false;
         private AudioSource audioSource;
-        private Rigidbody rigidbody;
+        public Rigidbody rigidbody;
 
         private Collider collider;
         private Outline outline;
@@ -22,8 +22,12 @@ namespace Arm
 
         public bool HasBeenPickup { get => hasBeenPickup; set => hasBeenPickup = value; }
 
+        private static int nextId = 0;
+        public int Id { get; private set; }
+
         private void Start()
         {
+            Id = nextId++;
             rigidbody = GetComponent<Rigidbody>();
             collider = GetComponent<Collider>();
             outline = GetComponent<Outline>();

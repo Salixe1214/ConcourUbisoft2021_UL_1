@@ -31,7 +31,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         photonView = GetComponent<PhotonView>();
         networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        objectsToSync = GameObject.FindObjectsOfType<NetworkSync>();
+        objectsToSync = GameObject.FindObjectsOfType<NetworkSync>().OrderBy(x => x.Id);
         Name = $"Player {(photonView.Owner.IsMasterClient ? "1" : "2")}";
     }
 
