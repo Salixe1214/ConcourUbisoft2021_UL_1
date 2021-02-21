@@ -16,6 +16,8 @@ public class TransportableSpawner : MonoBehaviour
     private float lastSpawnTime = 0.0f;
     private float currentDelay = 0.0f;
 
+    private int sequenceIndex = 0;
+
     private void Update()
     {
         if (Time.time - lastSpawnTime > currentDelay)
@@ -26,20 +28,33 @@ public class TransportableSpawner : MonoBehaviour
         }
     }
 
-    //TODO : Make sure that required items are available. Make them respawn if destroyed. 
+    //TODO : Make sure that required items are available. Make them respawn if destroyed. DONE
     //TODO : Speed up conveyors when items spawn the first time.
     //TODO : Add Speed when players progress. After each sequence?
     //TODO : Clear Items after sequence? Speed up to clear.
     private void Spawn()
     {
+        
         Color[] possibleColors = Level1Controller.GetColors();
 
         GameObject randomPrefab = TransportablesPrefab[Random.Range(0, TransportablesPrefab.Length)];
-        Color randomColor = possibleColors[Random.Range(0, possibleColors.Length)];
-
+        
         Vector3 randomPoint = PointA.position + Random.Range(0, 100) / 100.0f * (PointB.position - PointA.position);
 
         GameObject transportable = Instantiate(randomPrefab, randomPoint, Quaternion.identity);
-        transportable.gameObject.GetComponent<TransportableByConveyor>().Color = randomColor;
+        
+        
+        if (sequenceIndex >= Level1Controller.GetCurrentSequenceLenght())
+        {
+            transportable.gameObject.GetComponent<TransportableByConveyor>().Color = Level1Controller.GetNextColorInSequence();
+            sequenceIndex = 0;
+        }
+        else
+        {
+            Color randomColor = possibleColors[Random.Range(0, possibleColors.Length)];
+            transportable.gameObject.GetComponent<TransportableByConveyor>().Color = randomColor;
+            sequenceIndex++;
+        }
+        
     }
 }

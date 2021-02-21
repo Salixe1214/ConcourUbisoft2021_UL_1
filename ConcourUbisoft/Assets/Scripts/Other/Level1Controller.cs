@@ -7,6 +7,8 @@ public class Level1Controller : MonoBehaviour
 {
     [SerializeField] private Color[] PossibleColors = null;
     public Color[] GetColors() => PossibleColors;
+    public Color GetNextColorInSequence() => FurnaceController.GetNextColor();
+    public int GetCurrentSequenceLenght() => FurnaceController.GetCurrentSequenceLenght();
 
     [SerializeField] private FurnaceController FurnaceController = null;
     [SerializeField] private TransportableSpawner TransportableSpawner = null;

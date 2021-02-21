@@ -29,7 +29,7 @@ public class FurnaceController : MonoBehaviour
         colorPicker = new Random();
         allColors = Level1Controller.GetColors();
         SequencesOfColor = new SequenceOfColor[nbColorSequences];
-        generateNewColorSequences();
+        GenerateNewColorSequences();
     }
 
 
@@ -65,7 +65,7 @@ public class FurnaceController : MonoBehaviour
         }
     }
 
-    private void generateNewColorSequences()
+    private void GenerateNewColorSequences()
     {
         int currentSequenceLenght = minColorSequencelenght;
         for (int i = 0; i < nbColorSequences; i++)
@@ -83,5 +83,16 @@ public class FurnaceController : MonoBehaviour
                 currentSequenceLenght += 1;
             }
         }
+    }
+
+    public int GetCurrentSequenceLenght()
+    {
+        return SequencesOfColor[SucceedSequences].ColorsSequence.Length;
+    }
+
+    public Color GetNextColor()
+    {
+        SequenceOfColor currentSequence = SequencesOfColor[SucceedSequences];
+        return currentSequence.ColorsSequence[currentSequence.SucceedColors];
     }
 }
