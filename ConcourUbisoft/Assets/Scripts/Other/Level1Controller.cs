@@ -22,13 +22,13 @@ public class Level1Controller : MonoBehaviour
     [Tooltip("Speed at wich the conveyor goes when spawning items at the start of a new sequence. Also used for clearing Items after a sequence.")]
     [SerializeField] private float MaxConveyorSpeed = 15;
     [Tooltip("Speed at wich the conveyor starts at after spawning items rapidly.")]
-    [SerializeField] private float MinConveyorSpeed = 1;
+    [SerializeField] private float MinConveyorSpeed = 1.5f;
     [Tooltip("Added to previous MinConveyorSpeed after a successful sequence.")]
-    [SerializeField] private float ConveyorSpeedIncrement = 0.5f;
+    [SerializeField] private float ConveyorSpeedIncrement = 0.2f;
     [Tooltip("Longest delay range (Seconds) between each two items spawning back to back.")]
-    [SerializeField] private Vector2 DelayBetweenItemSpawnsSecondsHighest = new Vector2(0.5f,1f);
+    [SerializeField] private Vector2 DelayBetweenItemSpawnsSecondsHighest = new Vector2(1f,1.5f);
     [Tooltip("Shortest delay range (Seconds) between each two items spawning back to back. Used for rapidly spawning items at high speed.")]
-    [SerializeField] private Vector2 DelayBetweenItemSpawnsSecondsLowest = new Vector2(0.1f,0.1f);
+    [SerializeField] private Vector2 DelayBetweenItemSpawnsSecondsLowest = new Vector2(0.1f,0.2f);
 
     private float conveyorOperatingSpeed;
     private bool firstWave = false;
