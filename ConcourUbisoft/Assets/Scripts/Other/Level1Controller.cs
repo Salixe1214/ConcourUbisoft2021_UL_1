@@ -15,12 +15,19 @@ public class Level1Controller : MonoBehaviour
     [SerializeField] private TransportableSpawner TransportableSpawner = null;
     [SerializeField] private DoorsScript Level1Door = null;
 
+    [Tooltip("Duration (Seconds) of items being cleared off the conveyors.")]
     [SerializeField] private float ClearItemsTimeSeconds = 3;
+    [Tooltip("Duration (Seconds) of items spawning rapidly at the start of a new sequence.")]
     [SerializeField] private float FastItemSpawningTimeSeconds = 4;
+    [Tooltip("Speed at wich the conveyor goes when spawning items at the start of a new sequence. Also used for clearing Items after a sequence.")]
     [SerializeField] private float MaxConveyorSpeed = 15;
+    [Tooltip("Speed at wich the conveyor starts at after spawning items rapidly.")]
     [SerializeField] private float MinConveyorSpeed = 1;
+    [Tooltip("Added to previous MinConveyorSpeed after a successful sequence.")]
     [SerializeField] private float ConveyorSpeedIncrement = 0.5f;
-    [SerializeField] private Vector2 DelayBetweenItemSpawnsSeconds = new Vector2(0.5f,1f);
+    [Tooltip("Longest delay range (Seconds) between each two items spawning back to back.")]
+    [SerializeField] private Vector2 DelayBetweenItemSpawnsSecondsHighest = new Vector2(0.5f,1f);
+    [Tooltip("Shortest delay range (Seconds) between each two items spawning back to back. Used for rapidly spawning items at high speed.")]
     [SerializeField] private Vector2 DelayBetweenItemSpawnsSecondsLowest = new Vector2(0.1f,0.1f);
 
     private float conveyorOperatingSpeed;
@@ -105,7 +112,7 @@ public class Level1Controller : MonoBehaviour
             TransportableSpawner.SetConveyorsSpeed(conveyorOperatingSpeed+=ConveyorSpeedIncrement); 
         }
 
-        SetDelayBetweenItemSpawns(DelayBetweenItemSpawnsSeconds);       
+        SetDelayBetweenItemSpawns(DelayBetweenItemSpawnsSecondsHighest);       
     }
 
     IEnumerator EndLevel()

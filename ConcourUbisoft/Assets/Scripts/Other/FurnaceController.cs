@@ -42,6 +42,8 @@ public class FurnaceController : MonoBehaviour
         }
     }
 
+    //TODO : Reset sequence when player commits an error. Generate a new color sequence.
+    
     private void Consume(TransportableByConveyor transportableByConveyor)
     {
         transportableByConveyor.Consume();
