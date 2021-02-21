@@ -66,6 +66,7 @@ public class Level1Controller : MonoBehaviour
         firstWave = true;
         FurnaceController.enabled = true;
         TransportableSpawner.enabled = true;
+        ActivateItemSpawning(false);
         TransportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
         StartCoroutine(SpawnFreshItems(FastItemSpawningTimeSeconds));
     }
@@ -101,17 +102,15 @@ public class Level1Controller : MonoBehaviour
         SetDelayBetweenItemSpawns(DelayBetweenItemSpawnsSecondsLowest);
         ActivateItemSpawning(true);
         yield return new WaitForSeconds(seconds);
-        TransportableSpawner.SetConveyorsSpeed(conveyorOperatingSpeed);
         if (firstWave)
         {
             TransportableSpawner.SetConveyorsSpeed(conveyorOperatingSpeed);
+            firstWave = false;
         }
         else
-        {
-            firstWave = false;
+        {            
             TransportableSpawner.SetConveyorsSpeed(conveyorOperatingSpeed+=ConveyorSpeedIncrement); 
         }
-
         SetDelayBetweenItemSpawns(DelayBetweenItemSpawnsSecondsHighest);       
     }
 
