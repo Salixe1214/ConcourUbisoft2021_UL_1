@@ -65,7 +65,7 @@ public class FurnaceController : MonoBehaviour
         }
     }
 
-    public void generateNewColorSequences()
+    private void generateNewColorSequences()
     {
         int currentSequenceLenght = minColorSequencelenght;
         for (int i = 0; i < nbColorSequences; i++)

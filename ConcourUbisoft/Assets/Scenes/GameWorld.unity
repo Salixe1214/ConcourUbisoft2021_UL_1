@@ -185,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66cbd512e082cd84c8e230134d6fc392, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
+  Speed: 3
   Priority: 0
   ClockWise: 1
 --- !u!4 &61558787 stripped
@@ -249,6 +249,9 @@ MonoBehaviour:
     - {r: 1, g: 0, b: 0.8745098, a: 1}
     - {r: 1, g: 1, b: 1, a: 1}
     SucceedColors: 0
+  nbColorSequences: 5
+  minColorSequencelenght: 3
+  maxColorSequenceLenght: 7
   Level1Controller: {fileID: 216300352}
   TimeToConsume: 3
 --- !u!54 &71284030
@@ -899,7 +902,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f99abba2cb182b84082b7ee55da7ee4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
+  Speed: 3
   Priority: 1
 --- !u!1 &309406165
 GameObject:
@@ -1692,13 +1695,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 554653479}
-  m_LocalRotation: {x: 0.21263108, y: -0.67437977, z: 0.21263108, w: 0.67437977}
-  m_LocalPosition: {x: 60.5, y: 15, z: 5}
+  m_LocalRotation: {x: 0.24184473, y: -0.66446304, z: 0.24184473, w: 0.66446304}
+  m_LocalPosition: {x: 60.5, y: 21, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 751556754}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 35, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 40, y: -90, z: 0}
 --- !u!114 &554653481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4693,7 +4696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f99abba2cb182b84082b7ee55da7ee4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
+  Speed: 3
   Priority: -1
 --- !u!54 &2004855962
 Rigidbody:
