@@ -40,6 +40,7 @@ namespace Arm
             {
                 using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
                 {
+                    Debug.Log("Serialiaze");
                     binaryWriter.Write(ArmTarget.position.x);
                     binaryWriter.Write(ArmTarget.position.y);
                     binaryWriter.Write(ArmTarget.position.z);

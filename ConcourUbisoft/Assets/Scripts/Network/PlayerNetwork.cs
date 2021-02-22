@@ -21,8 +21,10 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     private NetworkController networkController = null;
     private GameController gameController = null;
 
-    private IEnumerable<NetworkSync> objectsToSync = null;
+    private IEnumerable<NetworkSync> objectsToSync = new NetworkSync[0];
     [SerializeField] private GameController.Role _playerRole;
+
+
 
     #region Unity Callbacks
 
@@ -31,7 +33,6 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         photonView = GetComponent<PhotonView>();
         networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        objectsToSync = GameObject.FindObjectsOfType<NetworkSync>().OrderBy(x => x.Id);
         Name = $"Player {(photonView.Owner.IsMasterClient ? "1" : "2")}";
     }
 
@@ -74,6 +75,8 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.SentServerTime));
         if (stream.IsWriting)
         {
+            stream.SendNext((int)PlayerRole);
+            stream.SendNext(Name);
             foreach (NetworkSync syncObject in objectsToSync)
             {
                 if (PlayerRole == syncObject.Owner)
@@ -84,6 +87,9 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         }
         else
         {
+            this.PlayerRole = (GameController.Role)(int)stream.ReceiveNext();
+            this.Name = (string)stream.ReceiveNext();
+
             foreach (NetworkSync syncObject in objectsToSync)
             {
                 syncObject.Deserialize((byte[])stream.ReceiveNext(), lag, info.SentServerTime);
@@ -140,10 +146,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 
     private void OnFinishLoadGameEvent()
     {
-        //playerA = GameObject.FindGameObjectWithTag("PlayerGuard");
-        //Arms = new ArmController[1];
-        //Arms[0] = GameObject.FindGameObjectWithTag("Arm1").GetComponent<ArmController>();
-        //Arms[1] = GameObject.FindGameObjectWithTag("Arm2").GetComponent<ArmController>();
+        objectsToSync = GameObject.FindObjectsOfType<NetworkSync>().OrderBy(x => x.Id);
 
         if (IsMine())
         {

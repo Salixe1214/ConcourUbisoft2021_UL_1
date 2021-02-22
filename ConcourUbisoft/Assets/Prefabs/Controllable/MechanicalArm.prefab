@@ -494,6 +494,9 @@ MonoBehaviour:
   magnetPullPoint: {fileID: 4391199953618283473}
   magnetTrigger: {fileID: 2789119806684443227}
   magnetRotationRoot: {fileID: 5374279495962164282}
+  currentPickable: {fileID: 0}
+  grabbed: 0
+  magnetActive: 0
 --- !u!114 &6105836392550221127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -509,6 +512,7 @@ MonoBehaviour:
   _componentToSync: {fileID: 269260054604294023}
   _owner: 0
   _smooth: 1
+  Id: 1
 --- !u!82 &3231111929472674229
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1139,6 +1143,7 @@ GameObject:
   - component: {fileID: 7915232795401323305}
   - component: {fileID: 2121669986793875469}
   - component: {fileID: 7748708573357444043}
+  - component: {fileID: 4320733802285747621}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -1190,3 +1195,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isControlled: 0
+--- !u!114 &4320733802285747621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8875939281911053909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f32fa626c1773fc478f9f233067cdfe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentToSync: {fileID: 2121669986793875469}
+  _owner: 0
+  _smooth: 1
+  Id: 0

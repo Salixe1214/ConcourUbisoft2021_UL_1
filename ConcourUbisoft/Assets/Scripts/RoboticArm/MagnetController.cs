@@ -42,7 +42,7 @@ namespace Arm
 
         private void FixedUpdate()
         {
-            if (controllable.IsControlled)
+            if (controllable.IsControlled || _networkSync.Owner != _networkController.GetLocalRole())
             {
                 if (!grabbed && !currentPickable && _networkSync.Owner == _networkController.GetLocalRole())
                 {
