@@ -69,6 +69,7 @@ public class Level1Controller : MonoBehaviour
 
     private void OnDoorUnlockEvent(DoorsScript doorsScript)
     {
+        Debug.Log("Door Unlocked");
         StartLevel();
     }
 
@@ -80,11 +81,13 @@ public class Level1Controller : MonoBehaviour
 
     public void StartLevel()
     {
+        Debug.Log("StartLevel");
         firstWave = true;
         FurnaceController.enabled = true;
         TransportableSpawner.enabled = true;
         ActivateItemSpawning(false);
         TransportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
+        Debug.Log("ConveyorSpeed Max");
         StartCoroutine(SpawnFreshItems(FastItemSpawningTimeSeconds));
     }
 
@@ -117,23 +120,29 @@ public class Level1Controller : MonoBehaviour
 
     IEnumerator SpawnFreshItems(float seconds)
     {
+        Debug.Log("SpawnFreshItems");
         if (!firstWave)
         {
+            Debug.Log("ClearItems");
             yield return waitForItemsToClear(ClearItemsTimeSeconds);
         }      
         SetDelayBetweenItemSpawns(DelayBetweenItemSpawnsSecondsLowest);
+        Debug.Log("Lowest Spawning Delay");
         ActivateItemSpawning(true);
         yield return new WaitForSeconds(seconds);
         if (firstWave)
         {
             TransportableSpawner.SetConveyorsSpeed(conveyorOperatingSpeed);
+            Debug.Log("ConveyorSpeed Normal");
             firstWave = false;
         }
         else
         {            
             TransportableSpawner.SetConveyorsSpeed(conveyorOperatingSpeed+=ConveyorSpeedIncrement); 
+            Debug.Log("ConveyorSpeed Normal");
         }
-        SetDelayBetweenItemSpawns(DelayBetweenItemSpawnsSecondsHighest);       
+        SetDelayBetweenItemSpawns(DelayBetweenItemSpawnsSecondsHighest);    
+        Debug.Log("Highest Spawning Delay");
     }
 
     IEnumerator EndLevel()
