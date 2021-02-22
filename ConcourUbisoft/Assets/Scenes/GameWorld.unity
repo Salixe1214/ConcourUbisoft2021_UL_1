@@ -597,7 +597,7 @@ MonoBehaviour:
   MaxConveyorSpeed: 15
   MinConveyorSpeed: 1
   ConveyorSpeedIncrement: 0.5
-  DelayBetweenItemSpawnsSecondsHighest: {x: 1, y: 1.5}
+  DelayBetweenItemSpawnsSecondsHighest: {x: 1.1, y: 1.5}
   DelayBetweenItemSpawnsSecondsLowest: {x: 0.1, y: 0.2}
   cameraShakeForce: 0.3
   cameraShakeDurationSeconds: 0.2
@@ -4976,6 +4976,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5239707521546577648, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
+      propertyPath: playerMovementSpeed
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 5239707521546577649, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
       propertyPath: m_Name
       value: Player
@@ -5046,7 +5050,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5239707521868079438, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
       propertyPath: mouseSensivityX
-      value: 100
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 5239707521868079438, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
       propertyPath: mouseSensivityY
