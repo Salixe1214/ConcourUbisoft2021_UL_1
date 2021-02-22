@@ -99,7 +99,7 @@ namespace Arm
             currentPickable.RB.velocity = Vector3.ClampMagnitude(currentPickable.RB.velocity, pullForce);
         }
 
-        private void OnCollisionEnter(Collision other)
+        private void OnCollisionStay(Collision other)
         {
             if (magnetActive && grabbed != true)
             {
