@@ -20,9 +20,11 @@ public class FurnaceController : MonoBehaviour
     [SerializeField] private int maxColorSequenceLenght=7;
     [SerializeField] private Level1Controller Level1Controller = null;
     [SerializeField] private float TimeToConsume = 0.0f;
+    
     private int SucceedSequences = 0;
     private Random colorPicker;
     private Color[] allColors;
+    
 
     private void Start()
     {
@@ -68,6 +70,10 @@ public class FurnaceController : MonoBehaviour
                     Level1Controller.InitiateNextSequence();
                 }
             }
+        }
+        else
+        {
+            Level1Controller.ShakeCamera();
         }
 
     }

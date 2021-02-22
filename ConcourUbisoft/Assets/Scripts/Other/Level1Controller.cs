@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Level1Controller : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class Level1Controller : MonoBehaviour
     [SerializeField] private FurnaceController FurnaceController = null;
     [SerializeField] private TransportableSpawner TransportableSpawner = null;
     [SerializeField] private DoorsScript Level1Door = null;
+    [SerializeField] private Camera AreaCamera = null;
 
     [Tooltip("Duration (Seconds) of items being cleared off the conveyors.")]
     [SerializeField] private float ClearItemsTimeSeconds = 3;
@@ -29,15 +31,30 @@ public class Level1Controller : MonoBehaviour
     [SerializeField] private Vector2 DelayBetweenItemSpawnsSecondsHighest = new Vector2(1f,1.5f);
     [Tooltip("Shortest delay range (Seconds) between each two items spawning back to back. Used for rapidly spawning items at high speed.")]
     [SerializeField] private Vector2 DelayBetweenItemSpawnsSecondsLowest = new Vector2(0.1f,0.2f);
+    [Tooltip("Intensity of the AreaCamera Shake Effect")]
+    [SerializeField] private float cameraShakeForce = 0.3f;
+    [Tooltip("Duration (Seconds) of the AreaCamera Shake effect.")]
+    [SerializeField] private float cameraShakeDurationSeconds = 0.2f;
 
     private float conveyorOperatingSpeed;
     private bool firstWave = false;
+    private Vector3 cameraOriginalPosition;
+    private bool cameraMustShake = false;
 
     public void Start()
     {
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
         conveyorOperatingSpeed = MinConveyorSpeed;
+        cameraOriginalPosition = AreaCamera.transform.position;
+    }
+
+    private void Update()
+    {
+        if (cameraMustShake)
+        {
+            AreaCamera.transform.position = cameraOriginalPosition + Random.insideUnitSphere * cameraShakeForce;
+        }
     }
 
     private void OnEnable()
@@ -76,6 +93,11 @@ public class Level1Controller : MonoBehaviour
         ActivateItemSpawning(false);       
         TransportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
         StartCoroutine(SpawnFreshItems(FastItemSpawningTimeSeconds));
+    }
+
+    public void ShakeCamera()
+    {
+        StartCoroutine(StartCameraShake(cameraShakeDurationSeconds));
     }
 
     private void ActivateItemSpawning(bool canSpawn)
@@ -121,5 +143,13 @@ public class Level1Controller : MonoBehaviour
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
         TransportableSpawner.gameObject.SetActive(false);
+    }
+    
+    IEnumerator StartCameraShake(float duration)
+    {
+        cameraMustShake = true;
+        yield return new WaitForSeconds(duration);
+        cameraMustShake = false;
+        AreaCamera.transform.position = cameraOriginalPosition;
     }
 }

@@ -591,11 +591,14 @@ MonoBehaviour:
   FurnaceController: {fileID: 71284029}
   TransportableSpawner: {fileID: 1728446350}
   Level1Door: {fileID: 773527634}
+  AreaCamera: {fileID: 554653483}
   ClearItemsTimeSeconds: 3
   FastItemSpawningTimeSeconds: 2
   MaxConveyorSpeed: 15
   MinConveyorSpeed: 1
   ConveyorSpeedIncrement: 0.5
+  DelayBetweenItemSpawnsSecondsHighest: {x: 1, y: 1.5}
+  DelayBetweenItemSpawnsSecondsLowest: {x: 0.1, y: 0.2}
 --- !u!4 &216300353
 Transform:
   m_ObjectHideFlags: 0

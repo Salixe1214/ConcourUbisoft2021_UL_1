@@ -15,7 +15,6 @@ public class NetworkVoiceManager : MonoBehaviour
 
     private void Update()
     {
-        
         string[] joysticks = Input.GetJoystickNames();
 
         if (joysticks.Contains("Controller (Xbox One For Windows)"))
