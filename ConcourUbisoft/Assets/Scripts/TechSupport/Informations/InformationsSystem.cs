@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -15,7 +16,7 @@ namespace TechSupport.Informations
             public string title;
             [TextArea]
             public string content;
-            public Sprite image;
+            public List<Sprite> images;
         }
         [Header("Information")]
         [SerializeField]
@@ -29,7 +30,6 @@ namespace TechSupport.Informations
         [SerializeField] private GameObject accordionPrefab;
         [SerializeField] private GameObject itemPrefab;
         [SerializeField] private GameObject headerPrefab;
-        [SerializeField] private GameObject imagePrefab;
         [SerializeField] private GameObject textPrefab;
 
         private GameObject _accordion;
@@ -44,11 +44,43 @@ namespace TechSupport.Informations
             GameObject go = Instantiate(itemPrefab, _accordion.transform);
             
             Instantiate(headerPrefab, go.transform).GetComponent<Text>().text = item.title;
-            if (item.image)
+            if (item.images.Count > 0)
             {
-                Instantiate(imagePrefab, go.transform).GetComponent<Image>().sprite = item.image;
+                CreateImageLayout(go.transform, item.images);
             }
             Instantiate(textPrefab, go.transform).GetComponent<Text>().text = item.content;
+        }
+
+        private void CreateImage(Transform parent, Sprite sprite)
+        {
+            GameObject go = new GameObject();
+            Image image = go.AddComponent<Image>();
+            image.sprite = sprite;
+            image.preserveAspect = true;
+            go.GetComponent<RectTransform>().SetParent(parent);
+            go.SetActive(true);
+        }
+
+        private void CreateImageLayout(Transform parent, List<Sprite> images)
+        {
+            GameObject go = new GameObject();
+            HorizontalLayoutGroup layout = go.AddComponent<HorizontalLayoutGroup>();
+
+            layout.childAlignment = TextAnchor.MiddleCenter;
+            images.ForEach(image => CreateImage(go.transform, image));
+            go.GetComponent<RectTransform>().SetParent(parent);
+            go.SetActive(true);
+        }
+
+        private void CreateParagraph(Transform parent, string content)
+        {
+            GameObject go = new GameObject();
+            Text text = go.AddComponent<Text>();
+            text.text = content;
+            text.fontSize = 14;
+            text.color = Color.black;
+            go.GetComponent<RectTransform>().SetParent(parent);
+            go.SetActive(true);
         }
     }
 }
