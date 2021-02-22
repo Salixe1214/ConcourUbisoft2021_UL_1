@@ -10,6 +10,7 @@ public class NetworkSync : MonoBehaviour
     [SerializeField] private Component _componentToSync = null;
     [SerializeField] private GameController.Role _owner = GameController.Role.SecurityGuard;
     [SerializeField] private bool _smooth = true;
+    private static int _nextId = 0;
     [SerializeField] public int Id = 0;
 
     public GameController.Role Owner
@@ -23,6 +24,11 @@ public class NetworkSync : MonoBehaviour
     private double _currentTime = 0;
     private byte[] _oldData = null;
     private byte[] _newData = null;
+
+    private void Reset()
+    {
+        Id = _nextId++;
+    }
 
     private void Awake()
     {
