@@ -14,7 +14,4 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/NetworkMechanicalArm.unity
     guid: b49556edce4618343b13255ed62c1544
-  - enabled: 0
-    path: Assets/Scenes/NetworkConveyor.unity
-    guid: 78d20ef2f3f0be147b9ac25e58e0a879
   m_configObjects: {}

@@ -370,6 +370,10 @@ PrefabInstance:
       propertyPath: isControlled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8097361729200462726, guid: ad5952f548b30e745b79571c123fda07, type: 3}
+      propertyPath: _owner
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9040515246666604909, guid: ad5952f548b30e745b79571c123fda07, type: 3}
       propertyPath: m_LocalPosition.y
       value: 3.92
