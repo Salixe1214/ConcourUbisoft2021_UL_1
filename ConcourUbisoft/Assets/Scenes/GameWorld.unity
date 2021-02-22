@@ -2784,6 +2784,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Arm1
       objectReference: {fileID: 0}
+    - target: {fileID: 8875939281911053909, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
+      propertyPath: m_TagString
+      value: Arm1
+      objectReference: {fileID: 0}
     - target: {fileID: 9038037867875215746, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
       propertyPath: viewIdField
       value: 2

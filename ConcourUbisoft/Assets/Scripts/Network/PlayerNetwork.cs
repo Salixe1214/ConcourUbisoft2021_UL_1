@@ -59,44 +59,44 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if (stream.IsWriting)
-        {
-            stream.SendNext((int) PlayerRole);
-            stream.SendNext(Name);
+        //if (stream.IsWriting)
+        //{
+        //    stream.SendNext((int) PlayerRole);
+        //    stream.SendNext(Name);
 
-            if (gameController.IsGameStart && PlayerRole == GameController.Role.SecurityGuard)
-            {
-                stream.SendNext(playerA.transform.position);
-                stream.SendNext(playerA.transform.rotation);
-            }
-            else if (gameController.IsGameStart && PlayerRole == GameController.Role.Technician)
-            {
-                for (int i = 0; i < Arms.Length; i++)
-                {
-                    stream.SendNext(Arms[i].transform.position);
-                    stream.SendNext(Arms[i].transform.rotation);
-                }
-            }
-        }
-        else
-        {
-            this.PlayerRole = (GameController.Role) (int) stream.ReceiveNext();
-            this.Name = (string) stream.ReceiveNext();
+        //    if (gameController.IsGameStart && PlayerRole == GameController.Role.SecurityGuard)
+        //    {
+        //        stream.SendNext(playerA.transform.position);
+        //        stream.SendNext(playerA.transform.rotation);
+        //    }
+        //    else if (gameController.IsGameStart && PlayerRole == GameController.Role.Technician)
+        //    {
+        //        for (int i = 0; i < Arms.Length; i++)
+        //        {
+        //            stream.SendNext(Arms[i].transform.position);
+        //            stream.SendNext(Arms[i].transform.rotation);
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //    this.PlayerRole = (GameController.Role) (int) stream.ReceiveNext();
+        //    this.Name = (string) stream.ReceiveNext();
 
-            if (gameController.IsGameStart && PlayerRole == GameController.Role.SecurityGuard)
-            {
-                playerA.transform.position = (Vector3) stream.ReceiveNext();
-                playerA.transform.rotation = (Quaternion) stream.ReceiveNext();
-            }
-            else if (gameController.IsGameStart && PlayerRole == GameController.Role.Technician)
-            {
-                for (int i = 0; i < Arms.Length; i++)
-                {
-                    Arms[i].transform.position = (Vector3) stream.ReceiveNext();
-                    Arms[i].transform.rotation = (Quaternion) stream.ReceiveNext();
-                }
-            }
-        }
+        //    if (gameController.IsGameStart && PlayerRole == GameController.Role.SecurityGuard)
+        //    {
+        //        playerA.transform.position = (Vector3) stream.ReceiveNext();
+        //        playerA.transform.rotation = (Quaternion) stream.ReceiveNext();
+        //    }
+        //    else if (gameController.IsGameStart && PlayerRole == GameController.Role.Technician)
+        //    {
+        //        for (int i = 0; i < Arms.Length; i++)
+        //        {
+        //            Arms[i].transform.position = (Vector3) stream.ReceiveNext();
+        //            Arms[i].transform.rotation = (Quaternion) stream.ReceiveNext();
+        //        }
+        //    }
+        //}
     }
 
     #endregion

@@ -50,10 +50,9 @@ public class GameController : MonoBehaviour
             yield return null;
         }
         IsGameLoading = false;
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(SceneToStartName));
         OnFinishLoadGameEvent?.Invoke();
         IsGameStart = true;
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName(SceneToStartName));
-
         if (GameRole == Role.SecurityGuard)
         {
             SetUpSecurityGuard();
