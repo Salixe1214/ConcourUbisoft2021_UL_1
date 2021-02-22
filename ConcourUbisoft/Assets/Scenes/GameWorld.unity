@@ -185,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66cbd512e082cd84c8e230134d6fc392, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
+  Speed: 3
   Priority: 0
   ClockWise: 1
 --- !u!4 &61558787 stripped
@@ -242,9 +242,18 @@ MonoBehaviour:
   SequencesOfColor:
   - ColorsSequence:
     - {r: 0, g: 0, b: 1, a: 1}
+    - {r: 1, g: 0, b: 0, a: 1}
+    - {r: 0, g: 1, b: 0, a: 1}
+    - {r: 1, g: 0.54509807, b: 0, a: 1}
+    - {r: 1, g: 0.9529412, b: 0, a: 1}
+    - {r: 1, g: 0, b: 0.8745098, a: 1}
+    - {r: 1, g: 1, b: 1, a: 1}
     SucceedColors: 0
+  nbColorSequences: 2
+  minColorSequencelenght: 3
+  maxColorSequenceLenght: 7
   Level1Controller: {fileID: 216300352}
-  TimeToConsume: 3
+  TimeToConsume: 2
 --- !u!54 &71284030
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -572,12 +581,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PossibleColors:
-  - {r: 0, g: 0, b: 1, a: 1}
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 0, g: 1, b: 0, a: 1}
+  - {r: 0, g: 0, b: 1, a: 0.00000020992007}
+  - {r: 1, g: 0, b: 0, a: 4.1726537e+21}
+  - {r: 0, g: 1, b: 0, a: 0.0007487743}
+  - {r: 1, g: 0.54509807, b: 0, a: 0.00000066019425}
+  - {r: 1, g: 0.9529412, b: 0, a: 0.00017107798}
+  - {r: 1, g: 0, b: 0.8745098, a: 2.658924e+23}
+  - {r: 1, g: 1, b: 1, a: 7.922331e+34}
   FurnaceController: {fileID: 71284029}
   TransportableSpawner: {fileID: 1728446350}
   Level1Door: {fileID: 773527634}
+  AreaCamera: {fileID: 554653483}
+  ClearItemsTimeSeconds: 2
+  FastItemSpawningTimeSeconds: 2.5
+  MaxConveyorSpeed: 15
+  MinConveyorSpeed: 1
+  ConveyorSpeedIncrement: 0.5
+  DelayBetweenItemSpawnsSecondsHighest: {x: 1.1, y: 1.5}
+  DelayBetweenItemSpawnsSecondsLowest: {x: 0.1, y: 0.2}
+  cameraShakeForce: 0.3
+  cameraShakeDurationSeconds: 0.2
 --- !u!4 &216300353
 Transform:
   m_ObjectHideFlags: 0
@@ -889,7 +912,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f99abba2cb182b84082b7ee55da7ee4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
+  Speed: 3
   Priority: 1
 --- !u!1 &309406165
 GameObject:
@@ -1669,7 +1692,7 @@ GameObject:
   - component: {fileID: 554653483}
   - component: {fileID: 554653481}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: CameraArea1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1682,13 +1705,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 554653479}
-  m_LocalRotation: {x: 0.16065644, y: 0, z: 0, w: 0.9870104}
-  m_LocalPosition: {x: 42.85, y: 9.15, z: -10.77}
+  m_LocalRotation: {x: 0.3535534, y: -0.61237246, z: 0.3535534, w: 0.61237246}
+  m_LocalPosition: {x: 55, y: 21, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 751556754}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 18.49, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 60, y: -90, z: 0}
 --- !u!114 &554653481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2705,6 +2728,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 951279064}
     m_Modifications:
+    - target: {fileID: 2121669986793875469, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
+      propertyPath: controlSpeed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6459741911634675205, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -2754,6 +2781,10 @@ PrefabInstance:
       value: RoboticArm
       objectReference: {fileID: 0}
     - target: {fileID: 8360864145031390083, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
+      propertyPath: m_TagString
+      value: Arm1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8875939281911053909, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
       propertyPath: m_TagString
       value: Arm1
       objectReference: {fileID: 0}
@@ -3687,7 +3718,7 @@ GameObject:
   - component: {fileID: 1309117626}
   - component: {fileID: 1309117624}
   m_Layer: 0
-  m_Name: Camera (1)
+  m_Name: CameraHub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4452,6 +4483,11 @@ MonoBehaviour:
   PointB: {fileID: 1042068769}
   Level1Controller: {fileID: 216300352}
   DelayBetweenSpawnsInSeconds: {x: 0.5, y: 1}
+  CanSpawn: 1
+  conveyors:
+  - {fileID: 2004855961}
+  - {fileID: 295921933}
+  - {fileID: 50355904}
 --- !u!4 &1728446351
 Transform:
   m_ObjectHideFlags: 0
@@ -4679,7 +4715,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f99abba2cb182b84082b7ee55da7ee4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
+  Speed: 3
   Priority: -1
 --- !u!54 &2004855962
 Rigidbody:
@@ -4944,6 +4980,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5239707521546577648, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
+      propertyPath: playerMovementSpeed
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 5239707521546577649, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
       propertyPath: m_Name
       value: Player
@@ -5014,7 +5054,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5239707521868079438, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
       propertyPath: mouseSensivityX
-      value: 100
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 5239707521868079438, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
       propertyPath: mouseSensivityY
