@@ -19,7 +19,6 @@ public class CircleConveyor : Conveyor
 
     protected override void MoveObject(Rigidbody rigidbody)
     {
-        Debug.Log($"forward change {rigidbody.gameObject.name}");
         Vector3 centerToObject = rigidbody.position - center;
         Vector2 centerToObject2D = new Vector2(centerToObject.x, centerToObject.z);
         float radius = centerToObject2D.magnitude;
