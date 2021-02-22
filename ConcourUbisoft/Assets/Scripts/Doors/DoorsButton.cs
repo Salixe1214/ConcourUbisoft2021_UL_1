@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DoorsButton : MonoBehaviour
@@ -29,6 +30,27 @@ public class DoorsButton : MonoBehaviour
 
         clickable = true;
     }
+
+    private void Update()
+    {
+        string[] joysticks = Input.GetJoystickNames();
+
+        if (joysticks.Contains("Controller (Xbox One For Windows)"))
+        {
+            if (Input.GetButtonDown("ConfirmXBO") && _isHover)
+            {
+                OnMouseDown();
+            }
+        }
+        else if (joysticks.Contains("Wireless Controller"))
+        {
+            if (Input.GetButtonDown("ConfirmPS") && _isHover)
+            {
+                OnMouseDown();
+            }
+        }
+    }
+    
 
     private void OnMouseDown()
     {

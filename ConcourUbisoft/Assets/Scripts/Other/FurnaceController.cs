@@ -42,7 +42,7 @@ public class FurnaceController : MonoBehaviour
         }
     }
 
-    //TODO : Reset sequence when player commits an error. Generate a new color sequence.
+    //TODO : Reset sequence when player commits an error. Generate a new color sequence. Maybe
     
     private void Consume(TransportableByConveyor transportableByConveyor)
     {
@@ -69,6 +69,7 @@ public class FurnaceController : MonoBehaviour
                 }
             }
         }
+
     }
 
     private void GenerateNewColorSequences()
