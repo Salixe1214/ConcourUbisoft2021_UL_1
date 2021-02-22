@@ -5420,7 +5420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4cc0e9bf109da3469915959d009fab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SceneToStartName: GameWorld
+  SceneToStartName: TechInfoAccordeon
   AudioListener: {fileID: 182247870}
   optionController: {fileID: 775259508}
 --- !u!4 &1209276559
