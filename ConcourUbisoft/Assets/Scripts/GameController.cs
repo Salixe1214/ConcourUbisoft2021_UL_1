@@ -17,8 +17,8 @@ public class GameController : MonoBehaviour
 
     private SoundController soundController = null;
 
-    public bool IsGameLoading { get; private set; }
-    public bool IsGameStart { get; private set; }
+    public bool IsGameLoading = false;
+    public bool IsGameStart = false;
     public Role GameRole { get; set; }
     public OptionController OptionController { get => optionController; }
 
@@ -50,9 +50,9 @@ public class GameController : MonoBehaviour
             yield return null;
         }
         IsGameLoading = false;
+        IsGameStart = true;
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(SceneToStartName));
         OnFinishLoadGameEvent?.Invoke();
-        IsGameStart = true;
         if (GameRole == Role.SecurityGuard)
         {
             SetUpSecurityGuard();

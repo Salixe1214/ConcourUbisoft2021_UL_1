@@ -96,10 +96,14 @@ public class DoorsScript : MonoBehaviour
 
     public void UnlockDoor()
     {
-        GetComponent<Collider>().isTrigger = true;
-        _matIndicator.SetColor("_Color", Color.green);
+        if(!DoorUnlocked)
+        {
+            GetComponent<Collider>().isTrigger = true;
+            _matIndicator.SetColor("_Color", Color.green);
 
-        OnDoorUnlockEvent?.Invoke(this);
+            OnDoorUnlockEvent?.Invoke(this);
+            DoorUnlocked = true;
+        }
     }
 
     IEnumerator Flash(Color pColor, Material pMaterial)
