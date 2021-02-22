@@ -171,7 +171,6 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public GameController.Role GetLocalRole()
     {
         IEnumerable<PlayerNetwork> playerNetworks = GameObject.FindGameObjectsWithTag("PlayerNetwork").Select(x => x.GetComponent<PlayerNetwork>()).Where(x => x.IsMine());
-        Debug.Log(playerNetworks.Count());
         return playerNetworks.Count() > 0 ? playerNetworks.First().PlayerRole : GameController.Role.None;
     }
     #endregion

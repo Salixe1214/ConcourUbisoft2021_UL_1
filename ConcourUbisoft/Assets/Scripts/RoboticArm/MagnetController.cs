@@ -1,14 +1,16 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace Arm
 {
     public class MagnetController : Serializable
     {
-        [SerializeField] private float pullForce = 0.1f;
+        [SerializeField] private float pullForce = 10f;
         [SerializeField] private Controllable controllable;
         [SerializeField] private Transform magnetPullPoint;
         [SerializeField] private MagnetTrigger magnetTrigger;
@@ -20,11 +22,13 @@ namespace Arm
 
         private NetworkSync _networkSync = null;
         private NetworkController _networkController = null;
+
         private void Start()
         {
             controllable.OnControlStateChange += OnControlStateChange;
             _networkSync = GetComponent<NetworkSync>();
-            _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+            _networkController =
+                GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         }
 
         void OnControlStateChange(bool controlled)
@@ -37,7 +41,7 @@ namespace Arm
 
         private void Update()
         {
-            magnetRotationRoot.rotation = Quaternion.Euler(190, 0, 0);
+            magnetRotationRoot.rotation = Quaternion.Euler(180, 0, 0);
         }
 
         private void FixedUpdate()
@@ -52,9 +56,13 @@ namespace Arm
                 if (currentPickable)
                 {
                     currentPickable.OnHover();
+                    if (grabbed)
+                    {
+                        currentPickable.RB.velocity = Vector3.zero;
+                    }
                 }
 
-                if(_networkSync.Owner == _networkController.GetLocalRole())
+                if (_networkSync.Owner == _networkController.GetLocalRole())
                 {
                     if (Input.GetButton("Grab") ||
                         Input.GetButton("GrabControllerXBO") ||
@@ -68,8 +76,8 @@ namespace Arm
                     }
                 }
 
-                if (!grabbed && 
-                    magnetActive && 
+                if (!grabbed &&
+                    magnetActive &&
                     currentPickable &&
                     magnetTrigger.GetPickables().Contains(currentPickable))
                     MovePickableToMagnet();
@@ -78,10 +86,17 @@ namespace Arm
 
         private void MovePickableToMagnet()
         {
-            currentPickable.RB.velocity += Time.fixedTime * pullForce *
-                                           (magnetPullPoint.position - currentPickable.transform.position).normalized;
+            Vector3 difference = (magnetPullPoint.position - currentPickable.transform.position);
+            if (difference.magnitude <= float.Epsilon)
+            {
+                currentPickable.RB.velocity = pullForce * Vector3.up;
+            }
+            else
+            {
+                currentPickable.RB.velocity = (pullForce / difference.sqrMagnitude) * difference.normalized;
+            }
 
-            Debug.Log($"Move Pickable");
+            currentPickable.RB.velocity = Vector3.ClampMagnitude(currentPickable.RB.velocity, pullForce);
         }
 
         private void OnCollisionEnter(Collision other)
@@ -91,7 +106,6 @@ namespace Arm
                 currentPickable = other.gameObject.GetComponent<Pickable>();
                 if (currentPickable)
                 {
-                    Debug.Log("grabbed");
                     currentPickable.OnGrab();
                     currentPickable.RB.velocity = Vector3.zero;
                     currentPickable.transform.parent = this.transform;
@@ -102,7 +116,6 @@ namespace Arm
 
         private void TurnMagnetOff()
         {
-            Debug.Log("Turn Off");
             magnetActive = false;
             grabbed = false;
             if (currentPickable)
@@ -151,9 +164,9 @@ namespace Arm
             {
                 using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
                 {
-                    if(currentPickable != null)
+                    if (currentPickable != null)
                     {
-                        binaryWriter.Write((Int32)currentPickable.Id);
+                        binaryWriter.Write((Int32) currentPickable.Id);
                         binaryWriter.Write(currentPickable.transform.position.x);
                         binaryWriter.Write(currentPickable.transform.position.y);
                         binaryWriter.Write(currentPickable.transform.position.z);
@@ -164,18 +177,18 @@ namespace Arm
                     }
                     else
                     {
-                        binaryWriter.Write((Int32)(-1));
-                        binaryWriter.Write((float)(0.0f));
-                        binaryWriter.Write((float)(0.0f));
-                        binaryWriter.Write((float)(0.0f));
-                        binaryWriter.Write((float)(0.0f));
-                        binaryWriter.Write((float)(0.0f));
-                        binaryWriter.Write((float)(0.0f));
-                        binaryWriter.Write((float)(0.0f));
+                        binaryWriter.Write((Int32) (-1));
+                        binaryWriter.Write((float) (0.0f));
+                        binaryWriter.Write((float) (0.0f));
+                        binaryWriter.Write((float) (0.0f));
+                        binaryWriter.Write((float) (0.0f));
+                        binaryWriter.Write((float) (0.0f));
+                        binaryWriter.Write((float) (0.0f));
+                        binaryWriter.Write((float) (0.0f));
                     }
 
-                    binaryWriter.Write((bool)magnetActive);
-                    binaryWriter.Write((bool)grabbed);
+                    binaryWriter.Write((bool) magnetActive);
+                    binaryWriter.Write((bool) grabbed);
                 }
 
                 return memoryStream.ToArray();
@@ -190,22 +203,24 @@ namespace Arm
                 {
                     int pickableId = binaryReader.ReadInt32();
                     Vector3 newPosition = new Vector3(
-                                binaryReader.ReadSingle(),
-                                binaryReader.ReadSingle(),
-                                binaryReader.ReadSingle());
+                        binaryReader.ReadSingle(),
+                        binaryReader.ReadSingle(),
+                        binaryReader.ReadSingle());
 
-                    Quaternion quaternion = new Quaternion(binaryReader.ReadSingle(), binaryReader.ReadSingle(), binaryReader.ReadSingle(), binaryReader.ReadSingle());
+                    Quaternion quaternion = new Quaternion(binaryReader.ReadSingle(), binaryReader.ReadSingle(),
+                        binaryReader.ReadSingle(), binaryReader.ReadSingle());
 
                     bool newMagnetActive = binaryReader.ReadBoolean();
-                    bool newGrabbed  = binaryReader.ReadBoolean();
-
-                    Pickable pickable = GameObject.FindObjectsOfType<Pickable>().Where(x => x.Id == pickableId).FirstOrDefault();
-                    if(pickableId == -1 && currentPickable != null)
+                    bool newGrabbed = binaryReader.ReadBoolean();
+                    //todo fix performance here
+                    Pickable pickable = GameObject.FindObjectsOfType<Pickable>().Where(x => x.Id == pickableId)
+                        .FirstOrDefault();
+                    if (pickableId == -1 && currentPickable != null)
                     {
                         Release();
                     }
 
-                    if(pickable != null && currentPickable != null && currentPickable != pickable)
+                    if (pickable != null && currentPickable != null && currentPickable != pickable)
                     {
                         Release();
                     }
@@ -252,7 +267,8 @@ namespace Arm
                     }
                     else
                     {
-                        Pickable pickable = GameObject.FindObjectsOfType<Pickable>().Where(x => x.Id == pickableId).FirstOrDefault();
+                        Pickable pickable = GameObject.FindObjectsOfType<Pickable>().Where(x => x.Id == pickableId)
+                            .FirstOrDefault();
                         if (pickable != null)
                         {
                             Debug.Log("Found Pickable");
@@ -263,7 +279,9 @@ namespace Arm
                                 binaryReaderNew.ReadSingle(),
                                 binaryReaderNew.ReadSingle());
 
-                            Quaternion quaternion = new Quaternion(binaryReaderNew.ReadSingle(), binaryReaderNew.ReadSingle(), binaryReaderNew.ReadSingle(), binaryReaderNew.ReadSingle());
+                            Quaternion quaternion = new Quaternion(binaryReaderNew.ReadSingle(),
+                                binaryReaderNew.ReadSingle(), binaryReaderNew.ReadSingle(),
+                                binaryReaderNew.ReadSingle());
                             //currentPickable.transform.position = Vector3.MoveTowards(currentPickable.transform.position, newPosition, Time.deltaTime * 3);
                         }
                     }

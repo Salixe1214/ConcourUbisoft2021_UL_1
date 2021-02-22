@@ -6,9 +6,6 @@ public class LineConveyor : Conveyor
 {
     protected override void MoveObject(Rigidbody rigidbody)
     {
-        if (!rigidbody.isKinematic)
-        {
-            rigidbody.MovePosition(rigidbody.position + this.transform.forward * Speed * Time.deltaTime);
-        }
+        rigidbody.MovePosition(rigidbody.position + this.transform.forward * Speed * Time.deltaTime);
     }
 }

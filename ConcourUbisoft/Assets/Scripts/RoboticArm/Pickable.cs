@@ -13,7 +13,7 @@ namespace Arm
         [SerializeField] private AudioClip magnetCollisionSound;
         [SerializeField] private bool hasBeenPickup = false;
         private AudioSource audioSource;
-        public Rigidbody rigidbody;
+        private Rigidbody rigidbody;
 
         private Collider collider;
         private Outline outline;
@@ -27,6 +27,7 @@ namespace Arm
 
         private void Start()
         {
+            
             Id = nextId++;
             rigidbody = GetComponent<Rigidbody>();
             collider = GetComponent<Collider>();
@@ -51,7 +52,8 @@ namespace Arm
 
         public void OnGrab()
         {
-            rigidbody.isKinematic = true;
+            rigidbody.useGravity = false;
+            rigidbody.freezeRotation = true;
             hasBeenPickup = true;
             audioSource.clip = magnetCollisionSound;
             audioSource.volume = volumeMultiplier;
@@ -65,7 +67,9 @@ namespace Arm
 
         public void OnRelease()
         {
-            rigidbody.isKinematic = false;
+            rigidbody.useGravity = true;
+            rigidbody.freezeRotation = false;
+            
         }
     }
 }
