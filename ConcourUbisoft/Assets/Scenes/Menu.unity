@@ -5423,6 +5423,8 @@ MonoBehaviour:
   SceneToStartName: GameWorld
   AudioListener: {fileID: 182247870}
   optionController: {fileID: 775259508}
+  IsGameLoading: 0
+  IsGameStart: 0
 --- !u!4 &1209276559
 Transform:
   m_ObjectHideFlags: 0
