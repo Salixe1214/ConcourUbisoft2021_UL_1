@@ -29,14 +29,15 @@ public class CharacterControl : MonoBehaviour
         Vector3 keyboardInput = (transform.right * keyboardHorizontal + transform.forward *keyBoardVertical)*playerMovementSpeed;
         
         inputVector = controllerInput + keyboardInput + gravityVector;
+        
+    }
 
+    private void FixedUpdate()
+    {
         if (inputVector.magnitude > playerMovementSpeed)
         {
             inputVector = Vector3.ClampMagnitude(inputVector,playerMovementSpeed);
         }
         playerBody.velocity = inputVector;
-
     }
-    
-    
 }
