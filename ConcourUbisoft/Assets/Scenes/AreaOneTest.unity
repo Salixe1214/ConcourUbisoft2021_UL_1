@@ -411,8 +411,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerBody: {fileID: 1536654633}
-  mouseSensivityX: 100
-  mouseSensivityY: 100
+  mouseSensivityX: 3
+  mouseSensivityY: 3
   controllerSensivity: 100
 --- !u!1 &322426304
 GameObject:

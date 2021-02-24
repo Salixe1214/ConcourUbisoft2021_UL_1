@@ -28,9 +28,16 @@ public class TransportableByConveyor : MonoBehaviour
 
     public void AddConveyor(int priority, object conveyor)
     {
-        if(!priorityConveyor.ContainsKey(priority))
+        if (!priorityConveyor.ContainsKey(priority))
         {
             priorityConveyor.Add(priority, conveyor);
+        }
+        else
+        {
+            if(!priorityConveyor.ContainsValue(conveyor))
+            {
+                Debug.LogError("You cannot have 2 conveyor with the same priority.");
+            }
         }
     }
 

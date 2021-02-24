@@ -81,7 +81,7 @@ namespace Arm
             if (controllable.IsControlled)
             {
                 Vector3 translation =
-                    Vector3.ClampMagnitude(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")),
+                    Vector3.ClampMagnitude(new Vector3(Input.GetAxis("Vertical")*-1, 0, Input.GetAxis("Horizontal")),
                         controlSpeed);
                 ArmTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
                 float distanceToTarget = Vector3.Distance(transform.position, ArmTarget.position);
