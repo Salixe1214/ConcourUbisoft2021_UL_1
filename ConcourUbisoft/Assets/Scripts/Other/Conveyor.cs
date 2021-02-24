@@ -43,12 +43,15 @@ public abstract class Conveyor : MonoBehaviour
         Rigidbody rigidbody = null;
         if (collision.gameObject.TryGetComponent(out transportableByConveyor) && collision.gameObject.TryGetComponent(out rigidbody))
         {
-            objectsOnConveyor[transportableByConveyor].NumberOfTimeOnConveyor = objectsOnConveyor[transportableByConveyor].NumberOfTimeOnConveyor - 1;
-            Debug.Log($"{collision.gameObject.name} has left the conveyor. ({objectsOnConveyor[transportableByConveyor].NumberOfTimeOnConveyor})");
-            if (objectsOnConveyor[transportableByConveyor].NumberOfTimeOnConveyor == 0)
+            if (objectsOnConveyor.ContainsKey(transportableByConveyor))
             {
-                transportableByConveyor.RemoveConveyor(this);
-                objectsOnConveyor.Remove(transportableByConveyor);
+                objectsOnConveyor[transportableByConveyor].NumberOfTimeOnConveyor = objectsOnConveyor[transportableByConveyor].NumberOfTimeOnConveyor - 1;
+                Debug.Log($"{collision.gameObject.name} has left the conveyor. ({objectsOnConveyor[transportableByConveyor].NumberOfTimeOnConveyor})");
+                if (objectsOnConveyor[transportableByConveyor].NumberOfTimeOnConveyor == 0)
+                {
+                    transportableByConveyor.RemoveConveyor(this);
+                    objectsOnConveyor.Remove(transportableByConveyor);
+                }
             }
         }
     }
