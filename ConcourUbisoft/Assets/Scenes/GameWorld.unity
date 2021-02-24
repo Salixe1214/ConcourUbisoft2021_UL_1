@@ -1969,6 +1969,7 @@ GameObject:
   - component: {fileID: 636416302}
   - component: {fileID: 636416301}
   - component: {fileID: 636416300}
+  - component: {fileID: 636416303}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2056,6 +2057,32 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &636416303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 636416298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b6c23d05b171514caef5614f779952e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items:
+  - title: test
+    content: '3333333333333
+
+      rrrrrrrrrrrr
+
+      gbtgfghnfgjhfhdj'
+    images: []
+  position: {x: 2000, y: 500, z: 0}
+  rotation: {x: 0, y: 0, z: 0, w: 0}
+  accordionPrefab: {fileID: 6953853909590194871, guid: 1664132dbeadfe3449e600d8760d88ee, type: 3}
+  itemPrefab: {fileID: 977273539004602342, guid: 1a7181cee50139c41806ebadbcfe4f27, type: 3}
+  headerPrefab: {fileID: 6550221425655467075, guid: 2cbe4c01e1d71414dac604231e9e6dad, type: 3}
+  textPrefab: {fileID: 3927507662192480917, guid: cbed76a6733e77949a9fa9966c56db66, type: 3}
 --- !u!1 &644190305
 GameObject:
   m_ObjectHideFlags: 0
