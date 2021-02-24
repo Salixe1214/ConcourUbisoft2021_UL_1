@@ -3216,6 +3216,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8452cd9a663f44e44abf8fcb039abade, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  QuickSetup: 0
+  photonPing: 0
+  photonSendRate: 60
+  photonSendRateSerialize: 60
 --- !u!1 &775259506
 GameObject:
   m_ObjectHideFlags: 0

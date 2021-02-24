@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameWorld.unity
     guid: 4391f0ddcb3779947a7421f03e488d55
+  - enabled: 0
+    path: Assets/Scenes/NetworkMechanicalArm.unity
+    guid: b49556edce4618343b13255ed62c1544
   m_configObjects: {}

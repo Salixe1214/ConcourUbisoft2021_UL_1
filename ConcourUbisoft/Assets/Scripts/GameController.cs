@@ -8,7 +8,8 @@ public class GameController : MonoBehaviour
     public enum Role
     {
         SecurityGuard,
-        Technician
+        Technician,
+        None
     }
 
     [SerializeField] private string SceneToStartName = "";
@@ -17,8 +18,8 @@ public class GameController : MonoBehaviour
 
     private SoundController soundController = null;
 
-    public bool IsGameLoading = false;
-    public bool IsGameStart = false;
+    public bool IsGameLoading { get; private set; }
+    public bool IsGameStart { get; set; }
     public Role GameRole { get; set; }
     public OptionController OptionController { get => optionController; }
 

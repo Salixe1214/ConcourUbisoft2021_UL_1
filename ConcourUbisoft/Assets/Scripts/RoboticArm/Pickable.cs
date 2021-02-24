@@ -22,8 +22,13 @@ namespace Arm
 
         public bool HasBeenPickup { get => hasBeenPickup; set => hasBeenPickup = value; }
 
+        private static int nextId = 0;
+        public int Id { get; private set; }
+
         private void Start()
         {
+            
+            Id = nextId++;
             rigidbody = GetComponent<Rigidbody>();
             collider = GetComponent<Collider>();
             outline = GetComponent<Outline>();
@@ -47,7 +52,8 @@ namespace Arm
 
         public void OnGrab()
         {
-            rigidbody.isKinematic = true;
+            rigidbody.useGravity = false;
+            rigidbody.freezeRotation = true;
             hasBeenPickup = true;
             audioSource.clip = magnetCollisionSound;
             audioSource.volume = volumeMultiplier;
@@ -61,7 +67,9 @@ namespace Arm
 
         public void OnRelease()
         {
-            rigidbody.isKinematic = false;
+            rigidbody.useGravity = true;
+            rigidbody.freezeRotation = false;
+            
         }
     }
 }

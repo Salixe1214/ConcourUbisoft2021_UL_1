@@ -43,7 +43,7 @@ public class TransportableByConveyor : MonoBehaviour
 
     public void RemoveConveyor(object conveyor)
     {
-        priorityConveyor.Remove(priorityConveyor.IndexOfValue(conveyor));
+        priorityConveyor.RemoveAt(priorityConveyor.IndexOfValue(conveyor));
     }
 
     public object GetFirstConveyorToAffectObject()
