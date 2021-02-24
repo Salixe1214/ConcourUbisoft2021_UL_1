@@ -21,15 +21,12 @@ public class CharacterControl : MonoBehaviour
         float keyBoardVertical = Input.GetAxis("Vertical");
         float controllerHorizontal = Input.GetAxis("LeftJoystickHorizontal");
         float controllerVertical = Input.GetAxis("LeftJoystickVertical");
-        Vector3 controllerInputVector = new Vector3(Input.GetAxis("LeftJoystickHorizontal")*playerMovementSpeed,0,Input.GetAxis("LeftJoystickVertical")*playerMovementSpeed);
-        Vector3 keyboardInputVector = new Vector3(Input.GetAxis("Horizontal") * playerMovementSpeed ,0,Input.GetAxis("Vertical")*playerMovementSpeed);
-        Vector3 gravityVector = new Vector3(0,playerBody.velocity.y,0);
         
+        Vector3 gravityVector = new Vector3(0,playerBody.velocity.y,0);
         Vector3 controllerInput = (transform.right * controllerHorizontal + transform.forward *controllerVertical)*playerMovementSpeed;
         Vector3 keyboardInput = (transform.right * keyboardHorizontal + transform.forward *keyBoardVertical)*playerMovementSpeed;
         
         inputVector = controllerInput + keyboardInput + gravityVector;
-        
     }
 
     private void FixedUpdate()
