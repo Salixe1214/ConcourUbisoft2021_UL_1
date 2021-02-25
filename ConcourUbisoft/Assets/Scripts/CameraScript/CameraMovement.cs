@@ -20,6 +20,7 @@ public class CameraMovement : MonoBehaviour
     private float xRotation = 0f;
     private float yRotation = 0f;
     private float mouseYAccumulator = 0f;
+    private float mouseXAccumulator = 0f;
     private float controllerYAccumulator = 0f;
     private float xRotationControllerPS = 0f;
     private float yRotationControllerPS = 0f;
@@ -66,11 +67,19 @@ public class CameraMovement : MonoBehaviour
         }
         else
         {
+            mouseXAccumulator += mouseX;
             mouseYAccumulator -= mouseY;
             mouseYAccumulator = Mathf.Clamp(mouseYAccumulator, -90f, 90f);
             xRotation = Mathf.Lerp(xRotation, mouseYAccumulator, mouseSnappinessY * Time.deltaTime);
-            transform.localRotation = Quaternion.Euler(xRotation,0, 0f);
-            yRotation = Mathf.Lerp(yRotation, mouseX, mouseSnappinessX * Time.deltaTime);
+            //transform.localRotation = Quaternion.Euler(xRotation,0, 0f);
+            transform.localRotation = Quaternion.Slerp(transform.localRotation,Quaternion.Euler(mouseYAccumulator,0,0),mouseSnappinessY*Time.deltaTime);
+            
+            //yRotation = Mathf.Lerp(yRotation, mouseXAccumulator, mouseSnappinessX * Time.deltaTime);
+            //yRotation += yRotation;
+            //playerBody.rotation= Quaternion.Euler(0,mouseXAccumulator,0);
+            playerBody.rotation = Quaternion.Slerp(playerBody.rotation,Quaternion.Euler(0,mouseXAccumulator,0),mouseSnappinessX*Time.deltaTime);
+            //yRotation = mouseX;
+
         }
     }
 
@@ -86,7 +95,10 @@ public class CameraMovement : MonoBehaviour
         }
         else
         {
-            playerBody.transform.Rotate(new Vector3(0, yRotation, 0));
+            //playerBody.transform.Rotate(new Vector3(0, yRotation, 0));
+            //playerBody.rotation= Quaternion.Euler(0,yRotation,0);
+            //playerBody.rotation= Quaternion.Euler(0,yRotation,0);
+           // playerBody.rotation = Quaternion.Slerp(playerBody.rotation,Quaternion.Euler(0,mouseXAccumulator,0),mouseSnappinessX*Time.deltaTime);
         }
     }
 }

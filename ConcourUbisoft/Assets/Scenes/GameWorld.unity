@@ -8494,6 +8494,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5239707521546577663, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
+      propertyPath: m_Drag
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5239707521546577663, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
+      propertyPath: m_AngularDrag
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 5239707521546577663, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
+      propertyPath: m_Constraints
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 5239707521546577663, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
+      propertyPath: m_Interpolate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5239707521868079426, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -8504,23 +8520,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5239707521868079438, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5239707521868079438, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
       propertyPath: mouseSensivityX
-      value: 120
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 5239707521868079438, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
       propertyPath: mouseSensivityY
-      value: 120
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 5239707521868079438, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
       propertyPath: mouseSnappinessX
-      value: 6
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 5239707521868079438, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
       propertyPath: mouseSnappinessY
-      value: 6
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 5239707521868079438, guid: 5b9d5bbdd1b252d45a1dcace19ca3d85, type: 3}
       propertyPath: controllerSensivity

@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEditorInternal;
 using UnityEngine;
 
 namespace Arm
@@ -27,8 +26,7 @@ namespace Arm
         {
             controllable.OnControlStateChange += OnControlStateChange;
             _networkSync = GetComponent<NetworkSync>();
-            _networkController =
-                GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+            _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         }
 
         void OnControlStateChange(bool controlled)
