@@ -26,7 +26,9 @@ namespace Arm
         {
             controllable.OnControlStateChange += OnControlStateChange;
             _networkSync = GetComponent<NetworkSync>();
-            _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+            GameObject networkControllerObject=GameObject.FindGameObjectWithTag("NetworkController");
+            if(networkControllerObject!=null)
+                _networkController = networkControllerObject.GetComponent<NetworkController>() ;
         }
 
         void OnControlStateChange(bool controlled)
