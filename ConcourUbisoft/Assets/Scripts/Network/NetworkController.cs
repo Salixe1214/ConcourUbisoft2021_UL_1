@@ -16,13 +16,15 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public int photonSendRate = 30;
     public int photonSendRateSerialize = 30;
 
+    private GameController _gameController = null;
+
     #region Unity Callbacks
     private void Awake()
     {
         PhotonNetwork.SendRate = photonSendRate;
         PhotonNetwork.SerializationRate = photonSendRateSerialize;
+        _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
     }
-
     private void Start()
     {
         if(QuickSetup)
@@ -58,7 +60,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public event OnPlayerJoinRoomHandler OnPlayerJoin;
 
     public delegate void OnPlayerLeftRoomHandler();
-    public event OnPlayerLeftRoomHandler OnPlayerLeft;
+    public event OnPlayerLeftRoomHandler OnPlayerLeftEvent;
 
     public delegate void OnLeftRoomHandler();
     public event OnLeftRoomHandler OnLeftRoomEvent;
@@ -125,7 +127,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        OnPlayerLeft?.Invoke();
+        if (_gameController.IsGameStart) {
+            OnNetworkErrorEvent?.Invoke("A player left the game.", "A player left the game while the game was in progress. ");
+        }
+        OnPlayerLeftEvent?.Invoke();
     }
     #endregion
     #region Public Functions

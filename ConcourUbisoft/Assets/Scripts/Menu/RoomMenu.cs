@@ -7,26 +7,24 @@ using UnityEngine.UI;
 
 public class RoomMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject Content = null;
-    [SerializeField] private GameObject RoomMenuElementPrefab = null;
-    [SerializeField] private GameObject StartButton = null;
-    [SerializeField] private GameObject ErrorText = null;
+    [SerializeField] private GameObject _content = null;
+    [SerializeField] private GameObject _roomMenuElementPrefab = null;
+    [SerializeField] private Button _startButton = null;
+    [SerializeField] private Text _errorText = null;
 
-    private NetworkController networkController = null;
-    private GameController gameController = null;
-    private Button startButton = null;
-    private Text errorText = null;
-    private SoundController menuSoundController = null;
+    private NetworkController _networkController = null;
+    private GameController _gameController = null;
+    private SoundController _menuSoundController = null;
 
     #region UI Action
     public void LeaveRoom()
     {
-        menuSoundController.PlayButtonSound();
-        networkController.LeaveRoom();
+        _menuSoundController.PlayButtonSound();
+        _networkController.LeaveRoom();
     }
     public void StartGame()
     {
-        menuSoundController.PlayButtonSound();
+        _menuSoundController.PlayButtonSound();
         IEnumerable<PlayerNetwork> playerNetworks = GameObject.FindGameObjectsWithTag("Player").Select(x => x.GetComponent<PlayerNetwork>());
 
         //if (playerNetworks.Count() != 2)
@@ -42,39 +40,37 @@ public class RoomMenu : MonoBehaviour
         //    return;
         //}
 
-        errorText.text = "";
+        _errorText.text = "";
 
-        gameController.StartGame(networkController.GetLocalRole());
+        _gameController.StartGame(_networkController.GetLocalRole());
     }
     #endregion
     #region Unity Callbacks
     private void Awake()
     {
-        networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
-        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        menuSoundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
-        startButton = StartButton.GetComponent<Button>();
-        errorText = ErrorText.GetComponent<Text>();
+        _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+        _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        _menuSoundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
     }
     private void OnEnable()
     {
-        networkController.OnPlayerObjectCreate += RefreshRoomInterface;
-        networkController.OnJoinedRoomEvent += OnJoinedRoomEvent;
+        _networkController.OnPlayerObjectCreate += RefreshRoomInterface;
+        _networkController.OnJoinedRoomEvent += OnJoinedRoomEvent;
     }
     private void OnDisable()
     {
-        networkController.OnPlayerObjectCreate -= RefreshRoomInterface;
-        networkController.OnJoinedRoomEvent -= OnJoinedRoomEvent;
+        _networkController.OnPlayerObjectCreate -= RefreshRoomInterface;
+        _networkController.OnJoinedRoomEvent -= OnJoinedRoomEvent;
     }
     private void Update()
     {
-        if (networkController.IsMasterClient())
+        if (_networkController.IsMasterClient())
         {
-            startButton.interactable = true;
+            _startButton.interactable = true;
         }
         else
         {
-            startButton.interactable = false;
+            _startButton.interactable = false;
         }
     }
     #endregion
@@ -82,9 +78,9 @@ public class RoomMenu : MonoBehaviour
     private void RefreshRoomInterface()
     {
         List<Transform> children = new List<Transform>();
-        for(int i = 0; i < Content.transform.childCount; ++i)
+        for(int i = 0; i < _content.transform.childCount; ++i)
         {
-            children.Add(Content.transform.GetChild(i));
+            children.Add(_content.transform.GetChild(i));
         }
 
         IEnumerable<PlayerNetwork> elements = children.Select(x => x.GetComponent<RoomElementController>().PlayerNetwork );
@@ -92,14 +88,14 @@ public class RoomMenu : MonoBehaviour
 
         foreach (PlayerNetwork playerNetwork in playerNetworksNotFoundInScene)
         {
-            GameObject roomElement = Instantiate(RoomMenuElementPrefab, Content.transform);
+            GameObject roomElement = Instantiate(_roomMenuElementPrefab, _content.transform);
             roomElement.GetComponent<RoomElementController>().PlayerNetwork = playerNetwork;
-            roomElement.transform.Find("KickButton").GetComponent<Button>().onClick.AddListener(new UnityAction(() => { menuSoundController.PlayButtonSound(); networkController.KickPlayer(playerNetwork.Id); }));
+            roomElement.transform.Find("KickButton").GetComponent<Button>().onClick.AddListener(new UnityAction(() => { _menuSoundController.PlayButtonSound(); _networkController.KickPlayer(playerNetwork.Id); }));
         }
     }
     private void OnJoinedRoomEvent()
     {
-        errorText.text = "";
+        _errorText.text = "";
     }
     #endregion
 }

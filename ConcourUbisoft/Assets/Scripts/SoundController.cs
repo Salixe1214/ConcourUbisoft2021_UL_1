@@ -21,6 +21,7 @@ public class SoundController : MonoBehaviour
     [SerializeField] private float MaxSoundValue = 0;
     [SerializeField] private float MinSoundValue = -10;
 
+
     private OptionController optionController = null;
     private GameController gameController = null;
 
@@ -45,7 +46,6 @@ public class SoundController : MonoBehaviour
         optionController.OnOptionSoundEffectVolumeUpdatedEvent -= OnOptionSoundEffectVolumeUpdatedEvent;
     }
     #endregion
-
     #region Event Callbacks
     private void OnOptionMasterVolumeUpdatedEvent()
     {
@@ -67,7 +67,6 @@ public class SoundController : MonoBehaviour
         MasterAudioMixer.SetFloat("SoundEffectVolume", MinSoundValue + ((MaxSoundValue - MinSoundValue) * optionController.SoundEffectVolume.value));
     }
     #endregion
-
     #region Public Functions
     public void PlayButtonSound()
     {

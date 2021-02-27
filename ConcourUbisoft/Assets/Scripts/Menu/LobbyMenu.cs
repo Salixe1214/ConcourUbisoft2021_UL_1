@@ -8,70 +8,70 @@ using Photon.Pun;
 
 public class LobbyMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject RoomListElementPrefab = null;
-    [SerializeField] private GameObject ContentPanel = null;
-    [SerializeField] private GameObject CreateRoomPanel = null;
-    [SerializeField] private GameObject TogglePrivate = null;
-    [SerializeField] private GameObject JoinRoomPanel = null;
-    [SerializeField] private LoadScreenMenuController LoadScreenMenuController = null;
+    [SerializeField] private GameObject _roomListElementPrefab = null;
+    [SerializeField] private GameObject _contentPanel = null;
+    [SerializeField] private GameObject _createRoomPanel = null;
+    [SerializeField] private GameObject _togglePrivate = null;
+    [SerializeField] private GameObject _joinRoomPanel = null;
+    [SerializeField] private LoadScreenMenuController _loadScreenMenuController = null;
 
-    private NetworkController networkController = null;
-    private SoundController menuSoundController = null;
+    private NetworkController _networkController = null;
+    private SoundController _menuSoundController = null;
 
     #region UI Actions
     public void OpenCreateRoomPanel()
     {
-        menuSoundController.PlayButtonSound();
-        CreateRoomPanel.SetActive(true);
+        _menuSoundController.PlayButtonSound();
+        _createRoomPanel.SetActive(true);
     }
     public void CreateRoom()
     {
-        menuSoundController.PlayButtonSound();
-        networkController.CreateRoom(CreateRoomPanel.transform.Find("RoomNameInputField").GetComponent<InputField>().text, TogglePrivate.GetComponent<Toggle>().isOn);
-        LoadScreenMenuController.Show("Creating Room...");
-        CreateRoomPanel.SetActive(false);
+        _menuSoundController.PlayButtonSound();
+        _networkController.CreateRoom(_createRoomPanel.transform.Find("RoomNameInputField").GetComponent<InputField>().text, _togglePrivate.GetComponent<Toggle>().isOn);
+        _loadScreenMenuController.Show("Creating Room...");
+        _createRoomPanel.SetActive(false);
     }
     public void BackFromCreateRoom()
     {
-        menuSoundController.PlayButtonSound();
-        CreateRoomPanel.SetActive(false);
+        _menuSoundController.PlayButtonSound();
+        _createRoomPanel.SetActive(false);
     }
     public void OpenJoinRoomPanel()
     {
-        menuSoundController.PlayButtonSound();
-        JoinRoomPanel.SetActive(true);
+        _menuSoundController.PlayButtonSound();
+        _joinRoomPanel.SetActive(true);
     }
     public void JoinRoom()
     {
-        menuSoundController.PlayButtonSound();
-        string text = JoinRoomPanel.transform.Find("RoomNameInputField").GetComponent<InputField>().textComponent.text;
-        LoadScreenMenuController.Show("Joining Room...");
-        networkController.JoinRoom(text);
-        JoinRoomPanel.SetActive(false);
+        _menuSoundController.PlayButtonSound();
+        string text = _joinRoomPanel.transform.Find("RoomNameInputField").GetComponent<InputField>().textComponent.text;
+        _loadScreenMenuController.Show("Joining Room...");
+        _networkController.JoinRoom(text);
+        _joinRoomPanel.SetActive(false);
     }
     public void BackFromJoinRoom()
     {
-        menuSoundController.PlayButtonSound();
-        JoinRoomPanel.SetActive(false);
+        _menuSoundController.PlayButtonSound();
+        _joinRoomPanel.SetActive(false);
     }
     public void OnTogglePrivate()
     {
-        menuSoundController.PlayButtonSound();
+        _menuSoundController.PlayButtonSound();
     }
     #endregion
     #region Unity Callbacks
     private void Awake()
     {
-        networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
-        menuSoundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
+        _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+        _menuSoundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
     }
     private void OnEnable()
     {
-        networkController.OnRoomListUpdateEvent += NetworkController_OnLobbyRoomListUpdate;
+        _networkController.OnRoomListUpdateEvent += NetworkController_OnLobbyRoomListUpdate;
     }
     private void OnDisable()
     {
-        networkController.OnRoomListUpdateEvent -= NetworkController_OnLobbyRoomListUpdate;
+        _networkController.OnRoomListUpdateEvent -= NetworkController_OnLobbyRoomListUpdate;
     }
     #endregion
     #region Event Callbacks
@@ -87,14 +87,14 @@ public class LobbyMenu : MonoBehaviour
     #region Private Functions
     private void AddElementToLobbyList(string name, int playerCount, UnityAction action)
     {
-        GameObject roomListElement = Instantiate(RoomListElementPrefab, ContentPanel.transform);
+        GameObject roomListElement = Instantiate(_roomListElementPrefab, _contentPanel.transform);
         roomListElement.transform.Find("RoomName").GetComponent<Text>().text = name;
         roomListElement.transform.Find("JoinButton").GetComponent<Button>().onClick.AddListener(action);
         roomListElement.transform.Find("PlayerCount").GetComponent<Text>().text = $"{playerCount.ToString()}/2";
     }
     private void ClearElementsOfLobbyList()
     {
-        foreach (Transform child in ContentPanel.transform)
+        foreach (Transform child in _contentPanel.transform)
         {
             Destroy(child.gameObject);
         }
@@ -102,7 +102,7 @@ public class LobbyMenu : MonoBehaviour
     private void OnJoinButtonClick(string roomName)
     {
         PhotonNetwork.JoinRoom(roomName);
-        menuSoundController.PlayButtonSound();
+        _menuSoundController.PlayButtonSound();
     }
     #endregion
 }

@@ -11,6 +11,8 @@ public class NetworkSync : MonoBehaviour
     [SerializeField] private GameController.Role _owner = GameController.Role.SecurityGuard;
     [SerializeField] private bool _smooth = true;
     private static int _nextId = 0;
+    private GameController _gameController = null;
+
     [SerializeField] public int Id = 0;
 
     public GameController.Role Owner
@@ -32,6 +34,7 @@ public class NetworkSync : MonoBehaviour
 
     private void Awake()
     {
+        _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         if (!(_componentToSync is Serializable))
         {
             Debug.LogError($"The component: {_componentToSync.name} must implement the interface ISerializable.");
@@ -55,7 +58,7 @@ public class NetworkSync : MonoBehaviour
 
     public void Smooth()
     {
-        if (_oldData != null && _smooth && _lastTime != 0)
+        if (_oldData != null && _smooth && _lastTime != 0 && _gameController.IsGameStart)
         {
             (_componentToSync as Serializable).Smooth(_oldData, _newData, _lag, _lastTime, _currentTime);
         }
