@@ -54,6 +54,7 @@ public class GameController : MonoBehaviour
         IsGameStart = true;
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(SceneToStartName));
         OnFinishLoadGameEvent?.Invoke();
+        soundController.PlayAmbientSound();
         if (GameRole == Role.SecurityGuard)
         {
             SetUpSecurityGuard();
@@ -71,7 +72,6 @@ public class GameController : MonoBehaviour
 
         GameObject player = GameObject.FindGameObjectWithTag("PlayerGuard");
         AudioListener.SetActive(false);
-        soundController.PlayAmbientSound();
         Transform playerCamera = player.transform.Find("Main Camera");
         playerCamera.GetComponent<CameraMovement>().enabled = true;
     }
@@ -94,6 +94,7 @@ public class GameController : MonoBehaviour
     {
         Debug.Log($"Start Game with role {role}");
         GameRole = role;
+        soundController.SetSound(GameRole);
         StartCoroutine("LoadAsyncLevel");
     }
     #endregion
