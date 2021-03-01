@@ -63,7 +63,7 @@ public class GameController : MonoBehaviour
         IsGameStart = true;
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(_sceneToStartName));
         OnFinishLoadGameEvent?.Invoke();
-        soundController.PlayAmbientSound();
+        _soundController.PlayAmbientSound();
         if (GameRole == Role.SecurityGuard)
         {
             SetUpSecurityGuard();
@@ -83,6 +83,7 @@ public class GameController : MonoBehaviour
             yield return null;
         }
 
+        _soundController.StopAmbientSound();
         _networkController.LeaveLobby();
     }
     private void ResetController()
@@ -135,7 +136,7 @@ public class GameController : MonoBehaviour
     {
         Debug.Log($"Start Game with role {role}");
         GameRole = role;
-        soundController.SetSound(GameRole);
+        _soundController.SetSound(GameRole);
         StartCoroutine("LoadAsyncLevel");
     }
     public void UnLoadGame()

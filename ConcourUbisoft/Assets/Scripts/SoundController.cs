@@ -36,38 +36,35 @@ public class SoundController : MonoBehaviour
     }
     private void OnEnable()
     {
-        optionController.OnOptionMasterVolumeUpdatedEvent += OnOptionMasterVolumeUpdatedEvent;
-        optionController.OnOptionAmbientVolumeUpdatedEvent += OnOptionAmbientVolumeUpdatedEvent;
-        optionController.OnOptionMusicVolumeUpdatedEvent += OnOptionMusicVolumeUpdatedEvent;
-        optionController.OnOptionSoundEffectVolumeUpdatedEvent +=OnOptionSoundEffectVolumeUpdatedEvent;
+        optionController.OnOptionVolumeUpdatedEvent += OnOptionVolumeUpdatedEvent;
     }
     private void OnDisable()
     {
-        optionController.OnOptionMasterVolumeUpdatedEvent -= OnOptionMasterVolumeUpdatedEvent;
-        optionController.OnOptionAmbientVolumeUpdatedEvent -= OnOptionAmbientVolumeUpdatedEvent;
-        optionController.OnOptionMusicVolumeUpdatedEvent -= OnOptionMusicVolumeUpdatedEvent;
-        optionController.OnOptionSoundEffectVolumeUpdatedEvent -= OnOptionSoundEffectVolumeUpdatedEvent;
+        optionController.OnOptionVolumeUpdatedEvent -= OnOptionVolumeUpdatedEvent;
     }
     #endregion
     #region Event Callbacks
-    private void OnOptionMasterVolumeUpdatedEvent()
+    private void OnOptionVolumeUpdatedEvent(OptionController.SoundChannel channel)
     {
-        MasterAudioMixer.SetFloat("MasterVolume", MinSoundValue + ((MaxSoundValue - MinSoundValue) * optionController.MasterVolume.value));
-    }
-
-    private void OnOptionAmbientVolumeUpdatedEvent()
-    {
-        MasterAudioMixer.SetFloat("AmbientVolume", MinSoundValue + ((MaxSoundValue - MinSoundValue) * optionController.AmbientVolume.value));
-    }
-
-    private void OnOptionMusicVolumeUpdatedEvent()
-    {
-        MasterAudioMixer.SetFloat("MusicVolume", MinSoundValue + ((MaxSoundValue - MinSoundValue) * optionController.MusicVolume.value));
-    }
-
-    private void OnOptionSoundEffectVolumeUpdatedEvent()
-    {
-        MasterAudioMixer.SetFloat("SoundEffectVolume", MinSoundValue + ((MaxSoundValue - MinSoundValue) * optionController.SoundEffectVolume.value));
+        switch (channel)
+        {
+            case OptionController.SoundChannel.Master:
+                MasterAudioMixer.SetFloat("MasterVolume", MinSoundValue + ((MaxSoundValue - MinSoundValue) * optionController.GetVolume(channel)));
+                break;
+            case OptionController.SoundChannel.Ambient:
+                MasterAudioMixer.SetFloat("AmbientVolume", MinSoundValue + ((MaxSoundValue - MinSoundValue) * optionController.GetVolume(channel)));
+                break;
+            case OptionController.SoundChannel.Music:
+                MasterAudioMixer.SetFloat("MusicVolume", MinSoundValue + ((MaxSoundValue - MinSoundValue) * optionController.GetVolume(channel)));
+                break;
+            case OptionController.SoundChannel.SoundEffect:
+                MasterAudioMixer.SetFloat("SoundEffectVolume", MinSoundValue + ((MaxSoundValue - MinSoundValue) * optionController.GetVolume(channel)));
+                break;
+            case OptionController.SoundChannel.VoiceChat:
+                MasterAudioMixer.SetFloat("VoiceChatVolume", MinSoundValue + ((MaxSoundValue - MinSoundValue) * optionController.GetVolume(channel)));
+                break;
+        }
+        
     }
     #endregion
     #region Public Functions

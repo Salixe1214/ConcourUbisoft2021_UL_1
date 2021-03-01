@@ -6,38 +6,48 @@ using UnityEngine.UI;
 
 public class OptionController : MonoBehaviour
 {
+    public enum SoundChannel
+    {
+        Master,
+        Ambient,
+        Music,
+        SoundEffect,
+        VoiceChat
+    }
+
     [SerializeField] private Slider _masterVolume = null;
     [SerializeField] private Slider _ambientVolume = null;
     [SerializeField] private Slider _musicVolume = null;
     [SerializeField] private Slider _soundEffectVolume = null;
+    [SerializeField] private Slider _voiceChatVolume = null;
 
-    public Slider MasterVolume { get => _masterVolume; }
-    public Slider AmbientVolume { get => _ambientVolume; }
-    public Slider MusicVolume { get => _musicVolume; }
-    public Slider SoundEffectVolume { get => _soundEffectVolume; }
+    private Dictionary<SoundChannel, Slider> _sliders = null;
+
+    #region Unity Callbacks
+    private void Awake()
+    {
+        _sliders = new Dictionary<SoundChannel, Slider>() {
+            { SoundChannel.Master, _masterVolume },
+            { SoundChannel.Ambient, _ambientVolume },
+            { SoundChannel.Music, _musicVolume },
+            { SoundChannel.SoundEffect, _soundEffectVolume },
+            { SoundChannel.VoiceChat, _voiceChatVolume },
+        };
+    }
+    #endregion
 
     #region Events 
-    public event Action OnOptionMasterVolumeUpdatedEvent;
-    public event Action OnOptionAmbientVolumeUpdatedEvent;
-    public event Action OnOptionSoundEffectVolumeUpdatedEvent;
-    public event Action OnOptionMusicVolumeUpdatedEvent;
+    public event Action<SoundChannel> OnOptionVolumeUpdatedEvent;
     #endregion
     #region Public Functions
-    public void PublishOptionMasterVolumeUpdated()
+    public float GetVolume(SoundChannel channel)
     {
-        OnOptionMasterVolumeUpdatedEvent?.Invoke();
+        return _sliders[channel].value;
     }
-    public void PublishOptionAmbientVolumeUpdated()
+
+    public void PublishVolumeChanged(int channel)
     {
-        OnOptionAmbientVolumeUpdatedEvent?.Invoke();
-    }
-    public void PublishOptionSoundEffectVolumeUpdated()
-    {
-        OnOptionSoundEffectVolumeUpdatedEvent?.Invoke();
-    }
-    public void PublishOptionMusicVolumeUpdated()
-    {
-        OnOptionMusicVolumeUpdatedEvent?.Invoke();
+        OnOptionVolumeUpdatedEvent?.Invoke((SoundChannel)channel);
     }
     #endregion
 }
