@@ -7,10 +7,10 @@ namespace TechSupport.Informations
     [RequireComponent(typeof(VerticalLayoutGroup)), RequireComponent(typeof(ContentSizeFitter)), RequireComponent(typeof(ToggleGroup))]
     public class Accordion : MonoBehaviour
     {
-        private struct InformationItem
+        private readonly struct InformationItem
         {
-            public AccordionElement Element;
-            public ImageLayout Image;
+            public readonly AccordionElement Element;
+            public readonly ImageLayout Image;
             public readonly Text Title;
             public readonly Text Content;
 
@@ -23,8 +23,8 @@ namespace TechSupport.Informations
             }
         }
 
-        private Sprite front = null;
-        private List<InformationItem> _items;
+        private Sprite _elementSprite;
+        private readonly List<InformationItem> _items;
 
         public Accordion()
         {
@@ -36,30 +36,12 @@ namespace TechSupport.Informations
             GetComponent<ToggleGroup>().allowSwitchOff = true;
         }
 
-        public void Setup(Sprite fond, Sprite devant)
+        public void Setup(Sprite accordionSprite, Sprite elementSprite)
         {
-            Image image = gameObject.AddComponent<Image>();
-
-            front = devant;
-            image.sprite = fond;
-            image.type = Image.Type.Sliced;
-            image.color = Color.white;
-            image.fillCenter = true;
-            image.pixelsPerUnitMultiplier = 1;
-            VerticalLayoutGroup test = gameObject.GetComponent<VerticalLayoutGroup>();
+            _elementSprite = elementSprite;
+            AddVerticalLayoutGroup(gameObject);
+            AddImage(gameObject, accordionSprite);
             gameObject.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-            if (test != null)
-            {
-                test.childScaleHeight = false;
-                test.childForceExpandWidth = true;
-                test.childControlHeight = true;
-                test.childControlWidth = true;
-                test.childAlignment = TextAnchor.UpperLeft;
-                test.childScaleHeight = false;
-                test.childScaleWidth = false;
-                test.spacing = 2;
-                test.padding = new RectOffset(2, 2, 2, 2);
-            }
         }
 
         private Text CreateTextObject()
@@ -76,7 +58,6 @@ namespace TechSupport.Informations
             text.color = Color.black;
             text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
             text.GetComponent<RectTransform>()?.SetParent(parent);
-            text.gameObject.SetActive(true);
             return text;
         }
 
@@ -94,41 +75,45 @@ namespace TechSupport.Informations
             ImageLayout imageLayout = new GameObject().AddComponent<ImageLayout>();
 
             imageLayout.CreateLayout(images);
-            imageLayout.GetComponent<RectTransform>().SetParent(gameObject.transform);
+            imageLayout.GetComponent<RectTransform>().SetParent(parent);
             return imageLayout;
         }
 
-        private AccordionElement InstantiateNewItem()
+        private void AddVerticalLayoutGroup(GameObject go)
         {
-            AccordionElement accordionElement = new GameObject().AddComponent<AccordionElement>();
-            Image image = accordionElement.gameObject.AddComponent<Image>();
+            VerticalLayoutGroup verticalLayoutGroup = go.GetComponent<VerticalLayoutGroup>();
 
-            image.sprite = front;
+            if (verticalLayoutGroup == null)
+                verticalLayoutGroup = go.AddComponent<VerticalLayoutGroup>();
+            verticalLayoutGroup.childScaleHeight = false;
+            verticalLayoutGroup.childForceExpandWidth = true;
+            verticalLayoutGroup.spacing = 2;
+            verticalLayoutGroup.padding = new RectOffset(2, 2, 2, 2);
+        }
+
+        private void AddImage(GameObject go, Sprite sprite)
+        {
+            Image image = go.AddComponent<Image>();
+            
+            image.sprite = sprite;
             image.type = Image.Type.Sliced;
             image.fillCenter = true;
             image.pixelsPerUnitMultiplier = 1;
-//            image.color = Color.white;
-            accordionElement.minHeight = 18;
-            VerticalLayoutGroup test = accordionElement.gameObject.AddComponent<VerticalLayoutGroup>();
-            if (test != null)
-            {
-                test.childScaleHeight = false;
-                test.childForceExpandWidth = true;
-                test.childControlHeight = true;
-                test.childControlWidth = true;
-                test.childAlignment = TextAnchor.UpperLeft;
-                test.childScaleHeight = false;
-                test.childScaleWidth = false;
-                test.spacing = 2;
-                test.padding = new RectOffset(2, 2, 2, 2);
-            }
-            accordionElement.GetComponent<RectTransform>()?.SetParent(gameObject.transform);
+        }
+
+        private AccordionElement InstantiateNewItem(Transform parent)
+        {
+            AccordionElement accordionElement = new GameObject().AddComponent<AccordionElement>();
+            
+            AddImage(accordionElement.gameObject, _elementSprite);
+            AddVerticalLayoutGroup(accordionElement.gameObject);
+            accordionElement.GetComponent<RectTransform>()?.SetParent(parent);
             return accordionElement;
         }
 
         public void AddItem(InformationsSystem.InformationItem item)
         {
-            AccordionElement element = InstantiateNewItem();
+            AccordionElement element = InstantiateNewItem(gameObject.transform);
             
             _items.Add(new InformationItem(
                 element,

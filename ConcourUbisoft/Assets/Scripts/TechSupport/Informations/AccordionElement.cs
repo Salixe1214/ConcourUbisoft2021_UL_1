@@ -22,6 +22,36 @@ namespace TechSupport.Informations
 			onValueChanged.AddListener(OnValueChanged);
 		}
 
+				
+		protected override void OnValidate()
+		{
+			base.OnValidate();
+			
+			if (group == null)
+			{
+				ToggleGroup tg = GetComponentInParent<ToggleGroup>();
+				
+				if (tg != null)
+				{
+					group = tg;
+				}
+			}
+			
+			LayoutElement le = gameObject.GetComponent<LayoutElement>();
+			
+			if (le != null)
+			{
+				if (isOn)
+				{
+					le.preferredHeight = -1f;
+				}
+				else
+				{
+					le.preferredHeight = minHeight;
+				}
+			}
+		}
+
 		private void OnValueChanged(bool state)
 		{
 			if (_layoutElement == null)
