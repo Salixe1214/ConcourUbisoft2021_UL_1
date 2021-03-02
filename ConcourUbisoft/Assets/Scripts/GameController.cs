@@ -75,7 +75,6 @@ public class GameController : MonoBehaviour
 
         soundController.PlayAmbientSound();
         GameObject playerCamera = GameObject.FindGameObjectWithTag("MainCamera");
-
         playerCamera.GetComponent<CameraMovement>().enabled = true;
     }
     private void SetUpTechnician()
@@ -87,7 +86,7 @@ public class GameController : MonoBehaviour
 
         GameObject player = GameObject.FindGameObjectWithTag("PlayerGuard");
         player.GetComponent<CharacterControl>().enabled = false;
-        Transform playerCamera = player.transform.Find("Main Camera");
+        GameObject playerCamera = GameObject.FindGameObjectWithTag("MainCamera");
         playerCamera.gameObject.SetActive(false);
         playerCamera.GetComponent<AudioListener>().enabled = false;
     }
