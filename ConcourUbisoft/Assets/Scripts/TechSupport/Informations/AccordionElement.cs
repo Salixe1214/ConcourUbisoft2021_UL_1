@@ -8,7 +8,7 @@ namespace TechSupport.Informations
 	public class AccordionElement : Toggle
 	{
 
-		[SerializeField] private float minHeight = 18f;
+		public float minHeight = 18f;
 		
 		private LayoutElement _layoutElement;
 
@@ -16,6 +16,8 @@ namespace TechSupport.Informations
 		{
 			base.Awake();
 			toggleTransition = ToggleTransition.None;
+			isOn = false; // default to not expand
+			interactable = true;
 			_layoutElement = gameObject.GetComponent<LayoutElement>();
 			onValueChanged.AddListener(OnValueChanged);
 		}

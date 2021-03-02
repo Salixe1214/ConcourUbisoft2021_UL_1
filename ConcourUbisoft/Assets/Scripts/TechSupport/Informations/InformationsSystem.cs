@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -18,25 +19,38 @@ namespace TechSupport.Informations
             public string content;
             public List<Sprite> images;
         }
+        
         [Header("Information")]
-        [SerializeField]
-        private List<InformationItem> items;
+        [SerializeField] private List<Sprite> imagesList; // it a temporary things ^^
+        [SerializeField] private List<InformationItem> items;
 
-        [Header("Transform")]
+        [Header("Accordion")]
         [SerializeField] private Vector3 position;
         [SerializeField] private Quaternion rotation;
+        [SerializeField] private Sprite background;
+        [SerializeField] private Sprite front;
 
         [Header("System prefabs")] 
         [SerializeField] private GameObject accordionPrefab;
         [SerializeField] private GameObject itemPrefab;
         [SerializeField] private GameObject headerPrefab;
-        [SerializeField] private GameObject textPrefab;
 
         private GameObject _accordion;
         private void Awake()
         {
             _accordion = Instantiate(accordionPrefab, position, rotation, gameObject.transform);
             items.ForEach(InstantiateItems);
+
+            ImageLayout go = new GameObject().AddComponent<ImageLayout>();
+            GameObject o;
+            (o = go.gameObject).GetComponent<RectTransform>().SetParent(gameObject.transform);
+            o.transform.position = new Vector3 (Screen.width * 0.5f, Screen.height * 0.9f, 0);
+            go.CreateLayout(imagesList);
+            /*Accordion accordion = new GameObject().AddComponent<Accordion>();
+            accordion.GetComponent<RectTransform>().SetParent(gameObject.transform);
+            accordion.Setup(background, front);
+            accordion.gameObject.transform.position = position;
+            accordion.CreateAccordion(items);*/
         }
 
         private void InstantiateItems(InformationItem item)
@@ -46,30 +60,12 @@ namespace TechSupport.Informations
             Instantiate(headerPrefab, go.transform).GetComponent<Text>().text = item.title;
             if (item.images.Count > 0)
             {
-                CreateImageLayout(go.transform, item.images);
+                ImageLayout imageLayout = new GameObject().AddComponent<ImageLayout>();
+                imageLayout.CreateLayout(item.images);
+                imageLayout.SetParent(go.transform);
             }
-            Instantiate(textPrefab, go.transform).GetComponent<Text>().text = item.content;
-        }
-
-        private void CreateImage(Transform parent, Sprite sprite)
-        {
-            GameObject go = new GameObject();
-            Image image = go.AddComponent<Image>();
-            image.sprite = sprite;
-            image.preserveAspect = true;
-            go.GetComponent<RectTransform>().SetParent(parent);
-            go.SetActive(true);
-        }
-
-        private void CreateImageLayout(Transform parent, List<Sprite> images)
-        {
-            GameObject go = new GameObject();
-            HorizontalLayoutGroup layout = go.AddComponent<HorizontalLayoutGroup>();
-
-            layout.childAlignment = TextAnchor.MiddleCenter;
-            images.ForEach(image => CreateImage(go.transform, image));
-            go.GetComponent<RectTransform>().SetParent(parent);
-            go.SetActive(true);
+            //Instantiate(textPrefab, go.transform).GetComponent<Text>().text = item.content;
+            CreateParagraph(go.transform, item.content);
         }
 
         private void CreateParagraph(Transform parent, string content)
@@ -78,8 +74,9 @@ namespace TechSupport.Informations
             Text text = go.AddComponent<Text>();
             text.text = content;
             text.fontSize = 14;
+            text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
             text.color = Color.black;
-            go.GetComponent<RectTransform>().SetParent(parent);
+            go.GetComponent<RectTransform>()?.SetParent(parent);
             go.SetActive(true);
         }
     }
