@@ -91,9 +91,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b15b6e198fdf6c4ab341abc6d68c457, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ButtonSound: {fileID: 8300000, guid: c7721155daef0d2428ede1fce56a1334, type: 3}
-  Title: {fileID: 2748151840994056441}
-  Message: {fileID: 2847741770385253519}
+  _title: {fileID: 2748151840994056441}
+  _message: {fileID: 2847741770385253519}
 --- !u!1 &4217190682605315836
 GameObject:
   m_ObjectHideFlags: 0
