@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +7,7 @@ namespace TechSupport.Informations
 {
     public class ImageLayout : HorizontalLayoutGroup
     {
-        private List<Image> _images;
+        private readonly List<Image> _images;
 
         public ImageLayout()
         {
@@ -19,7 +20,9 @@ namespace TechSupport.Informations
             childAlignment = TextAnchor.MiddleCenter;
             gameObject.SetActive(true);
         }
-                
+
+        #region GameObject Relative
+        
         private Image CreateImageObject()
         {
             Image image = (new GameObject()).AddComponent<Image>();
@@ -27,6 +30,21 @@ namespace TechSupport.Informations
             image.preserveAspect = true;
             image.GetComponent<RectTransform>()?.SetParent(gameObject.transform);
             return image;
+        }
+        
+        public void SetParent(Transform parent)
+        {
+            rectTransform.SetParent(parent);
+        }
+        
+        #endregion
+
+        public void DeleteSprite(int at)
+        {
+            if (at >= _images.Count)
+                return;
+            Destroy(_images[at]);
+            _images.RemoveAt(at);
         }
 
         public void UpdateSprite(int at, Sprite sprite)
@@ -51,6 +69,7 @@ namespace TechSupport.Informations
             {
                 Destroy(image.gameObject);
             }
+            _images.Clear();
         }
 
         public void CreateLayout(IEnumerable<Sprite> images)
@@ -75,9 +94,5 @@ namespace TechSupport.Informations
             }
         }
 
-        public void SetParent(Transform parent)
-        {
-            rectTransform.SetParent(parent);
-        }
     }
 }

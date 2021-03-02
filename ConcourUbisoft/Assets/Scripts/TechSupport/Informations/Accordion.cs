@@ -36,6 +36,8 @@ namespace TechSupport.Informations
             GetComponent<ToggleGroup>().allowSwitchOff = true;
         }
 
+        #region GameObject Relative
+        
         public void Setup(Sprite accordionSprite, Sprite elementSprite)
         {
             _elementSprite = elementSprite;
@@ -111,6 +113,10 @@ namespace TechSupport.Informations
             return accordionElement;
         }
 
+        #endregion
+
+        #region Informations List
+
         public void AddItem(InformationsSystem.InformationItem item)
         {
             AccordionElement element = InstantiateNewItem(gameObject.transform);
@@ -121,17 +127,24 @@ namespace TechSupport.Informations
                 InstantiateImageLayout(element.transform, item.images),
                 InstantiateText(element.transform, item.content)));
         }
-
-        // TODO
-        public void UpdateItem()
+        
+        public void UpdateItem(int at, InformationsSystem.InformationItem item)
         {
-            
+            if (at >= _items.Count)
+                return;
+            _items[at].Title.text = item.title;
+            _items[at].Content.text = item.content;
         }
 
-        // TODO:
-        public void DeleteItem()
+        public void DeleteItem(int at)
         {
-            
+            if (at >= _items.Count)
+                return;
+            Destroy(_items[at].Image);
+            Destroy(_items[at].Title);
+            Destroy(_items[at].Content);
+            Destroy(_items[at].Element);
+            _items.RemoveAt(at);
         }
 
         public void Clean()
@@ -153,5 +166,8 @@ namespace TechSupport.Informations
                 AddItem(item);
             }
         }
+
+        #endregion
+
     }
 }

@@ -51,11 +51,21 @@ namespace TechSupport.Informations
             _accordion = new GameObject().AddComponent<Accordion>();
 
             _accordion.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
-//            _accordion.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
+//            _accordion.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y); // no need for now
             _accordion.GetComponent<RectTransform>().SetParent(transform);
             _accordion.Setup(background, front);
             _accordion.transform.position = position;
             _accordion.CreateAccordion(items);
+        }
+
+        public ImageLayout GetList()
+        {
+            return _imageLayout;
+        }
+
+        public Accordion GetInformationDisplay()
+        {
+            return _accordion;
         }
     }
 }
