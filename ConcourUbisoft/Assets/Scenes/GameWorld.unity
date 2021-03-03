@@ -3993,6 +3993,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 650370854}
     m_Modifications:
+    - target: {fileID: 134272301, guid: 239feac3bad21a94ca3a24095b27a465, type: 3}
+      propertyPath: DoorId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1315503317290481079, guid: 239feac3bad21a94ca3a24095b27a465, type: 3}
       propertyPath: m_Name
       value: RealDoor (1)
@@ -4843,6 +4847,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1415181990}
     m_Modifications:
+    - target: {fileID: 134272301, guid: 239feac3bad21a94ca3a24095b27a465, type: 3}
+      propertyPath: DoorId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1315503317290481079, guid: 239feac3bad21a94ca3a24095b27a465, type: 3}
       propertyPath: m_Name
       value: RealDoor (2)
