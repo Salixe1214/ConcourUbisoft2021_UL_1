@@ -69,7 +69,7 @@ namespace TechSupport.Surveillance
                         SystemSwitch(SurveillanceMode.Focused);
                     }
                 }
-                else if (Input.GetButtonUp("Cancel"))
+                else if (Input.GetButtonUp("CameraEscape"))
                 {
                     if (mode == SurveillanceMode.Focused)
                     {
