@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Other;
 using UnityEngine;
 using Random = System.Random;
 
@@ -12,9 +13,11 @@ public class FurnaceController : MonoBehaviour
     {
         public Color[] ColorsSequence = null;
         public int SucceedColors = 0;
+        public TransportableType[] types = null;
     }
-    
+
     [SerializeField] private SequenceOfColor[] SequencesOfColor = null;
+    [SerializeField] private TransportableType[] SequencesOfTransportableTypes = null;
     [SerializeField] private int nbColorSequences = 5;
     [SerializeField] private int minColorSequencelenght=3;
     [SerializeField] private int maxColorSequenceLenght=7;
@@ -29,6 +32,7 @@ public class FurnaceController : MonoBehaviour
     private void Start()
     {
         colorPicker = new Random();
+        
         allColors = Level1Controller.GetColors();
         SequencesOfColor = new SequenceOfColor[nbColorSequences];
         GenerateNewColorSequences();
@@ -85,10 +89,13 @@ public class FurnaceController : MonoBehaviour
         {
             SequenceOfColor sc = new SequenceOfColor();
             sc.ColorsSequence = new Color[currentSequenceLenght];
+            sc.types = new TransportableType[currentSequenceLenght];
             for (int j = 0; j < currentSequenceLenght; j++)
             {
-                int nextColor =colorPicker.Next(0, allColors.Length);
+                int nextColor = colorPicker.Next(0, allColors.Length);
+                int nextType = colorPicker.Next(0, Enum.GetNames(typeof(TransportableType)).Length);
                 sc.ColorsSequence[j] = allColors[nextColor];
+                sc.types[j] = (TransportableType)nextType;
             }
             SequencesOfColor[i] = sc;
             if (currentSequenceLenght < maxColorSequenceLenght)
@@ -101,6 +108,11 @@ public class FurnaceController : MonoBehaviour
     public int GetCurrentSequenceLenght()
     {
         return SequencesOfColor[SucceedSequences].ColorsSequence.Length;
+    }
+
+    public SequenceOfColor GetCurrentSequence()
+    {
+        return SequencesOfColor[SucceedSequences];
     }
 
     public Color GetNextColor()
