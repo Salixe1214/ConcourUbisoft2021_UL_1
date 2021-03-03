@@ -31,14 +31,16 @@ public class CharacterControl : MonoBehaviour
         
         inputVector = controllerInput + keyboardInput;
 
-        if (inputVector == Vector3.zero)
+       /* if (inputVector == Vector3.zero)
         {
             smoothInputVector = Vector3.zero;
         }
         else
         {
             smoothInputVector =  Vector3.Lerp(smoothInputVector, inputVector, inputSmoothSpeed * Time.deltaTime);
-        }
+        } */
+
+       smoothInputVector = inputVector;
 
         if (smoothInputVector.magnitude > playerMovementSpeed)
         {
