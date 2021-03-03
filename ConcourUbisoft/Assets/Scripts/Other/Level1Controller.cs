@@ -60,6 +60,7 @@ public class Level1Controller : MonoBehaviour
 
     public void Start()
     {
+        FurnaceController.GenerateNewColorSequences(PossibleColors);
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
        // if (Level1Door == null)
@@ -81,12 +82,20 @@ public class Level1Controller : MonoBehaviour
     {
         if (Level1Door != null)
             Level1Door.OnDoorUnlockEvent += OnDoorUnlockEvent;
+
+        FurnaceController.WhenFurnaceConsumedAll += FinishLevel;
+        FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing += InitiateNextSequence;
+        FurnaceController.WhenFurnaceConsumeWrong += ShakeCamera;
     }
 
     private void OnDisable()
     {
         if (Level1Door != null)
             Level1Door.OnDoorUnlockEvent -= OnDoorUnlockEvent;
+
+        FurnaceController.WhenFurnaceConsumedAll -= FinishLevel;
+        FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing -= InitiateNextSequence;
+        FurnaceController.WhenFurnaceConsumeWrong -= ShakeCamera;
     }
 
     private void OnDoorUnlockEvent(DoorsScript doorsScript)
