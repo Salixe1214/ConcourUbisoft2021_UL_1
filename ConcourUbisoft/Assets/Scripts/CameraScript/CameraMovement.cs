@@ -7,54 +7,86 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
     [SerializeField] private Rigidbody playerBody;
-    [SerializeField] private float mouseSensivityX =100;
-    [SerializeField] private float mouseSensivityY =100;
-    [SerializeField] private float controllerSensivity;
+    [SerializeField] private float mouseSensivityX =120;
+    [SerializeField] private float mouseSensivityY =120;
+    [SerializeField] private float controllerSensivityX=120;
+    [SerializeField] private float controllerSensivityY=120;
+    [SerializeField] private float scrollSpeed = 0.1f;
+    [SerializeField] private float cameraRotationSmoothingSpeed = 0.7f;
     
-    private Vector3 velocity = Vector3.zero;
+    private Vector3 velocity;
+    private float smoothedScrollSpeed;
     private float xRotation = 0f;
+    private float yRotation = 0f;
+    private float mouseYAccumulator = 0f;
+    private float mouseXAccumulator = 0f;
+    private float controllerYAccumulator = 0f;
+    private float controllerXAccumulator = 0f;
     private float xRotationControllerPS = 0f;
+    private float yRotationControllerPS = 0f;
     private float xRotationControllerXBO = 0f;
+    private float yRotationControllerXBO = 0f;
+    private float accumulatedDeltaTime = 0.0f;
+    
+    private string[] joysticks;
     void Start()
     {
+        joysticks = Input.GetJoystickNames();
         Cursor.lockState = CursorLockMode.Locked;
+        velocity = Vector3.zero;
     }
 
     //PS = playstation
     //XBO = xbox one
-    void FixedUpdate()
+    void Update()
     {
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensivityX *Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensivityY *Time.deltaTime;
+        
+        float controllerX_PS = Input.GetAxis("RightJoystickHorizontalPS")*controllerSensivityX*Time.deltaTime;
+        float controllerY_PS = Input.GetAxis("RightJoystickVerticalPS")*controllerSensivityY*Time.deltaTime;
+        float controllerX_XBO = Input.GetAxis("RightJoystickHorizontalXBO")*controllerSensivityX*Time.deltaTime;
+        float controllerY_XBO = Input.GetAxis("RightJoystickVerticalXBO") * controllerSensivityY * Time.deltaTime;
 
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensivityX * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensivityY * Time.deltaTime;
-        float controllerX_PS = Input.GetAxis("RightJoystickHorizontalPS")*controllerSensivity*Time.deltaTime;
-        float controllerY_PS = Input.GetAxis("RightJoystickVerticalPS")*controllerSensivity*Time.deltaTime;
-        float controllerX_XBO = Input.GetAxis("RightJoystickHorizontalXBO")*controllerSensivity*Time.deltaTime;
-        float controllerY_XBO = Input.GetAxis("RightJoystickVerticalXBO") * controllerSensivity * Time.deltaTime;
-
-        string[] joysticks = Input.GetJoystickNames();
+        joysticks = Input.GetJoystickNames();
 
         if (joysticks.Contains("Controller (Xbox One For Windows)"))
         {
-               xRotationControllerXBO -= controllerY_XBO;
-               xRotationControllerXBO = Mathf.Clamp(xRotationControllerXBO,-90f,90f);
-               transform.localRotation = Quaternion.Euler(xRotationControllerXBO, 0f, 0f);
-               playerBody.transform.Rotate(Vector3.up * controllerX_XBO);
+            controllerYAccumulator -= controllerY_XBO;
+            controllerXAccumulator += controllerX_XBO;
+            controllerYAccumulator = Mathf.Clamp(controllerYAccumulator, -90f, 90f);
+            transform.localRotation = Quaternion.Slerp(transform.localRotation,Quaternion.Euler(controllerYAccumulator,controllerXAccumulator,0),cameraRotationSmoothingSpeed);
         }
         else if (joysticks.Contains("Wireless Controller"))
         {
-            xRotationControllerPS -= controllerY_PS; 
-            xRotationControllerPS = Mathf.Clamp(xRotationControllerPS, -90f, 90f);
-            transform.localRotation = Quaternion.Euler(xRotationControllerPS, 0f, 0f);
-            playerBody.transform.Rotate(Vector3.up * controllerX_PS);
+            controllerYAccumulator -= controllerY_PS;
+            controllerXAccumulator += controllerX_PS;
+            controllerYAccumulator = Mathf.Clamp(controllerYAccumulator, -90f, 90f);
+            transform.localRotation = Quaternion.Slerp(transform.localRotation,Quaternion.Euler(controllerYAccumulator,controllerXAccumulator,0),cameraRotationSmoothingSpeed);
         }
         else
-        { 
-            xRotation -= mouseY;
-            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-            transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-            playerBody.transform.Rotate(Vector3.up*mouseX);
+        {
+            mouseXAccumulator += mouseX;
+            mouseYAccumulator -= mouseY;
+            mouseYAccumulator = Mathf.Clamp(mouseYAccumulator, -90f, 90f);
+            transform.localRotation = Quaternion.Slerp(transform.localRotation,Quaternion.Euler(mouseYAccumulator,mouseXAccumulator,0),cameraRotationSmoothingSpeed);
         }
-        
+        transform.position = Vector3.SmoothDamp(transform.position, new Vector3(playerBody.position.x, transform.position.y, playerBody.position.z),ref velocity, scrollSpeed);
+    }
+
+    private void FixedUpdate()
+    {
+        if (joysticks.Contains("Controller (Xbox One For Windows)"))
+        {
+            playerBody.MoveRotation(Quaternion.Euler(0,controllerXAccumulator,0));
+        }
+        else if (joysticks.Contains("Wireless Controller"))
+        {
+            playerBody.MoveRotation(Quaternion.Euler(0,controllerXAccumulator,0));
+        }
+        else
+        {
+            playerBody.MoveRotation(Quaternion.Euler(0, mouseXAccumulator, 0));
+        }
     }
 }

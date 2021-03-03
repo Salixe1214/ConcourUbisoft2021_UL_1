@@ -8,64 +8,64 @@ public class RoomElementController : MonoBehaviour
 {
     public PlayerNetwork PlayerNetwork { get; set; }
 
-    private NetworkController networkController = null;
-    private Text PlayerName = null;
-    private Button KickButton = null;
-    private RawImage OwnerImage = null;
-    private Dropdown DropdownRole = null;
-    private SoundController menuSoundController = null;
+    private NetworkController _networkController = null;
+    private Text _playerName = null;
+    private Button _kickButton = null;
+    private RawImage _ownerImage = null;
+    private Dropdown _dropdownRole = null;
+    private SoundController _menuSoundController = null;
 
     #region UI Actions
     public void OnRoleModify()
     {
         PlayerNetwork.PlayerRole = (GameController.Role)gameObject.transform.Find("DropdownRole").GetComponent<Dropdown>().value;
-        menuSoundController.PlayButtonSound();
+        _menuSoundController.PlayButtonSound();
     }
     #endregion
     #region Unity Callbacks
     private void Awake()
     {
-        networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
-        menuSoundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
-        PlayerName = gameObject.transform.Find("PlayerName").GetComponent<Text>();
-        KickButton = gameObject.transform.Find("KickButton").GetComponent<Button>();
-        OwnerImage = gameObject.transform.Find("OwnerImage").GetComponent<RawImage>();
-        DropdownRole = gameObject.transform.Find("DropdownRole").GetComponent<Dropdown>();
+        _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+        _menuSoundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
+        _playerName = gameObject.transform.Find("PlayerName").GetComponent<Text>();
+        _kickButton = gameObject.transform.Find("KickButton").GetComponent<Button>();
+        _ownerImage = gameObject.transform.Find("OwnerImage").GetComponent<RawImage>();
+        _dropdownRole = gameObject.transform.Find("DropdownRole").GetComponent<Dropdown>();
     }
     private void Update()
     {
         if (PlayerNetwork != null)
         {
-            PlayerName.text = PlayerNetwork.Name;
+            _playerName.text = PlayerNetwork.Name;
 
-            if (PlayerNetwork.IsMasterClient() || !networkController.IsMasterClient())
+            if (PlayerNetwork.IsMasterClient() || !_networkController.IsMasterClient())
             {
-                KickButton.gameObject.SetActive(false);
+                _kickButton.gameObject.SetActive(false);
             }
             else
             {
-                KickButton.gameObject.SetActive(true);
+                _kickButton.gameObject.SetActive(true);
             }
 
             if (!PlayerNetwork.IsMasterClient())
             {
-                OwnerImage.gameObject.SetActive(false);
+                _ownerImage.gameObject.SetActive(false);
             }
             else
             {
-                OwnerImage.gameObject.SetActive(true);
+                _ownerImage.gameObject.SetActive(true);
             }
 
             if(PlayerNetwork.IsMine())
             {
-                DropdownRole.GetComponent<Dropdown>().interactable = true;
+                _dropdownRole.GetComponent<Dropdown>().interactable = true;
             }
             else
             {
-                DropdownRole.GetComponent<Dropdown>().interactable = false;
+                _dropdownRole.GetComponent<Dropdown>().interactable = false;
             }
 
-            DropdownRole.GetComponent<Dropdown>().value = (int)PlayerNetwork.PlayerRole;
+            _dropdownRole.GetComponent<Dropdown>().value = (int)PlayerNetwork.PlayerRole;
         }
         else
         {

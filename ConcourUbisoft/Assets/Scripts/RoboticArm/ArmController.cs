@@ -1,28 +1,78 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using Photon.Pun;
+using UnityEngine;
 
 namespace Arm
 {
-    public class ArmController : MonoBehaviour
+    public class ArmController : Serializable
     {
+        [SerializeField] private float minRange = 1.5f;
+        [SerializeField] float controlSpeed = 3f;
         [SerializeField] private Controllable controllable;
         [SerializeField] private IKSolver armIKSolver;
         [SerializeField] private Transform armRotationRoot;
-        [SerializeField] float controlSpeed = 3f;
-        private Transform armTarget = null;
 
         private float maxRange;
-        private float minRange;
-
-
         public float ControlSpeed => controlSpeed;
 
-        public Transform ArmTarget => armTarget;
+        public Transform ArmTarget { get; private set; } = null;
+
+        #region Network
+
+        public override void Deserialize(byte[] data)
+        {
+            using (MemoryStream memoryStream = new MemoryStream(data))
+            {
+                using (BinaryReader binaryReader = new BinaryReader(memoryStream))
+                {
+
+                }
+            }
+        }
+
+        public override byte[] Serialize()
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
+                {
+                    binaryWriter.Write(ArmTarget.position.x);
+                    binaryWriter.Write(ArmTarget.position.y);
+                    binaryWriter.Write(ArmTarget.position.z);
+                }
+
+                return memoryStream.ToArray();
+            }
+        }
+
+        public override void Smooth(byte[] oldData, byte[] newData, float lag, double lastTime, double currentTime)
+        {
+            using (MemoryStream memoryStreamOld = new MemoryStream(oldData),
+                memoryStreamNew = new MemoryStream(newData))
+            {
+                using (BinaryReader binaryReaderOld = new BinaryReader(memoryStreamOld),
+                    binaryReaderNew = new BinaryReader(memoryStreamNew))
+                {
+                    Vector3 newPosition = new Vector3(
+                        binaryReaderNew.ReadSingle(),
+                        binaryReaderNew.ReadSingle(),
+                        binaryReaderNew.ReadSingle());
+
+                    ArmTarget.position = Vector3.MoveTowards(ArmTarget.position,newPosition, Time.deltaTime * controlSpeed);
+                }
+            }
+        }
+
+        #endregion
 
         private void Start()
         {
-            minRange = armIKSolver.TotalLength / 6;
-            maxRange = armIKSolver.TotalLength - minRange;
-            armTarget = armIKSolver.Target;
+            maxRange = armIKSolver.TotalLength - 0.01f;
+            ArmTarget = armIKSolver.Target;
         }
 
         void Update()
@@ -32,14 +82,14 @@ namespace Arm
                 Vector3 translation =
                     Vector3.ClampMagnitude(new Vector3(Input.GetAxis("Vertical")*-1, 0, Input.GetAxis("Horizontal")),
                         controlSpeed);
-                armTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
-                float distanceToTarget = Vector3.Distance(transform.position, armTarget.position);
+                ArmTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
+                float distanceToTarget = Vector3.Distance(transform.position, ArmTarget.position);
                 if (distanceToTarget > maxRange)
                 {
-                    Vector3 dirToTarget = (armTarget.position - transform.position).normalized;
-                    armTarget.position = new Vector3(
+                    Vector3 dirToTarget = (ArmTarget.position - transform.position).normalized;
+                    ArmTarget.position = new Vector3(
                         transform.position.x + dirToTarget.x * maxRange,
-                        armTarget.position.y,
+                        ArmTarget.position.y,
                         transform.position.z + dirToTarget.z * maxRange);
                 }
 
@@ -48,17 +98,17 @@ namespace Arm
                         new Vector3(armIKSolver.Target.position.x, 0, armIKSolver.Target.position.z));
                 if (flatDistanceToTarget < minRange)
                 {
-                    Vector3 dirToTarget = (armTarget.position - transform.position);
+                    Vector3 dirToTarget = (ArmTarget.position - transform.position);
                     dirToTarget.y = 0;
                     dirToTarget.Normalize();
-                    armTarget.position = new Vector3(
+                    ArmTarget.position = new Vector3(
                         transform.position.x + dirToTarget.x * minRange,
-                        armTarget.position.y,
+                        ArmTarget.position.y,
                         transform.position.z + dirToTarget.z * minRange);
                 }
             }
 
-            Vector3 direction = armTarget.position - transform.position;
+            Vector3 direction = ArmTarget.position - transform.position;
             direction.y = 0;
             direction.Normalize();
             float rotationY = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;

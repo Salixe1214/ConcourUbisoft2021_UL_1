@@ -14,7 +14,7 @@ public class CircleConveyor : Conveyor
     private void Awake()
     {
         collider = GetComponentInChildren<Collider>();
-        center = collider.bounds.center + new Vector3(collider.bounds.extents.x, 0,0);
+        center = collider.bounds.center + new Vector3(collider.bounds.extents.x, 0, 0);
     }
 
     protected override void MoveObject(Rigidbody rigidbody)
@@ -27,7 +27,9 @@ public class CircleConveyor : Conveyor
         float percentOfCircumference = distanceToDo / circumference;
         float angle = percentOfCircumference * 360;
         float angleInRadian = angle * Mathf.Deg2Rad * (ClockWise ? -1 : 1);
-        Vector2 rotateVector = new Vector2(centerToObject2D.x * Mathf.Cos(angleInRadian) - centerToObject2D.y * Mathf.Sin(angleInRadian), centerToObject2D.x * Mathf.Sin(angleInRadian) + centerToObject2D.y * Mathf.Cos(angleInRadian));
+        Vector2 rotateVector =
+            new Vector2(centerToObject2D.x * Mathf.Cos(angleInRadian) - centerToObject2D.y * Mathf.Sin(angleInRadian),
+                centerToObject2D.x * Mathf.Sin(angleInRadian) + centerToObject2D.y * Mathf.Cos(angleInRadian));
 
         Vector3 newPosition = center + new Vector3(rotateVector.x, rigidbody.position.y - center.y, rotateVector.y);
 

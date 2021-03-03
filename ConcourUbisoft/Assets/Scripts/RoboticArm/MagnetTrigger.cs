@@ -14,7 +14,12 @@ namespace Arm
             pickables = new List<Pickable>();
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void FixedUpdate()
+        {
+            pickables.Clear();
+        }
+
+        private void OnTriggerStay(Collider other)
         {
             Pickable pickable = other.gameObject.GetComponent<Pickable>();
             if (pickable)
@@ -23,14 +28,6 @@ namespace Arm
             }
         }
 
-        private void OnTriggerExit(Collider other)
-        {
-            Pickable pickable = other.gameObject.GetComponent<Pickable>();
-            if (pickable)
-            {
-                pickables.Remove(pickable);
-            }
-        }
 
         public List<Pickable> GetPickables()
         {

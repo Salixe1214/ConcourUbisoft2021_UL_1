@@ -10,6 +10,33 @@ using UnityEngine.Events;
 
 public class NetworkController : MonoBehaviourPunCallbacks
 {
+    [SerializeField] private bool QuickSetup = false;
+
+    public float photonPing = 0;
+    public int photonSendRate = 30;
+    public int photonSendRateSerialize = 30;
+
+    private GameController _gameController = null;
+
+    #region Unity Callbacks
+    private void Awake()
+    {
+        PhotonNetwork.SendRate = photonSendRate;
+        PhotonNetwork.SerializationRate = photonSendRateSerialize;
+        _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+    }
+    private void Start()
+    {
+        if(QuickSetup)
+        {
+            JoinLobby();
+        }
+    }
+    private void Update()
+    {
+        photonPing = PhotonNetwork.GetPing();
+    }
+    #endregion
     #region Events
     public delegate void OnJoinedLobbyHandler();
     public event OnJoinedLobbyHandler OnJoinedLobbyEvent;
@@ -33,7 +60,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public event OnPlayerJoinRoomHandler OnPlayerJoin;
 
     public delegate void OnPlayerLeftRoomHandler();
-    public event OnPlayerLeftRoomHandler OnPlayerLeft;
+    public event OnPlayerLeftRoomHandler OnPlayerLeftEvent;
 
     public delegate void OnLeftRoomHandler();
     public event OnLeftRoomHandler OnLeftRoomEvent;
@@ -56,6 +83,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         OnJoinedLobbyEvent?.Invoke();
+        if (QuickSetup)
+        {
+            PhotonNetwork.JoinOrCreateRoom("DEFAULT_TEST", new RoomOptions() {IsVisible = false, MaxPlayers = 2 }, null);
+        }
     }
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
@@ -64,7 +95,18 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log($"Joined Room: {PhotonNetwork.CurrentRoom.Name}");
-        PhotonNetwork.Instantiate("Player", new Vector3(0, 0, 0), Quaternion.identity, 0);
+        GameObject playerNetwork = PhotonNetwork.Instantiate("Player", new Vector3(0, 0, 0), Quaternion.identity, 0);
+        if (QuickSetup)
+        {
+            GameController.Role role = PhotonNetwork.IsMasterClient ? GameController.Role.SecurityGuard : GameController.Role.Technician;
+
+            playerNetwork.GetComponent<PlayerNetwork>().PlayerRole = role;
+
+            GameController gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+            gameController.GameRole = role;
+            gameController.IsGameStart = true;
+        }
+
         OnJoinedRoomEvent?.Invoke();
     }
     public override void OnJoinRoomFailed(short returnCode, string message)
@@ -85,7 +127,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        OnPlayerLeft?.Invoke();
+        if (_gameController.IsGameStart) {
+            OnNetworkErrorEvent?.Invoke("A player left the game.", "A player left the game while the game was in progress. ");
+        }
+        OnPlayerLeftEvent?.Invoke();
     }
     #endregion
     #region Public Functions
@@ -130,7 +175,8 @@ public class NetworkController : MonoBehaviourPunCallbacks
     }
     public GameController.Role GetLocalRole()
     {
-        return GameObject.FindGameObjectsWithTag("PlayerNetwork").Select(x => x.GetComponent<PlayerNetwork>()).Where(x => x.IsMine()).First().PlayerRole;
+        IEnumerable<PlayerNetwork> playerNetworks = GameObject.FindGameObjectsWithTag("PlayerNetwork").Select(x => x.GetComponent<PlayerNetwork>()).Where(x => x.IsMine());
+        return playerNetworks.Count() > 0 ? playerNetworks.First().PlayerRole : GameController.Role.None;
     }
     #endregion
 }

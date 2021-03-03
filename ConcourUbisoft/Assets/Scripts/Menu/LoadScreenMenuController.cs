@@ -5,21 +5,21 @@ using UnityEngine.UI;
 
 public class LoadScreenMenuController : MonoBehaviour
 {
-    [SerializeField] private Text LoadingText = null;
-    [SerializeField] private RawImage LoadingImage = null;
-    [SerializeField] private float RotationSpeed = 0.0f;
+    [SerializeField] private Text _loadingText = null;
+    [SerializeField] private RawImage _loadingImage = null;
+    [SerializeField] private float _rotationSpeed = 0.0f;
 
     #region Unity Callbacks
     private void Update()
     {
-        LoadingImage.transform.Rotate(Vector3.forward, RotationSpeed * Time.deltaTime);
+        _loadingImage.transform.Rotate(Vector3.forward, _rotationSpeed * Time.deltaTime);
     }
     #endregion
     #region Public Functions
     public void Show(string text)
     {
-        LoadingImage.transform.rotation = Quaternion.identity;
-        LoadingText.text = text;
+        _loadingImage.transform.rotation = Quaternion.identity;
+        _loadingText.text = text;
         this.gameObject.SetActive(true);
     }
     public void Hide()

@@ -6,9 +6,12 @@ using UnityEngine;
 public class CharacterControl : MonoBehaviour
 {
 
-    [SerializeField] private float playerMovementSpeed = 1f; 
+    [SerializeField] private float playerMovementSpeed = 1f;
+    [SerializeField] private float inputSmoothSpeed = 0;
     private Rigidbody playerBody;
     private Vector3 inputVector;
+    private Vector3 smoothInputVector;
+    private Vector3 gravityVector;
     
     void Start()
     {
@@ -21,22 +24,32 @@ public class CharacterControl : MonoBehaviour
         float keyBoardVertical = Input.GetAxis("Vertical");
         float controllerHorizontal = Input.GetAxis("LeftJoystickHorizontal");
         float controllerVertical = Input.GetAxis("LeftJoystickVertical");
-        Vector3 controllerInputVector = new Vector3(Input.GetAxis("LeftJoystickHorizontal")*playerMovementSpeed,0,Input.GetAxis("LeftJoystickVertical")*playerMovementSpeed);
-        Vector3 keyboardInputVector = new Vector3(Input.GetAxis("Horizontal") * playerMovementSpeed ,0,Input.GetAxis("Vertical")*playerMovementSpeed);
-        Vector3 gravityVector = new Vector3(0,playerBody.velocity.y,0);
         
-        Vector3 controllerInput = (transform.right * controllerHorizontal + transform.forward *controllerVertical)*playerMovementSpeed;
-        Vector3 keyboardInput = (transform.right * keyboardHorizontal + transform.forward *keyBoardVertical)*playerMovementSpeed;
+        gravityVector = new Vector3(0,playerBody.velocity.y,0);
+        Vector3 controllerInput = (transform.right * controllerHorizontal + transform.forward *controllerVertical)*(playerMovementSpeed);
+        Vector3 keyboardInput = (transform.right * keyboardHorizontal + transform.forward *keyBoardVertical)*(playerMovementSpeed);
         
-        inputVector = controllerInput + keyboardInput + gravityVector;
+        inputVector = controllerInput + keyboardInput;
 
-        if (inputVector.magnitude > playerMovementSpeed)
+       /* if (inputVector == Vector3.zero)
         {
-            inputVector = Vector3.ClampMagnitude(inputVector,playerMovementSpeed);
+            smoothInputVector = Vector3.zero;
         }
-        playerBody.velocity = inputVector;
+        else
+        {
+            smoothInputVector =  Vector3.Lerp(smoothInputVector, inputVector, inputSmoothSpeed * Time.deltaTime);
+        } */
 
+       smoothInputVector = inputVector;
+
+        if (smoothInputVector.magnitude > playerMovementSpeed)
+        {
+            smoothInputVector = Vector3.ClampMagnitude(smoothInputVector,playerMovementSpeed);
+        }
     }
-    
-    
+
+    private void FixedUpdate()
+    {
+        playerBody.velocity = smoothInputVector + gravityVector;
+    }
 }

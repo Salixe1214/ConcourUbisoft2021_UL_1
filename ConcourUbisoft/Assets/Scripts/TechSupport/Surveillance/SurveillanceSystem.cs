@@ -15,6 +15,7 @@ namespace TechSupport.Surveillance
         [SerializeField] private SurveillanceMode mode = SurveillanceMode.Grid; // Default mode : grid
         private readonly GridSystem _gridSystem = new GridSystem();
         private readonly FullScreenSystem _fullScreenSystem = new FullScreenSystem();
+        private GameController _gameController = null;
 
         private IEnumerable<SurveillanceCamera> _cameras = new List<SurveillanceCamera>();
 
@@ -46,6 +47,7 @@ namespace TechSupport.Surveillance
         private void Awake()
         {
             _cameras = FindObjectsOfType<SurveillanceCamera>();
+            _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
             foreach (SurveillanceCamera camera in _cameras)
             {
                 camera.Init(); 
@@ -58,17 +60,21 @@ namespace TechSupport.Surveillance
         // TODO: Improve this basic input system
         private void Update()
         {
-            if (Input.GetMouseButtonUp(0))
+            if(!_gameController.IsGameMenuOpen)
             {
-                if (mode == SurveillanceMode.Grid)
+                if (Input.GetMouseButtonUp(0))
                 {
-                    SystemSwitch(SurveillanceMode.Focused);
+                    if (mode == SurveillanceMode.Grid)
+                    {
+                        SystemSwitch(SurveillanceMode.Focused);
+                    }
                 }
-            } else if (Input.GetButtonUp("Cancel"))
-            {
-                if (mode == SurveillanceMode.Focused)
+                else if (Input.GetButtonUp("Cancel"))
                 {
-                    SystemSwitch(SurveillanceMode.Grid);
+                    if (mode == SurveillanceMode.Focused)
+                    {
+                        SystemSwitch(SurveillanceMode.Grid);
+                    }
                 }
             }
         }
