@@ -91,7 +91,7 @@ public class GameController : MonoBehaviour
         if (GameRole == Role.SecurityGuard)
         {
             GameObject player = GameObject.FindGameObjectWithTag("PlayerGuard");
-            Transform playerCamera = player.transform.Find("Main Camera");
+            Transform playerCamera = Camera.main.transform;
             playerCamera.GetComponent<AudioListener>().enabled = false;
         }
         _soundController.PlayAmbientSound();
@@ -151,7 +151,7 @@ public class GameController : MonoBehaviour
         {
             Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.None : CursorLockMode.Locked;
             GameObject player = GameObject.FindGameObjectWithTag("PlayerGuard");
-            Transform playerCamera = player.transform.Find("Main Camera");
+            Transform playerCamera = Camera.main.transform;
             playerCamera.GetComponent<CameraMovement>().enabled = Cursor.lockState == CursorLockMode.Locked;
         }
     }

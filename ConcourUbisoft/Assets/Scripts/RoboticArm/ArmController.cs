@@ -69,7 +69,6 @@ namespace Arm
 
         #endregion
 
-
         private void Start()
         {
             maxRange = armIKSolver.TotalLength - 0.01f;
