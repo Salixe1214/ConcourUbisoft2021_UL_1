@@ -235,25 +235,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffe9d935c0ce0014c9a8cd742f56a13a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  imagesList:
+  - {fileID: 21300000, guid: 4e86f27a961229a4cafda611099a6b7a, type: 3}
+  - {fileID: 21300000, guid: eec3037292c6b3a47a2222e1d27e2cfb, type: 3}
+  - {fileID: 21300000, guid: fed3762b24cd73e46b4b4ffa196bf119, type: 3}
+  - {fileID: 21300000, guid: 5bfb061f43f118b47a013a83ee88ccf0, type: 3}
+  - {fileID: 21300000, guid: adf12bf062327394cbaa950f5d22e14a, type: 3}
+  sizeList: {x: 300, y: 50}
   items:
   - title: Item 1
-    content: Nullam vitae diam vel enim eleifend pharetra sed at lectus. Morbi commodo
-      porttitor rhoncus. Aenean semper ullamcorper lacus, eget maximus velit hendrerit
-      non. Ut ac tortor eget lacus bibendum tincidunt ac eu nisl. Suspendisse volutpat
-      faucibus accumsan. Donec finibus a mi id dapibus. Praesent elementum arcu in
-      ante molestie scelerisque. Phasellus tempus purus laoreet urna pulvinar sollicitudin.
-      Ut eu nibh in tellus pharetra egestas vel ac orci.
+    content: Donec finibus a mi id dapibus. Praesent elementum arcu in ante molestie
+      scelerisque. Phasellus tempus purus laoreet urna pulvinar sollicitudin. Ut
+      eu nibh in tellus pharetra egestas vel ac orci.
     images: []
   - title: Item 2
     content: Item avec image
     images:
     - {fileID: 21300000, guid: bd293dc32f4aaf94e8274f2fac2cdf89, type: 3}
-  position: {x: 817.5, y: 307, z: 0}
-  rotation: {x: 0, y: 0, z: 0, w: 0}
-  accordionPrefab: {fileID: 6953853909590194871, guid: 62664f59e8661d94b9b8263581247c8d, type: 3}
-  itemPrefab: {fileID: 977273539004602342, guid: 56f230c8fa10ed94180b7ac5a2f5d53a, type: 3}
-  headerPrefab: {fileID: 6550221425655467075, guid: 7211fc4f622fee6418b62264aad7fe32, type: 3}
-  textPrefab: {fileID: 3927507662192480917, guid: a728d1ef08809284aabe322d6d4eb13d, type: 3}
+  position: {x: -150, y: 0, z: 0}
+  sizeAccordion: {x: 200, y: 80}
+  background: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  front: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1 &1461066219
 GameObject:
   m_ObjectHideFlags: 0

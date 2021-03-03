@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-// TODO:
 namespace TechSupport.Informations
 {
     public class InformationsSystem : MonoBehaviour
@@ -18,69 +18,65 @@ namespace TechSupport.Informations
             public string content;
             public List<Sprite> images;
         }
-        [Header("Information")]
-        [SerializeField]
-        private List<InformationItem> items;
 
-        [Header("Transform")]
-        [SerializeField] private Vector3 position;
-        [SerializeField] private Quaternion rotation;
+        [Header("List")] 
+        private ImageLayout _imageLayout;
+        [SerializeField] private List<Sprite> imagesList;
+        [SerializeField] private Vector2 sizeList;
 
-        [Header("System prefabs")] 
-        [SerializeField] private GameObject accordionPrefab;
-        [SerializeField] private GameObject itemPrefab;
-        [SerializeField] private GameObject headerPrefab;
-        [SerializeField] private GameObject textPrefab;
+        [Header("Accordion")] 
+        private Accordion _accordion;
+        [SerializeField] private List<InformationItem> items;
+        [SerializeField] private Sprite background;
+        [SerializeField] private Sprite front;
 
-        private GameObject _accordion;
+        private RectTransform _listRectTransform;
+        private RectTransform _accordionRectTransform;
+
         private void Awake()
         {
-            _accordion = Instantiate(accordionPrefab, position, rotation, gameObject.transform);
-            items.ForEach(InstantiateItems);
+            CreateList();
+            CreateAccordion();
         }
 
-        private void InstantiateItems(InformationItem item)
+        private void Update()
         {
-            GameObject go = Instantiate(itemPrefab, _accordion.transform);
-            
-            Instantiate(headerPrefab, go.transform).GetComponent<Text>().text = item.title;
-            if (item.images.Count > 0)
-            {
-                CreateImageLayout(go.transform, item.images);
-            }
-            Instantiate(textPrefab, go.transform).GetComponent<Text>().text = item.content;
+            _imageLayout.transform.position = new Vector3 (Screen.width * 0.5f, Screen.height * 0.95f, 0);
+            _accordion.transform.position = new Vector3(Screen.width * 0.85f, Screen.height * 0.5f);
+            _accordionRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width * 0.15f);
         }
 
-        private void CreateImage(Transform parent, Sprite sprite)
+        private void SetSize(RectTransform rectTransform, Vector2 size)
         {
-            GameObject go = new GameObject();
-            Image image = go.AddComponent<Image>();
-            image.sprite = sprite;
-            image.preserveAspect = true;
-            go.GetComponent<RectTransform>().SetParent(parent);
-            go.SetActive(true);
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
+        }
+        private void CreateList()
+        {
+            _imageLayout = new GameObject().AddComponent<ImageLayout>();
+            _listRectTransform = _imageLayout.GetComponent<RectTransform>();
+            _listRectTransform.SetParent(transform);
+            SetSize(_listRectTransform, sizeList);
+            _imageLayout.CreateLayout(imagesList);
         }
 
-        private void CreateImageLayout(Transform parent, List<Sprite> images)
+        private void CreateAccordion()
         {
-            GameObject go = new GameObject();
-            HorizontalLayoutGroup layout = go.AddComponent<HorizontalLayoutGroup>();
-
-            layout.childAlignment = TextAnchor.MiddleCenter;
-            images.ForEach(image => CreateImage(go.transform, image));
-            go.GetComponent<RectTransform>().SetParent(parent);
-            go.SetActive(true);
+            _accordion = new GameObject().AddComponent<Accordion>();
+            _accordionRectTransform = _accordion.GetComponent<RectTransform>();
+            _accordionRectTransform.SetParent(transform);
+            _accordion.Setup(background, front);
+            _accordion.CreateAccordion(items);
         }
 
-        private void CreateParagraph(Transform parent, string content)
+        public ImageLayout GetList()
         {
-            GameObject go = new GameObject();
-            Text text = go.AddComponent<Text>();
-            text.text = content;
-            text.fontSize = 14;
-            text.color = Color.black;
-            go.GetComponent<RectTransform>().SetParent(parent);
-            go.SetActive(true);
+            return _imageLayout;
+        }
+
+        public Accordion GetInformationDisplay()
+        {
+            return _accordion;
         }
     }
 }
