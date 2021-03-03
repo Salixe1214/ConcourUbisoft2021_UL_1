@@ -53,15 +53,20 @@ public class Level1Controller : MonoBehaviour
     private ImageLayout imageList;
     private List<Sprite> itemSprites;
 
+    private void Awake()
+    {
+        itemSprites = new List<Sprite>();
+    }
+
     public void Start()
     {
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
-        if (Level1Door == null)
+       // if (Level1Door == null)
             StartLevel();
         conveyorOperatingSpeed = MinConveyorSpeed;
         cameraOriginalPosition = AreaCamera.transform.position;
-        itemSprites = new List<Sprite>();
+       // itemSprites = new List<Sprite>();
     }
 
     private void Update()
@@ -193,25 +198,22 @@ public class Level1Controller : MonoBehaviour
             Color currentColor = sequenceOfColor.ColorsSequence[i];
             TransportableType currentType = sequenceOfColor.types[i];
             GameObject itemImage = new GameObject();
-            itemImage.AddComponent<SpriteRenderer>();
+            itemImage.AddComponent<Image>();
 
             switch (currentType)
             {
-                case TransportableType.RobotHead : itemImage.GetComponent<SpriteRenderer>().sprite = RobotHeadImage;
+                case TransportableType.RobotHead : itemSprites.Add(RobotHeadImage);
                     break;
-                case TransportableType.Crate : itemImage.GetComponent<SpriteRenderer>().sprite =CrateImage;
+                case TransportableType.Crate : itemSprites.Add(CrateImage);
                     break;
-                case TransportableType.Gear : itemImage.GetComponent<SpriteRenderer>().sprite =GearImage;
+                case TransportableType.Gear : itemSprites.Add(GearImage);
                     break;
-                case TransportableType.Battery : itemImage.GetComponent<SpriteRenderer>().sprite =BatteryImage;
+                case TransportableType.Battery : itemSprites.Add(BatteryImage);
                     break;
-                case TransportableType.Pipe : itemImage.GetComponent<SpriteRenderer>().sprite =PipeImage;
+                case TransportableType.Pipe : itemSprites.Add(PipeImage);
                     break;
             }
-
-            itemImage.Get<SpriteRenderer>().color = currentColor;
-            itemSprites.Add(itemImage.GetComponent<SpriteRenderer>().sprite);
         }
-        imageList.CreateLayout(itemSprites);
+        imageList.CreateLayout(itemSprites,sequenceOfColor.ColorsSequence);
     }
 }
