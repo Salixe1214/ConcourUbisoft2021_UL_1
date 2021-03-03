@@ -30,7 +30,15 @@ public class CharacterControl : MonoBehaviour
         Vector3 keyboardInput = (transform.right * keyboardHorizontal + transform.forward *keyBoardVertical)*(playerMovementSpeed);
         
         inputVector = controllerInput + keyboardInput;
-        smoothInputVector =  Vector3.Lerp(smoothInputVector, inputVector, inputSmoothSpeed * Time.deltaTime);
+
+        if (inputVector == Vector3.zero)
+        {
+            smoothInputVector = Vector3.zero;
+        }
+        else
+        {
+            smoothInputVector =  Vector3.Lerp(smoothInputVector, inputVector, inputSmoothSpeed * Time.deltaTime);
+        }
 
         if (smoothInputVector.magnitude > playerMovementSpeed)
         {
