@@ -31,23 +31,30 @@ public class TransportableSpawner : MonoBehaviour
 
     private void Spawn()
     {
-        
         Color[] possibleColors = Level1Controller.GetColors();
 
         GameObject randomPrefab = TransportablesPrefab[Random.Range(0, TransportablesPrefab.Length)];
-        
+
         Vector3 randomPoint = PointA.position + Random.Range(0, 100) / 100.0f * (PointB.position - PointA.position);
 
-        GameObject transportable = Instantiate(randomPrefab, randomPoint, Quaternion.identity);
-        
-        
-        if (sequenceIndex >= Level1Controller.GetCurrentSequenceLenght())
+        GameObject transportable;
+
+        if (sequenceIndex > Level1Controller.GetCurrentSequenceLenght())
         {
-            transportable.gameObject.GetComponent<TransportableByConveyor>().Color = Level1Controller.GetNextColorInSequence();
+            foreach (var t in TransportablesPrefab)
+            {
+                if (t.GetComponent<TransportableByConveyor>().GetType() == Level1Controller.GetNextTypeInSequence())
+                {
+                    transportable = Instantiate(t, randomPoint, Quaternion.identity);
+                    transportable.gameObject.GetComponent<TransportableByConveyor>().Color = Level1Controller.GetNextColorInSequence();
+                    break;
+                }
+            }
             sequenceIndex = 0;
         }
         else
-        {
+        { 
+            transportable = Instantiate(randomPrefab, randomPoint, Quaternion.identity);
             Color randomColor = possibleColors[Random.Range(0, possibleColors.Length)];
             transportable.gameObject.GetComponent<TransportableByConveyor>().Color = randomColor;
             sequenceIndex++;

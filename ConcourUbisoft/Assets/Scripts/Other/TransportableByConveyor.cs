@@ -65,4 +65,9 @@ public class TransportableByConveyor : MonoBehaviour
     {
         collider.enabled = false;
     }
+
+    public TransportableType GetType()
+    {
+        return type;
+    }
 }

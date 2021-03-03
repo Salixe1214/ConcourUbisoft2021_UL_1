@@ -16,6 +16,8 @@ public class Level1Controller : MonoBehaviour
     public Color GetNextColorInSequence() => FurnaceController.GetNextColor();
     public int GetCurrentSequenceLenght() => FurnaceController.GetCurrentSequenceLenght();
 
+    public TransportableType GetNextTypeInSequence() => FurnaceController.GetNextItemType();
+
     [SerializeField] private FurnaceController FurnaceController = null;
     [SerializeField] private TransportableSpawner TransportableSpawner = null;
     [SerializeField] private DoorsScript Level1Door = null;

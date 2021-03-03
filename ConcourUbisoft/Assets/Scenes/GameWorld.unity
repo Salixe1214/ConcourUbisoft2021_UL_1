@@ -662,6 +662,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RealDoor
       objectReference: {fileID: 0}
+    - target: {fileID: 1315503317290481079, guid: 239feac3bad21a94ca3a24095b27a465, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1804338028529987341, guid: 239feac3bad21a94ca3a24095b27a465, type: 3}
       propertyPath: m_RootOrder
       value: 15
@@ -1049,7 +1053,7 @@ MonoBehaviour:
   CrateImage: {fileID: 21300000, guid: eec3037292c6b3a47a2222e1d27e2cfb, type: 3}
   GearImage: {fileID: 21300000, guid: fed3762b24cd73e46b4b4ffa196bf119, type: 3}
   BatteryImage: {fileID: 21300000, guid: 5bfb061f43f118b47a013a83ee88ccf0, type: 3}
-  PipeImage: {fileID: 21300000, guid: 5bfb061f43f118b47a013a83ee88ccf0, type: 3}
+  PipeImage: {fileID: 21300000, guid: adf12bf062327394cbaa950f5d22e14a, type: 3}
   ClearItemsTimeSeconds: 2
   FastItemSpawningTimeSeconds: 2.5
   MaxConveyorSpeed: 15

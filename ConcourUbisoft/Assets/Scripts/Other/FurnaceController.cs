@@ -53,8 +53,9 @@ public class FurnaceController : MonoBehaviour
         SequenceOfColor currentSequence = SequencesOfColor[SucceedSequences];
 
         Color currentSequenceColor = currentSequence.ColorsSequence[currentSequence.SucceedColors];
+        TransportableType currentType = currentSequence.types[currentSequence.SucceedColors];
         
-        if (currentSequenceColor.r == ( transportableByConveyor.Color).r && currentSequenceColor.g == ( transportableByConveyor.Color).g &&currentSequenceColor.b == ( transportableByConveyor.Color).b)
+        if (currentSequenceColor.r == ( transportableByConveyor.Color).r && currentSequenceColor.g == ( transportableByConveyor.Color).g &&currentSequenceColor.b == ( transportableByConveyor.Color).b && currentType == transportableByConveyor.GetType())
         {
             currentSequence.SucceedColors++;
             if (currentSequence.SucceedColors == currentSequence.ColorsSequence.Length)
@@ -87,7 +88,7 @@ public class FurnaceController : MonoBehaviour
             sc.types = new TransportableType[currentSequenceLenght];
             for (int j = 0; j < currentSequenceLenght; j++)
             {
-                int nextType = UnityEngine.Random.Range(0, Enum.GetNames(typeof(TransportableType)).Length);
+                int nextType = UnityEngine.Random.Range(0, 2);
                 int nextColor = UnityEngine.Random.Range(0, allColors.Length);
                 sc.ColorsSequence[j] = allColors[nextColor];
                 sc.types[j] = (TransportableType)nextType;
@@ -112,7 +113,13 @@ public class FurnaceController : MonoBehaviour
 
     public Color GetNextColor()
     {
-        SequenceOfColor currentSequence = SequencesOfColor[SucceedSequences];
+        SequenceOfColor currentSequence = GetCurrentSequence();
         return currentSequence.ColorsSequence[currentSequence.SucceedColors];
+    }
+
+    public TransportableType GetNextItemType()
+    {
+        SequenceOfColor currentSequence = GetCurrentSequence();
+        return currentSequence.types[currentSequence.SucceedColors];
     }
 }
