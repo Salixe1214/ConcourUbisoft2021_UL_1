@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
-using Random = System.Random;
 
 public class FurnaceController : MonoBehaviour
 {
@@ -18,20 +17,17 @@ public class FurnaceController : MonoBehaviour
     [SerializeField] private int nbColorSequences = 5;
     [SerializeField] private int minColorSequencelenght=3;
     [SerializeField] private int maxColorSequenceLenght=7;
-    [SerializeField] private Level1Controller Level1Controller = null;
     [SerializeField] private float TimeToConsume = 0.0f;
-    
-    private int SucceedSequences = 0;
-    private Random colorPicker;
-    private Color[] allColors;
-    
 
-    private void Start()
+    public event Action WhenFurnaceConsumedAll;
+    public event Action WhenFurnaceConsumeWrong;
+    public event Action WhenFurnaceConsumeAWholeSequenceWithoutFinishing;
+
+    private int SucceedSequences = 0;
+
+    private void Awake()
     {
-        colorPicker = new Random();
-        allColors = Level1Controller.GetColors();
         SequencesOfColor = new SequenceOfColor[nbColorSequences];
-        GenerateNewColorSequences();
     }
 
 
@@ -63,22 +59,22 @@ public class FurnaceController : MonoBehaviour
                 SucceedSequences++;
                 if (SucceedSequences == SequencesOfColor.Length)
                 {
-                    Level1Controller.FinishLevel();
+                    WhenFurnaceConsumedAll?.Invoke();
                 }
                 else
                 {
-                    Level1Controller.InitiateNextSequence();
+                    WhenFurnaceConsumeAWholeSequenceWithoutFinishing?.Invoke();
                 }
             }
         }
         else
         {
-            Level1Controller.ShakeCamera();
+            WhenFurnaceConsumeWrong.Invoke();
         }
 
     }
 
-    private void GenerateNewColorSequences()
+    public void GenerateNewColorSequences(Color[] allColors)
     {
         int currentSequenceLenght = minColorSequencelenght;
         for (int i = 0; i < nbColorSequences; i++)
@@ -87,7 +83,7 @@ public class FurnaceController : MonoBehaviour
             sc.ColorsSequence = new Color[currentSequenceLenght];
             for (int j = 0; j < currentSequenceLenght; j++)
             {
-                int nextColor =colorPicker.Next(0, allColors.Length);
+                int nextColor = UnityEngine.Random.Range(0, allColors.Length);
                 sc.ColorsSequence[j] = allColors[nextColor];
             }
             SequencesOfColor[i] = sc;

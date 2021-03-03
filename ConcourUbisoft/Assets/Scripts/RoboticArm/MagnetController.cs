@@ -289,5 +289,10 @@ namespace Arm
                 }
             }
         }
+
+        public void OnGrab(bool grab)
+        {
+            magnetActive = grab;
+        }
     }
 }

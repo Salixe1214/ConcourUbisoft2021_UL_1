@@ -21,6 +21,13 @@ namespace Arm
 
         public Transform ArmTarget { get; private set; } = null;
 
+        #region controllerDeclaration
+
+        private int _inputVerticalAxis;
+        private int _inputHorizontalAxis;
+
+        #endregion
+
         #region Network
 
         public override void Deserialize(byte[] data)
@@ -73,6 +80,9 @@ namespace Arm
         {
             maxRange = armIKSolver.TotalLength - 0.01f;
             ArmTarget = armIKSolver.Target;
+
+            _inputVerticalAxis = 0;
+            _inputHorizontalAxis = 0;
         }
 
         void Update()
@@ -108,11 +118,52 @@ namespace Arm
                 }
             }
 
+            else
+            {
+                Vector3 translation =
+                    Vector3.ClampMagnitude(new Vector3(_inputVerticalAxis*-1, 0, _inputHorizontalAxis),
+                        controlSpeed);
+                ArmTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
+                float distanceToTarget = Vector3.Distance(transform.position, ArmTarget.position);
+                if (distanceToTarget > maxRange)
+                {
+                    Vector3 dirToTarget = (ArmTarget.position - transform.position).normalized;
+                    ArmTarget.position = new Vector3(
+                        transform.position.x + dirToTarget.x * maxRange,
+                        ArmTarget.position.y,
+                        transform.position.z + dirToTarget.z * maxRange);
+                }
+
+                float flatDistanceToTarget =
+                    Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z),
+                        new Vector3(armIKSolver.Target.position.x, 0, armIKSolver.Target.position.z));
+                if (flatDistanceToTarget < minRange)
+                {
+                    Vector3 dirToTarget = (ArmTarget.position - transform.position);
+                    dirToTarget.y = 0;
+                    dirToTarget.Normalize();
+                    ArmTarget.position = new Vector3(
+                        transform.position.x + dirToTarget.x * minRange,
+                        ArmTarget.position.y,
+                        transform.position.z + dirToTarget.z * minRange);
+                }
+            }
+
             Vector3 direction = ArmTarget.position - transform.position;
             direction.y = 0;
             direction.Normalize();
             float rotationY = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             armRotationRoot.rotation = Quaternion.Euler(0f, rotationY + 180, 0f);
+        }
+    
+        public void OnHMove(int dir)
+        {
+            _inputHorizontalAxis = dir;
+        }
+    
+        public void OnVMove(int dir)
+        {
+            _inputVerticalAxis = dir;
         }
     }
 }
