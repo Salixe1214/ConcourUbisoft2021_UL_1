@@ -2850,7 +2850,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imagesList: []
-  sizeList: {x: 0, y: 0}
+  sizeList: {x: 250, y: 50}
   items:
   - title: Item 1
     content: Nullam vitae diam vel enim eleifend pharetra sed at lectus. Morbi commodo
