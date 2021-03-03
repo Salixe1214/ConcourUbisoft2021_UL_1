@@ -118,7 +118,7 @@ public class GameController : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         GameObject playerTech = GameObject.FindGameObjectWithTag("PlayerTech");
         playerTech.SetActive(true);
-
+        
         GameObject player = GameObject.FindGameObjectWithTag("PlayerGuard");
         player.GetComponent<CharacterControl>().enabled = false;
         GameObject playerCamera = GameObject.FindGameObjectWithTag("MainCamera");

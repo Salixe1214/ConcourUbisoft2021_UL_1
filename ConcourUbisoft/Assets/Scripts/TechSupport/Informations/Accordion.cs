@@ -76,7 +76,7 @@ namespace TechSupport.Informations
         {
             ImageLayout imageLayout = new GameObject().AddComponent<ImageLayout>();
 
-            imageLayout.CreateLayout(images);
+            //imageLayout.CreateLayout(images);
             imageLayout.GetComponent<RectTransform>().SetParent(parent);
             return imageLayout;
         }

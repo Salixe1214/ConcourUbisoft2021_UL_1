@@ -23,7 +23,7 @@ namespace TechSupport.Informations
 		}
 
 				
-		protected override void OnValidate()
+		/*protected override void OnValidate()
 		{
 			base.OnValidate();
 			
@@ -50,7 +50,7 @@ namespace TechSupport.Informations
 					le.preferredHeight = minHeight;
 				}
 			}
-		}
+		} */
 
 		private void OnValueChanged(bool state)
 		{

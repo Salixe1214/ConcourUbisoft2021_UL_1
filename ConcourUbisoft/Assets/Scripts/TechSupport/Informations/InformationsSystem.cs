@@ -57,8 +57,8 @@ namespace TechSupport.Informations
             _listRectTransform = _imageLayout.GetComponent<RectTransform>();
             _listRectTransform.SetParent(transform);
             SetSize(_listRectTransform, sizeList);
-            _imageLayout.CreateLayout(imagesList);
-        }
+           // _imageLayout.CreateLayout(imagesList);
+        } 
 
         private void CreateAccordion()
         {

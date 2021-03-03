@@ -54,10 +54,10 @@ namespace TechSupport.Informations
             _images[at].sprite = sprite;
         }
 
-        public void AddSprite(Sprite sprite)
+        public void AddSprite(Sprite sprite, Color color)
         {
             Image image = CreateImageObject();
-
+            image.color = color;
             image.sprite = sprite;
             image.gameObject.SetActive(true);
             _images.Add(image);
@@ -72,11 +72,11 @@ namespace TechSupport.Informations
             _images.Clear();
         }
 
-        public void CreateLayout(IEnumerable<Sprite> images)
+        public void CreateLayout(IEnumerable<Sprite> images , Color[] colors)
         {
-            foreach (Sprite image in images)
+            for (int i = 0; i < images.Count(); i++)
             {
-                AddSprite(image);
+                AddSprite(images.ElementAt(i),colors[i]);
             }
         }
 
@@ -89,7 +89,7 @@ namespace TechSupport.Informations
                 if (i < _images.Count)
                     UpdateSprite(i, image);
                 else
-                    AddSprite(image);
+                    AddSprite(image, Color.white);
                 i++;
             }
         }

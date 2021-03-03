@@ -1,8 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ExitGames.Client.Photon.StructWrapping;
 using JetBrains.Annotations;
+using Other;
+using TechSupport.Informations;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class Level1Controller : MonoBehaviour
@@ -16,6 +20,12 @@ public class Level1Controller : MonoBehaviour
     [SerializeField] private TransportableSpawner TransportableSpawner = null;
     [SerializeField] private DoorsScript Level1Door = null;
     [SerializeField] private Camera AreaCamera = null;
+    [SerializeField] private InformationsSystem techUI;
+    [SerializeField] private Sprite RobotHeadImage;
+    [SerializeField] private Sprite CrateImage;
+    [SerializeField] private Sprite GearImage;
+    [SerializeField] private Sprite BatteryImage;
+    [SerializeField] private Sprite PipeImage;
 
     [Tooltip("Duration (Seconds) of items being cleared off the conveyors.")]
     [SerializeField] private float ClearItemsTimeSeconds = 3;
@@ -40,13 +50,20 @@ public class Level1Controller : MonoBehaviour
     private bool firstWave = false;
     private Vector3 cameraOriginalPosition;
     private bool cameraMustShake = false;
+    private ImageLayout imageList;
+    private List<Sprite> itemSprites;
+
+    private void Awake()
+    {
+        itemSprites = new List<Sprite>();
+    }
 
     public void Start()
     {
         FurnaceController.GenerateNewColorSequences(PossibleColors);
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
-        if (Level1Door == null)
+       if (Level1Door == null)
             StartLevel();
         conveyorOperatingSpeed = MinConveyorSpeed;
         cameraOriginalPosition = AreaCamera.transform.position;
@@ -95,6 +112,7 @@ public class Level1Controller : MonoBehaviour
     public void StartLevel()
     {
         Debug.Log("StartLevel");
+        imageList = techUI.GetList();
         firstWave = true;
         FurnaceController.enabled = true;
         TransportableSpawner.enabled = true;
@@ -137,10 +155,13 @@ public class Level1Controller : MonoBehaviour
         if (!firstWave)
         {
             Debug.Log("ClearItems");
+            imageList.Clean();
             yield return waitForItemsToClear(ClearItemsTimeSeconds);
         }      
         SetDelayBetweenItemSpawns(DelayBetweenItemSpawnsSecondsLowest);
         Debug.Log("Lowest Spawning Delay");
+        
+        setItemsImageList();
         ActivateItemSpawning(true);
         yield return new WaitForSeconds(seconds);
         if (firstWave)
@@ -173,5 +194,34 @@ public class Level1Controller : MonoBehaviour
         yield return new WaitForSeconds(duration);
         cameraMustShake = false;
         AreaCamera.transform.position = cameraOriginalPosition;
+    }
+
+    private void setItemsImageList()
+    {
+        itemSprites.Clear();
+        FurnaceController.SequenceOfColor sequenceOfColor = FurnaceController.GetCurrentSequence();
+
+        for (int i = 0; i < FurnaceController.GetCurrentSequenceLenght(); i++)
+        {
+            Color currentColor = sequenceOfColor.ColorsSequence[i];
+            TransportableType currentType = sequenceOfColor.types[i];
+            GameObject itemImage = new GameObject();
+            itemImage.AddComponent<Image>();
+
+            switch (currentType)
+            {
+                case TransportableType.RobotHead : itemSprites.Add(RobotHeadImage);
+                    break;
+                case TransportableType.Crate : itemSprites.Add(CrateImage);
+                    break;
+                case TransportableType.Gear : itemSprites.Add(GearImage);
+                    break;
+                case TransportableType.Battery : itemSprites.Add(BatteryImage);
+                    break;
+                case TransportableType.Pipe : itemSprites.Add(PipeImage);
+                    break;
+            }
+        }
+        imageList.CreateLayout(itemSprites,sequenceOfColor.ColorsSequence);
     }
 }

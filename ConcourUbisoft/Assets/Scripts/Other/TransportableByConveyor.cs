@@ -2,6 +2,7 @@ using Arm;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Other;
 using UnityEngine;
 
 [RequireComponent(typeof(Renderer))]
@@ -9,6 +10,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class TransportableByConveyor : MonoBehaviour
 {
+    [SerializeField]private TransportableType type;
     public bool HasBeenPickUp { get { return pickable.HasBeenPickup; } set { pickable.HasBeenPickup = value; } }
 
     public Color Color { get { return renderer.material.color; } set { renderer.material.color = value; } }
@@ -18,6 +20,7 @@ public class TransportableByConveyor : MonoBehaviour
     private new Renderer renderer = null;
     private new Collider collider = null;
     private Pickable pickable = null;
+    
 
     private void Awake()
     {
