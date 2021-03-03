@@ -60,13 +60,13 @@ public class Level1Controller : MonoBehaviour
 
     public void Start()
     {
+        FurnaceController.GenerateNewColorSequences(PossibleColors);
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
-       // if (Level1Door == null)
+       if (Level1Door == null)
             StartLevel();
         conveyorOperatingSpeed = MinConveyorSpeed;
         cameraOriginalPosition = AreaCamera.transform.position;
-       // itemSprites = new List<Sprite>();
     }
 
     private void Update()
@@ -81,12 +81,20 @@ public class Level1Controller : MonoBehaviour
     {
         if (Level1Door != null)
             Level1Door.OnDoorUnlockEvent += OnDoorUnlockEvent;
+
+        FurnaceController.WhenFurnaceConsumedAll += FinishLevel;
+        FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing += InitiateNextSequence;
+        FurnaceController.WhenFurnaceConsumeWrong += ShakeCamera;
     }
 
     private void OnDisable()
     {
         if (Level1Door != null)
             Level1Door.OnDoorUnlockEvent -= OnDoorUnlockEvent;
+
+        FurnaceController.WhenFurnaceConsumedAll -= FinishLevel;
+        FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing -= InitiateNextSequence;
+        FurnaceController.WhenFurnaceConsumeWrong -= ShakeCamera;
     }
 
     private void OnDoorUnlockEvent(DoorsScript doorsScript)

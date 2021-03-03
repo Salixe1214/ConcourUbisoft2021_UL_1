@@ -17,7 +17,6 @@ public class DoorsButton : MonoBehaviour
     private bool _isHover = false;
     private bool _isActivated = false;
 
-    // Start is called before the first frame update
     void Awake()
     {
         _buttonMaterial = gameObject.GetComponent<Renderer>().material;
