@@ -721,6 +721,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1804338028529987341, guid: 239feac3bad21a94ca3a24095b27a465, type: 3}
   m_PrefabInstance: {fileID: 138434539}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &138434541 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 134272301, guid: 239feac3bad21a94ca3a24095b27a465, type: 3}
+  m_PrefabInstance: {fileID: 138434539}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22c51dfaad1838a408c64be49f7a1f24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &162616274
 GameObject:
   m_ObjectHideFlags: 0
@@ -1022,16 +1033,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PossibleColors:
-  - {r: 0, g: 0, b: 1, a: 0.00000020992007}
+  - {r: 0, g: 0, b: 1, a: 1}
   - {r: 1, g: 0, b: 0, a: 4.1726537e+21}
-  - {r: 0, g: 1, b: 0, a: 0.0007487743}
-  - {r: 1, g: 0.54509807, b: 0, a: 0.00000066019425}
-  - {r: 1, g: 0.9529412, b: 0, a: 0.00017107798}
+  - {r: 0, g: 1, b: 0, a: 1}
+  - {r: 1, g: 0.54509807, b: 0, a: 1}
+  - {r: 1, g: 0.9529412, b: 0, a: 1}
   - {r: 1, g: 0, b: 0.8745098, a: 2.658924e+23}
   - {r: 1, g: 1, b: 1, a: 7.922331e+34}
   FurnaceController: {fileID: 71284029}
   TransportableSpawner: {fileID: 1728446350}
-  Level1Door: {fileID: 0}
+  Level1Door: {fileID: 138434541}
   AreaCamera: {fileID: 554653483}
   techUI: {fileID: 636416303}
   RobotHeadImage: {fileID: 21300000, guid: 4e86f27a961229a4cafda611099a6b7a, type: 3}
@@ -3981,7 +3992,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1804338028529987341, guid: 239feac3bad21a94ca3a24095b27a465, type: 3}
       propertyPath: m_RootOrder
-      value: 19
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 1804338028529987341, guid: 239feac3bad21a94ca3a24095b27a465, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7559,7 +7570,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4552731891548158061, guid: ec3960705dd9ac2498af1ad61fb2692c, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4552731891548158061, guid: ec3960705dd9ac2498af1ad61fb2692c, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -8221,6 +8232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SequencesOfColor: []
+  SequencesOfTransportableTypes: 
   nbColorSequences: 5
   minColorSequencelenght: 3
   maxColorSequenceLenght: 7

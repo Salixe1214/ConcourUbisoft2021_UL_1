@@ -87,8 +87,7 @@ public class FurnaceController : MonoBehaviour
             sc.types = new TransportableType[currentSequenceLenght];
             for (int j = 0; j < currentSequenceLenght; j++)
             {
-                int nextColor = colorPicker.Next(0, allColors.Length);
-                int nextType = colorPicker.Next(0, Enum.GetNames(typeof(TransportableType)).Length);
+                int nextType = UnityEngine.Random.Range(0, Enum.GetNames(typeof(TransportableType)).Length);
                 int nextColor = UnityEngine.Random.Range(0, allColors.Length);
                 sc.ColorsSequence[j] = allColors[nextColor];
                 sc.types[j] = (TransportableType)nextType;

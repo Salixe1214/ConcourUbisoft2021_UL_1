@@ -63,11 +63,10 @@ public class Level1Controller : MonoBehaviour
         FurnaceController.GenerateNewColorSequences(PossibleColors);
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
-       // if (Level1Door == null)
+       if (Level1Door == null)
             StartLevel();
         conveyorOperatingSpeed = MinConveyorSpeed;
         cameraOriginalPosition = AreaCamera.transform.position;
-       // itemSprites = new List<Sprite>();
     }
 
     private void Update()
