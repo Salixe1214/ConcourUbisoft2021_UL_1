@@ -94,5 +94,10 @@ namespace TechSupport.Informations
             }
         }
 
+        public void GreyOutSpriteAt(int index)
+        {
+            
+        }
+
     }
 }

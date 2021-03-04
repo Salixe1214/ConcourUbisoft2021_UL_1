@@ -54,6 +54,7 @@ public class Level1Controller : MonoBehaviour
     private bool cameraMustShake = false;
     private ImageLayout imageList;
     private List<Sprite> itemSprites;
+    private SoundController soundController;
 
     private void Awake()
     {
@@ -62,6 +63,7 @@ public class Level1Controller : MonoBehaviour
 
     public void Start()
     {
+        soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         FurnaceController.GenerateNewColorSequences(PossibleColors);
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
@@ -185,6 +187,7 @@ public class Level1Controller : MonoBehaviour
     {
         waitForItemsToClear(ClearItemsTimeSeconds);
         yield return null;
+        soundController.PlayLevelClearSuccessSound();
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
         TransportableSpawner.gameObject.SetActive(false);
@@ -193,6 +196,7 @@ public class Level1Controller : MonoBehaviour
     IEnumerator StartCameraShake(float duration)
     {
         cameraMustShake = true;
+        soundController.PlayLevelOneErrorSound();
         yield return new WaitForSeconds(duration);
         cameraMustShake = false;
         AreaCamera.transform.position = cameraOriginalPosition;

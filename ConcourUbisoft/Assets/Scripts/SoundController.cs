@@ -16,10 +16,18 @@ public class SoundController : MonoBehaviour
     [SerializeField] private AudioClip AmbientSound = null;
     [SerializeField] private AudioSource AmbientSource = null;
 
+    [SerializeField] private AudioSource EffectSource = null;
+
+    [SerializeField] private AudioClip LevelOneErrorSound;
+    [SerializeField] private AudioClip LevelOneSuccesSound;
+
+    [SerializeField] private AudioClip LevelSuccessSound;
+
     [SerializeField] private AudioMixer MasterAudioMixer = null;
     [SerializeField] private AudioMixer _ambientAudioMixer = null;
     [SerializeField] private AudioMixer _musicAudioMixer = null;
     [SerializeField] private AudioMixer _soundEffectAudioMixer = null;
+    
 
     [SerializeField] private float MaxSoundValue = 0;
     [SerializeField] private float MinSoundValue = -10;
@@ -91,6 +99,27 @@ public class SoundController : MonoBehaviour
     public void StopAmbientSound()
     {
         AmbientSource.Stop();
+    }
+
+    public void PlayLevelOneErrorSound()
+    {
+        EffectSource.clip = LevelOneErrorSound;
+        EffectSource.time = 0;
+        EffectSource.Play();
+    }
+    
+    public void PlayLevelOneSuccessSound()
+    {
+        EffectSource.clip = LevelOneSuccesSound;
+        EffectSource.time = 0;
+        EffectSource.Play();
+    }
+    
+    public void PlayLevelClearSuccessSound()
+    {
+        EffectSource.clip = LevelSuccessSound;
+        EffectSource.time = 0;
+        EffectSource.Play();
     }
 
     public void SetSound(GameController.Role role)

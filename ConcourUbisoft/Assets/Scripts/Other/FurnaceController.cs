@@ -22,6 +22,8 @@ public class FurnaceController : MonoBehaviour
     [SerializeField] private int maxColorSequenceLenght=7;
     [SerializeField] private float TimeToConsume = 0.0f;
 
+    private SoundController soundController;
+
     public event Action WhenFurnaceConsumedAll;
     public event Action WhenFurnaceConsumeWrong;
     public event Action WhenFurnaceConsumeAWholeSequenceWithoutFinishing;
@@ -31,6 +33,7 @@ public class FurnaceController : MonoBehaviour
     private void Awake()
     {
         SequencesOfColor = new SequenceOfColor[nbColorSequences];
+        soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
     }
 
 
@@ -57,6 +60,7 @@ public class FurnaceController : MonoBehaviour
         
         if (currentSequenceColor.r == ( transportableByConveyor.Color).r && currentSequenceColor.g == ( transportableByConveyor.Color).g &&currentSequenceColor.b == ( transportableByConveyor.Color).b && currentType == transportableByConveyor.GetType())
         {
+            soundController.PlayLevelOneSuccessSound();
             currentSequence.SucceedColors++;
             if (currentSequence.SucceedColors == currentSequence.ColorsSequence.Length)
             {
