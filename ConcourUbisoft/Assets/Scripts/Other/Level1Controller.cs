@@ -189,6 +189,7 @@ public class Level1Controller : MonoBehaviour
         waitForItemsToClear(ClearItemsTimeSeconds);
         yield return null;
         soundController.PlayLevelSequenceClearedSuccessSound();
+        imageList.Clean();
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
         TransportableSpawner.gameObject.SetActive(false);
