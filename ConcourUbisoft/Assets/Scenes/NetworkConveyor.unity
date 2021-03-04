@@ -204,6 +204,22 @@ MonoBehaviour:
   FurnaceController: {fileID: 2089124704}
   TransportableSpawner: {fileID: 0}
   Level1Door: {fileID: 0}
+  AreaCamera: {fileID: 0}
+  techUI: {fileID: 0}
+  RobotHeadImage: {fileID: 0}
+  CrateImage: {fileID: 0}
+  GearImage: {fileID: 0}
+  BatteryImage: {fileID: 0}
+  PipeImage: {fileID: 0}
+  ClearItemsTimeSeconds: 3
+  FastItemSpawningTimeSeconds: 4
+  MaxConveyorSpeed: 15
+  MinConveyorSpeed: 1.5
+  ConveyorSpeedIncrement: 0.2
+  DelayBetweenItemSpawnsSecondsHighest: {x: 1, y: 1.5}
+  DelayBetweenItemSpawnsSecondsLowest: {x: 0.1, y: 0.2}
+  cameraShakeForce: 0.3
+  cameraShakeDurationSeconds: 0.2
 --- !u!4 &196708129
 Transform:
   m_ObjectHideFlags: 0
@@ -218,6 +234,103 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &440068114
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2097212504249045533, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_Name
+      value: MagnetA
+      objectReference: {fileID: 0}
+    - target: {fileID: 2097212504249045533, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2228345418740029278, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: Id
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5011476931402774636, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5011476931402774636, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -20.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 5011476931402774636, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.48024
+      objectReference: {fileID: 0}
+    - target: {fileID: 5011476931402774636, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -8.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5011476931402774636, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7269151
+      objectReference: {fileID: 0}
+    - target: {fileID: 5011476931402774636, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5011476931402774636, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.68672734
+      objectReference: {fileID: 0}
+    - target: {fileID: 5011476931402774636, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5011476931402774636, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5011476931402774636, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -86.743
+      objectReference: {fileID: 0}
+    - target: {fileID: 5011476931402774636, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5661598395360547120, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: isControlled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6788986334764852398, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_Name
+      value: ControllerA
+      objectReference: {fileID: 0}
+    - target: {fileID: 6788986334764852398, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8189427600138330044, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: Id
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8285799713874328404, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_Name
+      value: Arm2WithController
+      objectReference: {fileID: 0}
+    - target: {fileID: 8285799713874328404, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8975522478738679127, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 8975522478738679127, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.02
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
 --- !u!1001 &474901607
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -290,6 +403,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2081755105901008423, guid: ad5952f548b30e745b79571c123fda07, type: 3}
+      propertyPath: m_Name
+      value: MagnetB
+      objectReference: {fileID: 0}
+    - target: {fileID: 2081755105901008423, guid: ad5952f548b30e745b79571c123fda07, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2239844609579422564, guid: ad5952f548b30e745b79571c123fda07, type: 3}
+      propertyPath: _owner
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2658199437798570340, guid: ad5952f548b30e745b79571c123fda07, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -337,6 +462,10 @@ PrefabInstance:
     - target: {fileID: 2658199437798570347, guid: ad5952f548b30e745b79571c123fda07, type: 3}
       propertyPath: m_Name
       value: Conveyor
+      objectReference: {fileID: 0}
+    - target: {fileID: 2658199438259092092, guid: ad5952f548b30e745b79571c123fda07, type: 3}
+      propertyPath: Speed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2658199438277513601, guid: ad5952f548b30e745b79571c123fda07, type: 3}
       propertyPath: Level1Controller
@@ -470,10 +599,18 @@ PrefabInstance:
       propertyPath: SequencesOfColor.Array.data[9].ColorsSequence.Array.data[0].b
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2658199438487473585, guid: ad5952f548b30e745b79571c123fda07, type: 3}
+      propertyPath: Speed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2658199438863293234, guid: ad5952f548b30e745b79571c123fda07, type: 3}
       propertyPath: Level1Controller
       value: 
       objectReference: {fileID: 196708128}
+    - target: {fileID: 2658199439137343525, guid: ad5952f548b30e745b79571c123fda07, type: 3}
+      propertyPath: Speed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2837066390579050822, guid: ad5952f548b30e745b79571c123fda07, type: 3}
       propertyPath: pullForce
       value: 20
@@ -484,6 +621,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5722706416992736522, guid: ad5952f548b30e745b79571c123fda07, type: 3}
       propertyPath: isControlled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6903588929974542484, guid: ad5952f548b30e745b79571c123fda07, type: 3}
+      propertyPath: m_Name
+      value: ControllerB
+      objectReference: {fileID: 0}
+    - target: {fileID: 8097361729200462726, guid: ad5952f548b30e745b79571c123fda07, type: 3}
+      propertyPath: _owner
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9040515246666604909, guid: ad5952f548b30e745b79571c123fda07, type: 3}
@@ -522,10 +667,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed0f83e20af06ac458f09bce0df73f4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  masterVolume: {fileID: 0}
-  ambientVolume: {fileID: 0}
-  musicVolume: {fileID: 0}
-  soundEffectVolume: {fileID: 0}
+  _masterVolume: {fileID: 0}
+  _ambientVolume: {fileID: 0}
+  _musicVolume: {fileID: 0}
+  _soundEffectVolume: {fileID: 0}
+  _voiceChatVolume: {fileID: 0}
 --- !u!4 &748114224
 Transform:
   m_ObjectHideFlags: 0
@@ -569,9 +715,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4cc0e9bf109da3469915959d009fab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SceneToStartName: 
-  AudioListener: {fileID: 0}
-  optionController: {fileID: 748114223}
+  _sceneToStartName: 
+  _audioListener: {fileID: 0}
+  _optionController: {fileID: 0}
+  _inGameMenuController: {fileID: 0}
 --- !u!4 &828488298
 Transform:
   m_ObjectHideFlags: 0
@@ -797,7 +944,14 @@ MonoBehaviour:
   MenuSongSource: {fileID: 0}
   AmbientSound: {fileID: 0}
   AmbientSource: {fileID: 0}
+  EffectSource: {fileID: 0}
+  LevelOneErrorSound: {fileID: 0}
+  LevelOneSuccesSound: {fileID: 0}
+  LevelSuccessSound: {fileID: 0}
   MasterAudioMixer: {fileID: 0}
+  _ambientAudioMixer: {fileID: 0}
+  _musicAudioMixer: {fileID: 0}
+  _soundEffectAudioMixer: {fileID: 0}
   MaxSoundValue: 0
   MinSoundValue: -10
 --- !u!4 &1741871635

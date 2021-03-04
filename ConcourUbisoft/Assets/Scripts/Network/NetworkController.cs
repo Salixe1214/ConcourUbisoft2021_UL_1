@@ -99,7 +99,6 @@ public class NetworkController : MonoBehaviourPunCallbacks
         if (QuickSetup)
         {
             GameController.Role role = PhotonNetwork.IsMasterClient ? GameController.Role.SecurityGuard : GameController.Role.Technician;
-
             playerNetwork.GetComponent<PlayerNetwork>().PlayerRole = role;
 
             GameController gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();

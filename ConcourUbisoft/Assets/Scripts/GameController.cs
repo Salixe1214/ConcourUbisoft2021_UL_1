@@ -132,6 +132,7 @@ public class GameController : MonoBehaviour
             StartCoroutine("UnloadAsyncLevel");
         }
     }
+
     #endregion
     #region Public Functions
     public void StartGame(Role role)

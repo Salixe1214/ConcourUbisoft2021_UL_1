@@ -24,8 +24,6 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     private IEnumerable<NetworkSync> objectsToSync = new NetworkSync[0];
     [SerializeField] private GameController.Role _playerRole;
 
-
-
     #region Unity Callbacks
 
     private void Awake()
@@ -34,6 +32,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         Name = $"Player {(photonView.Owner.IsMasterClient ? "1" : "2")}";
+        objectsToSync = GameObject.FindObjectsOfType<NetworkSync>().OrderBy(x => x.Id);
     }
 
     private void Start()
@@ -77,50 +76,35 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         {
             stream.SendNext((int)PlayerRole);
             stream.SendNext(Name);
+            stream.SendNext((int)objectsToSync.Count(x => x.Owner == PlayerRole));
             foreach (NetworkSync syncObject in objectsToSync)
             {
                 if (PlayerRole == syncObject.Owner)
                 {
+                    stream.SendNext((int)syncObject.Id);
                     stream.SendNext(syncObject.Serialize());
                 }
             }
-
-            //if (gameController.IsGameStart && PlayerRole == GameController.Role.SecurityGuard)
-            //{
-            //    stream.SendNext(playerA.transform.position);
-            //    stream.SendNext(playerA.transform.rotation);
-            //}
-            //else if (gameController.IsGameStart && PlayerRole == GameController.Role.Technician)
-            //{
-            //    for (int i = 0; i < Arms.Length; i++)
-            //    {
-            //        stream.SendNext(Arms[i].transform.position);
-            //        stream.SendNext(Arms[i].transform.rotation);
-            //    }
-            //}
         }
         else
         {
             this.PlayerRole = (GameController.Role)(int)stream.ReceiveNext();
             this.Name = (string)stream.ReceiveNext();
 
-            foreach (NetworkSync syncObject in objectsToSync)
+            int serializeCount = (int)stream.ReceiveNext();
+
+            for (int i = 0; i < serializeCount; ++i)
             {
-                syncObject.Deserialize((byte[])stream.ReceiveNext(), lag, info.SentServerTime);
+                int syncId = (int)stream.ReceiveNext();
+                NetworkSync sync = objectsToSync.Where(x => x.Id == syncId).FirstOrDefault();
+
+                byte[] data = (byte[])stream.ReceiveNext();
+                if (sync != null)
+                {
+                    sync.Deserialize(data, lag, info.SentServerTime);
+                }
+                
             }
-            //if (gameController.IsGameStart && PlayerRole == GameController.Role.SecurityGuard)
-            //{
-            //    playerA.transform.position = (Vector3)stream.ReceiveNext();
-            //    playerA.transform.rotation = (Quaternion)stream.ReceiveNext();
-            //}
-            //else if (gameController.IsGameStart && PlayerRole == GameController.Role.Technician)
-            //{
-            //    for (int i = 0; i < Arms.Length; i++)
-            //    {
-            //        Arms[i].transform.position = (Vector3)stream.ReceiveNext();
-            //        Arms[i].transform.rotation = (Quaternion)stream.ReceiveNext();
-            //    }
-            //}
         }
     }
 
