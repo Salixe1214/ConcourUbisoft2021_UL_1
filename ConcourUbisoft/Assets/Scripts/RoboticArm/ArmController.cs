@@ -87,68 +87,37 @@ namespace Arm
 
         void Update()
         {
-            if (controllable.IsControlled)
-            {
-                Vector3 translation =
-                    Vector3.ClampMagnitude(new Vector3(Input.GetAxis("Vertical")*-1, 0, Input.GetAxis("Horizontal")),
-                        controlSpeed);
-                ArmTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
-                float distanceToTarget = Vector3.Distance(transform.position, ArmTarget.position);
-                if (distanceToTarget > maxRange)
-                {
-                    Vector3 dirToTarget = (ArmTarget.position - transform.position).normalized;
-                    ArmTarget.position = new Vector3(
-                        transform.position.x + dirToTarget.x * maxRange,
-                        ArmTarget.position.y,
-                        transform.position.z + dirToTarget.z * maxRange);
-                }
+            float inputV = controllable.IsControlled ? Input.GetAxis("Vertical") : _inputVerticalAxis;
+            float inputH = controllable.IsControlled ? Input.GetAxis("Horizontal") : _inputHorizontalAxis;
 
-                float flatDistanceToTarget =
-                    Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z),
-                        new Vector3(armIKSolver.Target.position.x, 0, armIKSolver.Target.position.z));
-                if (flatDistanceToTarget < minRange)
-                {
-                    Vector3 dirToTarget = (ArmTarget.position - transform.position);
-                    dirToTarget.y = 0;
-                    dirToTarget.Normalize();
-                    ArmTarget.position = new Vector3(
-                        transform.position.x + dirToTarget.x * minRange,
-                        ArmTarget.position.y,
-                        transform.position.z + dirToTarget.z * minRange);
-                }
+            Vector3 translation =
+                Vector3.ClampMagnitude(new Vector3(inputV * -1, 0, inputH),
+                    controlSpeed);
+            ArmTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
+            float distanceToTarget = Vector3.Distance(transform.position, ArmTarget.position);
+            if (distanceToTarget > maxRange)
+            {
+                Vector3 dirToTarget = (ArmTarget.position - transform.position).normalized;
+                ArmTarget.position = new Vector3(
+                    transform.position.x + dirToTarget.x * maxRange,
+                    ArmTarget.position.y,
+                    transform.position.z + dirToTarget.z * maxRange);
             }
 
-            else
+            float flatDistanceToTarget =
+                Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z),
+                    new Vector3(armIKSolver.Target.position.x, 0, armIKSolver.Target.position.z));
+            if (flatDistanceToTarget < minRange)
             {
-                Vector3 translation =
-                    Vector3.ClampMagnitude(new Vector3(_inputVerticalAxis*-1, 0, _inputHorizontalAxis),
-                        controlSpeed);
-                ArmTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
-                float distanceToTarget = Vector3.Distance(transform.position, ArmTarget.position);
-                if (distanceToTarget > maxRange)
-                {
-                    Vector3 dirToTarget = (ArmTarget.position - transform.position).normalized;
-                    ArmTarget.position = new Vector3(
-                        transform.position.x + dirToTarget.x * maxRange,
-                        ArmTarget.position.y,
-                        transform.position.z + dirToTarget.z * maxRange);
-                }
-
-                float flatDistanceToTarget =
-                    Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z),
-                        new Vector3(armIKSolver.Target.position.x, 0, armIKSolver.Target.position.z));
-                if (flatDistanceToTarget < minRange)
-                {
-                    Vector3 dirToTarget = (ArmTarget.position - transform.position);
-                    dirToTarget.y = 0;
-                    dirToTarget.Normalize();
-                    ArmTarget.position = new Vector3(
-                        transform.position.x + dirToTarget.x * minRange,
-                        ArmTarget.position.y,
-                        transform.position.z + dirToTarget.z * minRange);
-                }
+                Vector3 dirToTarget = (ArmTarget.position - transform.position);
+                dirToTarget.y = 0;
+                dirToTarget.Normalize();
+                ArmTarget.position = new Vector3(
+                    transform.position.x + dirToTarget.x * minRange,
+                    ArmTarget.position.y,
+                    transform.position.z + dirToTarget.z * minRange);
             }
-
+            
             Vector3 direction = ArmTarget.position - transform.position;
             direction.y = 0;
             direction.Normalize();
