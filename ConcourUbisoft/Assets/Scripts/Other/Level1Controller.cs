@@ -64,11 +64,17 @@ public class Level1Controller : MonoBehaviour
     public void Start()
     {
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
-        FurnaceController.GenerateNewColorSequences(PossibleColors);
-        FurnaceController.enabled = false;
-        TransportableSpawner.enabled = false;
-       if (Level1Door == null)
-            StartLevel();
+        if (FurnaceController != null)
+        {
+            FurnaceController.GenerateNewColorSequences(PossibleColors);
+            FurnaceController.enabled = false;
+        }
+        if(TransportableSpawner != null)
+        {
+            TransportableSpawner.enabled = false;
+        }
+        //if (Level1Door == null)
+        //    StartLevel();
         conveyorOperatingSpeed = MinConveyorSpeed;
         cameraOriginalPosition = AreaCamera.transform.position;
     }

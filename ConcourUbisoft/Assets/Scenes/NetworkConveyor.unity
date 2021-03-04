@@ -186,7 +186,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &196708128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,6 +252,14 @@ PrefabInstance:
     - target: {fileID: 2228345418740029278, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
       propertyPath: Id
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785021505857764732, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: pullForce
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3016163854590649865, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5011476931402774636, guid: 5423f23fd2e6f3142a05940186200280, type: 3}
       propertyPath: m_RootOrder
@@ -598,6 +606,10 @@ PrefabInstance:
     - target: {fileID: 2658199438277513601, guid: ad5952f548b30e745b79571c123fda07, type: 3}
       propertyPath: SequencesOfColor.Array.data[9].ColorsSequence.Array.data[0].b
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2658199438277513607, guid: ad5952f548b30e745b79571c123fda07, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2658199438487473585, guid: ad5952f548b30e745b79571c123fda07, type: 3}
       propertyPath: Speed

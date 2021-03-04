@@ -44,11 +44,17 @@ public class SoundController : MonoBehaviour
     }
     private void OnEnable()
     {
-        optionController.OnOptionVolumeUpdatedEvent += OnOptionVolumeUpdatedEvent;
+        if (optionController != null)
+        {
+            optionController.OnOptionVolumeUpdatedEvent += OnOptionVolumeUpdatedEvent;
+        }
     }
     private void OnDisable()
     {
-        optionController.OnOptionVolumeUpdatedEvent -= OnOptionVolumeUpdatedEvent;
+        if (optionController != null)
+        {
+            optionController.OnOptionVolumeUpdatedEvent -= OnOptionVolumeUpdatedEvent;
+        }
     }
     #endregion
     #region Event Callbacks
