@@ -60,7 +60,7 @@ public class FurnaceController : MonoBehaviour
         
         if (currentSequenceColor.r == ( transportableByConveyor.Color).r && currentSequenceColor.g == ( transportableByConveyor.Color).g &&currentSequenceColor.b == ( transportableByConveyor.Color).b && currentType == transportableByConveyor.GetType())
         {
-            soundController.PlayLevelOneSuccessSound();
+            soundController.PlayLevelPartialSequenceSuccessSound();
             currentSequence.SucceedColors++;
             if (currentSequence.SucceedColors == currentSequence.ColorsSequence.Length)
             {

@@ -128,7 +128,8 @@ public class Level1Controller : MonoBehaviour
 
     public void InitiateNextSequence()
     {
-        ActivateItemSpawning(false);       
+        ActivateItemSpawning(false);
+        soundController.PlayLevelSequenceClearedSuccessSound();
         TransportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
         StartCoroutine(SpawnFreshItems(FastItemSpawningTimeSeconds));
     }
@@ -187,7 +188,7 @@ public class Level1Controller : MonoBehaviour
     {
         waitForItemsToClear(ClearItemsTimeSeconds);
         yield return null;
-        soundController.PlayLevelClearSuccessSound();
+        soundController.PlayLevelSequenceClearedSuccessSound();
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
         TransportableSpawner.gameObject.SetActive(false);

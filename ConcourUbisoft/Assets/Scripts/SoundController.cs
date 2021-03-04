@@ -108,14 +108,14 @@ public class SoundController : MonoBehaviour
         EffectSource.Play();
     }
     
-    public void PlayLevelOneSuccessSound()
+    public void PlayLevelPartialSequenceSuccessSound()
     {
         EffectSource.clip = LevelOneSuccesSound;
         EffectSource.time = 0;
         EffectSource.Play();
     }
     
-    public void PlayLevelClearSuccessSound()
+    public void PlayLevelSequenceClearedSuccessSound()
     {
         EffectSource.clip = LevelSuccessSound;
         EffectSource.time = 0;
