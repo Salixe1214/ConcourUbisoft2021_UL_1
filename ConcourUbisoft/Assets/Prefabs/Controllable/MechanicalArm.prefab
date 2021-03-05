@@ -489,7 +489,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05637e89491b4403959b570936f28f5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pullForce: 0.1
+  pullForce: 10
   controllable: {fileID: 7748708573357444043}
   magnetPullPoint: {fileID: 4391199953618283473}
   magnetTrigger: {fileID: 2789119806684443227}
