@@ -17,6 +17,8 @@ namespace Arm
         [SerializeField] private Pickable currentPickable = null;
         [SerializeField] private bool grabbed = false;
         [SerializeField] private bool magnetActive = false;
+        [SerializeField] private bool _hasControlPanel = false;
+
         public bool IsMagnetActive => magnetActive;
 
         private NetworkSync _networkSync = null;
@@ -47,7 +49,7 @@ namespace Arm
         private void FixedUpdate()
         {
             if (controllable.IsControlled ||
-                (_networkController != null && _networkSync.Owner != _networkController.GetLocalRole()))
+                (_networkController != null && _networkSync.Owner != _networkController.GetLocalRole()) || _hasControlPanel)
             {
                 if (!grabbed && !currentPickable && _networkSync.Owner == _networkController.GetLocalRole())
                 {
@@ -63,7 +65,7 @@ namespace Arm
                     }
                 }
 
-                if (_networkSync.Owner == _networkController.GetLocalRole())
+                if (_networkSync.Owner == _networkController.GetLocalRole() && !_hasControlPanel)
                 {
                     if (Input.GetButton("Grab") ||
                         Input.GetButton("GrabControllerXBO") ||
@@ -290,9 +292,16 @@ namespace Arm
             }
         }
 
-        public void OnGrab(bool grab)
+        public void ToggleMagnet()
         {
-            magnetActive = grab;
+            if(magnetActive)
+            {
+                TurnMagnetOff();
+            }
+            else
+            {
+                magnetActive = true;
+            }
         }
     }
 }

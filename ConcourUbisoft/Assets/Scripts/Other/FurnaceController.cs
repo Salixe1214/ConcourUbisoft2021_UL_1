@@ -77,7 +77,7 @@ public class FurnaceController : MonoBehaviour
         }
         else
         {
-            WhenFurnaceConsumeWrong.Invoke();
+            WhenFurnaceConsumeWrong?.Invoke();
         }
 
     }

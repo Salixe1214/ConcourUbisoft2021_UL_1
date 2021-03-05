@@ -15,6 +15,7 @@ namespace Arm
         [SerializeField] private Controllable controllable;
         [SerializeField] private IKSolver armIKSolver;
         [SerializeField] private Transform armRotationRoot;
+        [SerializeField] private bool _hasControlPanel = false;
 
         private float maxRange;
         public float ControlSpeed => controlSpeed;
@@ -87,37 +88,40 @@ namespace Arm
 
         void Update()
         {
-            float inputV = controllable.IsControlled ? Input.GetAxis("Vertical") : _inputVerticalAxis;
-            float inputH = controllable.IsControlled ? Input.GetAxis("Horizontal") : _inputHorizontalAxis;
-
-            Vector3 translation =
-                Vector3.ClampMagnitude(new Vector3(inputV * -1, 0, inputH),
-                    controlSpeed);
-            ArmTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
-            float distanceToTarget = Vector3.Distance(transform.position, ArmTarget.position);
-            if (distanceToTarget > maxRange)
+            if (controllable.IsControlled)
             {
-                Vector3 dirToTarget = (ArmTarget.position - transform.position).normalized;
-                ArmTarget.position = new Vector3(
-                    transform.position.x + dirToTarget.x * maxRange,
-                    ArmTarget.position.y,
-                    transform.position.z + dirToTarget.z * maxRange);
+                float inputV = !_hasControlPanel ? Input.GetAxis("Vertical") : _inputVerticalAxis;
+                float inputH = !_hasControlPanel ? Input.GetAxis("Horizontal") : _inputHorizontalAxis;
+
+                Vector3 translation =
+                    Vector3.ClampMagnitude(new Vector3(inputV * -1, 0, inputH),
+                        controlSpeed);
+                ArmTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
+                float distanceToTarget = Vector3.Distance(transform.position, ArmTarget.position);
+                if (distanceToTarget > maxRange)
+                {
+                    Vector3 dirToTarget = (ArmTarget.position - transform.position).normalized;
+                    ArmTarget.position = new Vector3(
+                        transform.position.x + dirToTarget.x * maxRange,
+                        ArmTarget.position.y,
+                        transform.position.z + dirToTarget.z * maxRange);
+                }
+
+                float flatDistanceToTarget =
+                    Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z),
+                        new Vector3(armIKSolver.Target.position.x, 0, armIKSolver.Target.position.z));
+                if (flatDistanceToTarget < minRange)
+                {
+                    Vector3 dirToTarget = (ArmTarget.position - transform.position);
+                    dirToTarget.y = 0;
+                    dirToTarget.Normalize();
+                    ArmTarget.position = new Vector3(
+                        transform.position.x + dirToTarget.x * minRange,
+                        ArmTarget.position.y,
+                        transform.position.z + dirToTarget.z * minRange);
+                }  
             }
 
-            float flatDistanceToTarget =
-                Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z),
-                    new Vector3(armIKSolver.Target.position.x, 0, armIKSolver.Target.position.z));
-            if (flatDistanceToTarget < minRange)
-            {
-                Vector3 dirToTarget = (ArmTarget.position - transform.position);
-                dirToTarget.y = 0;
-                dirToTarget.Normalize();
-                ArmTarget.position = new Vector3(
-                    transform.position.x + dirToTarget.x * minRange,
-                    ArmTarget.position.y,
-                    transform.position.z + dirToTarget.z * minRange);
-            }
-            
             Vector3 direction = ArmTarget.position - transform.position;
             direction.y = 0;
             direction.Normalize();
