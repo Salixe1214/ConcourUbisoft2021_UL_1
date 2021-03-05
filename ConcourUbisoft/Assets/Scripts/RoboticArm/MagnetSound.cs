@@ -18,7 +18,7 @@ public class MagnetSound : MonoBehaviour
 
     private void Update()
     {
-        if (magnetController.IsMagnetActive)
+        if (magnetController.MagnetActive)
         {
             audioSource.volume = 1 * volumeMultiplier;
         }

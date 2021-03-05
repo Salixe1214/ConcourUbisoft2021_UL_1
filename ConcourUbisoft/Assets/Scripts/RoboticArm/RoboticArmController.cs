@@ -60,7 +60,7 @@ public class RoboticArmController : MonoBehaviour
                     _isToggle = true;
                     break;
                 case Usage.Catch:
-                    Magnet.ToggleMagnet();
+                    Magnet.MagnetActive = true;
                     break; 
             }
             
@@ -77,7 +77,7 @@ public class RoboticArmController : MonoBehaviour
                         break;
                     default:
                         Arm.OnHMove(0);
-                        Magnet.ToggleMagnet();
+                        Magnet.MagnetActive = false;
                         Arm.OnVMove(0);
                         if(_isHover)
                             _buttonMaterial.SetColor("_Color", _hoverColor);
@@ -108,7 +108,7 @@ public class RoboticArmController : MonoBehaviour
                         _isToggle = false;
                         break;
                     case Usage.Catch:
-                        Magnet.ToggleMagnet();
+                        Magnet.MagnetActive = true;
                         break; 
                 }
 
@@ -143,7 +143,7 @@ public class RoboticArmController : MonoBehaviour
                 case Usage.Toggle:
                     break;
                 case Usage.Catch:
-                    Magnet.ToggleMagnet();
+                    Magnet.MagnetActive = false;
                     break;
             }
             _isActivated = false;
@@ -183,7 +183,7 @@ public class RoboticArmController : MonoBehaviour
                 case Usage.Toggle:
                     break;
                 case Usage.Catch:
-                    Magnet.ToggleMagnet();
+                    Magnet.MagnetActive = false;
                     break;
             }
             
