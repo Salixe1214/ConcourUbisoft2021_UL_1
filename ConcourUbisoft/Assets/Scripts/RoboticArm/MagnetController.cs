@@ -17,7 +17,25 @@ namespace Arm
         [SerializeField] private Pickable currentPickable = null;
         [SerializeField] private bool grabbed = false;
         [SerializeField] private bool magnetActive = false;
-        public bool IsMagnetActive => magnetActive;
+
+        public bool MagnetActive
+        {
+            get => magnetActive;
+            set
+            {
+                if (value)
+                    magnetActive = value;
+                else
+                {
+                    magnetActive = false;
+                    grabbed = false;
+                    if (currentPickable)
+                    {
+                        Release();
+                    }
+                }
+            }
+        }
 
         private NetworkSync _networkSync = null;
         private NetworkController _networkController = null;
@@ -26,16 +44,16 @@ namespace Arm
         {
             controllable.OnControlStateChange += OnControlStateChange;
             _networkSync = GetComponent<NetworkSync>();
-            GameObject networkControllerObject=GameObject.FindGameObjectWithTag("NetworkController");
-            if(networkControllerObject!=null)
-                _networkController = networkControllerObject.GetComponent<NetworkController>() ;
+            GameObject networkControllerObject = GameObject.FindGameObjectWithTag("NetworkController");
+            if (networkControllerObject != null)
+                _networkController = networkControllerObject.GetComponent<NetworkController>();
         }
 
         void OnControlStateChange(bool controlled)
         {
             if (!controlled)
             {
-                TurnMagnetOff();
+                MagnetActive = false;
             }
         }
 
@@ -65,16 +83,9 @@ namespace Arm
 
                 if (_networkSync.Owner == _networkController.GetLocalRole())
                 {
-                    if (Input.GetButton("Grab") ||
-                        Input.GetButton("GrabControllerXBO") ||
-                        Input.GetButton("GrabControllerPS"))
-                    {
-                        magnetActive = true;
-                    }
-                    else
-                    {
-                        TurnMagnetOff();
-                    }
+                    MagnetActive = (Input.GetButton("Grab") ||
+                                    Input.GetButton("GrabControllerXBO") ||
+                                    Input.GetButton("GrabControllerPS"));
                 }
 
                 if (!grabbed &&
@@ -87,17 +98,9 @@ namespace Arm
 
         private void MovePickableToMagnet()
         {
-            Vector3 difference = (magnetPullPoint.position - currentPickable.transform.position);
-            if (difference.magnitude <= float.Epsilon)
-            {
-                currentPickable.RB.velocity = pullForce * Vector3.up;
-            }
-            else
-            {
-                currentPickable.RB.velocity = (pullForce / difference.sqrMagnitude) * difference.normalized;
-            }
+            Vector3 directionToMagnet = (magnetPullPoint.position - currentPickable.transform.position).normalized;
 
-            currentPickable.RB.velocity = Vector3.ClampMagnitude(currentPickable.RB.velocity, pullForce);
+            currentPickable.RB.velocity = pullForce * directionToMagnet;
         }
 
         private void OnCollisionStay(Collision other)
@@ -112,16 +115,6 @@ namespace Arm
                     currentPickable.transform.parent = this.transform;
                     grabbed = true;
                 }
-            }
-        }
-
-        private void TurnMagnetOff()
-        {
-            magnetActive = false;
-            grabbed = false;
-            if (currentPickable)
-            {
-                Release();
             }
         }
 
@@ -244,13 +237,8 @@ namespace Arm
                         }
                     }
 
-                    if (newMagnetActive == false && magnetActive == true)
-                    {
-                        TurnMagnetOff();
-                    }
-
                     grabbed = newGrabbed;
-                    magnetActive = newMagnetActive;
+                    MagnetActive = newMagnetActive;
                 }
             }
         }
@@ -288,11 +276,6 @@ namespace Arm
                     }
                 }
             }
-        }
-
-        public void OnGrab(bool grab)
-        {
-            magnetActive = grab;
         }
     }
 }
