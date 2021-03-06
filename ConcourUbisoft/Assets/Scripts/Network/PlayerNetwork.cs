@@ -140,7 +140,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     {
         DoorController doorsScript = FindObjectsOfType<DoorController>().Where(x => x.Id == (int)parameters[0])
             .FirstOrDefault();
-        if (doorsScript != null)
+        if (doorsScript != null && !doorsScript.IsUnlock)
         {
             doorsScript.Unlock();
         }
