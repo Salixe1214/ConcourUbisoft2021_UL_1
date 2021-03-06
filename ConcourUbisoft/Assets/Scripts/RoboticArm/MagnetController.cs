@@ -280,5 +280,10 @@ namespace Arm
                 }
             }
         }
+
+        public void ToggleMagnet()
+        {
+            MagnetActive = !MagnetActive;
+        }
     }
 }

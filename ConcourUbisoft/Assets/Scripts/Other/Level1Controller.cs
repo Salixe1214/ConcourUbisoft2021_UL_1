@@ -20,7 +20,6 @@ public class Level1Controller : MonoBehaviour
 
     [SerializeField] private FurnaceController FurnaceController = null;
     [SerializeField] private TransportableSpawner TransportableSpawner = null;
-    [SerializeField] private DoorsScript Level1Door = null;
     [SerializeField] private Camera AreaCamera = null;
     [SerializeField] private InformationsSystem techUI;
     [SerializeField] private Sprite RobotHeadImage;
@@ -67,8 +66,6 @@ public class Level1Controller : MonoBehaviour
         FurnaceController.GenerateNewColorSequences(PossibleColors);
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
-       if (Level1Door == null)
-            StartLevel();
         conveyorOperatingSpeed = MinConveyorSpeed;
         cameraOriginalPosition = AreaCamera.transform.position;
     }
@@ -83,9 +80,6 @@ public class Level1Controller : MonoBehaviour
 
     private void OnEnable()
     {
-        if (Level1Door != null)
-            Level1Door.OnDoorUnlockEvent += OnDoorUnlockEvent;
-
         FurnaceController.WhenFurnaceConsumedAll += FinishLevel;
         FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing += InitiateNextSequence;
         FurnaceController.WhenFurnaceConsumeWrong += ShakeCamera;
@@ -93,18 +87,9 @@ public class Level1Controller : MonoBehaviour
 
     private void OnDisable()
     {
-        if (Level1Door != null)
-            Level1Door.OnDoorUnlockEvent -= OnDoorUnlockEvent;
-
         FurnaceController.WhenFurnaceConsumedAll -= FinishLevel;
         FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing -= InitiateNextSequence;
         FurnaceController.WhenFurnaceConsumeWrong -= ShakeCamera;
-    }
-
-    private void OnDoorUnlockEvent(DoorsScript doorsScript)
-    {
-        Debug.Log("Door Unlocked");
-        StartLevel();
     }
 
     public void FinishLevel()

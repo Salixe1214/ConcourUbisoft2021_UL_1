@@ -138,11 +138,11 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     [PunRPC]
     private void UnlockDoor(object[] parameters)
     {
-        DoorsScript doorsScript = FindObjectsOfType<DoorsScript>().Where(x => x.DoorId == (int)parameters[0])
+        DoorController doorsScript = FindObjectsOfType<DoorController>().Where(x => x.Id == (int)parameters[0])
             .FirstOrDefault();
         if (doorsScript != null)
         {
-            doorsScript.UnlockDoor();
+            doorsScript.Unlock();
         }
     }
 
@@ -161,27 +161,23 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 
         if (IsMine())
         {
-            DoorsScript[] doorsScripts = FindObjectsOfType<DoorsScript>();
-            foreach (DoorsScript door in doorsScripts)
+            DoorController[] doorsScripts = FindObjectsOfType<DoorController>();
+            foreach (DoorController door in doorsScripts)
             {
-                door.OnDoorUnlockEvent += OnDoorUnlockEvent;
+                door.OnSuccess.AddListener(() => OnDoorUnlockEvent(door));
             }
         }
     }
 
-    private void OnDoorUnlockEvent(DoorsScript doorsScript)
+    private void OnDoorUnlockEvent(DoorController doorsScript)
     {
-        object[] parameters = new object[] { doorsScript.DoorId };
+        object[] parameters = new object[] { doorsScript.Id };
         photonView.RPC("UnlockDoor", RpcTarget.Others, parameters as object);
     }
 
     private void OnFinishGameEvent()
     {
-        DoorsScript[] doorsScripts = FindObjectsOfType<DoorsScript>();
-        foreach (DoorsScript door in doorsScripts)
-        {
-            door.OnDoorUnlockEvent -= OnDoorUnlockEvent;
-        }
+
     }
 
     #endregion
