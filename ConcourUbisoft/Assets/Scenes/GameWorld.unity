@@ -5363,6 +5363,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: PlayerGuard
       objectReference: {fileID: 0}
+    - target: {fileID: 6699166975180520853, guid: ac7fbfd19efded84bbf5511a09eb7875, type: 3}
+      propertyPath: playerMovementSpeed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6699166975933682629, guid: ac7fbfd19efded84bbf5511a09eb7875, type: 3}
       propertyPath: m_RootOrder
       value: 35
