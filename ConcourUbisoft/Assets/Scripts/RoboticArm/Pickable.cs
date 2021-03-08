@@ -1,4 +1,5 @@
 using System;
+using TreeEditor;
 using UnityEngine;
 
 namespace Arm
@@ -67,9 +68,9 @@ namespace Arm
 
         public void OnRelease()
         {
+            transform.SetParent(null);
             rigidbody.useGravity = true;
             rigidbody.freezeRotation = false;
-            
         }
     }
 }

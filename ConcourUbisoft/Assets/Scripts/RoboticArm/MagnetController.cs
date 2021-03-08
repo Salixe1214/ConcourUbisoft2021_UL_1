@@ -20,7 +20,7 @@ namespace Arm
         [SerializeField] private MagnetTrigger magnetTrigger;
         [SerializeField] private Pickable currentPickable = null;
 
-        private bool MagnetActive { get; set; }
+        public bool MagnetActive { get; set; }
 
         private void Update()
         {
@@ -34,14 +34,30 @@ namespace Arm
                 {
                     MovePickableToMagnet();
                 }
+                else
+                {
+                    ReleasePickable();
+                }
             }
         }
 
-        private void OnCollisionStay(Collision collision)
+        private void OnCollisionEnter(Collision collision)
         {
-            collision.gameObject.GetComponent<Pickable>();
+            currentPickable = collision.gameObject.GetComponent<Pickable>();
+            if (currentPickable)
+            {
+                currentPickable.OnGrab();
+                currentPickable.RB.velocity = Vector3.zero;
+                currentPickable.transform.parent = this.transform;
+            }
         }
 
+        private void ReleasePickable()
+        {
+            currentPickable.OnRelease();
+            currentPickable = null;
+        }
+        
         public override void Deserialize(byte[] data)
         {
             throw new NotImplementedException();
