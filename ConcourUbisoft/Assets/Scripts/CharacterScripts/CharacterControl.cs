@@ -6,11 +6,10 @@ using UnityEngine;
 public class CharacterControl : MonoBehaviour
 {
 
-    [SerializeField] private float playerMovementSpeed = 1f;
+   /* [SerializeField] private float playerMovementSpeed = 1f;
     [SerializeField] private float inputSmoothSpeed = 0;
     private Rigidbody playerBody;
     private Vector3 inputVector;
-    private Vector3 smoothInputVector;
     private Vector3 gravityVector;
     
     void Start()
@@ -31,25 +30,24 @@ public class CharacterControl : MonoBehaviour
         
         inputVector = controllerInput + keyboardInput;
 
-       /* if (inputVector == Vector3.zero)
+        if (inputVector == Vector3.zero)
         {
             smoothInputVector = Vector3.zero;
         }
         else
         {
             smoothInputVector =  Vector3.Lerp(smoothInputVector, inputVector, inputSmoothSpeed * Time.deltaTime);
-        } */
+        } 
+       
 
-       smoothInputVector = inputVector;
-
-        if (smoothInputVector.magnitude > playerMovementSpeed)
+        if (inputVector.magnitude > playerMovementSpeed)
         {
-            smoothInputVector = Vector3.ClampMagnitude(smoothInputVector,playerMovementSpeed);
+            inputVector = Vector3.ClampMagnitude(inputVector,playerMovementSpeed);
         }
     }
 
     private void FixedUpdate()
     {
-        playerBody.velocity = smoothInputVector + gravityVector;
-    }
+        playerBody.velocity = inputVector + gravityVector;
+    } */
 }
