@@ -10,6 +10,11 @@ namespace TechSupport.Informations
 {
     public class InformationsSystem : MonoBehaviour
     {
+        enum DevMode
+        {
+            Test,
+            Game
+        }
         [Serializable]
         public struct InformationItem
         {
@@ -19,9 +24,12 @@ namespace TechSupport.Informations
             public List<Sprite> images;
         }
 
+        [Header("Général")] [SerializeField] private DevMode mode = DevMode.Game;
+
         [Header("List")] 
         private ImageLayout _imageLayout;
         [SerializeField] private List<Sprite> imagesList;
+        [SerializeField] private Color[] colors;
         [SerializeField] private Vector2 sizeList;
 
         [Header("Accordion")] 
@@ -41,9 +49,13 @@ namespace TechSupport.Informations
 
         private void Update()
         {
-            _imageLayout.transform.position = new Vector3 (Screen.width * 0.5f, Screen.height * 0.95f, 0);
-            _accordion.transform.position = new Vector3(Screen.width * 0.85f, Screen.height * 0.5f);
-            _accordionRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width * 0.15f);
+            if (_imageLayout)
+                _imageLayout.transform.position = new Vector3 (Screen.width * 0.5f, Screen.height * 0.95f, 0);
+            if (_accordion)
+            {
+                _accordion.transform.position = new Vector3(Screen.width * 0.85f, Screen.height * 0.5f);
+                _accordionRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width * 0.15f);
+            }
         }
 
         private void SetSize(RectTransform rectTransform, Vector2 size)
@@ -57,7 +69,10 @@ namespace TechSupport.Informations
             _listRectTransform = _imageLayout.GetComponent<RectTransform>();
             _listRectTransform.SetParent(transform);
             SetSize(_listRectTransform, sizeList);
-           // _imageLayout.CreateLayout(imagesList);
+            if (mode == DevMode.Test)
+            {
+                _imageLayout.CreateLayout(imagesList, colors);
+            }
         } 
 
         private void CreateAccordion()

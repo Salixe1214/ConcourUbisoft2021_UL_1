@@ -47,7 +47,7 @@ namespace TechSupport.Surveillance
         private void Awake()
         {
             _cameras = FindObjectsOfType<SurveillanceCamera>();
-            _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+            _gameController = GameObject.FindGameObjectWithTag("GameController")?.GetComponent<GameController>();
             foreach (SurveillanceCamera camera in _cameras)
             {
                 camera.Init(); 
@@ -60,7 +60,7 @@ namespace TechSupport.Surveillance
         // TODO: Improve this basic input system
         private void Update()
         {
-            if(!_gameController.IsGameMenuOpen)
+            if(!_gameController || !_gameController.IsGameMenuOpen)
             {
                 if (Input.GetMouseButtonUp(0))
                 {
