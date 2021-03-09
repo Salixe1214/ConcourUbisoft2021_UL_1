@@ -42,7 +42,7 @@ namespace Arm
             return collider.bounds.Contains(point);
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             if (outline.enabled && !hovered)
                 outline.enabled = false;
@@ -71,6 +71,13 @@ namespace Arm
             transform.SetParent(null);
             rigidbody.useGravity = true;
             rigidbody.freezeRotation = false;
+        }
+
+        public Vector3 GetBottomPosition()
+        {
+            Bounds bounds = collider.bounds;
+
+            return bounds.center - new Vector3(0, bounds.extents.y, 0);
         }
     }
 }

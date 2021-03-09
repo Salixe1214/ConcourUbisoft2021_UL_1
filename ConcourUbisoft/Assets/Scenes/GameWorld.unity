@@ -3496,6 +3496,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoboticArm
       objectReference: {fileID: 0}
+    - target: {fileID: 7748708573357444043, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
+      propertyPath: test.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7748708573357444043, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
+      propertyPath: test.Array.data[0].Action.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7748708573357444043, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
+      propertyPath: test.Array.data[0].Action.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7748708573357444043, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
+      propertyPath: test.Array.data[0].Action.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8360864145031390083, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
       propertyPath: m_TagString
       value: Arm1
@@ -3508,8 +3524,29 @@ PrefabInstance:
       propertyPath: viewIdField
       value: 2
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7748708573357444043, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
+--- !u!1 &887028350 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8875939281911053909, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
+  m_PrefabInstance: {fileID: 887028349}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &887028351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 887028350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 910fbe88dd8f7fc4b97a747a7d9abcc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isControlled: 0
+  _armController: {fileID: 0}
+  _magnetController: {fileID: 0}
 --- !u!1 &887392593
 GameObject:
   m_ObjectHideFlags: 0
@@ -8585,14 +8622,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pullForce: 10
-  controllable: {fileID: 5661598396439267411}
   magnetPullPoint: {fileID: 1867399337734088777}
   magnetTrigger: {fileID: 265159828580544963}
-  magnetRotationRoot: {fileID: 8038853181119987618}
   currentPickable: {fileID: 0}
-  grabbed: 0
-  magnetActive: 0
-  _hasControlPanel: 1
 --- !u!33 &2896179337518839870
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -8880,7 +8912,6 @@ MonoBehaviour:
   controllable: {fileID: 5661598396439267411}
   armIKSolver: {fileID: 4393493630497660186}
   armRotationRoot: {fileID: 9125651644003719514}
-  _hasControlPanel: 1
 --- !u!4 &4068725953787806478
 Transform:
   m_ObjectHideFlags: 0

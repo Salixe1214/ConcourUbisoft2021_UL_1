@@ -17,18 +17,26 @@ namespace Arm
 
         [SerializeField] private float pullForce = 10f;
         [SerializeField] private Transform magnetPullPoint;
-        [SerializeField] private MagnetTrigger magnetTrigger;
-        [SerializeField] private Pickable currentPickable = null;
+
+        private MagnetTrigger _magnetTrigger;
+        private Pickable _currentPickable = null;
+        private bool grabbed = false;
 
         public bool MagnetActive { get; set; }
 
+        private void Awake()
+        {
+            _magnetTrigger = GetComponentInChildren<MagnetTrigger>();
+        }
+
         private void Update()
         {
+            transform.rotation = Quaternion.Euler(180, 0, 0);
             UpdateCurrentPickable();
 
-            if (currentPickable != null)
+            if (_currentPickable != null)
             {
-                currentPickable.OnHover();
+                _currentPickable.OnHover();
 
                 if (MagnetActive)
                 {
@@ -41,48 +49,59 @@ namespace Arm
             }
         }
 
-        private void OnCollisionEnter(Collision collision)
+        private void OnCollisionStay(Collision collision)
         {
-            currentPickable = collision.gameObject.GetComponent<Pickable>();
-            if (currentPickable)
+            if (_currentPickable && !grabbed)
             {
-                currentPickable.OnGrab();
-                currentPickable.RB.velocity = Vector3.zero;
-                currentPickable.transform.parent = this.transform;
+                _currentPickable.OnGrab();
+                _currentPickable.RB.velocity = Vector3.zero;
+                _currentPickable.transform.parent = this.transform;
+
+                grabbed = true;
             }
         }
 
         private void ReleasePickable()
         {
-            currentPickable.OnRelease();
-            currentPickable = null;
+            _currentPickable.OnRelease();
+            _currentPickable = null;
+            grabbed = false;
         }
         
         public override void Deserialize(byte[] data)
         {
-            throw new NotImplementedException();
+            
         }
 
         public override byte[] Serialize()
         {
-            throw new NotImplementedException();
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
+                {
+                    
+                }
+
+                return memoryStream.ToArray();
+            }
         }
 
         public override void Smooth(byte[] oldData, byte[] newData, float lag, double _lastTime, double _currentTime)
         {
-            throw new NotImplementedException();
+            
         }
 
         private void MovePickableToMagnet()
         {
-            Vector3 directionToMagnet = (magnetPullPoint.position - currentPickable.transform.position).normalized;
+            Vector3 directionToMagnet = (magnetPullPoint.position - _currentPickable.transform.position).normalized;
 
-            currentPickable.RB.velocity = pullForce * directionToMagnet;
+            _currentPickable.RB.velocity = pullForce * directionToMagnet;
         }
 
         private void UpdateCurrentPickable()
         {
-            currentPickable = magnetTrigger.GetPickables().OrderBy(x => Vector3.Distance(x.transform.position, magnetPullPoint.position)).FirstOrDefault();
+            _currentPickable = _magnetTrigger.GetPickables().OrderBy(x => Vector3.Distance(x.GetBottomPosition(), magnetPullPoint.position)).FirstOrDefault();
+            Debug.Log(_currentPickable);
         }
 
         //[SerializeField] private float pullForce = 10f;

@@ -12,11 +12,15 @@ namespace Arm
         private void Update()
         {
             if (IsControlled) {
-                Vector3 translation = new Vector3(Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontale"));
+                Vector3 translation = new Vector3(Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
                 if(translation != Vector3.zero)
                 {
                     _armController.Translate(translation);
                 }
+
+                _magnetController.MagnetActive = (Input.GetButton("Grab") ||
+                                    Input.GetButton("GrabControllerXBO") ||
+                                    Input.GetButton("GrabControllerPS"));
             }
         }
     }

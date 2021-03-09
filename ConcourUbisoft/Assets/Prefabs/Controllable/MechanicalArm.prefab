@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &927382908
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 927382909}
+  m_Layer: 0
+  m_Name: PullPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &927382909
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 927382908}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.1285, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5374279495962164282}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9660316004396089
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,6 +543,7 @@ GameObject:
   - component: {fileID: 7780099111703666920}
   - component: {fileID: 8565603360900868797}
   - component: {fileID: 1439748898033245251}
+  - component: {fileID: 1388979893}
   m_Layer: 0
   m_Name: Magnet
   m_TagString: Untagged
@@ -534,6 +565,7 @@ Transform:
   - {fileID: 5532708660549812110}
   - {fileID: 8454270460116266983}
   - {fileID: 4310424445982974768}
+  - {fileID: 927382909}
   m_Father: {fileID: 3195391529598196586}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -550,14 +582,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pullForce: 10
-  controllable: {fileID: 0}
-  magnetPullPoint: {fileID: 0}
-  magnetTrigger: {fileID: 0}
-  magnetRotationRoot: {fileID: 0}
-  currentPickable: {fileID: 0}
-  grabbed: 0
-  magnetActive: 0
-  _hasControlPanel: 0
+  magnetPullPoint: {fileID: 927382909}
 --- !u!82 &8565603360900868797
 AudioSource:
   m_ObjectHideFlags: 0
@@ -667,6 +692,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   volumeMultiplier: 0.3
+--- !u!54 &1388979893
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4302749757479535658}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &4504165374982355606
 GameObject:
   m_ObjectHideFlags: 0
@@ -1126,8 +1167,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7915232795401323305}
   - component: {fileID: 2121669986793875469}
-  - component: {fileID: 7748708573357444043}
   - component: {fileID: 4320733802285747621}
+  - component: {fileID: 838453515}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -1163,23 +1204,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minRange: 1.5
   controlSpeed: 4
-  controllable: {fileID: 7748708573357444043}
+  controllable: {fileID: 7748708573357444043, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
   armIKSolver: {fileID: 1865101538738871938}
   armRotationRoot: {fileID: 6610768617839303362}
-  _hasControlPanel: 0
---- !u!114 &7748708573357444043
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8875939281911053909}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e08331de79044ee2be61e27fced51bc8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isControlled: 0
 --- !u!114 &4320733802285747621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1196,3 +1223,18 @@ MonoBehaviour:
   _owner: 0
   _smooth: 1
   Id: 0
+--- !u!114 &838453515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8875939281911053909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 910fbe88dd8f7fc4b97a747a7d9abcc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isControlled: 1
+  _armController: {fileID: 2121669986793875469}
+  _magnetController: {fileID: 7780099111703666920}
