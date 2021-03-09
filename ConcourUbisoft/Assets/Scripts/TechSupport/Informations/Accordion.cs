@@ -34,6 +34,7 @@ namespace TechSupport.Informations
         private void Awake()
         {
             GetComponent<ToggleGroup>().allowSwitchOff = true;
+            gameObject.name = "Accordion";
         }
 
         #region GameObject Relative

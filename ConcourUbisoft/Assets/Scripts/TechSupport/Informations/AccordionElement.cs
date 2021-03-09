@@ -20,6 +20,7 @@ namespace TechSupport.Informations
 			interactable = true;
 			_layoutElement = gameObject.GetComponent<LayoutElement>();
 			onValueChanged.AddListener(OnValueChanged);
+			OnValueChanged(isOn);
 		}
 
 				

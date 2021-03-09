@@ -19,6 +19,7 @@ namespace TechSupport.Informations
             base.Awake();
             childAlignment = TextAnchor.MiddleCenter;
             gameObject.SetActive(true);
+            gameObject.name = "Image Layout";
         }
 
         #region GameObject Relative
@@ -72,7 +73,7 @@ namespace TechSupport.Informations
             _images.Clear();
         }
 
-        public void CreateLayout(IEnumerable<Sprite> images , Color[] colors)
+        public void CreateLayout(IEnumerable<Sprite> images, Color[] colors)
         {
             for (int i = 0; i < images.Count(); i++)
             {
