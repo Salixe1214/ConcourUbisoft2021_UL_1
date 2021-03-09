@@ -54,6 +54,7 @@ public class Level1Controller : MonoBehaviour
     private ImageLayout imageList;
     private List<Sprite> itemSprites;
     private SoundController soundController;
+    private int currentListIndex;
 
     private void Awake()
     {
@@ -62,6 +63,7 @@ public class Level1Controller : MonoBehaviour
 
     public void Start()
     {
+        currentListIndex = 0;
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         FurnaceController.GenerateNewColorSequences(PossibleColors);
         FurnaceController.enabled = false;
@@ -83,6 +85,7 @@ public class Level1Controller : MonoBehaviour
         FurnaceController.WhenFurnaceConsumedAll += FinishLevel;
         FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing += InitiateNextSequence;
         FurnaceController.WhenFurnaceConsumeWrong += ShakeCamera;
+        FurnaceController.CheckItemOffList += UpdateSpriteColorInList;
     }
 
     private void OnDisable()
@@ -90,6 +93,7 @@ public class Level1Controller : MonoBehaviour
         FurnaceController.WhenFurnaceConsumedAll -= FinishLevel;
         FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing -= InitiateNextSequence;
         FurnaceController.WhenFurnaceConsumeWrong -= ShakeCamera;
+        FurnaceController.CheckItemOffList -= UpdateSpriteColorInList;
     }
 
     public void FinishLevel()
@@ -141,6 +145,7 @@ public class Level1Controller : MonoBehaviour
 
     IEnumerator SpawnFreshItems(float seconds)
     {
+        currentListIndex = 0;
         Debug.Log("SpawnFreshItems");
         if (!firstWave)
         {
@@ -187,6 +192,17 @@ public class Level1Controller : MonoBehaviour
         yield return new WaitForSeconds(duration);
         cameraMustShake = false;
         AreaCamera.transform.position = cameraOriginalPosition;
+    }
+
+    private void UpdateSpriteColorInList()
+    {
+        imageList.UpdateSpriteColor(currentListIndex, Color.black);
+        currentListIndex++;
+    }
+
+    private void HighLightCurrentItemInList()
+    {
+        
     }
 
     private void setItemsImageList()

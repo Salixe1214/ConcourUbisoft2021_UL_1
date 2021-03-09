@@ -54,6 +54,20 @@ namespace TechSupport.Informations
             _images[at].sprite = sprite;
         }
 
+        public void HighlightSprite(int index)
+        {
+            if (index >= _images.Count)
+                return;
+            //_images[index].;
+        }
+
+        public void UpdateSpriteColor(int index, Color color)
+        {
+            if (index >= _images.Count)
+                return;
+            _images[index].color = color;
+        }
+
         public void AddSprite(Sprite sprite, Color color)
         {
             Image image = CreateImageObject();
@@ -93,11 +107,5 @@ namespace TechSupport.Informations
                 i++;
             }
         }
-
-        public void GreyOutSpriteAt(int index)
-        {
-            
-        }
-
     }
 }
