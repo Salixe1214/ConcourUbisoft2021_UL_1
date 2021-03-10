@@ -242,6 +242,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: f90297fd6dd28454799afcc080c99a9f, type: 2}
+    - target: {fileID: 5094372895287302841, guid: 57ef67f21f04aa04ab1a991cdcfc1f4d, type: 3}
+      propertyPath: Id
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6604280849752611814, guid: 57ef67f21f04aa04ab1a991cdcfc1f4d, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -4365,6 +4369,7 @@ GameObject:
   - component: {fileID: 1075695261}
   - component: {fileID: 1075695263}
   - component: {fileID: 1075695264}
+  - component: {fileID: 1075695265}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -4516,6 +4521,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1075695265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075695260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1001 &1080062170
 PrefabInstance:
   m_ObjectHideFlags: 0

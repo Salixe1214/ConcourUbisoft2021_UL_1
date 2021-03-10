@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(AudioSource))]
-[RequireComponent(typeof(Outline))]
 public class SimpleButton : MonoBehaviour
 {
     [SerializeField] public UnityEvent Actions = null;
@@ -14,13 +13,14 @@ public class SimpleButton : MonoBehaviour
     protected AudioSource _audioSource;
     protected bool _isHover = false;
     protected bool soundPlayed = false;
-    private Outline _outline;
+    private Outline _outline=null;
 
     private void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
         _animator = GetComponentInChildren<Animator>();
-        _outline = GetComponent<Outline>();
+        _outline = GetComponentInChildren<Outline>();
+
     }
 
     protected virtual bool GetInput()
