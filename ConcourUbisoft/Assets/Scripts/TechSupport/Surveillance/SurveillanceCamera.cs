@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using TechSupport.Controller;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace TechSupport.Surveillance
 {
@@ -6,6 +9,8 @@ namespace TechSupport.Surveillance
     public class SurveillanceCamera : MonoBehaviour
     {
         private Camera _camera;
+
+        [SerializeField] private List<ControllableOutline> controllable = new List<ControllableOutline>();
 
         public void Init()
         {
@@ -49,6 +54,11 @@ namespace TechSupport.Surveillance
         public void Enable(bool enabledCamera)
         {
             _camera.enabled = enabledCamera;
+        }
+
+        public void EnableController(bool enableController)
+        {
+            controllable.ForEach(outline => outline.Enable(enableController));
         }
     }
 }
