@@ -2406,7 +2406,6 @@ GameObject:
   - component: {fileID: 554653480}
   - component: {fileID: 554653483}
   - component: {fileID: 554653481}
-  - component: {fileID: 554653482}
   - component: {fileID: 554653484}
   m_Layer: 0
   m_Name: CameraArea1
@@ -2441,19 +2440,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e74168fa87d9e1e4e847b314a082f5c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &554653482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 554653479}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b900b54643dbfb4b9b9a2b2928f488e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mat: {fileID: 2100000, guid: 53d76defdf233184c9bdc1684133b308, type: 2}
 --- !u!20 &554653483
 Camera:
   m_ObjectHideFlags: 0
@@ -9529,6 +9515,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 3ff936555cd82bb4b89b1c0380b0cc6a, type: 2}
+    - target: {fileID: 1391509103126180349, guid: ecdc4ef1cf30d5846adf8c2e7bc3639f, type: 3}
+      propertyPath: _owner
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3056105466773456117, guid: ecdc4ef1cf30d5846adf8c2e7bc3639f, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
