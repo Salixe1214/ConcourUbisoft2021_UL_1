@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 7070779512776567822}
   - component: {fileID: 1588239907}
   - component: {fileID: 4810074454107990550}
+  - component: {fileID: 2926787331930287796}
   m_Layer: 0
   m_Name: LeftButton
   m_TagString: Untagged
@@ -206,6 +207,24 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2926787331930287796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2728866623284051249}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 0, g: 0.972549, b: 0.8235294, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &4402769626515257883
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,6 +237,7 @@ GameObject:
   - component: {fileID: 7460211072006472331}
   - component: {fileID: 1057656253}
   - component: {fileID: 5606106939249742695}
+  - component: {fileID: 3280795439735150909}
   m_Layer: 0
   m_Name: UpButton
   m_TagString: Untagged
@@ -376,6 +396,24 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3280795439735150909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4402769626515257883}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 0, g: 0.972549, b: 0.8235294, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &4659916959424346777
 GameObject:
   m_ObjectHideFlags: 0
@@ -590,6 +628,7 @@ GameObject:
   - component: {fileID: 140844887696765034}
   - component: {fileID: 322041500}
   - component: {fileID: 6277488674972060853}
+  - component: {fileID: 884897694485618908}
   m_Layer: 0
   m_Name: DownButton
   m_TagString: Untagged
@@ -748,6 +787,24 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &884897694485618908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5536034182711502821}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 0, g: 0.972549, b: 0.8235294, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &5905631756359833945
 GameObject:
   m_ObjectHideFlags: 0
@@ -760,6 +817,7 @@ GameObject:
   - component: {fileID: 2461417352007852438}
   - component: {fileID: 2147245111}
   - component: {fileID: 1552398665149095137}
+  - component: {fileID: 5927466206620312052}
   m_Layer: 0
   m_Name: RightButton
   m_TagString: Untagged
@@ -918,6 +976,24 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &5927466206620312052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5905631756359833945}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 0, g: 0.972549, b: 0.8235294, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &6055584786360798923
 GameObject:
   m_ObjectHideFlags: 0
@@ -1031,6 +1107,7 @@ GameObject:
   - component: {fileID: 453986028290555076}
   - component: {fileID: 150239157706731612}
   - component: {fileID: 1245827304}
+  - component: {fileID: 4988354054025132015}
   m_Layer: 0
   m_Name: CenterButton
   m_TagString: Untagged
@@ -1208,6 +1285,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4988354054025132015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6119379639150013776}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 0, g: 0.972549, b: 0.8235294, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &7344825843203306893
 GameObject:
   m_ObjectHideFlags: 0

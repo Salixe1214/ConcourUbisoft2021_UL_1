@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(Outline))]
 public class SimpleButton : MonoBehaviour
 {
     [SerializeField] public UnityEvent Actions = null;
@@ -13,11 +14,13 @@ public class SimpleButton : MonoBehaviour
     protected AudioSource _audioSource;
     protected bool _isHover = false;
     protected bool soundPlayed = false;
+    private Outline _outline;
 
     private void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
         _animator = GetComponentInChildren<Animator>();
+        _outline = GetComponent<Outline>();
     }
 
     protected virtual bool GetInput()
@@ -59,6 +62,7 @@ public class SimpleButton : MonoBehaviour
         Debug.Log("Enter Hover");
         _animator.SetBool("hover", true);
         _isHover = true;
+        _outline.enabled = true;
     }
 
     private void OnMouseExit()
@@ -66,5 +70,6 @@ public class SimpleButton : MonoBehaviour
         Debug.Log("Exit Hover");
         _isHover = false;
         _animator.SetBool("hover", false);
+        _outline.enabled = false;
     }
 }
