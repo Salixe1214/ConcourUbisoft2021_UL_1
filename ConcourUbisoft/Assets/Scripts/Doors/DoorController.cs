@@ -59,6 +59,10 @@ public class DoorController : MonoBehaviour
                     }
                 }
             }
+            else
+            {
+                error = true;
+            }
 
             if (error)
             {

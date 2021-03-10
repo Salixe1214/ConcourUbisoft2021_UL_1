@@ -8,11 +8,20 @@ namespace Arm
     {
         [SerializeField] private ArmController _armController = null;
         [SerializeField] private MagnetController _magnetController = null;
+        [SerializeField] private GameController.Role _owner = GameController.Role.SecurityGuard;
+
+        private NetworkController _networkController = null;
+
+
+        private void Awake()
+        {
+            _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+        }
 
         private void Update()
         {
-            if (IsControlled) {
-                Vector3 translation = new Vector3(Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
+            if (IsControlled && _owner == _networkController.GetLocalRole()) {
+                Vector3 translation = new Vector3(-Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
                 if(translation != Vector3.zero)
                 {
                     _armController.Translate(translation);

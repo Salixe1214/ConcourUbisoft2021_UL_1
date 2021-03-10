@@ -28,6 +28,8 @@ public class FurnaceController : MonoBehaviour
     public event Action WhenFurnaceConsumeWrong;
     public event Action WhenFurnaceConsumeAWholeSequenceWithoutFinishing;
 
+    public event Action CheckItemOffList;
+
     private int SucceedSequences = 0;
 
     private void Awake()
@@ -61,6 +63,7 @@ public class FurnaceController : MonoBehaviour
         if (currentSequenceColor.r == ( transportableByConveyor.Color).r && currentSequenceColor.g == ( transportableByConveyor.Color).g &&currentSequenceColor.b == ( transportableByConveyor.Color).b && currentType == transportableByConveyor.GetType())
         {
             soundController.PlayLevelPartialSequenceSuccessSound();
+            CheckItemOffList?.Invoke();
             currentSequence.SucceedColors++;
             if (currentSequence.SucceedColors == currentSequence.ColorsSequence.Length)
             {

@@ -34,7 +34,7 @@ public class SimpleButton : MonoBehaviour
         {
             if (GetInput())
             {
-                PressButon();
+                PressButton();
             }
             else
             {
@@ -43,7 +43,7 @@ public class SimpleButton : MonoBehaviour
         }
     }
 
-    protected virtual void PressButon()
+    protected virtual void PressButton()
     {
         _animator.SetTrigger("click");
         Actions?.Invoke();
