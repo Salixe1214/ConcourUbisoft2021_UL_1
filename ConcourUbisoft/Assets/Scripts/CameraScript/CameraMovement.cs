@@ -14,10 +14,6 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float controllerSensivityY=120;
     [SerializeField] private float cameraRotationSmoothingSpeed = 0.7f;
     
-    [SerializeField] private float playerMovementSpeed = 1f;
-    private Vector3 inputVector;
-    
-    private float smoothedScrollSpeed;
     private float xRotation = 0f;
     private float yRotation = 0f;
     private float mouseYAccumulator = 0f;
@@ -30,10 +26,6 @@ public class CameraMovement : MonoBehaviour
     private float yRotationControllerXBO = 0f;
     private float accumulatedDeltaTime = 0.0f;
     
-    private float keyboardHorizontal ;
-    private float keyBoardVertical ;
-    private float controllerHorizontal ;
-    private float controllerVertical ;
     private string[] joysticks;
     
     
@@ -49,30 +41,6 @@ public class CameraMovement : MonoBehaviour
     {
         joysticks = Input.GetJoystickNames();
         RotateCamera();
-        SetPlayerMovement();
-    }
-
-    private void FixedUpdate()
-    {
-        playerBody.velocity = inputVector;
-    }
-
-    private void SetPlayerMovement()
-    {
-        keyboardHorizontal = Input.GetAxis("Horizontal");
-        keyBoardVertical = Input.GetAxis("Vertical");
-        controllerHorizontal = Input.GetAxis("LeftJoystickHorizontal");
-        controllerVertical = Input.GetAxis("LeftJoystickVertical");
-        
-        Vector3 controllerInput = (transform.right * controllerHorizontal + transform.forward *controllerVertical)*(playerMovementSpeed);
-        Vector3 keyboardInput = (playerBody.transform.right * keyboardHorizontal + playerBody.transform.forward *keyBoardVertical)*(playerMovementSpeed);
-        
-        inputVector = controllerInput + keyboardInput;
-        
-        if (inputVector.magnitude > playerMovementSpeed)
-        {
-            inputVector = Vector3.ClampMagnitude(inputVector,playerMovementSpeed);
-        }
     }
 
     private void RotateCamera()

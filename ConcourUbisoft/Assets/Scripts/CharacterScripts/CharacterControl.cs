@@ -6,11 +6,15 @@ using UnityEngine;
 public class CharacterControl : MonoBehaviour
 {
 
-   /* [SerializeField] private float playerMovementSpeed = 1f;
-    [SerializeField] private float inputSmoothSpeed = 0;
+    [SerializeField] private float playerMovementSpeed = 1f;
     private Rigidbody playerBody;
     private Vector3 inputVector;
     private Vector3 gravityVector;
+    
+    private float keyboardHorizontal ;
+    private float keyBoardVertical ;
+    private float controllerHorizontal ;
+    private float controllerVertical ;
     
     void Start()
     {
@@ -19,27 +23,16 @@ public class CharacterControl : MonoBehaviour
     
     void Update()
     {
-        float keyboardHorizontal = Input.GetAxis("Horizontal");
-        float keyBoardVertical = Input.GetAxis("Vertical");
-        float controllerHorizontal = Input.GetAxis("LeftJoystickHorizontal");
-        float controllerVertical = Input.GetAxis("LeftJoystickVertical");
+        keyboardHorizontal = Input.GetAxis("Horizontal");
+        keyBoardVertical = Input.GetAxis("Vertical");
+        controllerHorizontal = Input.GetAxis("LeftJoystickHorizontal");
+        controllerVertical = Input.GetAxis("LeftJoystickVertical");
         
-        gravityVector = new Vector3(0,playerBody.velocity.y,0);
         Vector3 controllerInput = (transform.right * controllerHorizontal + transform.forward *controllerVertical)*(playerMovementSpeed);
-        Vector3 keyboardInput = (transform.right * keyboardHorizontal + transform.forward *keyBoardVertical)*(playerMovementSpeed);
+        Vector3 keyboardInput = (playerBody.transform.right * keyboardHorizontal + playerBody.transform.forward *keyBoardVertical)*(playerMovementSpeed);
         
         inputVector = controllerInput + keyboardInput;
-
-        if (inputVector == Vector3.zero)
-        {
-            smoothInputVector = Vector3.zero;
-        }
-        else
-        {
-            smoothInputVector =  Vector3.Lerp(smoothInputVector, inputVector, inputSmoothSpeed * Time.deltaTime);
-        } 
-       
-
+        
         if (inputVector.magnitude > playerMovementSpeed)
         {
             inputVector = Vector3.ClampMagnitude(inputVector,playerMovementSpeed);
@@ -48,6 +41,6 @@ public class CharacterControl : MonoBehaviour
 
     private void FixedUpdate()
     {
-        playerBody.velocity = inputVector + gravityVector;
-    } */
+        playerBody.velocity = inputVector;
+    } 
 }
