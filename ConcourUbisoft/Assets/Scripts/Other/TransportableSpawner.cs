@@ -19,13 +19,20 @@ public class TransportableSpawner : MonoBehaviour
 
     private int sequenceIndex = 0;
 
+    private System.Random _random = new System.Random(0);
+
+    private void Awake()
+    {
+        
+    }
+
     private void Update()
     {
         if (CanSpawn &&Time.time - lastSpawnTime > currentDelay)
         {
             Spawn();
             lastSpawnTime = Time.time;
-            currentDelay = Random.Range(DelayBetweenSpawnsInSeconds.x, DelayBetweenSpawnsInSeconds.y);
+            currentDelay = (float)_random.NextDouble()*(DelayBetweenSpawnsInSeconds.y - DelayBetweenSpawnsInSeconds.x) + DelayBetweenSpawnsInSeconds.x;
         }
     }
 
@@ -33,9 +40,9 @@ public class TransportableSpawner : MonoBehaviour
     {
         Color[] possibleColors = Level1Controller.GetColors();
 
-        GameObject randomPrefab = TransportablesPrefab[Random.Range(0, TransportablesPrefab.Length)];
+        GameObject randomPrefab = TransportablesPrefab[_random.Next(0, TransportablesPrefab.Length)];
 
-        Vector3 randomPoint = PointA.position + Random.Range(0, 100) / 100.0f * (PointB.position - PointA.position);
+        Vector3 randomPoint = PointA.position + _random.Next(0, 100) / 100.0f * (PointB.position - PointA.position);
 
         GameObject transportable;
 
@@ -55,7 +62,7 @@ public class TransportableSpawner : MonoBehaviour
         else
         { 
             transportable = Instantiate(randomPrefab, randomPoint, Quaternion.identity);
-            Color randomColor = possibleColors[Random.Range(0, possibleColors.Length)];
+            Color randomColor = possibleColors[_random.Next(0, possibleColors.Length)];
             transportable.gameObject.GetComponent<TransportableByConveyor>().Color = randomColor;
             sequenceIndex++;
         }

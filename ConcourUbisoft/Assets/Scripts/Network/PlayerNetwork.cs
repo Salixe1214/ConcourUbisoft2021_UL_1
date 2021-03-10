@@ -54,7 +54,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         gameController.OnFinishGameEvent -= OnFinishGameEvent;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         foreach (NetworkSync syncObject in objectsToSync)
         {

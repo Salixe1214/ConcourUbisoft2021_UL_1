@@ -9,6 +9,8 @@ public class SpawnObjectOnLineConveyor : MonoBehaviour
     [SerializeField] private float _padding = 0;
     [SerializeField] private Vector2 _objectSpace = new Vector2();
 
+    private System.Random _random = new System.Random(0);
+
     public IEnumerable<Bounds> GetSpawnPosition()
     {
         List<Bounds> solutions = new List<Bounds>();
@@ -19,8 +21,13 @@ public class SpawnObjectOnLineConveyor : MonoBehaviour
         for (int i = 0; i < _numberOfTry; ++i)
         {
             float yPosition = center.y + 1;
-            float xPosition = Random.Range(center.x - extents.x + _padding, center.x + extents.x - _padding);
-            float zPosition = Random.Range(center.z - extents.z + _padding, center.z + extents.z - _padding);
+            float minX = center.x - extents.x + _padding;
+            float maxX = center.x + extents.x - _padding;
+            float xPosition = (float)_random.NextDouble()*(maxX - minX) + minX;
+
+            float minZ = center.z - extents.z + _padding;
+            float maxZ = center.z + extents.z - _padding;
+            float zPosition = (float)_random.NextDouble() * (maxZ - minZ) + minZ;
 
             bool intersect = false;
             Bounds possibleSolution = new Bounds(new Vector3(xPosition, yPosition, zPosition), new Vector3(_objectSpace.x, 1, _objectSpace.y));

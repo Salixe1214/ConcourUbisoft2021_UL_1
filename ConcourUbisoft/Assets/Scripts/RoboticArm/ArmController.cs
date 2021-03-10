@@ -59,7 +59,7 @@ namespace Arm
                         binaryReaderNew.ReadSingle(),
                         binaryReaderNew.ReadSingle());
 
-                    ArmTarget.position = Vector3.MoveTowards(ArmTarget.position,newPosition, Time.deltaTime * controlSpeed);
+                    ArmTarget.position = Vector3.MoveTowards(ArmTarget.position, newPosition, Time.deltaTime * controlSpeed);
                 }
             }
         }

@@ -20,9 +20,9 @@ namespace DefaultNamespace
             }
         }
 
-        protected override void PressButon()
+        protected override void PressButton()
         {
-            base.PressButon();
+            base.PressButton();
             toggled = !toggled;
             if (toggled) toggledOnActions?.Invoke();
             else toggledOffActions?.Invoke();
