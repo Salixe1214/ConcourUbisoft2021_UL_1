@@ -120,7 +120,8 @@ public class GameController : MonoBehaviour
         playerTech.SetActive(true);
         
         GameObject player = GameObject.FindGameObjectWithTag("PlayerGuard");
-       
+        player.GetComponent<CharacterControl>().enabled = false;
+
         GameObject playerCamera = GameObject.FindGameObjectWithTag("MainCamera");
         playerCamera.gameObject.SetActive(false);
         playerCamera.GetComponent<AudioListener>().enabled = false;
