@@ -6380,6 +6380,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1192007261526916993, guid: ac7fbfd19efded84bbf5511a09eb7875, type: 3}
+      propertyPath: m_RenderPostProcessing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2079535805404803562, guid: ac7fbfd19efded84bbf5511a09eb7875, type: 3}
       propertyPath: m_RenderMode
       value: 0
