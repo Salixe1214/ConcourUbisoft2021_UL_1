@@ -1,37 +1,40 @@
+using TechSupport.Surveillance;
 using UnityEngine;
 
-namespace TechSupport.Surveillance
+namespace TechSupport
 {
     public class FullScreenSystem
     {
         private readonly Rect _fullSize = new Rect(Vector2.zero, Vector2.one);
         private Rect _originRect = Rect.zero;
-        private Camera _target;
+        private SurveillanceCamera _target;
 
         #region Full Screen
 
         public void RenderFullScreen()
         {
-            _target.enabled = true;
-            _originRect = _target.rect;
-            _target.rect = _fullSize;
+            _target.Enable(true);
+            _target.EnableController(true);
+            _originRect = _target.GetCamera().rect;
+            _target.GetCamera().rect = _fullSize;
         }
 
         public void EscapeFullScreen()
         {
-            _target.rect = _originRect;
+            _target.EnableController(false);
+            _target.GetCamera().rect = _originRect;
         }
 
         #endregion
 
         #region Getter Setter
 
-        public void SetTarget(Camera camera)
+        public void SetTarget(SurveillanceCamera camera)
         {
             _target = camera;
         }
 
-        public Camera GetTarget()
+        public SurveillanceCamera GetTarget()
         {
             return _target;
         }
