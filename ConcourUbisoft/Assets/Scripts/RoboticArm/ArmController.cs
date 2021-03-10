@@ -12,7 +12,6 @@ namespace Arm
     {
         [SerializeField] private float minRange = 1.5f;
         [SerializeField] float controlSpeed = 3f;
-        [SerializeField] private Controllable controllable;
         [SerializeField] private IKSolver armIKSolver;
         [SerializeField] private Transform armRotationRoot;
 

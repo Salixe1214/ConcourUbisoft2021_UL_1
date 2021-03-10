@@ -26,6 +26,7 @@ namespace Arm
 
         private void Awake()
         {
+            
             _magnetTrigger = GetComponentInChildren<MagnetTrigger>();
         }
 

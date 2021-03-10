@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 namespace Arm
 {
-    public class ControllableInputArm : Controllable
+    public class MechanicalArmWASDControl : Controllable
     {
         [SerializeField] private ArmController _armController = null;
         [SerializeField] private MagnetController _magnetController = null;

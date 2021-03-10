@@ -592,12 +592,12 @@ AudioSource:
   m_GameObject: {fileID: 4302749757479535658}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 6237676351217213401, guid: ecf6682e6c8c50945a724780bcfa4240, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 298e0d1290bcbd14994a1ac42d6d9a84, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
+  m_Volume: 0
+  m_Pitch: 0.58
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -1168,7 +1168,6 @@ GameObject:
   - component: {fileID: 7915232795401323305}
   - component: {fileID: 2121669986793875469}
   - component: {fileID: 4320733802285747621}
-  - component: {fileID: 838453515}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -1204,7 +1203,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minRange: 1.5
   controlSpeed: 4
-  controllable: {fileID: 7748708573357444043, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
   armIKSolver: {fileID: 1865101538738871938}
   armRotationRoot: {fileID: 6610768617839303362}
 --- !u!114 &4320733802285747621
@@ -1223,18 +1221,3 @@ MonoBehaviour:
   _owner: 0
   _smooth: 1
   Id: 0
---- !u!114 &838453515
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8875939281911053909}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 910fbe88dd8f7fc4b97a747a7d9abcc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isControlled: 1
-  _armController: {fileID: 2121669986793875469}
-  _magnetController: {fileID: 7780099111703666920}
