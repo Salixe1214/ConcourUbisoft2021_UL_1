@@ -21,7 +21,7 @@ namespace Arm
         private void Update()
         {
             if (IsControlled && _owner == _networkController.GetLocalRole()) {
-                Vector3 translation = new Vector3(Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
+                Vector3 translation = new Vector3(-Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
                 if(translation != Vector3.zero)
                 {
                     _armController.Translate(translation);
