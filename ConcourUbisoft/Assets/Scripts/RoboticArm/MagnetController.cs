@@ -3,287 +3,184 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 namespace Arm
 {
     public class MagnetController : Serializable
     {
-        [SerializeField] private float pullForce = 10f;
-        [SerializeField] private Controllable controllable;
-        [SerializeField] private Transform magnetPullPoint;
-        [SerializeField] private MagnetTrigger magnetTrigger;
-        [SerializeField] private Transform magnetRotationRoot;
-        [SerializeField] private Pickable currentPickable = null;
-        [SerializeField] private bool grabbed = false;
-        [SerializeField] private bool magnetActive = false;
-        [SerializeField] private bool _hasControlPanel = false;
-
-        public bool IsMagnetActive => magnetActive;
-
-        public bool MagnetActive
+        [Serializable]
+        public class MagnetControllerDTO
         {
-            get => magnetActive;
-            set
-            {
-                if (value)
-                    magnetActive = value;
-                else
-                {
-                    magnetActive = false;
-                    grabbed = false;
-                    if (currentPickable)
-                    {
-                        Release();
-                    }
-                }
-            }
+            public int? PickableId { get; set; }
+            public bool MagnetActive { get; set; }
+            public bool Grabbed { get; set; }
+            public float? PositionX { get; set; }
+            public float? PositionY { get; set; }
+            public float? PositionZ { get; set; }
+            public float? RotationX { get; set; }
+            public float? RotationY { get; set; }
+            public float? RotationZ { get; set; }
+            public float? RotationW { get; set; }
         }
 
-        private NetworkSync _networkSync = null;
+        [SerializeField] private float pullForce = 10f;
+        [SerializeField] private Transform magnetPullPoint;
+        [SerializeField] private GameController.Role _owner = GameController.Role.SecurityGuard;
+
+        private MagnetTrigger _magnetTrigger;
+        private Pickable _currentPickable = null;
+        private bool _grabbed = false;
         private NetworkController _networkController = null;
 
-        private void Start()
-        {
-            controllable.OnControlStateChange += OnControlStateChange;
-            _networkSync = GetComponent<NetworkSync>();
-            GameObject networkControllerObject = GameObject.FindGameObjectWithTag("NetworkController");
-            if (networkControllerObject != null)
-                _networkController = networkControllerObject.GetComponent<NetworkController>();
-        }
+        public bool MagnetActive { get; set; }
 
-        void OnControlStateChange(bool controlled)
+        private void Awake()
         {
-            if (!controlled)
-            {
-                MagnetActive = false;
-            }
+            _magnetTrigger = GetComponentInChildren<MagnetTrigger>();
+            _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         }
 
         private void Update()
         {
-            magnetRotationRoot.rotation = Quaternion.Euler(180, 0, 0);
-        }
-
-        private void FixedUpdate()
-        {
-            if (controllable.IsControlled ||
-                (_networkController != null && _networkSync.Owner != _networkController.GetLocalRole()) || _hasControlPanel)
+            transform.rotation = Quaternion.Euler(180, 0, 0);
+            if(_owner == _networkController.GetLocalRole())
             {
-                if (!grabbed && !currentPickable && _networkSync.Owner == _networkController.GetLocalRole())
-                {
-                    UpdateCurrentPickable();
-                }
+                UpdateCurrentPickable();
 
-                if (currentPickable)
+                if (_currentPickable != null)
                 {
-                    currentPickable.OnHover();
-                    if (grabbed)
+                    _currentPickable.OnHover();
+
+                    if (MagnetActive)
                     {
-                        currentPickable.RB.velocity = Vector3.zero;
+                        MovePickableToMagnet();
+                    }
+                    else if (_grabbed)
+                    {
+                        ReleasePickable();
                     }
                 }
-
-                if (_networkSync.Owner == _networkController.GetLocalRole() && !_hasControlPanel)
-                {
-                    MagnetActive = (Input.GetButton("Grab") ||
-                                    Input.GetButton("GrabControllerXBO") ||
-                                    Input.GetButton("GrabControllerPS"));
-                }
-
-                if (!grabbed &&
-                    magnetActive &&
-                    currentPickable &&
-                    magnetTrigger.GetPickables().Contains(currentPickable))
-                    MovePickableToMagnet();
             }
         }
 
-        private void MovePickableToMagnet()
+        private void OnCollisionStay(Collision collision)
         {
-            Vector3 directionToMagnet = (magnetPullPoint.position - currentPickable.transform.position).normalized;
-
-            currentPickable.RB.velocity = pullForce * directionToMagnet;
-        }
-
-        private void OnCollisionStay(Collision other)
-        {
-            if (magnetActive && grabbed != true)
+            if (_currentPickable && !_grabbed && MagnetActive)
             {
-                currentPickable = other.gameObject.GetComponent<Pickable>();
-                if (currentPickable)
-                {
-                    currentPickable.OnGrab();
-                    currentPickable.RB.velocity = Vector3.zero;
-                    currentPickable.transform.parent = this.transform;
-                    grabbed = true;
-                }
+                GrabPickable();
             }
         }
 
-        private void Release()
+        private void GrabPickable()
         {
-            currentPickable.transform.SetParent(null);
-            currentPickable.OnRelease();
-            currentPickable = null;
+            _currentPickable.OnGrab();
+            _currentPickable.RB.velocity = Vector3.zero;
+            _currentPickable.transform.parent = this.transform;
+
+            _grabbed = true;
         }
 
-        private void UpdateCurrentPickable()
+        private void ReleasePickable()
         {
-            currentPickable = null;
-            List<Pickable> pickables = magnetTrigger.GetPickables();
-            if (pickables.Count != 0)
+            _currentPickable.OnRelease();
+            _currentPickable = null;
+            _grabbed = false;
+        }
+        
+        public override void Deserialize(byte[] data)
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            using (var memStream = new MemoryStream())
             {
-                float minDist = float.MaxValue;
-                Pickable pickable = null;
-                for (int i = pickables.Count - 1; i >= 0; i--)
+                using (MemoryStream memoryStream = new MemoryStream())
                 {
-                    pickable = pickables[i];
+                    memStream.Write(data, 0, data.Length);
+                    memStream.Seek(0, SeekOrigin.Begin);
+                    MagnetControllerDTO serializedMagnetController = (MagnetControllerDTO)bf.Deserialize(memStream);
+
+                    Pickable pickable = serializedMagnetController.PickableId != null ? GameObject.FindObjectsOfType<Pickable>().Where(x => x.Id == serializedMagnetController.PickableId) 
+                        .FirstOrDefault() : null;
+                    if (serializedMagnetController.PickableId == null && _currentPickable != null
+                        || pickable != null && _currentPickable != null && _currentPickable != pickable)
+                    {
+                        ReleasePickable();
+                    }
+
+                    if(serializedMagnetController.PickableId == null)
+                    {
+                        _currentPickable = null;
+                    }
+
                     if (pickable != null)
                     {
-                        float dist = Vector3.Distance(pickable.transform.position, magnetPullPoint.position);
-                        if (minDist > dist)
+                        Vector3 newPosition = new Vector3(serializedMagnetController.PositionX.Value, serializedMagnetController.PositionY.Value, serializedMagnetController.PositionZ.Value);
+
+                        Quaternion quaternion = new Quaternion(serializedMagnetController.RotationX.Value, serializedMagnetController.RotationY.Value, serializedMagnetController.RotationZ.Value, serializedMagnetController.RotationW.Value);
+                        _currentPickable = pickable;
+
+                        if (_grabbed == false && serializedMagnetController.MagnetActive)
                         {
-                            currentPickable = pickable;
+                            _currentPickable.transform.position = newPosition;
+                            _currentPickable.transform.rotation = quaternion;
+                        }
+
+                        if (serializedMagnetController.MagnetActive == false && MagnetActive == true && _grabbed == true)
+                        {
+                            ReleasePickable();
+                        }
+
+                        if (serializedMagnetController.Grabbed == true && _grabbed == false)
+                        {
+                            GrabPickable();
                         }
                     }
-                    else
-                    {
-                        pickables.RemoveAt(i);
-                    }
+
+                    _grabbed = serializedMagnetController.Grabbed;
+                    MagnetActive = serializedMagnetController.MagnetActive;
                 }
             }
         }
 
         public override byte[] Serialize()
         {
+            BinaryFormatter bf = new BinaryFormatter();
             using (MemoryStream memoryStream = new MemoryStream())
             {
-                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
-                {
-                    if (currentPickable != null)
-                    {
-                        binaryWriter.Write((Int32) currentPickable.Id);
-                        binaryWriter.Write(currentPickable.transform.position.x);
-                        binaryWriter.Write(currentPickable.transform.position.y);
-                        binaryWriter.Write(currentPickable.transform.position.z);
-                        binaryWriter.Write(currentPickable.transform.rotation.x);
-                        binaryWriter.Write(currentPickable.transform.rotation.y);
-                        binaryWriter.Write(currentPickable.transform.rotation.z);
-                        binaryWriter.Write(currentPickable.transform.rotation.w);
-                    }
-                    else
-                    {
-                        binaryWriter.Write((Int32) (-1));
-                        binaryWriter.Write((float) (0.0f));
-                        binaryWriter.Write((float) (0.0f));
-                        binaryWriter.Write((float) (0.0f));
-                        binaryWriter.Write((float) (0.0f));
-                        binaryWriter.Write((float) (0.0f));
-                        binaryWriter.Write((float) (0.0f));
-                        binaryWriter.Write((float) (0.0f));
-                    }
-
-                    binaryWriter.Write((bool) magnetActive);
-                    binaryWriter.Write((bool) grabbed);
-                }
-
+                bf.Serialize(memoryStream, new MagnetControllerDTO() {
+                    PickableId = _currentPickable?.Id,
+                    Grabbed = _grabbed,
+                    MagnetActive = MagnetActive,
+                    PositionX = _currentPickable?.transform.position.x,
+                    PositionY = _currentPickable?.transform.position.y,
+                    PositionZ = _currentPickable?.transform.position.z,
+                    RotationX = _currentPickable?.transform.rotation.x,
+                    RotationY = _currentPickable?.transform.rotation.y,
+                    RotationZ = _currentPickable?.transform.rotation.z,
+                    RotationW = _currentPickable?.transform.rotation.w,
+                });
+                
                 return memoryStream.ToArray();
-            }
-        }
-
-        public override void Deserialize(byte[] data)
-        {
-            using (MemoryStream memoryStream = new MemoryStream(data))
-            {
-                using (BinaryReader binaryReader = new BinaryReader(memoryStream))
-                {
-                    int pickableId = binaryReader.ReadInt32();
-                    Vector3 newPosition = new Vector3(
-                        binaryReader.ReadSingle(),
-                        binaryReader.ReadSingle(),
-                        binaryReader.ReadSingle());
-
-                    Quaternion quaternion = new Quaternion(binaryReader.ReadSingle(), binaryReader.ReadSingle(),
-                        binaryReader.ReadSingle(), binaryReader.ReadSingle());
-
-                    bool newMagnetActive = binaryReader.ReadBoolean();
-                    bool newGrabbed = binaryReader.ReadBoolean();
-                    //todo fix performance here
-                    Pickable pickable = GameObject.FindObjectsOfType<Pickable>().Where(x => x.Id == pickableId)
-                        .FirstOrDefault();
-                    if (pickableId == -1 && currentPickable != null)
-                    {
-                        Release();
-                    }
-
-                    if (pickable != null && currentPickable != null && currentPickable != pickable)
-                    {
-                        Release();
-                    }
-
-                    if (pickable != null)
-                    {
-                        currentPickable = pickable;
-                        if (grabbed == false)
-                        {
-                            currentPickable.transform.position = newPosition;
-                            currentPickable.transform.rotation = quaternion;
-                        }
-
-                        if (newGrabbed == true && grabbed == false)
-                        {
-                            currentPickable.OnGrab();
-                            currentPickable.RB.velocity = Vector3.zero;
-                            currentPickable.transform.parent = this.transform;
-                            grabbed = true;
-                        }
-                    }
-
-                    grabbed = newGrabbed;
-                    MagnetActive = newMagnetActive;
-                }
             }
         }
 
         public override void Smooth(byte[] oldData, byte[] newData, float lag, double _lastTime, double _currentTime)
         {
-            using (MemoryStream memoryStream = new MemoryStream(newData))
-            {
-                using (BinaryReader binaryReaderNew = new BinaryReader(memoryStream))
-                {
-                    int pickableId = binaryReaderNew.ReadInt32();
-                    if (pickableId == -1)
-                    {
-                        currentPickable = null;
-                    }
-                    else
-                    {
-                        Pickable pickable = GameObject.FindObjectsOfType<Pickable>().Where(x => x.Id == pickableId)
-                            .FirstOrDefault();
-                        if (pickable != null)
-                        {
-                            Debug.Log("Found Pickable");
-                            currentPickable = pickable;
 
-                            Vector3 newPosition = new Vector3(
-                                binaryReaderNew.ReadSingle(),
-                                binaryReaderNew.ReadSingle(),
-                                binaryReaderNew.ReadSingle());
-
-                            Quaternion quaternion = new Quaternion(binaryReaderNew.ReadSingle(),
-                                binaryReaderNew.ReadSingle(), binaryReaderNew.ReadSingle(),
-                                binaryReaderNew.ReadSingle());
-                            //currentPickable.transform.position = Vector3.MoveTowards(currentPickable.transform.position, newPosition, Time.deltaTime * 3);
-                        }
-                    }
-                }
-            }
         }
 
-        public void ToggleMagnet()
+        private void MovePickableToMagnet()
         {
-            MagnetActive = !MagnetActive;
+            Vector3 directionToMagnet = (magnetPullPoint.position - _currentPickable.transform.position).normalized;
+
+            _currentPickable.RB.velocity = pullForce * directionToMagnet;
+        }
+
+        private void UpdateCurrentPickable()
+        {
+            _currentPickable = _magnetTrigger.GetPickables().OrderBy(x => Vector3.Distance(x.GetBottomPosition(), magnetPullPoint.position)).FirstOrDefault();
+
         }
     }
 }

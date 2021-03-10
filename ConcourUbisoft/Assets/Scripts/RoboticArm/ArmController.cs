@@ -12,22 +12,13 @@ namespace Arm
     {
         [SerializeField] private float minRange = 1.5f;
         [SerializeField] float controlSpeed = 3f;
-        [SerializeField] private Controllable controllable;
         [SerializeField] private IKSolver armIKSolver;
         [SerializeField] private Transform armRotationRoot;
-        [SerializeField] private bool _hasControlPanel = false;
 
         private float maxRange;
         public float ControlSpeed => controlSpeed;
 
         public Transform ArmTarget { get; private set; } = null;
-
-        #region controllerDeclaration
-
-        private int _inputVerticalAxis;
-        private int _inputHorizontalAxis;
-
-        #endregion
 
         #region Network
 
@@ -41,7 +32,6 @@ namespace Arm
                 }
             }
         }
-
         public override byte[] Serialize()
         {
             using (MemoryStream memoryStream = new MemoryStream())
@@ -56,7 +46,6 @@ namespace Arm
                 return memoryStream.ToArray();
             }
         }
-
         public override void Smooth(byte[] oldData, byte[] newData, float lag, double lastTime, double currentTime)
         {
             using (MemoryStream memoryStreamOld = new MemoryStream(oldData),
@@ -70,7 +59,7 @@ namespace Arm
                         binaryReaderNew.ReadSingle(),
                         binaryReaderNew.ReadSingle());
 
-                    ArmTarget.position = Vector3.MoveTowards(ArmTarget.position,newPosition, Time.deltaTime * controlSpeed);
+                    ArmTarget.position = Vector3.MoveTowards(ArmTarget.position, newPosition, Time.deltaTime * controlSpeed);
                 }
             }
         }
@@ -81,64 +70,53 @@ namespace Arm
         {
             maxRange = armIKSolver.TotalLength - 0.01f;
             ArmTarget = armIKSolver.Target;
-
-            _inputVerticalAxis = 0;
-            _inputHorizontalAxis = 0;
         }
 
         void Update()
         {
-            if (controllable.IsControlled)
-            {
-                float inputV = !_hasControlPanel ? Input.GetAxis("Vertical") : _inputVerticalAxis;
-                float inputH = !_hasControlPanel ? Input.GetAxis("Horizontal") : _inputHorizontalAxis;
+            ClampTarget();
+            FaceTarget();
+        }
 
-                Vector3 translation =
-                    Vector3.ClampMagnitude(new Vector3(inputV * -1, 0, inputH),
-                        controlSpeed);
-                ArmTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
-                float distanceToTarget = Vector3.Distance(transform.position, ArmTarget.position);
-                if (distanceToTarget > maxRange)
-                {
-                    Vector3 dirToTarget = (ArmTarget.position - transform.position).normalized;
-                    ArmTarget.position = new Vector3(
-                        transform.position.x + dirToTarget.x * maxRange,
-                        ArmTarget.position.y,
-                        transform.position.z + dirToTarget.z * maxRange);
-                }
-
-                float flatDistanceToTarget =
-                    Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z),
-                        new Vector3(armIKSolver.Target.position.x, 0, armIKSolver.Target.position.z));
-                if (flatDistanceToTarget < minRange)
-                {
-                    Vector3 dirToTarget = (ArmTarget.position - transform.position);
-                    dirToTarget.y = 0;
-                    dirToTarget.Normalize();
-                    ArmTarget.position = new Vector3(
-                        transform.position.x + dirToTarget.x * minRange,
-                        ArmTarget.position.y,
-                        transform.position.z + dirToTarget.z * minRange);
-                }  
-            }
-
+        private void FaceTarget()
+        {
             Vector3 direction = ArmTarget.position - transform.position;
             direction.y = 0;
             direction.Normalize();
             float rotationY = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             armRotationRoot.rotation = Quaternion.Euler(0f, rotationY + 180, 0f);
         }
-    
-        public void OnHMove(int dir)
+        private void ClampTarget()
         {
-            _inputHorizontalAxis = dir;
-        }
-    
-        public void OnVMove(int dir)
-        {
-            _inputVerticalAxis = dir;
-        }
+            float distanceToTarget = Vector3.Distance(transform.position, ArmTarget.position);
+            if (distanceToTarget > maxRange)
+            {
+                Vector3 dirToTarget = (ArmTarget.position - transform.position).normalized;
+                ArmTarget.position = new Vector3(
+                    transform.position.x + dirToTarget.x * maxRange,
+                    ArmTarget.position.y,
+                    transform.position.z + dirToTarget.z * maxRange);
+            }
 
-        
+            float flatDistanceToTarget =
+                    Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z),
+                        new Vector3(armIKSolver.Target.position.x, 0, armIKSolver.Target.position.z));
+            if (flatDistanceToTarget < minRange)
+            {
+                Vector3 dirToTarget = (ArmTarget.position - transform.position);
+                dirToTarget.y = 0;
+                dirToTarget.Normalize();
+                ArmTarget.position = new Vector3(
+                    transform.position.x + dirToTarget.x * minRange,
+                    ArmTarget.position.y,
+                    transform.position.z + dirToTarget.z * minRange);
+            }
+        }
+        public void Translate(Vector3 translate)
+        {
+            Vector3 translation = Vector3.ClampMagnitude(translate, controlSpeed);
+
+            ArmTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
+        }
     }
 }
