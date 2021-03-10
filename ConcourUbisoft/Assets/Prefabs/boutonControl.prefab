@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 1492933824006272370}
   - component: {fileID: 128342610460227871}
   m_Layer: 0
-  m_Name: GameObject (4)
+  m_Name: ButtonUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -221,8 +221,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 8300000, guid: c991920e6ee174f4ea501bb2cbdd306b, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -320,7 +320,7 @@ GameObject:
   - component: {fileID: 1492933824400499086}
   - component: {fileID: 2605740414652480719}
   m_Layer: 0
-  m_Name: GameObject (2)
+  m_Name: ButtonLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -391,8 +391,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 8300000, guid: c991920e6ee174f4ea501bb2cbdd306b, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -490,7 +490,7 @@ GameObject:
   - component: {fileID: 1492933824517491732}
   - component: {fileID: 2435273637240631709}
   m_Layer: 0
-  m_Name: GameObject (3)
+  m_Name: ButtonRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -561,8 +561,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 8300000, guid: c991920e6ee174f4ea501bb2cbdd306b, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -660,7 +660,7 @@ GameObject:
   - component: {fileID: 1492933824617933143}
   - component: {fileID: 101922121906531440}
   m_Layer: 0
-  m_Name: GameObject (1)
+  m_Name: ButtonDown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -731,8 +731,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 8300000, guid: c991920e6ee174f4ea501bb2cbdd306b, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -830,7 +830,7 @@ GameObject:
   - component: {fileID: 1492933824814266681}
   - component: {fileID: 1882519640464694024}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: ButtonCenter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -902,8 +902,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 8300000, guid: c991920e6ee174f4ea501bb2cbdd306b, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
