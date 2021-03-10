@@ -13,6 +13,8 @@ namespace TechSupport.Controller
         private RawImage _image;
         private GameController _gameController = null;
         
+        private bool _wasControlled = false;
+
         private enum ControllerType
         {
             Xbox,
@@ -24,8 +26,8 @@ namespace TechSupport.Controller
 
         [Header("Outline")]
         [SerializeField] private GameObject outlineTarget;
-        [SerializeField] private Color outlineColor = Color.green;
-        [SerializeField, Range(0f, 10f)] private float outlineWidth = 2f;
+        [SerializeField] private Color outlineColor = Color.white;
+        [SerializeField, Range(0f, 10f)] private float outlineWidth = 10f;
 
         [Header("Button Position")] 
         [SerializeField] private GameObject canvas;
@@ -57,6 +59,7 @@ namespace TechSupport.Controller
             _image.texture = defaultInputSprite;
             _image.gameObject.transform.SetParent(canvas.transform);
             _image.gameObject.transform.localScale /= 2;
+            Enable(false);
         }
 
         private void UpdateOutline()
@@ -82,6 +85,22 @@ namespace TechSupport.Controller
         private void FixedUpdate()
         {
             _image.gameObject.transform.localPosition = targetTop.transform.position * 10;
+        }
+        
+        public void Enable(bool enabledOutline)
+        {
+            _outline.enabled = enabledOutline;
+            _image.enabled = enabledOutline;
+            enabled = enabledOutline;
+            if (enabledOutline)
+            {
+                _controllable.IsControlled = _wasControlled;
+            }
+            else
+            {
+                _wasControlled = _controllable.IsControlled;
+                _controllable.IsControlled = false;
+            }
         }
     }
 }

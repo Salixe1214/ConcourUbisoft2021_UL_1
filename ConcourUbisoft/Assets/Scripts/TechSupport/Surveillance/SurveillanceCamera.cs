@@ -10,21 +10,21 @@ namespace TechSupport.Surveillance
     {
         private Camera _camera;
 
-//        [SerializeField] private int 
+//        [SerializeField] private int
         [SerializeField] private List<ControllableOutline> controllable = new List<ControllableOutline>();
 
         public void Init()
         {
             _camera = GetComponent<Camera>();
         }
-        
+
         public Rect GetPrintedRect()
         {
             Rect rect = _camera.rect;
-            
+
             return new Rect(
-                    rect.x * Screen.width, 
-                    rect.y * Screen.height, 
+                    rect.x * Screen.width,
+                    rect.y * Screen.height,
                 (rect.x + rect.width) * Screen.width,
                 (rect.y + rect.height) * Screen.height);
         }

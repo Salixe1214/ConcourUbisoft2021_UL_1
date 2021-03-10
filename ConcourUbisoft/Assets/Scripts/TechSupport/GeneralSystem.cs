@@ -26,7 +26,7 @@ namespace TechSupport
                 this.number = number;
             }
         }
-        
+
         private readonly GridSystem _gridSystem = new GridSystem();
         private readonly FullScreenSystem _fullScreenSystem = new FullScreenSystem();
 
