@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8223968371551361349}
   m_Layer: 0
-  m_Name: ButtonControlPanel
+  m_Name: ArmButtonsControlPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -436,7 +436,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5561349426305759274, guid: d9f07bf7378d30b41a8dc73c6655cced, type: 3}
+  - {fileID: 2100000, guid: f90297fd6dd28454799afcc080c99a9f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -537,7 +537,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5561349426305759274, guid: d9f07bf7378d30b41a8dc73c6655cced, type: 3}
+  - {fileID: 2100000, guid: f90297fd6dd28454799afcc080c99a9f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -978,7 +978,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5561349426305759274, guid: d9f07bf7378d30b41a8dc73c6655cced, type: 3}
+  - {fileID: 2100000, guid: f90297fd6dd28454799afcc080c99a9f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1268,7 +1268,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5561349426305759274, guid: d9f07bf7378d30b41a8dc73c6655cced, type: 3}
+  - {fileID: 2100000, guid: f90297fd6dd28454799afcc080c99a9f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1369,7 +1369,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5561349426305759274, guid: d9f07bf7378d30b41a8dc73c6655cced, type: 3}
+  - {fileID: 2100000, guid: f90297fd6dd28454799afcc080c99a9f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

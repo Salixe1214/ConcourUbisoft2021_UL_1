@@ -247,7 +247,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 3ff936555cd82bb4b89b1c0380b0cc6a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -429,7 +429,11 @@ MonoBehaviour:
   - ColorsSequence:
     - {r: 0, g: 0, b: 1, a: 1}
     SucceedColors: 0
-  Level1Controller: {fileID: 0}
+    types: 
+  SequencesOfTransportableTypes: 
+  nbColorSequences: 5
+  minColorSequencelenght: 3
+  maxColorSequenceLenght: 7
   TimeToConsume: 3
 --- !u!54 &2658199438277513602
 Rigidbody:
@@ -621,6 +625,8 @@ MonoBehaviour:
   PointB: {fileID: 2658199437906514333}
   Level1Controller: {fileID: 0}
   DelayBetweenSpawnsInSeconds: {x: 0.5, y: 1}
+  CanSpawn: 1
+  conveyors: []
 --- !u!1 &2658199439137343531
 GameObject:
   m_ObjectHideFlags: 0
