@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Inputs;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 namespace TechSupport.Controller
 {
@@ -15,15 +17,6 @@ namespace TechSupport.Controller
         
         private bool _wasControlled = false;
 
-        private enum ControllerType
-        {
-            Xbox,
-            Playstation,
-            Other
-        }
-
-        private ControllerType _controllerType = ControllerType.Other;
-
         [Header("Outline")]
         [SerializeField] private GameObject outlineTarget;
         [SerializeField] private Color outlineColor = Color.white;
@@ -32,18 +25,17 @@ namespace TechSupport.Controller
         [Header("Button Position")] 
         [SerializeField] private GameObject canvas;
         [SerializeField] private GameObject targetTop;
-
-        [Header("Default Input")]
-        [SerializeField] private string defaultInputName = "Control";
-        [SerializeField] private Texture defaultInputSprite = null;
         
-        [Header("Xbox Input")]
-        [SerializeField] private string xboxInputName = "ControlXBO";
-        [SerializeField] private Texture xboxInputSprite = null;
-
-        [Header("PS Input")]
-        [SerializeField] private string psInputName = "ControlPS";
-        [SerializeField] private Texture psInputSprite = null;
+        [Header("Inputs")]
+        [SerializeField] private string inputName = "Control";
+        [SerializeField] public SerializableDictionary<Inputs.Controller, Texture> textures 
+            = new SerializableDictionary<Inputs.Controller, Texture>(
+            new Dictionary<Inputs.Controller, Texture> {
+                { Inputs.Controller.Xbox, null },
+                { Inputs.Controller.Playstation, null },
+                { Inputs.Controller.Other, null }
+            })
+;
 
         void Awake()
         {
@@ -56,7 +48,7 @@ namespace TechSupport.Controller
             _outline.OutlineMode = Outline.Mode.OutlineAll;
             
             _image = (new GameObject()).AddComponent<RawImage>();
-            _image.texture = defaultInputSprite;
+            _image.texture = textures[InputManager.GetController()];
             _image.gameObject.transform.SetParent(canvas.transform);
             _image.gameObject.transform.localScale /= 2;
             Enable(false);
@@ -73,9 +65,7 @@ namespace TechSupport.Controller
             if (_gameController != null && _gameController.IsGameMenuOpen)
                 return;
             
-            if (Input.GetButtonUp(defaultInputName)
-                || Input.GetButtonUp(xboxInputName)
-                || Input.GetButtonUp(psInputName))
+            if (Input.GetButtonUp(InputManager.GetInputNameByController(inputName)))
             {
                 _controllable.IsControlled = !_controllable.IsControlled;
                 UpdateOutline();

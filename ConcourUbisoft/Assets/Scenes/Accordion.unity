@@ -1194,12 +1194,15 @@ MonoBehaviour:
   outlineWidth: 10
   canvas: {fileID: 657352892}
   targetTop: {fileID: 1394871843}
-  defaultInputName: Control
-  defaultInputSprite: {fileID: 2800000, guid: cf19b2c34b9afa442a1f2148622dd8c1, type: 3}
-  xboxInputName: ControlXBO
-  xboxInputSprite: {fileID: 2800000, guid: 6ec7699e4fa280743892f084df909984, type: 3}
-  psInputName: ControlPS
-  psInputSprite: {fileID: 2800000, guid: f05aa8f6de7dd5d41b3c97d678845c29, type: 3}
+  inputName: Control
+  textures:
+    items:
+    - key: 0
+      value: {fileID: 2800000, guid: 6ec7699e4fa280743892f084df909984, type: 3}
+    - key: 1
+      value: {fileID: 2800000, guid: f05aa8f6de7dd5d41b3c97d678845c29, type: 3}
+    - key: 2
+      value: {fileID: 2800000, guid: cf19b2c34b9afa442a1f2148622dd8c1, type: 3}
 --- !u!1 &1461066219
 GameObject:
   m_ObjectHideFlags: 0
