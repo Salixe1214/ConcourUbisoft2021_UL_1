@@ -65,7 +65,7 @@ namespace TechSupport.Controller
         private void UpdateOutline()
         {
             _outline.enabled = !_controllable.IsControlled;
-            _image.gameObject.SetActive(!_controllable.IsControlled);
+            _image.enabled = !_controllable.IsControlled;
         }
 
         private void Update()
@@ -89,8 +89,6 @@ namespace TechSupport.Controller
         
         public void Enable(bool enabledOutline)
         {
-            _outline.enabled = enabledOutline;
-            _image.enabled = enabledOutline;
             enabled = enabledOutline;
             if (enabledOutline)
             {
@@ -101,6 +99,8 @@ namespace TechSupport.Controller
                 _wasControlled = _controllable.IsControlled;
                 _controllable.IsControlled = false;
             }
+            _outline.enabled = enabledOutline && !_controllable.IsControlled;
+            _image.enabled = enabledOutline && !_controllable.IsControlled;
         }
     }
 }
