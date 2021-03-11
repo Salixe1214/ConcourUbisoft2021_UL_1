@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using TechSupport.Controller;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace TechSupport.Surveillance
 {
