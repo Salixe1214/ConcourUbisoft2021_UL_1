@@ -9,7 +9,6 @@ namespace TechSupport.Surveillance
     {
         private Camera _camera;
 
-//        [SerializeField] private int
         [SerializeField] private List<ControllableOutline> controllable = new List<ControllableOutline>();
 
         public void Init()
