@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TechSupport.Surveillance;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace TechSupport
 {
@@ -13,12 +14,25 @@ namespace TechSupport
     }
     public class GeneralSystem : MonoBehaviour
     {
-        [SerializeField] private SurveillanceMode mode = SurveillanceMode.Grid; // Default mode : grid
+        [Serializable]
+        private struct OrderedItems
+        {
+            public int number;
+            public SurveillanceCamera items;
+
+            public OrderedItems(int number, SurveillanceCamera items)
+            {
+                this.items = items;
+                this.number = number;
+            }
+        }
+        
         private readonly GridSystem _gridSystem = new GridSystem();
         private readonly FullScreenSystem _fullScreenSystem = new FullScreenSystem();
-        private GameController _gameController = null;
 
-        private IEnumerable<SurveillanceCamera> _cameras = new List<SurveillanceCamera>();
+        [SerializeField] private SurveillanceMode mode = SurveillanceMode.Grid; // Default mode : grid
+        [SerializeField] private List<OrderedItems> cameras;
+        private GameController _gameController;
 
         #region Callbacks
 
@@ -47,14 +61,11 @@ namespace TechSupport
 
         private void Awake()
         {
-            _cameras = FindObjectsOfType<SurveillanceCamera>();
             _gameController = GameObject.FindGameObjectWithTag("GameController")?.GetComponent<GameController>();
-            foreach (SurveillanceCamera camera in _cameras)
-            {
-                camera.Init(); 
-            }
-            _gridSystem.SearchGridSize(_cameras.Count());
-            _fullScreenSystem.SetTarget(_cameras.First());
+            cameras.Sort((a, b) => a.number.CompareTo(b.number));
+            cameras.ForEach(c => c.items.Init());
+            _gridSystem.SearchGridSize(cameras.Count());
+            _fullScreenSystem.SetTarget(cameras.First().items);
             SystemSwitch(mode);
         }
 
@@ -84,10 +95,7 @@ namespace TechSupport
 
         private void EnableAll(bool enabledCamera)
         {
-            foreach (SurveillanceCamera cam in _cameras)
-            {
-                cam.Enable(enabledCamera);
-            }
+            cameras.ForEach(cam => cam.items.Enable(enabledCamera));
         }
 
         #endregion
@@ -112,7 +120,7 @@ namespace TechSupport
         private void ExitGrid()
         {
             SurveillanceCamera selected =
-                _cameras.First(surveillanceCamera => surveillanceCamera.Contains(Input.mousePosition));
+                cameras.First(item => item.items.Contains(Input.mousePosition)).items;
             if (selected != null)
             {
                 _fullScreenSystem.SetTarget(selected);
@@ -122,7 +130,7 @@ namespace TechSupport
         private void OnGrid()
         {
             EnableAll(true);
-            _gridSystem.Grid(_cameras.Select(input => input.GetCamera()),
+            _gridSystem.Grid(cameras.Select(input => input.items.GetCamera()),
                 _gridSystem.GetGridSize());
         }
 
