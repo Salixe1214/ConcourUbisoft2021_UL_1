@@ -16,11 +16,17 @@ public class DoorController : MonoBehaviour
     [SerializeField] private List<Direction> _inputSequences = null;
     [SerializeField] public int Id = 0;
     private List<Direction> _currentSequences = new List<Direction>();
+    private Animation _animation = null;
 
     public UnityEvent OnError;
     public UnityEvent OnSuccess;
 
     public bool IsUnlock { get; private set; } = false;
+
+    private void Awake()
+    {
+        _animation = GetComponent<Animation>();
+    }
 
     public void TriggerLeft()
     {
@@ -79,7 +85,9 @@ public class DoorController : MonoBehaviour
 
     public void Unlock()
     {
+        Debug.Log("Play");
         IsUnlock = true;
+        _animation.Play();
         OnSuccess?.Invoke();
     }
 }
