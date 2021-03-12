@@ -23,7 +23,7 @@ namespace TechSupport
 
             foreach (Camera camera in cams)
             {
-                camera.rect = new Rect(x * (1f / size.x), 0.5f - y * (1f / size.y),
+                camera.rect = new Rect(x * (1f / size.x), y * (1f / size.y),
                     1f / size.x, 1f / size.y);
                 x++;
                 if (x % size.x == 0)

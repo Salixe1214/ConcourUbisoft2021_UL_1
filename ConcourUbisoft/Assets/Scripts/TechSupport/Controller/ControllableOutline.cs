@@ -7,19 +7,21 @@ using Utils;
 
 namespace TechSupport.Controller
 {
-    [RequireComponent(typeof(Controllable))]
+    [RequireComponent(typeof(Controllable), typeof(Outline))]
     public class ControllableOutline : MonoBehaviour
     {
+        // Game Flow Object
+        private GameController _gameController;
+        private NetworkController _networkController;
+
         private Controllable _controllable;
         private Outline _outline;
         private RawImage _image;
-        private GameController _gameController = null;
         
         private bool _wasControlled = false;
 
         [Header("Outline")]
-        [SerializeField] private GameObject outlineTarget;
-        [SerializeField] private Color outlineColor = Color.white;
+        [SerializeField] private Color outlineColor = Color.red;
         [SerializeField, Range(0f, 10f)] private float outlineWidth = 10f;
 
         [Header("Button Position")] 
@@ -41,19 +43,54 @@ namespace TechSupport.Controller
         {
             _controllable = GetComponent<Controllable>();
             _gameController = GameObject.FindGameObjectWithTag("GameController")?.GetComponent<GameController>();
-            _outline = outlineTarget.AddComponent<Outline>();
+            _networkController = GameObject.FindGameObjectWithTag("NetworkController")?.GetComponent<NetworkController>();
+
+            SetupOutline();
+            SetupInputImage();
+            enabled = false;
+            _outline.enabled = false;
+            _image.enabled = false;
+        }
+
+        #region Object Setup
+
+        private void SetupOutline()
+        {
+            _outline = GetComponent<Outline>();
 
             _outline.OutlineColor = outlineColor;
             _outline.OutlineWidth = outlineWidth;
             _outline.OutlineMode = Outline.Mode.OutlineAll;
-            
-            _image = (new GameObject()).AddComponent<RawImage>();
-            _image.texture = textures[InputManager.GetController()];
-            _image.gameObject.transform.SetParent(canvas.transform);
-            _image.gameObject.transform.localScale /= 2;
-            Enable(false);
         }
 
+        private void SetupInputImage()
+        {
+            _image = new GameObject().AddComponent<RawImage>();
+            Transform imageTransform = _image.gameObject.transform;
+
+            _image.texture = textures[InputManager.GetController()];
+            imageTransform.SetParent(canvas.transform);
+            imageTransform.localScale /= 2;
+            imageTransform.localPosition = Vector3.zero;
+        }
+
+        #endregion
+
+        #region Game Flow
+
+        
+        private bool GameMenuOpen()
+        {
+            return _gameController != null && _gameController.IsGameMenuOpen;
+        }
+
+        private bool NetworkOwnerInvalid()
+        {
+            return _networkController != null && _networkController.GetLocalRole() != GameController.Role.Technician;
+        }
+
+        #endregion
+        
         private void UpdateOutline()
         {
             _outline.enabled = !_controllable.IsControlled;
@@ -62,7 +99,7 @@ namespace TechSupport.Controller
 
         private void Update()
         {
-            if (_gameController != null && _gameController.IsGameMenuOpen)
+            if (GameMenuOpen() || NetworkOwnerInvalid())
                 return;
             
             if (Input.GetButtonUp(InputManager.GetInputNameByController(inputName)))
@@ -74,10 +111,12 @@ namespace TechSupport.Controller
 
         private void FixedUpdate()
         {
-            _image.gameObject.transform.localPosition = targetTop.transform.position * 10;
+            if (FullScreenSystem.Current == null)
+                return;
+            _image.gameObject.transform.position = FullScreenSystem.Current.WorldToScreenPoint(targetTop.transform.position);
         }
-        
-        public void Enable(bool enabledOutline)
+
+        public void Enable(bool enabledOutline, Camera c)
         {
             enabled = enabledOutline;
             if (enabledOutline)

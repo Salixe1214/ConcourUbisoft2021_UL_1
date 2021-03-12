@@ -57,7 +57,7 @@ namespace TechSupport.Surveillance
 
         public void EnableController(bool enableController)
         {
-            controllable.ForEach(outline => outline.Enable(enableController));
+            controllable.ForEach(outline => outline.Enable(enableController, _camera));
         }
     }
 }

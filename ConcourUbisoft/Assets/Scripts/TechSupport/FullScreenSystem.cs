@@ -7,7 +7,9 @@ namespace TechSupport
     {
         private readonly Rect _fullSize = new Rect(Vector2.zero, Vector2.one);
         private Rect _originRect = Rect.zero;
-        private SurveillanceCamera _target;
+        private static SurveillanceCamera _target;
+
+        public static Camera Current { get => _target.GetCamera(); }
 
         #region Full Screen
 
