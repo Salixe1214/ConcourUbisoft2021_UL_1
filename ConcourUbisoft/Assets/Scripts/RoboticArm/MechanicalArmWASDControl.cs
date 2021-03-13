@@ -15,12 +15,12 @@ namespace Arm
 
         private void Awake()
         {
-            _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+            _networkController = GameObject.FindGameObjectWithTag("NetworkController")?.GetComponent<NetworkController>();
         }
 
         private void Update()
         {
-            if (IsControlled && _owner == _networkController.GetLocalRole()) {
+            if (IsControlled && (_owner == GameController.Role.None || _owner == _networkController.GetLocalRole())) {
                 Vector3 translation = new Vector3(-Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
                 if(translation != Vector3.zero)
                 {
