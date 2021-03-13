@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 5905518934942538558}
   - component: {fileID: 6319612779888370426}
   m_Layer: 3
-  m_Name: TransportableA
+  m_Name: TransportableE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,7 +45,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2362435244797905396}
-  m_Mesh: {fileID: 4068373912626513877, guid: 5d324e9d602acde4e9bed87c9400fdae, type: 3}
+  m_Mesh: {fileID: 7563582778146171765, guid: 81710624946b21b4caf1a5b3b62ed078, type: 3}
 --- !u!23 &2362435244797905384
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3ff936555cd82bb4b89b1c0380b0cc6a, type: 2}
+  - {fileID: -1360991219368177298, guid: 81710624946b21b4caf1a5b3b62ed078, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
