@@ -33,11 +33,13 @@ public class randomCodePicker : MonoBehaviour
     // When the object awake, it randomly compose a combination of two different symbols of two different colors
     private void Awake()
     {
+        Random.InitState(System.DateTime.Now.Millisecond);
         #region choosing Symbol
         
         // Choice of the first symbol
         var symbolValues = Enum.GetValues(typeof(Symbol)); // List of the symbols
         int firstSymbolIndex = Random.Range(0, symbolValues.Length); // Random index in this list
+        Debug.Log("Index1: " + firstSymbolIndex);
         Symbol randomSymbol1 = (Symbol) symbolValues.GetValue(firstSymbolIndex); // Expliciting this symbol
         
         // We can't choose this symbol again
