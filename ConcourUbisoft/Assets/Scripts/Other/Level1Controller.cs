@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Arm;
 using ExitGames.Client.Photon.StructWrapping;
 using JetBrains.Annotations;
 using Other;
@@ -27,6 +28,9 @@ public class Level1Controller : MonoBehaviour
     [SerializeField] private Sprite GearImage;
     [SerializeField] private Sprite BatteryImage;
     [SerializeField] private Sprite PipeImage;
+    [SerializeField] private Vector3 camArmControlPosition;
+    [SerializeField] private Vector3 camFreeLookPosition;
+    [SerializeField] private MechanicalArmWASDControl levelOneArm;
 
     [Tooltip("Duration (Seconds) of items being cleared off the conveyors.")]
     [SerializeField] private float ClearItemsTimeSeconds = 3;
@@ -128,6 +132,11 @@ public class Level1Controller : MonoBehaviour
         StartCoroutine(StartCameraShake(cameraShakeDurationSeconds));
     }
 
+    public void SetCameraPosition(Vector3 camPositon)
+    {
+        StartCoroutine(MoveCamera(camPositon));
+    }
+
     private void ActivateItemSpawning(bool canSpawn)
     {
         TransportableSpawner.ActivateSpawning(canSpawn);
@@ -192,6 +201,16 @@ public class Level1Controller : MonoBehaviour
         yield return new WaitForSeconds(duration);
         cameraMustShake = false;
         AreaCamera.transform.position = cameraOriginalPosition;
+    }
+
+    IEnumerator MoveCamera(Vector3 targetPosition)
+    {
+        Vector3 velocity = Vector3.zero;
+        while (AreaCamera.transform.position != targetPosition)
+        {
+            Vector3.SmoothDamp(AreaCamera.transform.position, targetPosition, ref velocity, 1);
+            yield return null;
+        }
     }
 
     private void UpdateSpriteColorInList()

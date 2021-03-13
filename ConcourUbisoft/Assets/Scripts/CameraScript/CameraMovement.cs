@@ -75,7 +75,6 @@ public class CameraMovement : MonoBehaviour
         else
         {
             mouseXAccumulator += mouseX;
-            float previousMouseY = mouseYAccumulator;
             mouseYAccumulator -= mouseY;
             mouseYAccumulator = Mathf.Clamp(mouseYAccumulator, -90f, 90f);
             transform.localRotation = Quaternion.Slerp(transform.localRotation,Quaternion.Euler(mouseYAccumulator,0,0),cameraRotationSmoothingSpeed);
