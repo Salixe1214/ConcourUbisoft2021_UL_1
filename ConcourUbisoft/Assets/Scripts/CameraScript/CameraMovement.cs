@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Photon.Voice;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
@@ -45,8 +46,8 @@ public class CameraMovement : MonoBehaviour
 
     private void RotateCamera()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensivityX *Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensivityY *Time.deltaTime;
+        float mouseX = Input.GetAxisRaw("Mouse X") *mouseSensivityX;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensivityY;
         
         float controllerX_PS = Input.GetAxis("RightJoystickHorizontalPS")*controllerSensivityX*Time.deltaTime;
         float controllerY_PS = Input.GetAxis("RightJoystickVerticalPS")*controllerSensivityY*Time.deltaTime;
@@ -74,12 +75,12 @@ public class CameraMovement : MonoBehaviour
         else
         {
             mouseXAccumulator += mouseX;
+            float previousMouseY = mouseYAccumulator;
             mouseYAccumulator -= mouseY;
             mouseYAccumulator = Mathf.Clamp(mouseYAccumulator, -90f, 90f);
             transform.localRotation = Quaternion.Slerp(transform.localRotation,Quaternion.Euler(mouseYAccumulator,0,0),cameraRotationSmoothingSpeed);
-            //transform.localRotation = Quaternion.Euler(mouseYAccumulator, 0, 0);
             playerBody.MoveRotation(Quaternion.Slerp(playerBody.rotation,Quaternion.Euler(playerBody.rotation.x,mouseXAccumulator,playerBody.rotation.z),cameraRotationSmoothingSpeed));
-           // playerBody.MoveRotation(Quaternion.Euler(playerBody.rotation.x,mouseXAccumulator,playerBody.rotation.z));
+           
         }
     }
 }

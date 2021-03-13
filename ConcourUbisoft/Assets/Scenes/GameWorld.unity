@@ -9388,6 +9388,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4424554184312084893, guid: ac7fbfd19efded84bbf5511a09eb7875, type: 3}
+      propertyPath: mouseSensivityX
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4424554184312084893, guid: ac7fbfd19efded84bbf5511a09eb7875, type: 3}
+      propertyPath: mouseSensivityY
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4424554184312084893, guid: ac7fbfd19efded84bbf5511a09eb7875, type: 3}
+      propertyPath: cameraRotationSmoothingSpeed
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5711988891212450705, guid: ac7fbfd19efded84bbf5511a09eb7875, type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
+    - target: {fileID: 5711988891212450705, guid: ac7fbfd19efded84bbf5511a09eb7875, type: 3}
+      propertyPath: m_Interpolate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6699166975933682629, guid: ac7fbfd19efded84bbf5511a09eb7875, type: 3}
       propertyPath: m_RootOrder
       value: 5
