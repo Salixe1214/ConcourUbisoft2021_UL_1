@@ -13,8 +13,8 @@ public class DoorController : MonoBehaviour
         Up
     }
 
-    [SerializeField] private List<Direction> _inputSequences = null;
     [SerializeField] public int Id = 0;
+    private List<Direction> _inputSequences;
     private List<Direction> _currentSequences = new List<Direction>();
     private Animation _animation = null;
 
@@ -26,6 +26,15 @@ public class DoorController : MonoBehaviour
     private void Awake()
     {
         _animation = GetComponent<Animation>();
+        
+        if (GetComponent<randomCodePicker>() != null)
+            _inputSequences = GetComponent<randomCodePicker>().GETSequence();
+        else
+        {
+            _inputSequences = new List<Direction>();
+            _inputSequences.Add(Direction.Up);
+            Debug.LogWarning("Random Code Picker missing on " + gameObject.name);
+        }
     }
 
     public void TriggerLeft()
