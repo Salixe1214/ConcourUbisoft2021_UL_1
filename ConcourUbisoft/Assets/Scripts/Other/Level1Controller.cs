@@ -30,7 +30,7 @@ public class Level1Controller : MonoBehaviour
     [SerializeField] private Sprite PipeImage;
     [SerializeField] private Vector3 camArmControlPosition;
     [SerializeField] private Vector3 camFreeLookPosition;
-    [SerializeField] private MechanicalArmWASDControl levelOneArm;
+    [SerializeField] private Controllable levelOneArm;
 
     [Tooltip("Duration (Seconds) of items being cleared off the conveyors.")]
     [SerializeField] private float ClearItemsTimeSeconds = 3;
@@ -53,12 +53,12 @@ public class Level1Controller : MonoBehaviour
 
     private float conveyorOperatingSpeed;
     private bool firstWave = false;
-    private Vector3 cameraOriginalPosition;
     private bool cameraMustShake = false;
     private ImageLayout imageList;
     private List<Sprite> itemSprites;
     private SoundController soundController;
     private int currentListIndex;
+    private Vector3 currentCamPosition;
 
     private void Awake()
     {
@@ -73,14 +73,14 @@ public class Level1Controller : MonoBehaviour
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
         conveyorOperatingSpeed = MinConveyorSpeed;
-        cameraOriginalPosition = AreaCamera.transform.position;
+        currentCamPosition = AreaCamera.transform.position;
     }
 
     private void Update()
     {
         if (cameraMustShake)
         {
-            AreaCamera.transform.position = cameraOriginalPosition + Random.insideUnitSphere * cameraShakeForce;
+            AreaCamera.transform.position = currentCamPosition + Random.insideUnitSphere * cameraShakeForce;
         }
     }
 
@@ -90,6 +90,7 @@ public class Level1Controller : MonoBehaviour
         FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing += InitiateNextSequence;
         FurnaceController.WhenFurnaceConsumeWrong += ShakeCamera;
         FurnaceController.CheckItemOffList += UpdateSpriteColorInList;
+        levelOneArm.OnControlStateChange += SetCameraPosition;
     }
 
     private void OnDisable()
@@ -98,6 +99,7 @@ public class Level1Controller : MonoBehaviour
         FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing -= InitiateNextSequence;
         FurnaceController.WhenFurnaceConsumeWrong -= ShakeCamera;
         FurnaceController.CheckItemOffList -= UpdateSpriteColorInList;
+        levelOneArm.OnControlStateChange -= SetCameraPosition;
     }
 
     public void FinishLevel()
@@ -132,9 +134,11 @@ public class Level1Controller : MonoBehaviour
         StartCoroutine(StartCameraShake(cameraShakeDurationSeconds));
     }
 
-    public void SetCameraPosition(Vector3 camPositon)
+    public void SetCameraPosition(bool armControlled)
     {
-        StartCoroutine(MoveCamera(camPositon));
+        currentCamPosition = armControlled ? camArmControlPosition : camFreeLookPosition;
+
+        StartCoroutine(MoveCamera(currentCamPosition));
     }
 
     private void ActivateItemSpawning(bool canSpawn)
@@ -200,7 +204,7 @@ public class Level1Controller : MonoBehaviour
         soundController.PlayLevelOneErrorSound();
         yield return new WaitForSeconds(duration);
         cameraMustShake = false;
-        AreaCamera.transform.position = cameraOriginalPosition;
+        AreaCamera.transform.position = currentCamPosition;
     }
 
     IEnumerator MoveCamera(Vector3 targetPosition)
