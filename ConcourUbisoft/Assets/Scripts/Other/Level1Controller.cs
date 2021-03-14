@@ -29,7 +29,9 @@ public class Level1Controller : MonoBehaviour
     [SerializeField] private Sprite BatteryImage;
     [SerializeField] private Sprite PipeImage;
     [SerializeField] private Vector3 camArmControlPosition;
-    [SerializeField] private Vector3 camFreeLookPosition;
+    [SerializeField] private float camArmControlAngle = 90;
+    [SerializeField] private Vector3 camRoomViewPosition;
+    [SerializeField] private float camRoomViewAngle = 45;
     [SerializeField] private Controllable levelOneArm;
 
     [Tooltip("Duration (Seconds) of items being cleared off the conveyors.")]
@@ -59,6 +61,8 @@ public class Level1Controller : MonoBehaviour
     private SoundController soundController;
     private int currentListIndex;
     private Vector3 currentCamPosition;
+    private float currentCameraAngle;
+    private Coroutine cameraMovementCoroutine;
 
     private void Awake()
     {
@@ -74,6 +78,7 @@ public class Level1Controller : MonoBehaviour
         TransportableSpawner.enabled = false;
         conveyorOperatingSpeed = MinConveyorSpeed;
         currentCamPosition = AreaCamera.transform.position;
+        currentCameraAngle = AreaCamera.transform.localRotation.x;
     }
 
     private void Update()
@@ -136,9 +141,14 @@ public class Level1Controller : MonoBehaviour
 
     public void SetCameraPosition(bool armControlled)
     {
-        currentCamPosition = armControlled ? camArmControlPosition : camFreeLookPosition;
-
-        StartCoroutine(MoveCamera(currentCamPosition));
+        currentCamPosition = armControlled ? camArmControlPosition : camRoomViewPosition;
+        currentCameraAngle = armControlled ? camArmControlAngle : camRoomViewAngle;
+        
+        if (cameraMovementCoroutine != null)
+        {
+            StopCoroutine(cameraMovementCoroutine);
+        }
+        cameraMovementCoroutine = StartCoroutine(MoveCamera(currentCamPosition,currentCameraAngle));
     }
 
     private void ActivateItemSpawning(bool canSpawn)
@@ -207,14 +217,25 @@ public class Level1Controller : MonoBehaviour
         AreaCamera.transform.position = currentCamPosition;
     }
 
-    IEnumerator MoveCamera(Vector3 targetPosition)
+    IEnumerator MoveCamera(Vector3 targetPosition, float targetRotation)
     {
+        Vector3 previousposition = AreaCamera.transform.localPosition;
         Vector3 velocity = Vector3.zero;
-        while (AreaCamera.transform.position != targetPosition)
+        Vector3 velocityAngle = Vector3.zero;
+        while (AreaCamera.transform.localPosition != targetPosition)
         {
-            Vector3.SmoothDamp(AreaCamera.transform.position, targetPosition, ref velocity, 1);
+            previousposition = AreaCamera.transform.localPosition;
+            AreaCamera.transform.localPosition =Vector3.SmoothDamp(AreaCamera.transform.localPosition, targetPosition, ref velocity, 0.5f);
+            AreaCamera.transform.localRotation = Quaternion.Slerp(AreaCamera.transform.localRotation,Quaternion.Euler(targetRotation, -90, 0), 0.02f);
+            if (previousposition == AreaCamera.transform.localPosition)
+            {
+                break;
+            }
+
             yield return null;
         }
+
+        yield return null;
     }
 
     private void UpdateSpriteColorInList()
