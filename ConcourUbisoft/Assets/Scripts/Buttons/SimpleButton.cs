@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(AudioSource))]
 public class SimpleButton : MonoBehaviour
@@ -15,12 +16,16 @@ public class SimpleButton : MonoBehaviour
     protected bool soundPlayed = false;
     private Outline _outline=null;
 
+    private int _maxDistance = 10;
+    private bool _reachable;
+    private bool _inPerimeter = false;
+
     private void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
         _animator = GetComponentInChildren<Animator>();
         _outline = GetComponentInChildren<Outline>();
-
+        _reachable = false;
     }
 
     protected virtual bool GetInput()
@@ -33,6 +38,30 @@ public class SimpleButton : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (!_reachable && Vector3.Distance(GameObject.FindWithTag("Player").transform.position, gameObject.transform.position) < _maxDistance)
+        {
+            if (_inPerimeter)
+            {
+                Debug.Log("Enter Hover");
+                _animator.SetBool("hover", true);
+                _isHover = true;
+                _outline.enabled = true;
+            }
+            _reachable = true;
+        }
+
+        if (_reachable && Vector3.Distance(GameObject.FindWithTag("Player").transform.position, gameObject.transform.position) >= _maxDistance)
+        {
+            if (_isHover)
+            {
+                Debug.Log("Exit Hover");
+                _isHover = false;
+                _animator.SetBool("hover", false);
+                _outline.enabled = false;
+            }
+            _reachable = false;
+        }
+        
         if (_isHover)
         {
             if (GetInput())
@@ -59,17 +88,25 @@ public class SimpleButton : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        Debug.Log("Enter Hover");
-        _animator.SetBool("hover", true);
-        _isHover = true;
-        _outline.enabled = true;
+        _inPerimeter = true;
+        if (_reachable)
+        {
+            Debug.Log("Enter Hover");
+            _animator.SetBool("hover", true);
+            _isHover = true;
+            _outline.enabled = true;
+        }
     }
 
     private void OnMouseExit()
     {
-        Debug.Log("Exit Hover");
-        _isHover = false;
-        _animator.SetBool("hover", false);
-        _outline.enabled = false;
+        _inPerimeter = false;
+        if (_isHover)
+        {
+            Debug.Log("Exit Hover");
+            _isHover = false;
+            _animator.SetBool("hover", false);
+            _outline.enabled = false;
+        }
     }
 }
