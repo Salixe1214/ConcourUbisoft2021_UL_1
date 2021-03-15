@@ -99,9 +99,9 @@ public class randomCodePicker : MonoBehaviour
         string a = "";
         foreach (var i in _sequence)
         {
-            a = a + (i.ToString());
+            a = a + i + " - ";
         }
-        Debug.Log("Sequence: " + a);
+        Debug.Log("Sequence of " + gameObject.name + ": " + a);
         Debug.Log(("Symbol1: " + _firstSymbol));
         Debug.Log(("Symbol2: " + _secondSymbol));
 
