@@ -20,6 +20,7 @@ public class DoorController : MonoBehaviour
 
     public UnityEvent OnError;
     public UnityEvent OnSuccess;
+    public UnityEvent OnEntry;
 
     public bool IsUnlock { get; private set; } = false;
 
@@ -40,21 +41,25 @@ public class DoorController : MonoBehaviour
     public void TriggerLeft()
     {
         _currentSequences.Add(Direction.Left);
+        OnEntry.Invoke();
     }
 
     public void TriggerRight()
     {
         _currentSequences.Add(Direction.Right);
+        OnEntry.Invoke();
     }
 
     public void TriggerBottom()
     {
         _currentSequences.Add(Direction.Bottom);
+        OnEntry.Invoke();
     }
 
     public void TriggerUp()
     {
         _currentSequences.Add(Direction.Up);
+        OnEntry.Invoke();
     }
 
     public void CheckSequence()
