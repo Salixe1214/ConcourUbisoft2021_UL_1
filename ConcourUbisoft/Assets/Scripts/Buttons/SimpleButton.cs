@@ -19,6 +19,7 @@ public class SimpleButton : MonoBehaviour
     private int _maxDistance = 10;
     private bool _reachable;
     private bool _inPerimeter = false;
+    private GameObject _player = null;
 
     private void Awake()
     {
@@ -26,6 +27,8 @@ public class SimpleButton : MonoBehaviour
         _animator = GetComponentInChildren<Animator>();
         _outline = GetComponentInChildren<Outline>();
         _reachable = false;
+
+        _player = GameObject.FindWithTag("Player");
     }
 
     protected virtual bool GetInput()
@@ -38,7 +41,7 @@ public class SimpleButton : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (!_reachable && Vector3.Distance(GameObject.FindWithTag("Player").transform.position, gameObject.transform.position) < _maxDistance)
+        if (!_reachable && Vector3.Distance(_player.transform.position, gameObject.transform.position) < _maxDistance)
         {
             if (_inPerimeter)
             {
@@ -50,7 +53,7 @@ public class SimpleButton : MonoBehaviour
             _reachable = true;
         }
 
-        if (_reachable && Vector3.Distance(GameObject.FindWithTag("Player").transform.position, gameObject.transform.position) >= _maxDistance)
+        if (_reachable && Vector3.Distance(_player.transform.position, gameObject.transform.position) >= _maxDistance)
         {
             if (_isHover)
             {
