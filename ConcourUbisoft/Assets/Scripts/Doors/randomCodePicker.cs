@@ -29,6 +29,7 @@ public class randomCodePicker : MonoBehaviour
     private (Symbol, SymbolColor) _firstSymbol;
     private (Symbol, SymbolColor) _secondSymbol;
     private List<DoorController.Direction> _sequence = new List<DoorController.Direction>();
+    private bool _isGenerated = false;
     
     // When the object awake, it randomly compose a combination of two different symbols of two different colors
     private void Awake()
@@ -39,7 +40,7 @@ public class randomCodePicker : MonoBehaviour
         // Choice of the first symbol
         var symbolValues = Enum.GetValues(typeof(Symbol)); // List of the symbols
         int firstSymbolIndex = Random.Range(0, symbolValues.Length); // Random index in this list
-        Debug.Log("Index1: " + firstSymbolIndex);
+        
         Symbol randomSymbol1 = (Symbol) symbolValues.GetValue(firstSymbolIndex); // Expliciting this symbol
         
         // We can't choose this symbol again
@@ -104,6 +105,8 @@ public class randomCodePicker : MonoBehaviour
         Debug.Log("Sequence of " + gameObject.name + ": " + a);
         Debug.Log(("Symbol1: " + _firstSymbol));
         Debug.Log(("Symbol2: " + _secondSymbol));
+
+        _isGenerated = true;
 
     }
 
@@ -241,9 +244,20 @@ public class randomCodePicker : MonoBehaviour
 
     public ((Symbol, SymbolColor),(Symbol, SymbolColor)) GETSymbols()
     {
+        Debug.Log("Getting: "+ _firstSymbol); 
+        
         return (_firstSymbol, _secondSymbol);
     }
 
+    IEnumerator waitForReturn()
+    {
+        while (!_isGenerated)
+        {
+            yield return new WaitForSeconds(1);
+        }
+        
+    }
+    
     public List<DoorController.Direction> GETSequence()
     {
         return _sequence;
