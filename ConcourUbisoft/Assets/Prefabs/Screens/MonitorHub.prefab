@@ -59,7 +59,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7590d7154f5acea4bae1bf326c6145c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spritesList: []
+  spritesList:
+  - {fileID: 21300000, guid: 4e86f27a961229a4cafda611099a6b7a, type: 3}
+  - {fileID: 21300000, guid: eec3037292c6b3a47a2222e1d27e2cfb, type: 3}
+  - {fileID: 21300000, guid: fed3762b24cd73e46b4b4ffa196bf119, type: 3}
   door: {fileID: 0}
   idSymbol: 2
 --- !u!212 &2794193165350600933
@@ -260,7 +263,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7590d7154f5acea4bae1bf326c6145c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spritesList: []
+  spritesList:
+  - {fileID: 21300000, guid: 4e86f27a961229a4cafda611099a6b7a, type: 3}
+  - {fileID: 21300000, guid: eec3037292c6b3a47a2222e1d27e2cfb, type: 3}
+  - {fileID: 21300000, guid: fed3762b24cd73e46b4b4ffa196bf119, type: 3}
   door: {fileID: 0}
   idSymbol: 1
 --- !u!212 &5084952514768922467
