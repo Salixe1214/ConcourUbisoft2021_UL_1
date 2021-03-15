@@ -16,7 +16,7 @@ public class SimpleButton : MonoBehaviour
     protected bool soundPlayed = false;
     private Outline _outline=null;
 
-    private int _maxDistance = 10;
+    [SerializeField] private int maxDistance = 10;
     private bool _reachable;
     private bool _inPerimeter = false;
     private GameObject _player = null;
@@ -41,7 +41,7 @@ public class SimpleButton : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (!_reachable && Vector3.Distance(_player.transform.position, gameObject.transform.position) < _maxDistance)
+        if (!_reachable && Vector3.Distance(_player.transform.position, gameObject.transform.position) < maxDistance)
         {
             if (_inPerimeter)
             {
@@ -53,7 +53,7 @@ public class SimpleButton : MonoBehaviour
             _reachable = true;
         }
 
-        if (_reachable && Vector3.Distance(_player.transform.position, gameObject.transform.position) >= _maxDistance)
+        if (_reachable && Vector3.Distance(_player.transform.position, gameObject.transform.position) >= maxDistance)
         {
             if (_isHover)
             {
