@@ -173,6 +173,7 @@ GameObject:
   - component: {fileID: 7092499746771334416}
   - component: {fileID: 8892310260985401137}
   - component: {fileID: 7576829587614216107}
+  - component: {fileID: 8948978638033349432}
   m_Layer: 0
   m_Name: RealRealDoor
   m_TagString: Untagged
@@ -222,7 +223,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e20a5a7f914ed3f4d8847a48ca5fb699, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputSequences: 03000000030000000200000001000000
   Id: 0
   OnError:
     m_PersistentCalls:
@@ -242,6 +242,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8948978638033349432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7576829587614216106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25407c884bd8d0f448d6feaa46b523bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8056977626124845028
 PrefabInstance:
   m_ObjectHideFlags: 0
