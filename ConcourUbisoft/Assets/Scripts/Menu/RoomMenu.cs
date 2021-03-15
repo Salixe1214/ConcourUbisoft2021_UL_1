@@ -9,6 +9,7 @@ public class RoomMenu : MonoBehaviour
 {
     [SerializeField] private GameObject _content = null;
     [SerializeField] private GameObject _roomMenuElementPrefab = null;
+    [SerializeField] private GameObject _waitingForAnotherPlayer = null;
     [SerializeField] private Button _startButton = null;
     [SerializeField] private Text _errorText = null;
 
@@ -56,11 +57,13 @@ public class RoomMenu : MonoBehaviour
     {
         _networkController.OnPlayerObjectCreate += RefreshRoomInterface;
         _networkController.OnJoinedRoomEvent += OnJoinedRoomEvent;
+        _networkController.OnPlayerLeftEvent += RefreshRoomInterface;
     }
     private void OnDisable()
     {
         _networkController.OnPlayerObjectCreate -= RefreshRoomInterface;
         _networkController.OnJoinedRoomEvent -= OnJoinedRoomEvent;
+        _networkController.OnPlayerLeftEvent -= RefreshRoomInterface;
     }
     private void Update()
     {
@@ -78,12 +81,20 @@ public class RoomMenu : MonoBehaviour
     private void RefreshRoomInterface()
     {
         List<Transform> children = new List<Transform>();
-        for(int i = 0; i < _content.transform.childCount; ++i)
+        for (int i = 0; i < _content.transform.childCount; ++i)
         {
-            children.Add(_content.transform.GetChild(i));
+            Transform child = _content.transform.GetChild(i);
+            if (child.GetComponent<RoomElementController>() == null)
+            {
+                Destroy(child.gameObject);
+            }
+            else
+            {
+                children.Add(child);
+            }
         }
 
-        IEnumerable<PlayerNetwork> elements = children.Select(x => x.GetComponent<RoomElementController>().PlayerNetwork );
+        IEnumerable<PlayerNetwork> elements = children.Select(x => x.GetComponent<RoomElementController>().PlayerNetwork);
         IEnumerable<PlayerNetwork> playerNetworksNotFoundInScene = GameObject.FindGameObjectsWithTag("PlayerNetwork").Select(x => x.GetComponent<PlayerNetwork>()).Where(y => elements.Count(z => z == y) == 0).OrderBy(x => !x.IsMasterClient());
 
         foreach (PlayerNetwork playerNetwork in playerNetworksNotFoundInScene)
@@ -91,6 +102,12 @@ public class RoomMenu : MonoBehaviour
             GameObject roomElement = Instantiate(_roomMenuElementPrefab, _content.transform);
             roomElement.GetComponent<RoomElementController>().PlayerNetwork = playerNetwork;
             roomElement.transform.Find("KickButton").GetComponent<Button>().onClick.AddListener(new UnityAction(() => { _menuSoundController.PlayButtonSound(); _networkController.KickPlayer(playerNetwork.Id); }));
+        }
+
+        Debug.Log(children.Count() + playerNetworksNotFoundInScene.Count());
+        if (_networkController.GetNumberOfPlayer() != 2)
+        {
+            Instantiate(_waitingForAnotherPlayer, _content.transform);
         }
     }
     private void OnJoinedRoomEvent()

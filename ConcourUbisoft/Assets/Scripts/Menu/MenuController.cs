@@ -47,6 +47,11 @@ public class MenuController : MonoBehaviour
         _loadScreenMenuController.Show("Disconnecting...");
         _networkController.LeaveLobby();
     }
+    public void ExitGame()
+    {
+        _menuSoundController.PlayButtonSound();
+        Application.Quit();
+    }
     #endregion
     #region Unity Callbacks
     private void Awake()

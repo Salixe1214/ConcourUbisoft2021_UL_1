@@ -13,6 +13,8 @@ public class LobbyMenu : MonoBehaviour
     [SerializeField] private GameObject _createRoomPanel = null;
     [SerializeField] private GameObject _togglePrivate = null;
     [SerializeField] private GameObject _joinRoomPanel = null;
+    [SerializeField] private GameObject _roomNameCreateInputField = null;
+    [SerializeField] private GameObject _roomNameJoinInputField = null;
     [SerializeField] private LoadScreenMenuController _loadScreenMenuController = null;
 
     private NetworkController _networkController = null;
@@ -27,7 +29,7 @@ public class LobbyMenu : MonoBehaviour
     public void CreateRoom()
     {
         _menuSoundController.PlayButtonSound();
-        _networkController.CreateRoom(_createRoomPanel.transform.Find("RoomNameInputField").GetComponent<InputField>().text, _togglePrivate.GetComponent<Toggle>().isOn);
+        _networkController.CreateRoom(_roomNameCreateInputField.GetComponent<InputField>().text, _togglePrivate.GetComponent<Toggle>().isOn);
         _loadScreenMenuController.Show("Creating Room...");
         _createRoomPanel.SetActive(false);
     }
@@ -44,7 +46,7 @@ public class LobbyMenu : MonoBehaviour
     public void JoinRoom()
     {
         _menuSoundController.PlayButtonSound();
-        string text = _joinRoomPanel.transform.Find("RoomNameInputField").GetComponent<InputField>().textComponent.text;
+        string text = _roomNameJoinInputField.GetComponent<InputField>().textComponent.text;
         _loadScreenMenuController.Show("Joining Room...");
         _networkController.JoinRoom(text);
         _joinRoomPanel.SetActive(false);
