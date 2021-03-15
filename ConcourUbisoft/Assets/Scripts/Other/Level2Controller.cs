@@ -35,7 +35,6 @@ public class Level2Controller : MonoBehaviour
                 solutions.RemoveAt(solutionIndex);
             }
 
-
             foreach (Bounds solution in solutions)
             {
                 SpawnObject(solution, _possibleColors[Random.Range(0, _possibleColors.Length)]);
@@ -47,7 +46,6 @@ public class Level2Controller : MonoBehaviour
     {
         GameObject randomPrefab = _transportablesPrefab[Random.Range(0, _transportablesPrefab.Length)];
         GameObject transportable = Instantiate(randomPrefab, solution.center, Quaternion.identity);
-
         transportable.gameObject.GetComponent<TransportableByConveyor>().Color = color;
     }
 }
