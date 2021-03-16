@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Other;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ public class TransportableSpawner : MonoBehaviour
     [SerializeField] public GameObject LevelControl = null;
     [SerializeField] private Vector2 DelayBetweenSpawnsInSeconds = new Vector2(0.5f, 1);
     [SerializeField] private bool CanSpawn = true;
-    
+
     // Control conveyor speed according to needs. Ex: Slow conveyor speed might need a speed boost when items are spawned the first time in order to avoid item drought.
     [SerializeField] private Conveyor[] conveyors = null;
 
@@ -20,12 +21,19 @@ public class TransportableSpawner : MonoBehaviour
     private float currentDelay = 0.0f;
     private int sequenceIndex = 0;
     private LevelController levelController;
+    private System.Random _random = new System.Random(Guid.NewGuid().GetHashCode());
+    private bool canSpawnNextNeededItem;
 
-    private System.Random _random = new System.Random(0);
+    public event Action spawnedNextNeededItem;
+
+    public bool CanSpawnNextNeededItem
+    {
+        set => canSpawnNextNeededItem = value;
+    }
 
     private void Awake()
     {
-        
+        canSpawnNextNeededItem = false;
     }
 
     private void Start()
@@ -55,12 +63,19 @@ public class TransportableSpawner : MonoBehaviour
 
         if (sequenceIndex > levelController.GetCurrentSequenceLenght())
         {
+            if (!canSpawnNextNeededItem)
+            {
+                sequenceIndex = 0;
+                return;
+            }
+
             foreach (var t in TransportablesPrefab)
             {
                 if (t.GetComponent<TransportableByConveyor>().GetType() == levelController.GetNextTypeInSequence())
                 {
                     transportable = Instantiate(t, randomPoint, Quaternion.identity);
                     transportable.gameObject.GetComponent<TransportableByConveyor>().Color = levelController.GetNextColorInSequence();
+                    spawnedNextNeededItem?.Invoke();
                     break;
                 }
             }
@@ -94,4 +109,5 @@ public class TransportableSpawner : MonoBehaviour
         DelayBetweenSpawnsInSeconds = delay;
     }
 
+    
 }

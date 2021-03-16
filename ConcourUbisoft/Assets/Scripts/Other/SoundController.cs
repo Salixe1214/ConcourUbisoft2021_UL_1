@@ -23,6 +23,8 @@ public class SoundController : MonoBehaviour
 
     [SerializeField] private AudioClip LevelSuccessSound;
 
+    [SerializeField] private AudioClip Area2Track;
+
     [SerializeField] private AudioMixer MasterAudioMixer = null;
     [SerializeField] private AudioMixer _ambientAudioMixer = null;
     [SerializeField] private AudioMixer _musicAudioMixer = null;
@@ -120,6 +122,19 @@ public class SoundController : MonoBehaviour
         EffectSource.clip = LevelSuccessSound;
         EffectSource.time = 0;
         EffectSource.Play();
+    }
+
+    public void PlayArea2Music()
+    {
+        AudioSource.clip = Area2Track;
+        AudioSource.time = 0;
+        AudioSource.loop = true;
+        AudioSource.Play();
+    }
+
+    public void StopArea2Music()
+    {
+        AudioSource.Stop();
     }
 
     public void SetSound(GameController.Role role)
