@@ -983,18 +983,17 @@ MonoBehaviour:
   - {r: 1, g: 0.16355915, b: 0, a: 1}
   - {r: 1, g: 0.9456895, b: 0, a: 1}
   sizeList: {x: 300, y: 50}
-  items:
-  - title: Item 1
-    content: Donec finibus a mi id dapibus. Praesent elementum arcu in ante molestie
-      scelerisque. Phasellus tempus purus laoreet urna pulvinar sollicitudin. Ut
-      eu nibh in tellus pharetra egestas vel ac orci.
-    images: []
-  - title: Item 2
-    content: Item avec image
-    images:
-    - {fileID: 21300000, guid: bd293dc32f4aaf94e8274f2fac2cdf89, type: 3}
   background: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   front: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  symbols:
+    items:
+    - key: 0
+      value: {fileID: 21300000, guid: 0efd02f6ee02fe5468c389ad33efd25c, type: 3}
+    - key: 1
+      value: {fileID: 21300000, guid: f9112f301f7ef2541ad4d19b69018634, type: 3}
+    - key: 2
+      value: {fileID: 21300000, guid: 2564c49e527e565428861cabe6b907ab, type: 3}
+  arrow: {fileID: 21300000, guid: 5e98e428bdf1f6e429e4c833f3efc2de, type: 3}
 --- !u!114 &657352899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1189,7 +1188,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fd784278ec7afb4a8dcfbf168e58e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outlineTarget: {fileID: 1394871844}
   outlineColor: {r: 1, g: 0, b: 0, a: 1}
   outlineWidth: 10
   canvas: {fileID: 657352892}
@@ -1203,6 +1201,24 @@ MonoBehaviour:
       value: {fileID: 2800000, guid: f05aa8f6de7dd5d41b3c97d678845c29, type: 3}
     - key: 2
       value: {fileID: 2800000, guid: cf19b2c34b9afa442a1f2148622dd8c1, type: 3}
+--- !u!114 &1394871849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1394871844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &1461066219
 GameObject:
   m_ObjectHideFlags: 0
