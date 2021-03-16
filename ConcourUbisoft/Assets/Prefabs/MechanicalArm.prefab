@@ -584,6 +584,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pullForce: 10
   magnetPullPoint: {fileID: 927382909}
+  _owner: 0
 --- !u!82 &8565603360900868797
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1172,7 +1173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 6455222844297920428}
   armController: {fileID: 2121669986793875469}
-  smoothIterationCount: 10
+  smoothIterationCount: 120
   volumeMultiplier: 0.3
 --- !u!1 &8875939281911053909
 GameObject:
