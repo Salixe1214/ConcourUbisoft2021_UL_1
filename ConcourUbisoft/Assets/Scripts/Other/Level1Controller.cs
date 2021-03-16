@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class Level1Controller : MonoBehaviour
+public class Level1Controller : MonoBehaviour , LevelController
 {
     [SerializeField] private Color[] PossibleColors = null;
     public Color[] GetColors() => PossibleColors;
