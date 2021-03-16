@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Other;
 using UnityEngine;
 
 public class TransportableSpawner : MonoBehaviour
@@ -7,7 +9,7 @@ public class TransportableSpawner : MonoBehaviour
     [SerializeField] private GameObject[] TransportablesPrefab = null;
     [SerializeField] private Transform PointA = null;
     [SerializeField] private Transform PointB = null;
-    [SerializeField] private Level1Controller Level1Controller = null;
+    [SerializeField] public GameObject LevelControl = null;
     [SerializeField] private Vector2 DelayBetweenSpawnsInSeconds = new Vector2(0.5f, 1);
     [SerializeField] private bool CanSpawn = true;
     
@@ -16,14 +18,19 @@ public class TransportableSpawner : MonoBehaviour
 
     private float lastSpawnTime = 0.0f;
     private float currentDelay = 0.0f;
-
     private int sequenceIndex = 0;
+    private LevelController levelController;
 
     private System.Random _random = new System.Random(0);
 
     private void Awake()
     {
         
+    }
+
+    private void Start()
+    {
+        levelController = LevelControl.GetComponent<LevelController>();
     }
 
     private void Update()
@@ -38,7 +45,7 @@ public class TransportableSpawner : MonoBehaviour
 
     private void Spawn()
     {
-        Color[] possibleColors = Level1Controller.GetColors();
+        Color[] possibleColors = levelController.GetColors();
 
         GameObject randomPrefab = TransportablesPrefab[_random.Next(0, TransportablesPrefab.Length)];
 
@@ -46,14 +53,14 @@ public class TransportableSpawner : MonoBehaviour
 
         GameObject transportable;
 
-        if (sequenceIndex > Level1Controller.GetCurrentSequenceLenght())
+        if (sequenceIndex > levelController.GetCurrentSequenceLenght())
         {
             foreach (var t in TransportablesPrefab)
             {
-                if (t.GetComponent<TransportableByConveyor>().GetType() == Level1Controller.GetNextTypeInSequence())
+                if (t.GetComponent<TransportableByConveyor>().GetType() == levelController.GetNextTypeInSequence())
                 {
                     transportable = Instantiate(t, randomPoint, Quaternion.identity);
-                    transportable.gameObject.GetComponent<TransportableByConveyor>().Color = Level1Controller.GetNextColorInSequence();
+                    transportable.gameObject.GetComponent<TransportableByConveyor>().Color = levelController.GetNextColorInSequence();
                     break;
                 }
             }

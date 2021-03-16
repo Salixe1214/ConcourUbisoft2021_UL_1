@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 5905518934942538558}
   - component: {fileID: 6319612779888370426}
   m_Layer: 3
-  m_Name: TransportableD
+  m_Name: TransportablePipe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b3d139d0c9f837488bb839403516f38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  type: 4
 --- !u!114 &843007250116299105
 MonoBehaviour:
   m_ObjectHideFlags: 0

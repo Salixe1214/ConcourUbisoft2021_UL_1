@@ -1,18 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using Other;
 using UnityEngine;
 
-public class Level2Controller : MonoBehaviour
+public class Level2Controller : MonoBehaviour , LevelController
 {
     [SerializeField] private GameObject[] _transportablesPrefab = null;
     [SerializeField] private Color[] _possibleColors = null;
     [SerializeField] private SpawnObjectOnLineConveyor[] _spawners = null;
     [SerializeField] private FurnaceController _furnace = null;
 
+    [SerializeField] private TransportableSpawner Spawner;
+    
+    public Color[] GetColors() => _possibleColors;
+    public Color GetNextColorInSequence() => _furnace.GetNextColor();
+    public int GetCurrentSequenceLenght() => _furnace.GetCurrentSequenceLenght();
+    public TransportableType GetNextTypeInSequence() => _furnace.GetNextItemType();
+    
     private void Start()
     {
         _furnace.GenerateNewColorSequences(_possibleColors);
-        SpawnObjects();
+        //SpawnObjects();
+        Spawner.ActivateSpawning(true);
     }
 
     public void SpawnObjects()
@@ -35,7 +44,6 @@ public class Level2Controller : MonoBehaviour
                 solutions.RemoveAt(solutionIndex);
             }
 
-
             foreach (Bounds solution in solutions)
             {
                 SpawnObject(solution, _possibleColors[Random.Range(0, _possibleColors.Length)]);
@@ -47,7 +55,6 @@ public class Level2Controller : MonoBehaviour
     {
         GameObject randomPrefab = _transportablesPrefab[Random.Range(0, _transportablesPrefab.Length)];
         GameObject transportable = Instantiate(randomPrefab, solution.center, Quaternion.identity);
-
-        transportable.gameObject.GetComponent<TransportableByConveyor>().Color = color;
+        transportable.gameObject.GetComponent<TransportableByConveyor>().Color = color; 
     }
 }

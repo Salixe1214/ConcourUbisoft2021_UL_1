@@ -7,6 +7,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using System;
 
 public class NetworkController : MonoBehaviourPunCallbacks
 {
@@ -70,6 +71,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public delegate void OnPlayerNetworkInstantiateHandler();
     public event OnPlayerNetworkInstantiateHandler OnPlayerObjectCreate;
+
     #endregion
     #region Photon Callbacks
     public override void OnDisconnected(DisconnectCause cause)
@@ -176,6 +178,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
     {
         IEnumerable<PlayerNetwork> playerNetworks = GameObject.FindGameObjectsWithTag("PlayerNetwork").Select(x => x.GetComponent<PlayerNetwork>()).Where(x => x.IsMine());
         return playerNetworks.Count() > 0 ? playerNetworks.First().PlayerRole : GameController.Role.None;
+    }
+    public int GetNumberOfPlayer()
+    {
+        return PhotonNetwork.CurrentRoom.PlayerCount;
     }
     #endregion
 }
