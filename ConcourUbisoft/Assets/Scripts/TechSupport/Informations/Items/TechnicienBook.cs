@@ -11,7 +11,7 @@ namespace TechSupport.Informations.Items
     {
         private AccordionElement _accordionElement;
 
-        private readonly List<((DoorCode.Symbol, DoorCode.SymbolColor), (DoorCode.Symbol, DoorCode.SymbolColor))> _content = 
+        private readonly List<((DoorCode.Symbol, DoorCode.SymbolColor), (DoorCode.Symbol, DoorCode.SymbolColor))> _content =
             new List<((DoorCode.Symbol, DoorCode.SymbolColor), (DoorCode.Symbol, DoorCode.SymbolColor))>()
         {
             ((DoorCode.Symbol.One, DoorCode.SymbolColor.Blue), (DoorCode.Symbol.Two, DoorCode.SymbolColor.Green)),
@@ -59,7 +59,7 @@ namespace TechSupport.Informations.Items
         private Image InstantiateDirection(Transform parent, DoorController.Direction direction)
         {
             Image image = InstantiateImage(parent, _arrow, Color.black, Image.Type.Simple);
-            
+
             image.transform.Rotate(_directions[direction]);
             Debug.Log(image.rectTransform.sizeDelta);
             return image;
@@ -71,7 +71,7 @@ namespace TechSupport.Informations.Items
 
 
             line.transform.SetParent(_accordionElement.transform);
-            InstantiateImage(line.gameObject.transform, _symbols[combination.Item1.Item1], 
+            InstantiateImage(line.gameObject.transform, _symbols[combination.Item1.Item1],
                 _colors[combination.Item1.Item2], Image.Type.Simple);
             InstantiateImage(line.gameObject.transform, _symbols[combination.Item2.Item1],
                 _colors[combination.Item2.Item2], Image.Type.Simple);
@@ -99,7 +99,7 @@ namespace TechSupport.Informations.Items
 
         public override void Delete()
         {
-            Object.Destroy(_accordionElement); // The theorie want the book to delete his children 
+            Object.Destroy(_accordionElement); // The theorie want the book to delete his children
         }
     }
 }
