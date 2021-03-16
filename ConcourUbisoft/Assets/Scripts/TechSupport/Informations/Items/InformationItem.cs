@@ -59,7 +59,7 @@ namespace TechSupport.Informations.Items
                 verticalLayoutGroup = go.AddComponent<VerticalLayoutGroup>();
             verticalLayoutGroup.childScaleHeight = false;
             verticalLayoutGroup.childForceExpandWidth = true;
-            verticalLayoutGroup.spacing = 2;
+            verticalLayoutGroup.spacing = 0;
             verticalLayoutGroup.padding = new RectOffset(2, 2, 2, 2);
         }
         
