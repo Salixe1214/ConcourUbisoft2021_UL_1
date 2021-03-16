@@ -8,7 +8,7 @@ using UnityEngine.Audio;
 public class SoundController : MonoBehaviour
 {
     [SerializeField] private AudioClip ButtonSound = null;
-    [SerializeField] private AudioSource AudioSource = null;
+    [SerializeField] private AudioSource AudioSourceSoundEffect = null;
 
     [SerializeField] private AudioClip MenuSong = null;
     [SerializeField] private AudioSource MenuSongSource = null;
@@ -80,7 +80,7 @@ public class SoundController : MonoBehaviour
     #region Public Functions
     public void PlayButtonSound()
     {
-        AudioSource.PlayOneShot(ButtonSound);
+        AudioSourceSoundEffect.PlayOneShot(ButtonSound);
     }
     public void PlayMenuSong()
     {
@@ -126,15 +126,15 @@ public class SoundController : MonoBehaviour
 
     public void PlayArea2Music()
     {
-        AudioSource.clip = Area2Track;
-        AudioSource.time = 0;
-        AudioSource.loop = true;
-        AudioSource.Play();
+        MenuSongSource.clip = Area2Track;
+        MenuSongSource.time = 0;
+        MenuSongSource.loop = true;
+        MenuSongSource.Play();
     }
 
     public void StopArea2Music()
     {
-        AudioSource.Stop();
+        MenuSongSource.Stop();
     }
 
     public void SetSound(GameController.Role role)
