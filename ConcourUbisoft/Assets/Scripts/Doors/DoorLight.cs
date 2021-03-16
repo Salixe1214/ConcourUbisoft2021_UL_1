@@ -8,7 +8,6 @@ public class DoorLight : MonoBehaviour
     [SerializeField] private Color defaultColor = Color.black;
     private List<Color> _color = new List<Color>();
     [SerializeField] private List<GameObject> _indicatorLights;
-    private List<Light> _lights = new List<Light>();
     private List<Renderer> _renderers = new List<Renderer>();
     
     private int _numYellowLights = 0;
@@ -19,7 +18,6 @@ public class DoorLight : MonoBehaviour
         for(int i = 0 ; i < _indicatorLights.Count ; i++)
         {
             _color.Insert(i, defaultColor);
-            _lights.Insert(i, _indicatorLights[i].GetComponentInChildren<Light>());
             _renderers.Insert(i, _indicatorLights[i].GetComponent<Renderer>());
         }
     }
@@ -30,15 +28,13 @@ public class DoorLight : MonoBehaviour
         {
             if(i < _numYellowLights)
             {
-                _lights[i].color = Color.yellow;
                 _renderers[i].material.color = Color.yellow;
-                _renderers[i].material.SetColor("_EmissionColor", Color.yellow);
+                _renderers[i].material.SetColor("_EmissionColor", Color.yellow * 15);
             }
             else
             {
-                _lights[i].color = _color[i];
                 _renderers[i].material.color = _color[i];
-                _renderers[i].material.SetColor("_EmissionColor", _color[i]);
+                _renderers[i].material.SetColor("_EmissionColor", _color[i] * 15);
             }
         }
     }
