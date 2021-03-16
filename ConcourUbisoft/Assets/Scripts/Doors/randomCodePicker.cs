@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using Random = System.Random;
 
 public class randomCodePicker : MonoBehaviour
 {
@@ -29,16 +29,16 @@ public class randomCodePicker : MonoBehaviour
     private (Symbol, SymbolColor) _firstSymbol;
     private (Symbol, SymbolColor) _secondSymbol;
     private List<DoorController.Direction> _sequence = new List<DoorController.Direction>();
+    private Random _random = new Random(0);
     
     // When the object awake, it randomly compose a combination of two different symbols of two different colors
     private void Awake()
     {
-        Random.InitState(System.DateTime.Now.Millisecond);
         #region choosing Symbol
         
         // Choice of the first symbol
         var symbolValues = Enum.GetValues(typeof(Symbol)); // List of the symbols
-        int firstSymbolIndex = Random.Range(0, symbolValues.Length); // Random index in this list
+        int firstSymbolIndex = _random.Next(0, symbolValues.Length); // Random index in this list
         Debug.Log("Index1: " + firstSymbolIndex);
         Symbol randomSymbol1 = (Symbol) symbolValues.GetValue(firstSymbolIndex); // Expliciting this symbol
         
@@ -48,7 +48,7 @@ public class randomCodePicker : MonoBehaviour
         int infiniteLoopProtection = 1000;
         while (secondSymbolIndex == firstSymbolIndex)
         {
-            secondSymbolIndex = Random.Range(0, symbolValues.Length);
+            secondSymbolIndex = _random.Next(0, symbolValues.Length);
             
             // Te ensure there is no infinite loop
             infiniteLoopProtection = infiniteLoopProtection - 1;
@@ -67,7 +67,7 @@ public class randomCodePicker : MonoBehaviour
 
         // Choice of the first color
         var colorValues = Enum.GetValues(typeof(SymbolColor)); // List of the colors
-        int firstColorIndex = Random.Range(0, colorValues.Length); // Random index in this list
+        int firstColorIndex = _random.Next(0, colorValues.Length); // Random index in this list
         SymbolColor randomColor1 = (SymbolColor) colorValues.GetValue(firstColorIndex); // Expliciting this symbol
         
         // We can't choose this color again
@@ -76,7 +76,7 @@ public class randomCodePicker : MonoBehaviour
         infiniteLoopProtection = 1000;
         while (secondColorIndex == firstColorIndex)
         {
-            secondColorIndex = Random.Range(0, colorValues.Length);
+            secondColorIndex = _random.Next(0, colorValues.Length);
             
             // Te ensure there is no infinite loop
             infiniteLoopProtection = infiniteLoopProtection - 1;
