@@ -66,7 +66,7 @@ namespace TechSupport.Informations
             if (_accordion)
             {
                 _accordion.transform.position = new Vector3(Screen.width * 0.80f, Screen.height * 0.5f);
-                _accordionRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width * 0.20f);
+                _accordionRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width * 0.25f);
             }
         }
         private void SetSize(RectTransform rectTransform, Vector2 size)
