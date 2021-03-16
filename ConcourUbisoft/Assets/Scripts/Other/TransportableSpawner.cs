@@ -21,7 +21,7 @@ public class TransportableSpawner : MonoBehaviour
     private float currentDelay = 0.0f;
     private int sequenceIndex = 0;
     private LevelController levelController;
-    private System.Random _random = new System.Random(Guid.NewGuid().GetHashCode());
+    private System.Random _random = new System.Random(0);
     private bool canSpawnNextNeededItem;
 
     public event Action spawnedNextNeededItem;
