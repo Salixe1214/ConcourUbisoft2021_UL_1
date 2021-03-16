@@ -61,7 +61,10 @@ public class CharacterControl : Serializable
 
     private void FixedUpdate()
     {
-        playerBody.velocity = inputVector;
+        if (_owner == _networkController.GetLocalRole())
+        {
+            playerBody.velocity = inputVector;
+        }
     }
 
     public override void Deserialize(byte[] data)

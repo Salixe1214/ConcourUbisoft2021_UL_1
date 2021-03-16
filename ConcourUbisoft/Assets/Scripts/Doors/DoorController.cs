@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+
+[RequireComponent(typeof(randomCodePicker), typeof(Animation))]
 public class DoorController : MonoBehaviour
 {
     public enum Direction
@@ -27,15 +29,8 @@ public class DoorController : MonoBehaviour
     private void Awake()
     {
         _animation = GetComponent<Animation>();
-        
-        if (GetComponent<randomCodePicker>() != null)
-            _inputSequences = GetComponent<randomCodePicker>().GETSequence();
-        else
-        {
-            _inputSequences = new List<Direction>();
-            _inputSequences.Add(Direction.Up);
-            Debug.LogWarning("Random Code Picker missing on " + gameObject.name);
-        }
+
+        _inputSequences = GetComponent<randomCodePicker>().GetSequence();
     }
 
     public void TriggerLeft()

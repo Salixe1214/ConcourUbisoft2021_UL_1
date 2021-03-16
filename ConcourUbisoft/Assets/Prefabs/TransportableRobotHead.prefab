@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 2337986934944574126}
   - component: {fileID: 4079854508183948934}
   m_Layer: 3
-  m_Name: TransportableB
+  m_Name: TransportableRobotHead
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98,8 +98,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.02, y: 0.032, z: 0.02}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.020725755, y: 0.03246531, z: 0.019877648}
+  m_Center: {x: 0, y: -0.0000002561137, z: 9.313226e-10}
 --- !u!54 &6730704992779430199
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1456006706197027654}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
