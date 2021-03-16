@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class DoorLight : MonoBehaviour
 {
-    // [SerializeField] private Light _light = null;
-    // [SerializeField] private Renderer _renderer = null;
     [SerializeField] private Color defaultColor = Color.black;
     private List<Color> _color = new List<Color>();
     [SerializeField] private List<GameObject> _indicatorLights;
