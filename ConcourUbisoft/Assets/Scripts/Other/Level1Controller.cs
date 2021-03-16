@@ -63,11 +63,13 @@ public class Level1Controller : MonoBehaviour , LevelController
 
     public void Start()
     {
+        
         currentListIndex = 0;
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         FurnaceController.GenerateNewColorSequences(PossibleColors);
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
+        TransportableSpawner.CanSpawnNextNeededItem = true;
         conveyorOperatingSpeed = MinConveyorSpeed;
         cameraOriginalPosition = AreaCamera.transform.position;
     }
@@ -159,6 +161,7 @@ public class Level1Controller : MonoBehaviour , LevelController
         setItemsImageList();
         ActivateItemSpawning(true);
         yield return new WaitForSeconds(seconds);
+        SetDelayBetweenItemSpawns(DelayBetweenItemSpawnsSecondsHighest);
         if (firstWave)
         {
             TransportableSpawner.SetConveyorsSpeed(conveyorOperatingSpeed);
@@ -170,7 +173,6 @@ public class Level1Controller : MonoBehaviour , LevelController
             TransportableSpawner.SetConveyorsSpeed(conveyorOperatingSpeed+=ConveyorSpeedIncrement); 
             Debug.Log("ConveyorSpeed Normal");
         }
-        SetDelayBetweenItemSpawns(DelayBetweenItemSpawnsSecondsHighest);    
         Debug.Log("Highest Spawning Delay");
     }
 
@@ -212,7 +214,6 @@ public class Level1Controller : MonoBehaviour , LevelController
 
         for (int i = 0; i < FurnaceController.GetCurrentSequenceLenght(); i++)
         {
-            Color currentColor = sequenceOfColor.ColorsSequence[i];
             TransportableType currentType = sequenceOfColor.types[i];
             GameObject itemImage = new GameObject();
             itemImage.AddComponent<Image>();
