@@ -14,10 +14,10 @@ namespace Arm
         [SerializeField] float controlSpeed = 3f;
         [SerializeField] private IKSolver armIKSolver;
         [SerializeField] private Transform armRotationRoot;
-
+ 
         private float maxRange;
         public float ControlSpeed => controlSpeed;
-
+        public Transform Head => armIKSolver.transform;
         public Transform ArmTarget { get; private set; } = null;
 
         #region Network

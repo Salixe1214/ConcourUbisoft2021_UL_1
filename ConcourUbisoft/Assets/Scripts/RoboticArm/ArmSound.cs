@@ -10,12 +10,12 @@ public class ArmSound : MonoBehaviour
     [SerializeField] private ArmController armController;
     [SerializeField] private int smoothIterationCount = 10;
     [SerializeField] private float volumeMultiplier = 1;
-    private Vector3 lastTargetPosition;
+    private Vector3 lastHeadPosition;
     private AudioSource audioSource;
 
     void Start()
     {
-        lastTargetPosition = target.position;
+        lastHeadPosition = armController.Head.position;
 
         audioSource = GetComponent<AudioSource>();
         audioSource.loop = true;
@@ -23,7 +23,7 @@ public class ArmSound : MonoBehaviour
 
     void LateUpdate()
     {
-        float distance = Vector3.Distance(lastTargetPosition, target.position);
+        float distance = Vector3.Distance( armController.Head.position, lastHeadPosition);
         if (distance >= float.Epsilon)
         {
             float volume = distance / (armController.ControlSpeed * Time.deltaTime);
@@ -36,6 +36,6 @@ public class ArmSound : MonoBehaviour
             audioSource.volume = 0;
         }
 
-        lastTargetPosition = target.position;
+        lastHeadPosition =  armController.Head.position;
     }
 }

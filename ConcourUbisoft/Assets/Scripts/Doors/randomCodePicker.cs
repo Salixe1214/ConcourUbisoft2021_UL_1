@@ -97,7 +97,7 @@ public class randomCodePicker : MonoBehaviour
         return (_firstSymbol, _secondSymbol);
     }
 
-    public List<DoorController.Direction> GETSequence()
+    public List<DoorController.Direction> GetSequence()
     {
         return _sequence;
     }
