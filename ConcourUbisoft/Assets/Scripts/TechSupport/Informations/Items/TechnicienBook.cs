@@ -87,7 +87,7 @@ namespace TechSupport.Informations.Items
         public override void Instantiate(Transform parent, Sprite backgroundSprite)
         {
             _accordionElement = InstantiateNewItem(parent, backgroundSprite);
-            InstantiateHeader(_accordionElement.transform, "Bible du technicien");
+            InstantiateHeader(_accordionElement.transform, "Livre du technicien");
             _content.ForEach(c => InstantiateLine(c));
             // InstantiateImageLayout()
         }
