@@ -26,14 +26,18 @@ public class randomCodePicker : MonoBehaviour
         Three = 2
     }
 
+    [SerializeField] private int _seedTemp = 0;
+
     private (Symbol, SymbolColor) _firstSymbol;
     private (Symbol, SymbolColor) _secondSymbol;
     private List<DoorController.Direction> _sequence = new List<DoorController.Direction>();
-    private Random _random = new Random(0);
+    private Random _random;
 
     // When the object awake, it randomly compose a combination of two different symbols of two different colors
     private void Awake()
     {
+        _random = new Random(_seedTemp);
+
         #region choosing Symbol
 
         // Choice of the first symbol
