@@ -45,6 +45,7 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     public void StartLevel()
     {
+        _soundController.PlayArea2Music();
         _furnace.GenerateNewColorSequences(_possibleColors);
         SpawnObjects();
 
@@ -92,6 +93,7 @@ public class Level2Controller : MonoBehaviour, LevelController
     {
         _soundController.PlayLevelSequenceClearedSuccessSound();
         _imageList.Clean();
+        _soundController.StopArea2Music();
     }
 
     public void InitiateNextSequence()
