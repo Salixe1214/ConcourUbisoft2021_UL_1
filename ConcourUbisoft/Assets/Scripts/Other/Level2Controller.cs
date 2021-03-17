@@ -25,6 +25,7 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     private ImageLayout _imageList;
     private List<Sprite> _itemSprites = new List<Sprite>();
+    private System.Random _random = new System.Random(0);
 
     public void StartLevel()
     {
@@ -48,7 +49,7 @@ public class Level2Controller : MonoBehaviour, LevelController
 
             for(int i = 0; i < _furnace.GetCurrentSequenceLenght(); ++i)
             {
-                int solutionIndex = Random.Range(0, solutions.Count);
+                int solutionIndex = _random.Next(0, solutions.Count);
 
                 SpawnObject(solutions[solutionIndex], _furnace.GetNextColor());
 
@@ -57,14 +58,14 @@ public class Level2Controller : MonoBehaviour, LevelController
 
             foreach (Bounds solution in solutions)
             {
-                SpawnObject(solution, _possibleColors[Random.Range(0, _possibleColors.Length)]);
+                SpawnObject(solution, _possibleColors[_random.Next(0, _possibleColors.Length)]);
             }
         }
     }
 
     private void SpawnObject(Bounds solution, Color color)
     {
-        GameObject randomPrefab = _transportablesPrefab[Random.Range(0, _transportablesPrefab.Length)];
+        GameObject randomPrefab = _transportablesPrefab[_random.Next(0, _transportablesPrefab.Length)];
         GameObject transportable = Instantiate(randomPrefab, solution.center, Quaternion.identity);
         transportable.gameObject.GetComponent<TransportableByConveyor>().Color = color; 
     }
