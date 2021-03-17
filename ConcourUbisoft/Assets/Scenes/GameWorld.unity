@@ -1413,6 +1413,18 @@ PrefabInstance:
       propertyPath: door
       value: 
       objectReference: {fileID: 1080062183}
+    - target: {fileID: 6069077499519903155, guid: 87e75dc8d55f40947a64400a7393cd16, type: 3}
+      propertyPath: spritesList.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 0efd02f6ee02fe5468c389ad33efd25c, type: 3}
+    - target: {fileID: 6069077499519903155, guid: 87e75dc8d55f40947a64400a7393cd16, type: 3}
+      propertyPath: spritesList.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: f9112f301f7ef2541ad4d19b69018634, type: 3}
+    - target: {fileID: 6069077499519903155, guid: 87e75dc8d55f40947a64400a7393cd16, type: 3}
+      propertyPath: spritesList.Array.data[2]
+      value: 
+      objectReference: {fileID: 21300000, guid: 2564c49e527e565428861cabe6b907ab, type: 3}
     - target: {fileID: 9045623121051993052, guid: 87e75dc8d55f40947a64400a7393cd16, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -3201,21 +3213,17 @@ MonoBehaviour:
   imagesList: []
   colors: []
   sizeList: {x: 250, y: 50}
-  items:
-  - title: Item 1
-    content: Nullam vitae diam vel enim eleifend pharetra sed at lectus. Morbi commodo
-      porttitor rhoncus. Aenean semper ullamcorper lacus, eget maximus velit hendrerit
-      non. Ut ac tortor eget lacus bibendum tincidunt ac eu nisl. Suspendisse volutpat
-      faucibus accumsan. Donec finibus a mi id dapibus. Praesent elementum arcu in
-      ante molestie scelerisque. Phasellus tempus purus laoreet urna pulvinar sollicitudin.
-      Ut eu nibh in tellus pharetra egestas vel ac orci.
-    images: []
-  - title: Item 2
-    content: Item avec image
-    images:
-    - {fileID: 21300000, guid: bd293dc32f4aaf94e8274f2fac2cdf89, type: 3}
   background: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   front: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  symbols:
+    items:
+    - key: 0
+      value: {fileID: 21300000, guid: 0efd02f6ee02fe5468c389ad33efd25c, type: 3}
+    - key: 1
+      value: {fileID: 21300000, guid: f9112f301f7ef2541ad4d19b69018634, type: 3}
+    - key: 2
+      value: {fileID: 21300000, guid: 2564c49e527e565428861cabe6b907ab, type: 3}
+  arrow: {fileID: 21300000, guid: 5e98e428bdf1f6e429e4c833f3efc2de, type: 3}
 --- !u!1 &649503892
 GameObject:
   m_ObjectHideFlags: 0
@@ -10943,6 +10951,18 @@ PrefabInstance:
       propertyPath: door
       value: 
       objectReference: {fileID: 7874691156158002680}
+    - target: {fileID: 4881922318772734217, guid: bfd121b5bd331464993cdf2579eeafb8, type: 3}
+      propertyPath: spritesList.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 0efd02f6ee02fe5468c389ad33efd25c, type: 3}
+    - target: {fileID: 4881922318772734217, guid: bfd121b5bd331464993cdf2579eeafb8, type: 3}
+      propertyPath: spritesList.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: f9112f301f7ef2541ad4d19b69018634, type: 3}
+    - target: {fileID: 4881922318772734217, guid: bfd121b5bd331464993cdf2579eeafb8, type: 3}
+      propertyPath: spritesList.Array.data[2]
+      value: 
+      objectReference: {fileID: 21300000, guid: 2564c49e527e565428861cabe6b907ab, type: 3}
     - target: {fileID: 5568183260850442760, guid: bfd121b5bd331464993cdf2579eeafb8, type: 3}
       propertyPath: door
       value: 
@@ -10953,7 +10973,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6729212495898289575, guid: bfd121b5bd331464993cdf2579eeafb8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.012
+      value: -0.01
       objectReference: {fileID: 0}
     - target: {fileID: 7275313089949086823, guid: bfd121b5bd331464993cdf2579eeafb8, type: 3}
       propertyPath: m_RootOrder
@@ -10999,10 +11019,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7509705132847703722, guid: bfd121b5bd331464993cdf2579eeafb8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 8980681593991446978, guid: bfd121b5bd331464993cdf2579eeafb8, type: 3}
       propertyPath: door
       value: 
       objectReference: {fileID: 1080062183}
+    - target: {fileID: 8980681593991446978, guid: bfd121b5bd331464993cdf2579eeafb8, type: 3}
+      propertyPath: spritesList.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 0efd02f6ee02fe5468c389ad33efd25c, type: 3}
+    - target: {fileID: 8980681593991446978, guid: bfd121b5bd331464993cdf2579eeafb8, type: 3}
+      propertyPath: spritesList.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: f9112f301f7ef2541ad4d19b69018634, type: 3}
+    - target: {fileID: 8980681593991446978, guid: bfd121b5bd331464993cdf2579eeafb8, type: 3}
+      propertyPath: spritesList.Array.data[2]
+      value: 
+      objectReference: {fileID: 21300000, guid: 2564c49e527e565428861cabe6b907ab, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bfd121b5bd331464993cdf2579eeafb8, type: 3}
 --- !u!4 &5209907294389050954 stripped
@@ -11842,6 +11878,18 @@ PrefabInstance:
       propertyPath: door
       value: 
       objectReference: {fileID: 1080062183}
+    - target: {fileID: 6069077499519903155, guid: 87e75dc8d55f40947a64400a7393cd16, type: 3}
+      propertyPath: spritesList.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 0efd02f6ee02fe5468c389ad33efd25c, type: 3}
+    - target: {fileID: 6069077499519903155, guid: 87e75dc8d55f40947a64400a7393cd16, type: 3}
+      propertyPath: spritesList.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: f9112f301f7ef2541ad4d19b69018634, type: 3}
+    - target: {fileID: 6069077499519903155, guid: 87e75dc8d55f40947a64400a7393cd16, type: 3}
+      propertyPath: spritesList.Array.data[2]
+      value: 
+      objectReference: {fileID: 21300000, guid: 2564c49e527e565428861cabe6b907ab, type: 3}
     - target: {fileID: 9045623121051993052, guid: 87e75dc8d55f40947a64400a7393cd16, type: 3}
       propertyPath: m_RootOrder
       value: 32

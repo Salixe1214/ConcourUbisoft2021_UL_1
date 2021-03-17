@@ -21,9 +21,9 @@ public class randomCodePicker : MonoBehaviour
     // Those are the types of symbols, to make switches the easy way
     public enum Symbol
     {
-        One,
-        Two,
-        Three
+        One = 0,
+        Two = 1,
+        Three = 2
     }
 
     private (Symbol, SymbolColor) _firstSymbol;
@@ -101,9 +101,9 @@ public class randomCodePicker : MonoBehaviour
         {
             a = a + i + " - ";
         }
-        Debug.Log("Sequence of " + gameObject.name + ": " + a);
-        Debug.Log(("Symbol1: " + _firstSymbol));
-        Debug.Log(("Symbol2: " + _secondSymbol));
+        Debug.Log("RandomCodePicker: Sequence of " + gameObject.name + ": " + a);
+        Debug.Log(("RandomCodePicker: Symbol1: " + _firstSymbol));
+        Debug.Log(("RandomCodePicker: Symbol2: " + _secondSymbol));
 
     }
 

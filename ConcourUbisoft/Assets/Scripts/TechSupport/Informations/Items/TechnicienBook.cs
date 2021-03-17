@@ -43,9 +43,9 @@ namespace TechSupport.Informations.Items
             new Dictionary<DoorController.Direction, Vector3>()
             {
                 {DoorController.Direction.Up, Vector3.zero},
-                {DoorController.Direction.Right, new Vector3(0, 0, 90)},
+                {DoorController.Direction.Right, new Vector3(0, 0, -90)},
                 {DoorController.Direction.Bottom, new Vector3(0, 0, 180)},
-                {DoorController.Direction.Left, new Vector3(0, 0, -90)}
+                {DoorController.Direction.Left, new Vector3(0, 0, 90)}
             };
 
         private readonly Dictionary<DoorCode.Symbol, Sprite> _symbols;
@@ -61,7 +61,6 @@ namespace TechSupport.Informations.Items
             Image image = InstantiateImage(parent, _arrow, Color.black, Image.Type.Simple);
 
             image.transform.Rotate(_directions[direction]);
-            Debug.Log(image.rectTransform.sizeDelta);
             return image;
         }
 
