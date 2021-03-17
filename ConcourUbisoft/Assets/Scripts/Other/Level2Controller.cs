@@ -101,6 +101,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         _soundController.PlayLevelSequenceClearedSuccessSound();
         _imageList.Clean();
         setItemsImageList();
+        _currentListIndex = 0;
     }
 
     public void ShakeCamera()
