@@ -17,6 +17,13 @@ public class Level2Controller : MonoBehaviour, LevelController
     [SerializeField] private Sprite GearImage;
     [SerializeField] private Sprite BatteryImage;
     [SerializeField] private Sprite PipeImage;
+    [SerializeField] private Camera AreaCamera = null;
+
+    [Tooltip("Intensity of the AreaCamera Shake Effect")]
+    [SerializeField] private float cameraShakeForce = 0.3f;
+    [Tooltip("Duration (Seconds) of the AreaCamera Shake effect.")]
+    [SerializeField] private float cameraShakeDurationSeconds = 0.2f;
+    private bool cameraMustShake = false;
 
     public Color[] GetColors() => _possibleColors;
     public Color GetNextColorInSequence() => _furnace.GetNextColor();
@@ -26,6 +33,15 @@ public class Level2Controller : MonoBehaviour, LevelController
     private ImageLayout _imageList;
     private List<Sprite> _itemSprites = new List<Sprite>();
     private System.Random _random = new System.Random(0);
+    private SoundController _soundController;
+    private Vector3 _cameraOriginalPosition;
+    private int _currentListIndex;
+
+    private void Awake()
+    {
+        _soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
+        _cameraOriginalPosition = AreaCamera.transform.position;
+    }
 
     public void StartLevel()
     {
@@ -68,6 +84,64 @@ public class Level2Controller : MonoBehaviour, LevelController
         GameObject randomPrefab = _transportablesPrefab[_random.Next(0, _transportablesPrefab.Length)];
         GameObject transportable = Instantiate(randomPrefab, solution.center, Quaternion.identity);
         transportable.gameObject.GetComponent<TransportableByConveyor>().Color = color; 
+    }
+
+    public void FinishLevel()
+    {
+        //TransportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
+        //StartCoroutine(EndLevel());
+    }
+
+    public void InitiateNextSequence()
+    {
+        //ActivateItemSpawning(false);
+        _soundController.PlayLevelSequenceClearedSuccessSound();
+        //TransportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
+        //StartCoroutine(SpawnFreshItems(FastItemSpawningTimeSeconds));
+    }
+
+    public void ShakeCamera()
+    {
+        StartCoroutine(StartCameraShake(cameraShakeDurationSeconds));
+    }
+
+    IEnumerator StartCameraShake(float duration)
+    {
+        cameraMustShake = true;
+        _soundController.PlayLevelOneErrorSound();
+        yield return new WaitForSeconds(duration);
+        cameraMustShake = false;
+        AreaCamera.transform.position = _cameraOriginalPosition;
+    }
+
+    private void OnEnable()
+    {
+        _furnace.WhenFurnaceConsumedAll += FinishLevel;
+        _furnace.WhenFurnaceConsumeAWholeSequenceWithoutFinishing += InitiateNextSequence;
+        _furnace.WhenFurnaceConsumeWrong += ShakeCamera;
+        _furnace.CheckItemOffList += UpdateSpriteColorInList;
+    }
+
+    private void OnDisable()
+    {
+        _furnace.WhenFurnaceConsumedAll -= FinishLevel;
+        _furnace.WhenFurnaceConsumeAWholeSequenceWithoutFinishing -= InitiateNextSequence;
+        _furnace.WhenFurnaceConsumeWrong -= ShakeCamera;
+        _furnace.CheckItemOffList -= UpdateSpriteColorInList;
+    }
+
+    private void Update()
+    {
+        if (cameraMustShake)
+        {
+            AreaCamera.transform.position = _cameraOriginalPosition + Random.insideUnitSphere * cameraShakeForce;
+        }
+    }
+
+    private void UpdateSpriteColorInList()
+    {
+        _imageList.UpdateSpriteColor(_currentListIndex, Color.black);
+        _currentListIndex++;
     }
 
     private void setItemsImageList()

@@ -6445,6 +6445,9 @@ MonoBehaviour:
   GearImage: {fileID: 21300000, guid: fed3762b24cd73e46b4b4ffa196bf119, type: 3}
   BatteryImage: {fileID: 21300000, guid: 5bfb061f43f118b47a013a83ee88ccf0, type: 3}
   PipeImage: {fileID: 21300000, guid: adf12bf062327394cbaa950f5d22e14a, type: 3}
+  AreaCamera: {fileID: 956954904}
+  cameraShakeForce: 0.3
+  cameraShakeDurationSeconds: 0.2
 --- !u!1 &1145107327
 GameObject:
   m_ObjectHideFlags: 0
