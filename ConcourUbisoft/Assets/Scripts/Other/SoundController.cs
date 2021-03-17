@@ -138,6 +138,11 @@ public class SoundController : MonoBehaviour
         MenuSongSource.Stop();
     }
 
+    public void MuteAmbient()
+    {
+        
+    }
+
     public void PlayArea1Music()
     {
         MenuSongSource.clip = Area1Track;
