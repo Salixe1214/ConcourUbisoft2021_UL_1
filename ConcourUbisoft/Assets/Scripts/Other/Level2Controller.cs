@@ -95,6 +95,7 @@ public class Level2Controller : MonoBehaviour, LevelController
     public void InitiateNextSequence()
     {
         _soundController.PlayLevelSequenceClearedSuccessSound();
+        _imageList.Clean();
         setItemsImageList();
     }
 
