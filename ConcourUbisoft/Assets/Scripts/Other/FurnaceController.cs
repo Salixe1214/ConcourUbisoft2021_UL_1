@@ -132,4 +132,20 @@ public class FurnaceController : MonoBehaviour
         SequenceOfColor currentSequence = GetCurrentSequence();
         return currentSequence.types[currentSequence.SucceedColors];
     }
+
+    public SequenceOfColor[] GetAllSequences()
+    {
+        return SequencesOfColor;
+    }
+
+    public int GetItemCount()
+    {
+        int total = 0;
+        foreach (var sequence in SequencesOfColor)
+        {
+            total += sequence.ColorsSequence.Length;
+        }
+
+        return total;
+    }
 }

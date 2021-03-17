@@ -59,23 +59,12 @@ public class Level2Controller : MonoBehaviour, LevelController
         {
             solutions.AddRange(spawner.GetSpawnPosition());
         }
+        
+        SpawnSequences(solutions);
 
-        if(solutions.Count >= _furnace.GetCurrentSequenceLenght())
+        foreach (Bounds solution in solutions)
         {
-
-            for(int i = 0; i < _furnace.GetCurrentSequenceLenght(); ++i)
-            {
-                int solutionIndex = _random.Next(0, solutions.Count);
-
-                SpawnObject(solutions[solutionIndex], _furnace.GetNextColor());
-
-                solutions.RemoveAt(solutionIndex);
-            }
-
-            foreach (Bounds solution in solutions)
-            {
-                SpawnObject(solution, _possibleColors[_random.Next(0, _possibleColors.Length)]);
-            }
+            SpawnObject(solution, _possibleColors[_random.Next(0, _possibleColors.Length)]);
         }
     }
 
@@ -84,6 +73,19 @@ public class Level2Controller : MonoBehaviour, LevelController
         GameObject randomPrefab = _transportablesPrefab[_random.Next(0, _transportablesPrefab.Length)];
         GameObject transportable = Instantiate(randomPrefab, solution.center, Quaternion.identity);
         transportable.gameObject.GetComponent<TransportableByConveyor>().Color = color; 
+    }
+
+    private void SpawnSequenceObject(Bounds solution, Color color, TransportableType type)
+    {
+        foreach (var t in _transportablesPrefab)
+        {
+            if (t.GetComponent<TransportableByConveyor>().GetType() == type)
+            {
+                GameObject transportable = Instantiate(t, solution.center, Quaternion.identity);
+                transportable.gameObject.GetComponent<TransportableByConveyor>().Color = color;
+                break;
+            }
+        }
     }
 
     public void FinishLevel()
@@ -174,5 +176,29 @@ public class Level2Controller : MonoBehaviour, LevelController
             }
         }
         _imageList.CreateLayout(_itemSprites, sequenceOfColor.ColorsSequence);
+    }
+
+    private void SpawnSequences(List<Bounds> solutions)
+    {
+        if (solutions.Count >= _furnace.GetItemCount())
+        {
+            FurnaceController.SequenceOfColor[] sequences = _furnace.GetAllSequences();
+            foreach (var sequence in sequences)
+            {
+                for (int i = 0; i < sequence.ColorsSequence.Length; i++)
+                {
+                    int solutionIndex = _random.Next(0, solutions.Count);
+                    SpawnSequenceObject(solutions[solutionIndex],sequence.ColorsSequence[i],sequence.types[i]);
+                    solutions.RemoveAt(solutionIndex);
+                }
+            }
+        }
+
+        else
+        {
+            Debug.Log("Number of items in sequences are superior to the amount of spawning positions available.");
+        }
+
+        
     }
 }
