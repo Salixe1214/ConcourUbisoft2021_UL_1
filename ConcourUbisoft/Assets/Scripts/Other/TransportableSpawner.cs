@@ -22,20 +22,7 @@ public class TransportableSpawner : MonoBehaviour
     private int sequenceIndex = 0;
     private LevelController levelController;
     private System.Random _random = new System.Random(0);
-    private bool canSpawnNextNeededItem;
-
-    public event Action spawnedNextNeededItem;
-
-    public bool CanSpawnNextNeededItem
-    {
-        set => canSpawnNextNeededItem = value;
-    }
-
-    private void Awake()
-    {
-        canSpawnNextNeededItem = false;
-    }
-
+    
     private void Start()
     {
         levelController = LevelControl.GetComponent<LevelController>();
@@ -63,19 +50,12 @@ public class TransportableSpawner : MonoBehaviour
 
         if (sequenceIndex > levelController.GetCurrentSequenceLenght())
         {
-            if (!canSpawnNextNeededItem)
-            {
-                sequenceIndex = 0;
-                return;
-            }
-
             foreach (var t in TransportablesPrefab)
             {
                 if (t.GetComponent<TransportableByConveyor>().GetType() == levelController.GetNextTypeInSequence())
                 {
                     transportable = Instantiate(t, randomPoint, Quaternion.identity);
                     transportable.gameObject.GetComponent<TransportableByConveyor>().Color = levelController.GetNextColorInSequence();
-                    spawnedNextNeededItem?.Invoke();
                     break;
                 }
             }
