@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Doors;
+using TechSupport.Informations.Items;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Utils;
 
 namespace TechSupport.Informations
 {
@@ -15,34 +18,43 @@ namespace TechSupport.Informations
             Test,
             Game
         }
-        [Serializable]
-        public struct InformationItem
-        {
-            public string title;
-            [TextArea]
-            public string content;
-            public List<Sprite> images;
-        }
-
+        
         [Header("Général")] [SerializeField] private DevMode mode = DevMode.Game;
 
         [Header("List")] 
-        private ImageLayout _imageLayout;
         [SerializeField] private List<Sprite> imagesList;
         [SerializeField] private Color[] colors;
         [SerializeField] private Vector2 sizeList;
+        private ImageLayout _imageLayout;
 
-        [Header("Accordion")] 
-        private Accordion _accordion;
-        [SerializeField] private List<InformationItem> items;
+        [Header("Accordion")]
         [SerializeField] private Sprite background;
         [SerializeField] private Sprite front;
+        private Accordion _accordion;
+        private List<InformationItem> _items;
+        
+        [Header("Tech Book")] 
+        [SerializeField] private SerializableDictionary<DoorCode.Symbol, Sprite> symbols =
+            new SerializableDictionary<DoorCode.Symbol, Sprite>(
+                new Dictionary<DoorCode.Symbol, Sprite>
+                {
+                    {DoorCode.Symbol.One, null},
+                    {DoorCode.Symbol.Two, null},
+                    {DoorCode.Symbol.Three, null}
+                });
+
+        [SerializeField] private Sprite arrow;
 
         private RectTransform _listRectTransform;
         private RectTransform _accordionRectTransform;
 
         private void Awake()
         {
+            _items = new List<InformationItem>()
+            {
+                new TechnicienBook(symbols, arrow)
+            };
+
             CreateList();
             CreateAccordion();
         }
@@ -53,11 +65,10 @@ namespace TechSupport.Informations
                 _imageLayout.transform.position = new Vector3 (Screen.width * 0.5f, Screen.height * 0.95f, 0);
             if (_accordion)
             {
-                _accordion.transform.position = new Vector3(Screen.width * 0.85f, Screen.height * 0.5f);
-                _accordionRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width * 0.15f);
+                _accordion.transform.position = new Vector3(Screen.width * 0.80f, Screen.height * 0.5f);
+                _accordionRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width * 0.25f);
             }
         }
-
         private void SetSize(RectTransform rectTransform, Vector2 size)
         {
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
@@ -81,7 +92,7 @@ namespace TechSupport.Informations
             _accordionRectTransform = _accordion.GetComponent<RectTransform>();
             _accordionRectTransform.SetParent(transform);
             _accordion.Setup(background, front);
-            _accordion.CreateAccordion(items);
+            _accordion.CreateAccordion(_items);
         }
 
         public ImageLayout GetList()

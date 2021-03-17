@@ -27,11 +27,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 62668760254839051}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.001, y: 0, z: 0.01}
+  m_LocalPosition: {x: -0.001, y: 0, z: -0.01}
   m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
   m_Children: []
   m_Father: {fileID: 7275313089949086823}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &8980681593991446978
 MonoBehaviour:
@@ -129,8 +129,8 @@ Transform:
   m_LocalPosition: {x: 0.003, y: 3.93, z: 4.586}
   m_LocalScale: {x: 18.04, y: 48.7, z: 50.9}
   m_Children:
-  - {fileID: 5692513037425201751}
   - {fileID: 6729212495898289575}
+  - {fileID: 7509705132847703722}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 86.512, z: 0}
@@ -183,7 +183,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &7357578778344330422
+--- !u!1 &5095765736396527413
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -191,10 +191,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5692513037425201751}
-  - component: {fileID: 5568183260850442760}
-  - component: {fileID: 5209907294389050960}
-  - component: {fileID: 5209907294389050959}
+  - component: {fileID: 7509705132847703722}
+  - component: {fileID: 4881922318772734217}
+  - component: {fileID: 7622742674630701686}
+  - component: {fileID: 1441821711702293245}
   m_Layer: 0
   m_Name: Symbol1_1
   m_TagString: Untagged
@@ -202,32 +202,27 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &5692513037425201751
-RectTransform:
+--- !u!4 &7509705132847703722
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7357578778344330422}
+  m_GameObject: {fileID: 5095765736396527413}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -0.01}
+  m_LocalPosition: {x: -0.001, y: 0, z: 0.01}
   m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
   m_Children: []
   m_Father: {fileID: 7275313089949086823}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.001, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &5568183260850442760
+--- !u!114 &4881922318772734217
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7357578778344330422}
+  m_GameObject: {fileID: 5095765736396527413}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7590d7154f5acea4bae1bf326c6145c1, type: 3}
@@ -239,13 +234,21 @@ MonoBehaviour:
   - {fileID: 21300000, guid: fed3762b24cd73e46b4b4ffa196bf119, type: 3}
   door: {fileID: 0}
   idSymbol: 1
---- !u!23 &5209907294389050960
+--- !u!33 &7622742674630701686
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5095765736396527413}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &1441821711702293245
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7357578778344330422}
+  m_GameObject: {fileID: 5095765736396527413}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -280,11 +283,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &5209907294389050959
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7357578778344330422}
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}

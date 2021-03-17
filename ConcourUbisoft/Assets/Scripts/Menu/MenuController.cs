@@ -59,7 +59,7 @@ public class MenuController : MonoBehaviour
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         _menuSoundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
-        _menuSoundController.PlayMenuSong();
+        //_menuSoundController.PlayMenuSong();
     }
     private void OnEnable()
     {

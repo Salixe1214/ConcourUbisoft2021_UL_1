@@ -15,7 +15,6 @@ public class Level1Controller : MonoBehaviour , LevelController
     public Color[] GetColors() => PossibleColors;
     public Color GetNextColorInSequence() => FurnaceController.GetNextColor();
     public int GetCurrentSequenceLenght() => FurnaceController.GetCurrentSequenceLenght();
-
     public TransportableType GetNextTypeInSequence() => FurnaceController.GetNextItemType();
 
     [SerializeField] private FurnaceController FurnaceController = null;
@@ -69,7 +68,6 @@ public class Level1Controller : MonoBehaviour , LevelController
         FurnaceController.GenerateNewColorSequences(PossibleColors);
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
-        TransportableSpawner.CanSpawnNextNeededItem = true;
         conveyorOperatingSpeed = MinConveyorSpeed;
         cameraOriginalPosition = AreaCamera.transform.position;
     }
@@ -107,6 +105,7 @@ public class Level1Controller : MonoBehaviour , LevelController
     public void StartLevel()
     {
         Debug.Log("StartLevel");
+        soundController.PlayArea1Music();
         imageList = techUI.GetList();
         firstWave = true;
         FurnaceController.enabled = true;
@@ -185,6 +184,7 @@ public class Level1Controller : MonoBehaviour , LevelController
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
         TransportableSpawner.gameObject.SetActive(false);
+        soundController.StopAreaMusic();
     }
     
     IEnumerator StartCameraShake(float duration)

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using Random = System.Random;
 
 public class randomCodePicker : MonoBehaviour
 {
@@ -21,44 +21,48 @@ public class randomCodePicker : MonoBehaviour
     // Those are the types of symbols, to make switches the easy way
     public enum Symbol
     {
-        One,
-        Two,
-        Three
+        One = 0,
+        Two = 1,
+        Three = 2
     }
+
+    [SerializeField] private int _seedTemp = 0;
 
     private (Symbol, SymbolColor) _firstSymbol;
     private (Symbol, SymbolColor) _secondSymbol;
     private List<DoorController.Direction> _sequence = new List<DoorController.Direction>();
-    
+    private Random _random;
+
     // When the object awake, it randomly compose a combination of two different symbols of two different colors
     private void Awake()
     {
-        Random.InitState(System.DateTime.Now.Millisecond);
+        _random = new Random(_seedTemp);
+
         #region choosing Symbol
-        
+
         // Choice of the first symbol
         var symbolValues = Enum.GetValues(typeof(Symbol)); // List of the symbols
-        int firstSymbolIndex = Random.Range(0, symbolValues.Length); // Random index in this list
+        int firstSymbolIndex = _random.Next(0, symbolValues.Length); // Random index in this list
         Debug.Log("Index1: " + firstSymbolIndex);
-        Symbol randomSymbol1 = (Symbol) symbolValues.GetValue(firstSymbolIndex); // Expliciting this symbol
-        
+        Symbol randomSymbol1 = (Symbol)symbolValues.GetValue(firstSymbolIndex); // Expliciting this symbol
+
         // We can't choose this symbol again
         int secondSymbolIndex = firstSymbolIndex;
-        
+
         int infiniteLoopProtection = 1000;
         while (secondSymbolIndex == firstSymbolIndex)
         {
-            secondSymbolIndex = Random.Range(0, symbolValues.Length);
-            
+            secondSymbolIndex = _random.Next(0, symbolValues.Length);
+
             // Te ensure there is no infinite loop
             infiniteLoopProtection = infiniteLoopProtection - 1;
-            if(infiniteLoopProtection <= 0)
+            if (infiniteLoopProtection <= 0)
             {
                 throw new Exception("An error occured while selecting the second Symbol");
             }
         }
-        
-        Symbol randomSymbol2 = (Symbol) symbolValues.GetValue(secondSymbolIndex);
+
+        Symbol randomSymbol2 = (Symbol)symbolValues.GetValue(secondSymbolIndex);
 
         #endregion
 
@@ -67,43 +71,43 @@ public class randomCodePicker : MonoBehaviour
 
         // Choice of the first color
         var colorValues = Enum.GetValues(typeof(SymbolColor)); // List of the colors
-        int firstColorIndex = Random.Range(0, colorValues.Length); // Random index in this list
+        int firstColorIndex = _random.Next(0, colorValues.Length); // Random index in this list
         SymbolColor randomColor1 = (SymbolColor) colorValues.GetValue(firstColorIndex); // Expliciting this symbol
-        
+
         // We can't choose this color again
         int secondColorIndex = firstColorIndex;
-        
+
         infiniteLoopProtection = 1000;
         while (secondColorIndex == firstColorIndex)
         {
-            secondColorIndex = Random.Range(0, colorValues.Length);
-            
+            secondColorIndex = _random.Next(0, colorValues.Length);
+
             // Te ensure there is no infinite loop
             infiniteLoopProtection = infiniteLoopProtection - 1;
-            if(infiniteLoopProtection <= 0)
+            if (infiniteLoopProtection <= 0)
             {
                 throw new Exception("An error occured while selecting the second Symbol");
             }
         }
-        
-        SymbolColor randomColor2 = (SymbolColor) colorValues.GetValue(secondColorIndex);
+
+        SymbolColor randomColor2 = (SymbolColor)colorValues.GetValue(secondColorIndex);
 
         #endregion
-        
-        
+
+
         // Initializing the global variables
         _firstSymbol = (randomSymbol1, randomColor1);
         _secondSymbol = (randomSymbol2, randomColor2);
-        _sequence.AddRange(getSymbolCode(_firstSymbol.Item2,_firstSymbol.Item1));
+        _sequence.AddRange(getSymbolCode(_firstSymbol.Item2, _firstSymbol.Item1));
         _sequence.AddRange(getSymbolCode(_secondSymbol.Item2, _secondSymbol.Item1));
         string a = "";
         foreach (var i in _sequence)
         {
             a = a + i + " - ";
         }
-        Debug.Log("Sequence of " + gameObject.name + ": " + a);
-        Debug.Log(("Symbol1: " + _firstSymbol));
-        Debug.Log(("Symbol2: " + _secondSymbol));
+        Debug.Log("RandomCodePicker: Sequence of " + gameObject.name + ": " + a);
+        Debug.Log(("RandomCodePicker: Symbol1: " + _firstSymbol));
+        Debug.Log(("RandomCodePicker: Symbol2: " + _secondSymbol));
 
     }
 
@@ -233,13 +237,13 @@ public class randomCodePicker : MonoBehaviour
                 dirList.Clear();
                 break;
         }
-        
+
         return dirList;
     }
 
     #region getters
 
-    public ((Symbol, SymbolColor),(Symbol, SymbolColor)) GETSymbols()
+    public ((Symbol, SymbolColor), (Symbol, SymbolColor)) GETSymbols()
     {
         return (_firstSymbol, _secondSymbol);
     }
@@ -250,5 +254,5 @@ public class randomCodePicker : MonoBehaviour
     }
 
     #endregion
-    
+
 }

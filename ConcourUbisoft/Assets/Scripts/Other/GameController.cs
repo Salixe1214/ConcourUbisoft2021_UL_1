@@ -51,7 +51,7 @@ public class GameController : MonoBehaviour
     #region Private Functions
     private IEnumerator LoadAsyncLevel()
     {
-        _soundController.StopMenuSong();
+        //_soundController.StopMenuSong();
         AsyncOperation operation = SceneManager.LoadSceneAsync(_sceneToStartName, LoadSceneMode.Additive);
         IsGameLoading = true;
         OnLoadGameEvent?.Invoke();
@@ -63,7 +63,7 @@ public class GameController : MonoBehaviour
         IsGameStart = true;
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(_sceneToStartName));
         OnFinishLoadGameEvent?.Invoke();
-        _soundController.PlayAmbientSound();
+        //_soundController.PlayAmbientSound();
         if (GameRole == Role.SecurityGuard)
         {
             SetUpSecurityGuard();
@@ -83,7 +83,7 @@ public class GameController : MonoBehaviour
             yield return null;
         }
 
-        _soundController.StopAmbientSound();
+       // _soundController.StopAmbientSound();
         _networkController.LeaveLobby();
     }
     private void ResetController()
@@ -94,7 +94,7 @@ public class GameController : MonoBehaviour
             Transform playerCamera = Camera.main.transform;
             playerCamera.GetComponent<AudioListener>().enabled = false;
         }
-        _soundController.PlayAmbientSound();
+        //_soundController.PlayAmbientSound();
         _audioListener.SetActive(true);
         IsGameStart = false;
         GameRole = Role.None;
@@ -109,7 +109,7 @@ public class GameController : MonoBehaviour
         GameObject player = GameObject.FindGameObjectWithTag("PlayerGuard");
         _audioListener.SetActive(false);
 
-        _soundController.PlayAmbientSound();
+        //_soundController.PlayAmbientSound();
         GameObject playerCamera = GameObject.FindGameObjectWithTag("MainCamera");
         playerCamera.GetComponent<CameraMovement>().enabled = true;
     }
@@ -118,7 +118,7 @@ public class GameController : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         GameObject playerTech = GameObject.FindGameObjectWithTag("PlayerTech");
         playerTech.SetActive(true);
-
+        _soundController.MuteAmbient();
         GameObject player = GameObject.FindGameObjectWithTag("PlayerGuard");
         player.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
 

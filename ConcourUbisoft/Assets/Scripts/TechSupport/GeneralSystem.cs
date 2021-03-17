@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TechSupport.Surveillance;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
 namespace TechSupport
@@ -72,7 +73,7 @@ namespace TechSupport
         // TODO: Improve this basic input system
         private void Update()
         {
-            if(!_gameController || !_gameController.IsGameMenuOpen)
+            if((!_gameController || !_gameController.IsGameMenuOpen) && !EventSystem.current.IsPointerOverGameObject())
             {
                 if (Input.GetMouseButtonUp(0))
                 {
