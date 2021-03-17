@@ -103,6 +103,7 @@ public class CharacterControl : Serializable
                 DTO dto = (DTO)bf.Deserialize(memStream);
 
                 transform.position = Vector3.MoveTowards(transform.position, new Vector3(dto.PositionX, dto.PositionY, dto.PositionZ), Time.deltaTime * playerMovementSpeed);
+                transform.rotation = new Quaternion(dto.RotationX, dto.RotationY, dto.RotationZ, dto.RotationW);
             }
         }
     }
