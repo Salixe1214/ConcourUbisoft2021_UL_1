@@ -63,7 +63,7 @@ public class GameController : MonoBehaviour
         IsGameStart = true;
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(_sceneToStartName));
         OnFinishLoadGameEvent?.Invoke();
-        _soundController.PlayAmbientSound();
+        //_soundController.PlayAmbientSound();
         if (GameRole == Role.SecurityGuard)
         {
             SetUpSecurityGuard();
@@ -83,7 +83,7 @@ public class GameController : MonoBehaviour
             yield return null;
         }
 
-        _soundController.StopAmbientSound();
+       // _soundController.StopAmbientSound();
         _networkController.LeaveLobby();
     }
     private void ResetController()
@@ -94,7 +94,7 @@ public class GameController : MonoBehaviour
             Transform playerCamera = Camera.main.transform;
             playerCamera.GetComponent<AudioListener>().enabled = false;
         }
-        _soundController.PlayAmbientSound();
+        //_soundController.PlayAmbientSound();
         _audioListener.SetActive(true);
         IsGameStart = false;
         GameRole = Role.None;
@@ -109,7 +109,7 @@ public class GameController : MonoBehaviour
         GameObject player = GameObject.FindGameObjectWithTag("PlayerGuard");
         _audioListener.SetActive(false);
 
-        _soundController.PlayAmbientSound();
+        //_soundController.PlayAmbientSound();
         GameObject playerCamera = GameObject.FindGameObjectWithTag("MainCamera");
         playerCamera.GetComponent<CameraMovement>().enabled = true;
     }
