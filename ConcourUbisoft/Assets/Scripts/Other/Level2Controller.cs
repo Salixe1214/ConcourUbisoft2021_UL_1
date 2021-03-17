@@ -93,7 +93,7 @@ public class Level2Controller : MonoBehaviour, LevelController
     {
         _soundController.PlayLevelSequenceClearedSuccessSound();
         _imageList.Clean();
-        _soundController.StopArea2Music();
+        _soundController.StopAreaMusic();
     }
 
     public void InitiateNextSequence()

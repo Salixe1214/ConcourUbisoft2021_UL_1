@@ -107,6 +107,7 @@ public class Level1Controller : MonoBehaviour , LevelController
     public void StartLevel()
     {
         Debug.Log("StartLevel");
+        soundController.PlayArea1Music();
         imageList = techUI.GetList();
         firstWave = true;
         FurnaceController.enabled = true;
@@ -185,6 +186,7 @@ public class Level1Controller : MonoBehaviour , LevelController
         FurnaceController.enabled = false;
         TransportableSpawner.enabled = false;
         TransportableSpawner.gameObject.SetActive(false);
+        soundController.StopAreaMusic();
     }
     
     IEnumerator StartCameraShake(float duration)

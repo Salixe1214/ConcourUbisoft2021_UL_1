@@ -51,7 +51,7 @@ public class GameController : MonoBehaviour
     #region Private Functions
     private IEnumerator LoadAsyncLevel()
     {
-        _soundController.StopMenuSong();
+        //_soundController.StopMenuSong();
         AsyncOperation operation = SceneManager.LoadSceneAsync(_sceneToStartName, LoadSceneMode.Additive);
         IsGameLoading = true;
         OnLoadGameEvent?.Invoke();

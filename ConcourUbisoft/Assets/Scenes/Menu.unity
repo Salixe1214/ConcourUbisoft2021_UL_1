@@ -9417,6 +9417,7 @@ MonoBehaviour:
   LevelOneSuccesSound: {fileID: 8300000, guid: 768a766a5b3d8ed4c9dfe64c8e9f9618, type: 3}
   LevelSuccessSound: {fileID: 8300000, guid: 2c4e0fc0a8f0644409ad393e59c47b19, type: 3}
   Area2Track: {fileID: 8300000, guid: 694dc5834ed49b24c8252b62a4847eb6, type: 3}
+  Area1Track: {fileID: 8300000, guid: 76d57bc094f7b2b41b907a880a0a5e38, type: 3}
   MasterAudioMixer: {fileID: 24100000, guid: ecf6682e6c8c50945a724780bcfa4240, type: 2}
   _ambientAudioMixer: {fileID: 24100000, guid: 1a92f8cbf444fd045bffd1e8f4b8a728, type: 2}
   _musicAudioMixer: {fileID: 24100000, guid: a5021839ef948684fad985f2af67a32c, type: 2}
