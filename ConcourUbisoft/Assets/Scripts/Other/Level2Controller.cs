@@ -88,16 +88,14 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     public void FinishLevel()
     {
-        //TransportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
-        //StartCoroutine(EndLevel());
+        _soundController.PlayLevelSequenceClearedSuccessSound();
+        _imageList.Clean();
     }
 
     public void InitiateNextSequence()
     {
-        //ActivateItemSpawning(false);
         _soundController.PlayLevelSequenceClearedSuccessSound();
-        //TransportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
-        //StartCoroutine(SpawnFreshItems(FastItemSpawningTimeSeconds));
+        setItemsImageList();
     }
 
     public void ShakeCamera()

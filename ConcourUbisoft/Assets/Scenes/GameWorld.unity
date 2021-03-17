@@ -2620,8 +2620,8 @@ MonoBehaviour:
     types: 
   SequencesOfTransportableTypes: 
   nbColorSequences: 5
-  minColorSequencelenght: 3
-  maxColorSequenceLenght: 7
+  minColorSequencelenght: 1
+  maxColorSequenceLenght: 1
   TimeToConsume: 0
   HasBeenPickupNeeded: 0
 --- !u!1 &554653479
