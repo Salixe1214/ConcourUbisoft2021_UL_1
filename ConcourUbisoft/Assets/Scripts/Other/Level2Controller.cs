@@ -26,11 +26,13 @@ public class Level2Controller : MonoBehaviour, LevelController
     private ImageLayout _imageList;
     private List<Sprite> _itemSprites = new List<Sprite>();
 
-    private void Start()
+    public void StartLevel()
     {
         _furnace.GenerateNewColorSequences(_possibleColors);
         SpawnObjects();
+
         _imageList = _techUI.GetList();
+        setItemsImageList();
     }
 
     public void SpawnObjects()
