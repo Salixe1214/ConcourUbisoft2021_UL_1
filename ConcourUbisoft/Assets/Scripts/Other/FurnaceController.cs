@@ -21,6 +21,7 @@ public class FurnaceController : MonoBehaviour
     [SerializeField] private int minColorSequencelenght=3;
     [SerializeField] private int maxColorSequenceLenght=7;
     [SerializeField] private float TimeToConsume = 0.0f;
+    [SerializeField] private bool HasBeenPickupNeeded = true;
 
     private SoundController soundController;
 
@@ -32,6 +33,8 @@ public class FurnaceController : MonoBehaviour
 
     private int SucceedSequences = 0;
 
+    System.Random _random = new System.Random(0);
+
     private void Awake()
     {
         SequencesOfColor = new SequenceOfColor[nbColorSequences];
@@ -42,7 +45,7 @@ public class FurnaceController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         TransportableByConveyor transportableByConveyor = null;
-        if (other.gameObject.TryGetComponent(out transportableByConveyor) && transportableByConveyor.HasBeenPickUp)
+        if (other.gameObject.TryGetComponent(out transportableByConveyor) && (HasBeenPickupNeeded && transportableByConveyor.HasBeenPickUp || !HasBeenPickupNeeded))
         {
             Consume(transportableByConveyor);
         }
@@ -95,8 +98,8 @@ public class FurnaceController : MonoBehaviour
             sc.types = new TransportableType[currentSequenceLenght];
             for (int j = 0; j < currentSequenceLenght; j++)
             {
-                int nextType = UnityEngine.Random.Range(0, 2);
-                int nextColor = UnityEngine.Random.Range(0, allColors.Length);
+                int nextType = _random.Next(0, 2);
+                int nextColor = _random.Next(0, allColors.Length);
                 sc.ColorsSequence[j] = allColors[nextColor];
                 sc.types[j] = (TransportableType)nextType;
             }

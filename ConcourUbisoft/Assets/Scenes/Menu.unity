@@ -9407,7 +9407,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ButtonSound: {fileID: 8300000, guid: c7721155daef0d2428ede1fce56a1334, type: 3}
-  AudioSource: {fileID: 219863224}
+  AudioSourceSoundEffect: {fileID: 219863224}
   MenuSong: {fileID: 8300000, guid: 4de2b912fffb7a349b74e452bc9ec041, type: 3}
   MenuSongSource: {fileID: 1725082336}
   AmbientSound: {fileID: 8300000, guid: 153034c29424660459bf4da20e6198fc, type: 3}
