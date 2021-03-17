@@ -21,6 +21,7 @@ public class FurnaceController : MonoBehaviour
     [SerializeField] private int minColorSequencelenght=3;
     [SerializeField] private int maxColorSequenceLenght=7;
     [SerializeField] private float TimeToConsume = 0.0f;
+    [SerializeField] private bool HasBeenPickupNeeded = true;
 
     private SoundController soundController;
 
@@ -42,7 +43,7 @@ public class FurnaceController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         TransportableByConveyor transportableByConveyor = null;
-        if (other.gameObject.TryGetComponent(out transportableByConveyor) && transportableByConveyor.HasBeenPickUp)
+        if (other.gameObject.TryGetComponent(out transportableByConveyor) && (HasBeenPickupNeeded && transportableByConveyor.HasBeenPickUp || !HasBeenPickupNeeded))
         {
             Consume(transportableByConveyor);
         }
