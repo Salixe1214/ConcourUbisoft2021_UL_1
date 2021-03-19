@@ -36,18 +36,29 @@ public class Level2Controller : MonoBehaviour, LevelController
     private SoundController _soundController;
     private Vector3 _cameraOriginalPosition;
     private int _currentListIndex;
+    private NetworkController _networkController = null;
+
 
     private void Awake()
     {
         _soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
+        _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _cameraOriginalPosition = AreaCamera.transform.position;
+
+        //REMOVE
+        StartLevel();
     }
 
     public void StartLevel()
     {
         _soundController.PlayArea2Music();
         _furnace.GenerateNewColorSequences(_possibleColors);
-        SpawnObjects();
+
+        if(_networkController.GetLocalRole() == GameController.Role.SecurityGuard)
+        {
+            SpawnObjects();
+        }
+        
 
         _imageList = _techUI.GetList();
         setItemsImageList();
@@ -72,8 +83,10 @@ public class Level2Controller : MonoBehaviour, LevelController
     private void SpawnObject(Bounds solution, Color color)
     {
         GameObject randomPrefab = _transportablesPrefab[_random.Next(0, _transportablesPrefab.Length)];
-        GameObject transportable = Instantiate(randomPrefab, solution.center, Quaternion.identity);
-        transportable.gameObject.GetComponent<TransportableByConveyor>().Color = color; 
+        _networkController.GetOwnNetworkPlayer().InstantiateNetworkGameObject(randomPrefab.name, solution.center, Quaternion.identity, GameController.Role.SecurityGuard);
+
+        //GameObject transportable = Instantiate(randomPrefab, solution.center, Quaternion.identity);
+        //transportable.gameObject.GetComponent<TransportableByConveyor>().Color = color; 
     }
 
     private void SpawnSequenceObject(Bounds solution, Color color, TransportableType type)
@@ -82,8 +95,10 @@ public class Level2Controller : MonoBehaviour, LevelController
         {
             if (t.GetComponent<TransportableByConveyor>().GetType() == type)
             {
-                GameObject transportable = Instantiate(t, solution.center, Quaternion.identity);
-                transportable.gameObject.GetComponent<TransportableByConveyor>().Color = color;
+                //GameObject transportable = Instantiate(t, solution.center, Quaternion.identity);
+                //transportable.gameObject.GetComponent<TransportableByConveyor>().Color = color;
+
+                _networkController.GetOwnNetworkPlayer().InstantiateNetworkGameObject(t.name, solution.center, Quaternion.identity, GameController.Role.SecurityGuard);
                 break;
             }
         }

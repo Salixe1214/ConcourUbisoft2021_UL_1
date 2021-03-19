@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using UnityEditor;
 using UnityEngine;
 
 public class NetworkSync : MonoBehaviour
@@ -13,7 +14,7 @@ public class NetworkSync : MonoBehaviour
     private static int _nextId = 0;
     private GameController _gameController = null;
 
-    [SerializeField] public int Id = 0;
+    [SerializeField] public string Id;
 
     public GameController.Role Owner
     {
@@ -26,11 +27,6 @@ public class NetworkSync : MonoBehaviour
     private double _currentTime = 0;
     private byte[] _oldData = null;
     private byte[] _newData = null;
-
-    private void Reset()
-    {
-        Id = _nextId++;
-    }
 
     private void Awake()
     {

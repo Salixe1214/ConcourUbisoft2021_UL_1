@@ -7,7 +7,7 @@ namespace Arm
     [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(Outline))]
     [RequireComponent(typeof(AudioSource))]
-    public class Pickable : MonoBehaviour
+    public class Pickable : Serializable
     {
         [SerializeField] private float volumeMultiplier=0.3f;
         [SerializeField] private AudioClip magnetCollisionSound;
@@ -27,7 +27,6 @@ namespace Arm
 
         private void Start()
         {
-            
             Id = nextId++;
             rigidbody = GetComponent<Rigidbody>();
             collider = GetComponent<Collider>();
@@ -77,6 +76,21 @@ namespace Arm
             Bounds bounds = collider.bounds;
 
             return bounds.center - new Vector3(0, bounds.extents.y, 0);
+        }
+
+        public override byte[] Serialize()
+        {
+            return new byte[0];
+        }
+
+        public override void Deserialize(byte[] data)
+        {
+
+        }
+
+        public override void Smooth(byte[] oldData, byte[] newData, float lag, double _lastTime, double _currentTime)
+        {
+
         }
     }
 }

@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 7488668580826404114}
   - component: {fileID: 2337986934944574126}
   - component: {fileID: 4079854508183948934}
+  - component: {fileID: 8215021125290771865}
   m_Layer: 3
   m_Name: TransportableRobotHead
   m_TagString: Untagged
@@ -19751,3 +19752,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8215021125290771865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456006706197027654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f32fa626c1773fc478f9f233067cdfe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentToSync: {fileID: 7488668580826404114}
+  _owner: 0
+  _smooth: 1
+  Id: 

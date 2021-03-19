@@ -81,7 +81,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
             {
                 if (PlayerRole == syncObject.Owner)
                 {
-                    stream.SendNext((int)syncObject.Id);
+                    stream.SendNext((string)syncObject.Id.ToString());
                     stream.SendNext(syncObject.Serialize());
                 }
             }
@@ -95,8 +95,8 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 
             for (int i = 0; i < serializeCount; ++i)
             {
-                int syncId = (int)stream.ReceiveNext();
-                NetworkSync sync = objectsToSync.Where(x => x.Id == syncId).FirstOrDefault();
+                string syncId = (string)stream.ReceiveNext();
+                NetworkSync sync = objectsToSync.Where(x => x.Id.ToString() == syncId).FirstOrDefault();
 
                 byte[] data = (byte[])stream.ReceiveNext();
                 if (sync != null)
@@ -122,6 +122,16 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         return photonView.IsMine;
     }
 
+    public void InstantiateNetworkGameObject(string prefabName, Vector3 position, Quaternion rotation, GameController.Role owner)
+    {
+        GameObject gameObjectInstantiate = Instantiate(networkController.GetPrefab(prefabName), position, rotation);
+        string id = Guid.NewGuid().ToString();
+        gameObjectInstantiate.GetComponent<NetworkSync>().Id = id;
+
+        object[] parameters = new object[] { prefabName, position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, rotation.w, id, (int)PlayerRole };
+        photonView.RPC("Instantiate", RpcTarget.Others, parameters as object);
+    }
+
     #endregion
 
     #region RPC Functions
@@ -144,6 +154,19 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         {
             doorsScript.Unlock();
         }
+    }
+
+    [PunRPC]
+    private void Instantiate(object[] parameters)
+    {
+        GameObject gameObjectInstantiate = Instantiate(networkController.GetPrefab((string)parameters[0]), 
+            new Vector3((float)parameters[1], (float)parameters[2], (float)parameters[3]), 
+            new Quaternion((float)parameters[4], (float)parameters[5], (float)parameters[6], (float)parameters[7]));
+
+
+        NetworkSync networkSync = gameObjectInstantiate.GetComponent<NetworkSync>();
+        networkSync.Id = (string)parameters[8];
+        networkSync.Owner = (GameController.Role)parameters[9];
     }
 
     #endregion

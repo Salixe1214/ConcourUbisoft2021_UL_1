@@ -3992,6 +3992,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   QuickSetup: 0
+  networkObjects:
+  - {fileID: 2362435244797905396, guid: 5c6f209095a4e4c45965df0e2a0f6320, type: 3}
+  - {fileID: 2362435244797905396, guid: 53c6bf0970b4d434881b9745e7b7bd23, type: 3}
+  - {fileID: 277212353033363236, guid: 0a01550949ad16e43833742c5e4d8a0c, type: 3}
+  - {fileID: 2362435244797905396, guid: 0528745e7992d8d4b9106518f6b7b0a9, type: 3}
+  - {fileID: 1456006706197027654, guid: e4fe7562363e7f644993aac9e739260e, type: 3}
   photonPing: 0
   photonSendRate: 20
   photonSendRateSerialize: 20

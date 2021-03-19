@@ -8,16 +8,31 @@ using System.Linq;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System;
+using UnityEditor;
 
 public class NetworkController : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private bool QuickSetup = false;
 
+    [SerializeField] private bool QuickSetup = false;
+    [SerializeField] private List<GameObject> networkObjects = null;
+
+#if UNITY_EDITOR 
+    [MenuItem("Network/AssignID")]
+    public static void DoSomething()
+    {
+        NetworkSync[] syncs = GameObject.FindObjectsOfType<NetworkSync>();
+        foreach (NetworkSync sync in syncs)
+        {
+            sync.Id = Guid.NewGuid().ToString();
+        }
+    }
+#endif
     public float photonPing = 0;
     public int photonSendRate = 30;
     public int photonSendRateSerialize = 30;
 
     private GameController _gameController = null;
+    private PlayerNetwork ownNetworkPlayer = null;
 
     #region Unity Callbacks
     private void Awake()
@@ -183,5 +198,19 @@ public class NetworkController : MonoBehaviourPunCallbacks
     {
         return PhotonNetwork.CurrentRoom.PlayerCount;
     }
+
+    public GameObject GetPrefab(string name)
+    {
+        return networkObjects.Where(x => x.name == name).FirstOrDefault();
+    }
+    public PlayerNetwork GetOwnNetworkPlayer()
+    {
+        if (ownNetworkPlayer == null) {
+            ownNetworkPlayer = GameObject.FindObjectsOfType<PlayerNetwork>().Where(x => x.PlayerRole == GetLocalRole()).FirstOrDefault();
+        }
+
+        return ownNetworkPlayer;
+    }
+
     #endregion
 }
