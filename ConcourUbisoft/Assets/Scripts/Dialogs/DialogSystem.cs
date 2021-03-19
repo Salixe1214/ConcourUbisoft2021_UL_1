@@ -2,20 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class DialogSystem : MonoBehaviour
 {
+    [SerializeField] private Image char1Slot;
+    [SerializeField] private Image char2Slot;
+    [SerializeField] private Text textSlot;
+
+    [SerializeField] private Sprite perso1Sprite;
+    [SerializeField] private Sprite perso2Sprite;
     [SerializeField] private TextAsset rawText;
     [SerializeField] private char lineSep = '\n';
     [SerializeField] private char itemSep = ',';
+    
     private List<string> _character1 = new List<string>();
     private List<string> _character2 = new List<string>();
     private List<string> _line = new List<string>();
     private int _lineCount = 0;
     private int _numLines = 0;
     
-    // Start is called before the first frame update
     void Awake()
     {
         string text = rawText.ToString();
@@ -25,8 +31,6 @@ public class DialogSystem : MonoBehaviour
         for(var i = 0 ; i < lines.Length - 1 ; i++)
         {
             string[] line = lines[i].Split(itemSep);
-            
-            Debug.Log("Line " + i + ": " + line[0]);
 
             _character1.Insert(i, line[0]);
             _character2.Insert(i, line[1]);
@@ -35,20 +39,63 @@ public class DialogSystem : MonoBehaviour
 
         _numLines = lines.Length - 1;
         
+        char2Slot.transform.localRotation = Quaternion.Euler(0,180,0);
+        
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.anyKeyDown)
         {
-            Debug.Log("_numlines: " + _numLines + "\n_lineCount: " + _lineCount);
-            Debug.Log("Perso 1: " + _character1[_lineCount]);
-            Debug.Log("Perso 2: " + _character2[_lineCount]);
-            Debug.Log("Message: " + _line[_lineCount]);
+            if (_lineCount == _numLines)
+            {
+                gameObject.SetActive(false);
+            }
+            else
+            {
+                ReadLine();
 
-            if(_lineCount < _numLines - 1)
                 _lineCount += 1;
+            }
         }
+    }
+
+    private void ReadLine()
+    {
+        // Character 1
+        if (_character1[_lineCount] == "0")
+        {
+            char1Slot.sprite = null;
+            char1Slot.color = Color.clear;
+        }
+        if (_character1[_lineCount] == "1")
+        {
+            char1Slot.sprite = perso1Sprite;
+            char1Slot.color = Color.white;
+        }
+        if (_character1[_lineCount] == "2")
+        {
+            char1Slot.sprite = perso2Sprite;
+            char1Slot.color = Color.white;
+        }
+            
+        // Character 2
+        if (_character2[_lineCount] == "0")
+        {
+            char2Slot.sprite = null;
+            char2Slot.color = Color.clear;
+        }
+        if (_character2[_lineCount] == "1")
+        {
+            char2Slot.sprite = perso1Sprite;
+            char2Slot.color = Color.white;
+        }
+        if (_character2[_lineCount] == "2")
+        {
+            char2Slot.sprite = perso2Sprite;
+            char2Slot.color = Color.white;
+        }
+
+        textSlot.text = _line[_lineCount];
     }
 }
