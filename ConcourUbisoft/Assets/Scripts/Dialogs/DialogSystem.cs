@@ -21,31 +21,15 @@ public class DialogSystem : MonoBehaviour
     private List<string> _line = new List<string>();
     private int _lineCount = 0;
     private int _numLines = 0;
-    
-    void Awake()
-    {
-        string text = rawText.ToString();
 
-        string[] lines = text.Split(lineSep);
+    private static int _id = 0;
+    private int _selfId;
 
-        for(var i = 0 ; i < lines.Length - 1 ; i++)
-        {
-            string[] line = lines[i].Split(itemSep);
-
-            _character1.Insert(i, line[0]);
-            _character2.Insert(i, line[1]);
-            _line.Insert(i, line[2]);
-        }
-
-        _numLines = lines.Length - 1;
-        
-        char2Slot.transform.localRotation = Quaternion.Euler(0,180,0);
-        
-    }
+    private bool _initialised = false;
 
     void Update()
     {
-        if (Input.anyKeyDown)
+        if (Input.anyKeyDown && _initialised)
         {
             if (_lineCount == _numLines)
             {
@@ -60,7 +44,7 @@ public class DialogSystem : MonoBehaviour
         }
     }
 
-    private void ReadLine()
+    public void ReadLine()
     {
         // Character 1
         if (_character1[_lineCount] == "0")
@@ -97,5 +81,85 @@ public class DialogSystem : MonoBehaviour
         }
 
         textSlot.text = _line[_lineCount];
+    }
+
+    public void InitiateDialog(TextAsset pRawText = null, char pLineSeparator = '\n', char pItemSep = ',')
+    {
+        if (pRawText != null)
+        {
+            rawText = pRawText;
+        }
+        
+        lineSep = pLineSeparator;
+        itemSep = pItemSep;
+        
+        string text = rawText.ToString();
+
+        string[] lines = text.Split(lineSep);
+
+        for(var i = 0 ; i < lines.Length - 1 ; i++)
+        {
+            string[] line = lines[i].Split(itemSep);
+
+            _character1.Insert(i, line[0]);
+            _character2.Insert(i, line[1]);
+            _line.Insert(i, line[2]);
+        }
+
+        _numLines = lines.Length - 1;
+        
+        char2Slot.transform.localRotation = Quaternion.Euler(0,180,0);
+
+        _selfId = _id;
+        _id += 1;
+
+        _initialised = true;
+    }
+
+    public void InitiateDialog(TextAsset pRawText = null, Sprite pPerso1Sprite = null, Sprite pPerso2Sprite = null, char pLineSeparator = '\n', char pItemSep = ',')
+    {
+        if(pRawText != null)
+            rawText = pRawText;
+        
+        lineSep = pLineSeparator;
+        itemSep = pItemSep;
+
+        if(pPerso1Sprite != null)
+            perso1Sprite = pPerso1Sprite;
+        
+        if(pPerso2Sprite != null)
+            perso2Sprite = pPerso2Sprite;
+        
+        string text = rawText.ToString();
+
+        string[] lines = text.Split(lineSep);
+
+        for(var i = 0 ; i < lines.Length - 1 ; i++)
+        {
+            string[] line = lines[i].Split(itemSep);
+
+            _character1.Insert(i, line[0]);
+            _character2.Insert(i, line[1]);
+            _line.Insert(i, line[2]);
+        }
+
+        _numLines = lines.Length - 1;
+        
+        char2Slot.transform.localRotation = Quaternion.Euler(0,180,0);
+
+        _selfId = _id;
+        _id += 1;
+
+        _initialised = true;
+    }
+
+    public int GetId()
+    {
+        return _selfId;
+    }
+
+    private bool IsInitialised()
+    {
+        return _initialised;
     }
 }
