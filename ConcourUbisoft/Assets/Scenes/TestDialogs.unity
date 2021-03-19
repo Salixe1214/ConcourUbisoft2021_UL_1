@@ -501,7 +501,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 64e4732d23871034f9fa1f24c9a8cb81, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -544,13 +544,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1452592500}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2078162882}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 577, y: 276}
@@ -576,7 +576,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: c9b7cac5144ea44419e885d37f4c30c7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -608,7 +608,7 @@ GameObject:
   - component: {fileID: 2078162879}
   - component: {fileID: 2078162883}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: DialogUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -709,4 +709,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af0fbe251012e3d4f8a3a2bf30ec13c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  char1Slot: {fileID: 1288248136}
+  char2Slot: {fileID: 1452592502}
+  textSlot: {fileID: 652913678}
+  perso1Sprite: {fileID: 21300000, guid: 2bab8cb6eb1d80c4a9602b08c9ca57ad, type: 3}
+  perso2Sprite: {fileID: 21300000, guid: a3e3a91c1fc159342b5631a712dc01fc, type: 3}
   rawText: {fileID: 4900000, guid: fcb19cfef797b2d4a8fe7b3b2a421c24, type: 3}
+  lineSep: 10
+  itemSep: 44
