@@ -26,11 +26,14 @@ public class DialogSystem : MonoBehaviour
     private int _selfId;
 
     private bool _initialised = false;
+    private bool _active = false;
+    private bool _ready = false;
 
     void Update()
     {
         if (Input.anyKeyDown && _initialised)
         {
+            _ready = false;
             if (_lineCount == _numLines)
             {
                 gameObject.SetActive(false);
@@ -38,8 +41,6 @@ public class DialogSystem : MonoBehaviour
             else
             {
                 ReadLine();
-
-                _lineCount += 1;
             }
         }
     }
@@ -81,6 +82,10 @@ public class DialogSystem : MonoBehaviour
         }
 
         textSlot.text = _line[_lineCount];
+        
+        _lineCount += 1;
+        _ready = true;
+        Debug.Log(_lineCount);
     }
 
     public void InitiateDialog(TextAsset pRawText = null, char pLineSeparator = '\n', char pItemSep = ',')
@@ -113,6 +118,10 @@ public class DialogSystem : MonoBehaviour
         _selfId = _id;
         _id += 1;
 
+        char1Slot.enabled = false;
+        char2Slot.enabled = false;
+        textSlot.enabled = false;
+        
         _initialised = true;
     }
 
@@ -150,6 +159,10 @@ public class DialogSystem : MonoBehaviour
         _selfId = _id;
         _id += 1;
 
+        char1Slot.enabled = false;
+        char2Slot.enabled = false;
+        textSlot.enabled = false;
+
         _initialised = true;
     }
 
@@ -158,8 +171,20 @@ public class DialogSystem : MonoBehaviour
         return _selfId;
     }
 
-    private bool IsInitialised()
+    public bool IsInitialised()
     {
         return _initialised;
+    }
+
+    public void StartDialog()
+    {
+        _active = true;
+        char1Slot.enabled = true;
+        char2Slot.enabled = true;
+        textSlot.enabled = true;
+        
+        char1Slot.color = Color.clear;
+        char2Slot.color = Color.clear;
+        textSlot.text = "";
     }
 }
