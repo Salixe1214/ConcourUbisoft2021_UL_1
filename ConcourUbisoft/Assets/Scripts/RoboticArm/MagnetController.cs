@@ -33,6 +33,7 @@ namespace Arm
         private Pickable _currentPickable = null;
         private bool _grabbed = false;
         private NetworkController _networkController = null;
+        private NetworkSync _networkSync = null;
 
         public bool MagnetActive { get; set; }
 
@@ -40,26 +41,30 @@ namespace Arm
         {
             _magnetTrigger = GetComponentInChildren<MagnetTrigger>();
             _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+            _networkSync = GetComponent<NetworkSync>();
         }
 
         private void Update()
         {
             transform.rotation = Quaternion.Euler(180, 0, 0);
-            if(_owner == _networkController.GetLocalRole())
+            if (_networkController.GetLocalRole() == _networkSync.Owner)
             {
-                UpdateCurrentPickable();
-
-                if (_currentPickable != null)
+                if (_owner == _networkController.GetLocalRole())
                 {
-                    _currentPickable.OnHover();
+                    UpdateCurrentPickable();
 
-                    if (MagnetActive)
+                    if (_currentPickable != null)
                     {
-                        MovePickableToMagnet();
-                    }
-                    else if (_grabbed)
-                    {
-                        ReleasePickable();
+                        _currentPickable.OnHover();
+
+                        if (MagnetActive)
+                        {
+                            MovePickableToMagnet();
+                        }
+                        else if (_grabbed)
+                        {
+                            ReleasePickable();
+                        }
                     }
                 }
             }
@@ -67,9 +72,12 @@ namespace Arm
 
         private void OnCollisionStay(Collision collision)
         {
-            if (_currentPickable && !_grabbed && MagnetActive)
+            if (_networkController.GetLocalRole() == _networkSync.Owner)
             {
-                GrabPickable();
+                if (_currentPickable && !_grabbed && MagnetActive)
+                {
+                    GrabPickable();
+                }
             }
         }
 
@@ -88,7 +96,8 @@ namespace Arm
             _currentPickable = null;
             _grabbed = false;
         }
-        
+
+
         public override void Deserialize(byte[] data)
         {
             BinaryFormatter bf = new BinaryFormatter();
@@ -100,45 +109,45 @@ namespace Arm
                     memStream.Seek(0, SeekOrigin.Begin);
                     MagnetControllerDTO serializedMagnetController = (MagnetControllerDTO)bf.Deserialize(memStream);
 
-                    Pickable pickable = serializedMagnetController.PickableId != null ? GameObject.FindObjectsOfType<Pickable>().Where(x => x.Id == serializedMagnetController.PickableId) 
-                        .FirstOrDefault() : null;
-                    if (serializedMagnetController.PickableId == null && _currentPickable != null
-                        || pickable != null && _currentPickable != null && _currentPickable != pickable)
-                    {
-                        ReleasePickable();
-                    }
+                    //Pickable pickable = serializedMagnetController.PickableId != null ? GameObject.FindObjectsOfType<Pickable>().Where(x => x.Id == serializedMagnetController.PickableId)
+                    //    .FirstOrDefault() : null;
+                    //if (serializedMagnetController.PickableId == null && _currentPickable != null
+                    //    || pickable != null && _currentPickable != null && _currentPickable != pickable)
+                    //{
+                    //    ReleasePickable();
+                    //}
 
-                    if(serializedMagnetController.PickableId == null)
-                    {
-                        _currentPickable = null;
-                    }
+                    //if (serializedMagnetController.PickableId == null)
+                    //{
+                    //    _currentPickable = null;
+                    //}
 
-                    if (pickable != null)
-                    {
-                        Vector3 newPosition = new Vector3(serializedMagnetController.PositionX.Value, serializedMagnetController.PositionY.Value, serializedMagnetController.PositionZ.Value);
+                    //if (pickable != null)
+                    //{
+                    //    Vector3 newPosition = new Vector3(serializedMagnetController.PositionX.Value, serializedMagnetController.PositionY.Value, serializedMagnetController.PositionZ.Value);
 
-                        Quaternion quaternion = new Quaternion(serializedMagnetController.RotationX.Value, serializedMagnetController.RotationY.Value, serializedMagnetController.RotationZ.Value, serializedMagnetController.RotationW.Value);
-                        _currentPickable = pickable;
+                    //    Quaternion quaternion = new Quaternion(serializedMagnetController.RotationX.Value, serializedMagnetController.RotationY.Value, serializedMagnetController.RotationZ.Value, serializedMagnetController.RotationW.Value);
+                    //    _currentPickable = pickable;
 
-                        if (_grabbed == false && serializedMagnetController.MagnetActive)
-                        {
-                            _currentPickable.transform.position = newPosition;
-                            _currentPickable.transform.rotation = quaternion;
-                        }
+                    //    if (_grabbed == false && serializedMagnetController.MagnetActive)
+                    //    {
+                    //        _currentPickable.transform.position = newPosition;
+                    //        _currentPickable.transform.rotation = quaternion;
+                    //    }
 
-                        if (serializedMagnetController.MagnetActive == false && MagnetActive == true && _grabbed == true)
-                        {
-                            ReleasePickable();
-                        }
+                    //    if (serializedMagnetController.MagnetActive == false && MagnetActive == true && _grabbed == true)
+                    //    {
+                    //        ReleasePickable();
+                    //    }
 
-                        if (serializedMagnetController.Grabbed == true && _grabbed == false)
-                        {
-                            GrabPickable();
-                        }
-                    }
+                    //    if (serializedMagnetController.Grabbed == true && _grabbed == false)
+                    //    {
+                    //        GrabPickable();
+                    //    }
+                    //}
 
-                    _grabbed = serializedMagnetController.Grabbed;
-                    MagnetActive = serializedMagnetController.MagnetActive;
+                    //_grabbed = serializedMagnetController.Grabbed;
+                    //MagnetActive = serializedMagnetController.MagnetActive;
                 }
             }
         }
@@ -148,7 +157,8 @@ namespace Arm
             BinaryFormatter bf = new BinaryFormatter();
             using (MemoryStream memoryStream = new MemoryStream())
             {
-                bf.Serialize(memoryStream, new MagnetControllerDTO() {
+                bf.Serialize(memoryStream, new MagnetControllerDTO()
+                {
                     PickableId = _currentPickable?.Id,
                     Grabbed = _grabbed,
                     MagnetActive = MagnetActive,
@@ -160,7 +170,7 @@ namespace Arm
                     RotationZ = _currentPickable?.transform.rotation.z,
                     RotationW = _currentPickable?.transform.rotation.w,
                 });
-                
+
                 return memoryStream.ToArray();
             }
         }

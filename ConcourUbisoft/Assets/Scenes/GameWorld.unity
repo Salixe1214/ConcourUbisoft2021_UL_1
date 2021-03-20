@@ -194,6 +194,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 650370854}
     m_Modifications:
+    - target: {fileID: 56265981343216852, guid: 57ef67f21f04aa04ab1a991cdcfc1f4d, type: 3}
+      propertyPath: Id
+      value: ad4b8ffe-da9a-4bec-ba03-10369cf70305
+      objectReference: {fileID: 0}
     - target: {fileID: 1304527213542587124, guid: 57ef67f21f04aa04ab1a991cdcfc1f4d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -244,7 +248,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: f90297fd6dd28454799afcc080c99a9f, type: 2}
     - target: {fileID: 5094372895287302841, guid: 57ef67f21f04aa04ab1a991cdcfc1f4d, type: 3}
       propertyPath: Id
-      value: 3
+      value: 85f8d455-3b74-4a7b-b56a-75c1c60c6e66
       objectReference: {fileID: 0}
     - target: {fileID: 6604280849752611814, guid: 57ef67f21f04aa04ab1a991cdcfc1f4d, type: 3}
       propertyPath: m_RootOrder
@@ -646,6 +650,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 576131171}
     m_Modifications:
+    - target: {fileID: -6253556876634545219, guid: 0a01550949ad16e43833742c5e4d8a0c, type: 3}
+      propertyPath: viewIdField
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -6253556876634545219, guid: 0a01550949ad16e43833742c5e4d8a0c, type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 277212353033363236, guid: 0a01550949ad16e43833742c5e4d8a0c, type: 3}
       propertyPath: m_Name
       value: TransportableGear
@@ -2495,6 +2507,7 @@ GameObject:
   - component: {fileID: 518346392}
   - component: {fileID: 518346393}
   - component: {fileID: 518346394}
+  - component: {fileID: 518346395}
   m_Layer: 0
   m_Name: Destroyer
   m_TagString: Untagged
@@ -2558,6 +2571,28 @@ MonoBehaviour:
   maxColorSequenceLenght: 7
   TimeToConsume: 0
   HasBeenPickupNeeded: 0
+--- !u!114 &518346395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 518346391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  observableSearch: 2
+  Synchronization: 3
+  OwnershipTransfer: 0
+  ObservedComponents: []
+  viewIdField: 7
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &554653479
 GameObject:
   m_ObjectHideFlags: 0
@@ -3503,6 +3538,14 @@ PrefabInstance:
     - target: {fileID: 2362435244797905396, guid: 53c6bf0970b4d434881b9745e7b7bd23, type: 3}
       propertyPath: m_Name
       value: TransportableEnergyCell
+      objectReference: {fileID: 0}
+    - target: {fileID: 2399903834909243466, guid: 53c6bf0970b4d434881b9745e7b7bd23, type: 3}
+      propertyPath: viewIdField
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2399903834909243466, guid: 53c6bf0970b4d434881b9745e7b7bd23, type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 53c6bf0970b4d434881b9745e7b7bd23, type: 3}
@@ -6416,6 +6459,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1136590215}
   - component: {fileID: 1136590216}
+  - component: {fileID: 1136590217}
   m_Layer: 0
   m_Name: Level2Controller
   m_TagString: Untagged
@@ -6477,6 +6521,28 @@ MonoBehaviour:
   AreaCamera: {fileID: 956954904}
   cameraShakeForce: 0.3
   cameraShakeDurationSeconds: 0.2
+--- !u!114 &1136590217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136590214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  observableSearch: 2
+  Synchronization: 3
+  OwnershipTransfer: 0
+  ObservedComponents: []
+  viewIdField: 2
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1145107327
 GameObject:
   m_ObjectHideFlags: 0
@@ -9053,6 +9119,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: TransportablePipe
       objectReference: {fileID: 0}
+    - target: {fileID: 8386667326922746655, guid: 0528745e7992d8d4b9106518f6b7b0a9, type: 3}
+      propertyPath: viewIdField
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8386667326922746655, guid: 0528745e7992d8d4b9106518f6b7b0a9, type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0528745e7992d8d4b9106518f6b7b0a9, type: 3}
 --- !u!4 &1680286587 stripped
@@ -9483,7 +9557,7 @@ AudioSource:
   m_GameObject: {fileID: 1740097863}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 201127971705081101, guid: 1a92f8cbf444fd045bffd1e8f4b8a728, type: 2}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: a5021839ef948684fad985f2af67a32c, type: 2}
   m_audioClip: {fileID: 8300000, guid: 8e0dc11f401a33042812b622eb2f65d2, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.8
@@ -9586,6 +9660,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 576131171}
     m_Modifications:
+    - target: {fileID: -2319057153434039745, guid: e4fe7562363e7f644993aac9e739260e, type: 3}
+      propertyPath: viewIdField
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -2319057153434039745, guid: e4fe7562363e7f644993aac9e739260e, type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1456006706197027654, guid: e4fe7562363e7f644993aac9e739260e, type: 3}
       propertyPath: m_Name
       value: TransportableRobotHead
@@ -9905,6 +9987,18 @@ PrefabInstance:
     - target: {fileID: 2362435244797905396, guid: 5c6f209095a4e4c45965df0e2a0f6320, type: 3}
       propertyPath: m_Name
       value: TransportableBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 5667651556797236924, guid: 5c6f209095a4e4c45965df0e2a0f6320, type: 3}
+      propertyPath: Id
+      value: a5049c17-d80e-41fd-81a4-a7f9e6edad6e
+      objectReference: {fileID: 0}
+    - target: {fileID: 8607090515085413296, guid: 5c6f209095a4e4c45965df0e2a0f6320, type: 3}
+      propertyPath: viewIdField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8607090515085413296, guid: 5c6f209095a4e4c45965df0e2a0f6320, type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c6f209095a4e4c45965df0e2a0f6320, type: 3}
@@ -10836,7 +10930,7 @@ MonoBehaviour:
   _componentToSync: {fileID: 2125856654}
   _owner: 0
   _smooth: 1
-  Id: 4
+  Id: bf83cbde-c2b2-48f6-9a43-76e7ee6864f5
 --- !u!23 &613417423161098253
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10925,6 +11019,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 375132439627707101, guid: ecdc4ef1cf30d5846adf8c2e7bc3639f, type: 3}
+      propertyPath: Id
+      value: 90e6351b-6ff2-4483-87cd-06410bafc80e
+      objectReference: {fileID: 0}
     - target: {fileID: 650326526789460663, guid: ecdc4ef1cf30d5846adf8c2e7bc3639f, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -10984,6 +11082,10 @@ PrefabInstance:
     - target: {fileID: 4828321525219480895, guid: ecdc4ef1cf30d5846adf8c2e7bc3639f, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4846295702527073456, guid: ecdc4ef1cf30d5846adf8c2e7bc3639f, type: 3}
+      propertyPath: Id
+      value: 518fd34e-93da-411b-9916-82c8998fb45a
       objectReference: {fileID: 0}
     - target: {fileID: 5059185363806645123, guid: ecdc4ef1cf30d5846adf8c2e7bc3639f, type: 3}
       propertyPath: m_Layer

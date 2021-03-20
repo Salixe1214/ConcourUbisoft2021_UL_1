@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Arm;
 using Other;
+using Photon.Pun;
 using UnityEngine;
 
 public class FurnaceController : MonoBehaviour
@@ -12,11 +14,11 @@ public class FurnaceController : MonoBehaviour
     {
         public Color[] ColorsSequence = null;
         public int SucceedColors = 0;
-        public TransportableType[] types = null;
+        public Other.PickableType[] types = null;
     }
 
     [SerializeField] private SequenceOfColor[] SequencesOfColor = null;
-    [SerializeField] private TransportableType[] SequencesOfTransportableTypes = null;
+    [SerializeField] private Other.PickableType[] SequencesOfTransportableTypes = null;
     [SerializeField] private int nbColorSequences = 5;
     [SerializeField] private int minColorSequencelenght=3;
     [SerializeField] private int maxColorSequenceLenght=7;
@@ -34,36 +36,47 @@ public class FurnaceController : MonoBehaviour
     private int SucceedSequences = 0;
 
     System.Random _random = new System.Random(0);
+    private PhotonView _photonView = null;
 
     private void Awake()
     {
         SequencesOfColor = new SequenceOfColor[nbColorSequences];
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
+        _photonView = GetComponent<PhotonView>();
     }
 
 
     private void OnTriggerEnter(Collider other)
     {
-        TransportableByConveyor transportableByConveyor = null;
-        if (other.gameObject.TryGetComponent(out transportableByConveyor) && (HasBeenPickupNeeded && transportableByConveyor.HasBeenPickUp || !HasBeenPickupNeeded))
+        Pickable pickable = null;
+        if (other.gameObject.TryGetComponent(out pickable) && (HasBeenPickupNeeded && pickable.HasBeenPickup || !HasBeenPickupNeeded) && PhotonNetwork.IsMasterClient)
         {
-            Consume(transportableByConveyor);
+            Consume(pickable);
         }
     }
 
-    //TODO : Reset sequence when player commits an error. Generate a new color sequence. Maybe
-    
-    private void Consume(TransportableByConveyor transportableByConveyor)
+    private void Consume(Pickable pickable)
     {
-        transportableByConveyor.Consume();
-        Destroy(transportableByConveyor.gameObject, TimeToConsume);
+        PhotonNetwork.Destroy(pickable.gameObject);
 
+        object[] parameters = new object[] { (int)pickable.GetType(), pickable.Color.r, pickable.Color.g, pickable.Color.b, pickable.Color.a, };
+        _photonView.RPC("Consumed", RpcTarget.All, parameters as object);
+    }
+
+    [PunRPC]
+    public void Consumed(object[] parameters)
+    {
+        ValidateConsumed((PickableType)parameters[0], new Color((float)parameters[1], (float)parameters[2], (float)parameters[3], (float)parameters[4]));
+    }
+
+    private void ValidateConsumed(PickableType type, Color color)
+    {
         SequenceOfColor currentSequence = SequencesOfColor[SucceedSequences];
 
         Color currentSequenceColor = currentSequence.ColorsSequence[currentSequence.SucceedColors];
-        TransportableType currentType = currentSequence.types[currentSequence.SucceedColors];
-        
-        if (currentSequenceColor.r == ( transportableByConveyor.Color).r && currentSequenceColor.g == ( transportableByConveyor.Color).g &&currentSequenceColor.b == ( transportableByConveyor.Color).b && currentType == transportableByConveyor.GetType())
+        PickableType currentType = currentSequence.types[currentSequence.SucceedColors];
+
+        if (currentSequenceColor.r == (color).r && currentSequenceColor.g == (color).g && currentSequenceColor.b == (color).b && currentType == type)
         {
             soundController.PlayLevelPartialSequenceSuccessSound();
             CheckItemOffList?.Invoke();
@@ -85,7 +98,6 @@ public class FurnaceController : MonoBehaviour
         {
             WhenFurnaceConsumeWrong?.Invoke();
         }
-
     }
 
     public void GenerateNewColorSequences(Color[] allColors)
@@ -95,13 +107,13 @@ public class FurnaceController : MonoBehaviour
         {
             SequenceOfColor sc = new SequenceOfColor();
             sc.ColorsSequence = new Color[currentSequenceLenght];
-            sc.types = new TransportableType[currentSequenceLenght];
+            sc.types = new Other.PickableType[currentSequenceLenght];
             for (int j = 0; j < currentSequenceLenght; j++)
             {
                 int nextType = _random.Next(0, 2);
                 int nextColor = _random.Next(0, allColors.Length);
                 sc.ColorsSequence[j] = allColors[nextColor];
-                sc.types[j] = (TransportableType)nextType;
+                sc.types[j] = (Other.PickableType)nextType;
             }
             SequencesOfColor[i] = sc;
             if (currentSequenceLenght < maxColorSequenceLenght)
@@ -127,7 +139,7 @@ public class FurnaceController : MonoBehaviour
         return currentSequence.ColorsSequence[currentSequence.SucceedColors];
     }
 
-    public TransportableType GetNextItemType()
+    public Other.PickableType GetNextItemType()
     {
         SequenceOfColor currentSequence = GetCurrentSequence();
         return currentSequence.types[currentSequence.SucceedColors];

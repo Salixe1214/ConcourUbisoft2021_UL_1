@@ -14,7 +14,6 @@ public class DoorLight : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("Color: " + defaultColor);
         for(int i = 0 ; i < _indicatorLights.Count ; i++)
         {
             _color.Insert(i, defaultColor);

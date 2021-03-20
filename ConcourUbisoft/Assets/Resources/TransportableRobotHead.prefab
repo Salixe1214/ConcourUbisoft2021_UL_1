@@ -17,7 +17,8 @@ GameObject:
   - component: {fileID: 7488668580826404114}
   - component: {fileID: 2337986934944574126}
   - component: {fileID: 4079854508183948934}
-  - component: {fileID: 8215021125290771865}
+  - component: {fileID: -2319057153434039745}
+  - component: {fileID: -6727576610627789922}
   m_Layer: 3
   m_Name: TransportableRobotHead
   m_TagString: Untagged
@@ -129,7 +130,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b3d139d0c9f837488bb839403516f38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
 --- !u!114 &7488668580826404114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,6 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7884ea6d82d05a84aa5c90ea518e6ca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   volumeMultiplier: 0.3
   magnetCollisionSound: {fileID: 8300000, guid: d0cbf4c91bdfaf9449032b32781825e8, type: 3}
   hasBeenPickup: 0
@@ -19752,7 +19753,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &8215021125290771865
+--- !u!114 &-2319057153434039745
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -19761,10 +19762,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 1456006706197027654}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f32fa626c1773fc478f9f233067cdfe2, type: 3}
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentToSync: {fileID: 7488668580826404114}
-  _owner: 0
-  _smooth: 1
-  Id: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  observableSearch: 2
+  Synchronization: 3
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 7488668580826404114}
+  - {fileID: -6727576610627789922}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &-6727576610627789922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456006706197027654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 0

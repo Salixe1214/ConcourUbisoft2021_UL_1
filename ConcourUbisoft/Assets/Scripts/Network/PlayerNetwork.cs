@@ -18,10 +18,9 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     }
 
     private new PhotonView photonView = null;
-    private NetworkController networkController = null;
+    private NetworkController _networkController = null;
     private GameController gameController = null;
 
-    private IEnumerable<NetworkSync> objectsToSync = new NetworkSync[0];
     [SerializeField] private GameController.Role _playerRole;
 
     #region Unity Callbacks
@@ -29,15 +28,14 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     private void Awake()
     {
         photonView = GetComponent<PhotonView>();
-        networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+        _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         Name = $"Player {(photonView.Owner.IsMasterClient ? "1" : "2")}";
-        objectsToSync = GameObject.FindObjectsOfType<NetworkSync>().OrderBy(x => x.Id);
     }
 
     private void Start()
     {
-        networkController.InvokePlayerNetworkInstantiate();
+        _networkController.InvokePlayerNetworkInstantiate();
     }
 
     private void OnEnable()
@@ -54,9 +52,9 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         gameController.OnFinishGameEvent -= OnFinishGameEvent;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        foreach (NetworkSync syncObject in objectsToSync)
+        foreach (NetworkSync syncObject in _networkController.NetworkSyncs)
         {
             if (PlayerRole != syncObject.Owner)
             {
@@ -76,8 +74,8 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         {
             stream.SendNext((int)PlayerRole);
             stream.SendNext(Name);
-            stream.SendNext((int)objectsToSync.Count(x => x.Owner == PlayerRole));
-            foreach (NetworkSync syncObject in objectsToSync)
+            stream.SendNext((int)_networkController.NetworkSyncs.Count(x => x.Owner == PlayerRole));
+            foreach (NetworkSync syncObject in _networkController.NetworkSyncs)
             {
                 if (PlayerRole == syncObject.Owner)
                 {
@@ -96,7 +94,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
             for (int i = 0; i < serializeCount; ++i)
             {
                 string syncId = (string)stream.ReceiveNext();
-                NetworkSync sync = objectsToSync.Where(x => x.Id.ToString() == syncId).FirstOrDefault();
+                NetworkSync sync = _networkController.NetworkSyncs.Where(x => x.Id.ToString() == syncId).FirstOrDefault();
 
                 byte[] data = (byte[])stream.ReceiveNext();
                 if (sync != null)
@@ -122,16 +120,6 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         return photonView.IsMine;
     }
 
-    public void InstantiateNetworkGameObject(string prefabName, Vector3 position, Quaternion rotation, GameController.Role owner)
-    {
-        GameObject gameObjectInstantiate = Instantiate(networkController.GetPrefab(prefabName), position, rotation);
-        string id = Guid.NewGuid().ToString();
-        gameObjectInstantiate.GetComponent<NetworkSync>().Id = id;
-
-        object[] parameters = new object[] { prefabName, position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, rotation.w, id, (int)PlayerRole };
-        photonView.RPC("Instantiate", RpcTarget.Others, parameters as object);
-    }
-
     #endregion
 
     #region RPC Functions
@@ -141,7 +129,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     {
         if (!(gameController.IsGameLoading || gameController.IsGameStart))
         {
-            gameController.StartGame(networkController.GetLocalRole());
+            gameController.StartGame(_networkController.GetLocalRole());
         }
     }
 
@@ -156,19 +144,6 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         }
     }
 
-    [PunRPC]
-    private void Instantiate(object[] parameters)
-    {
-        GameObject gameObjectInstantiate = Instantiate(networkController.GetPrefab((string)parameters[0]), 
-            new Vector3((float)parameters[1], (float)parameters[2], (float)parameters[3]), 
-            new Quaternion((float)parameters[4], (float)parameters[5], (float)parameters[6], (float)parameters[7]));
-
-
-        NetworkSync networkSync = gameObjectInstantiate.GetComponent<NetworkSync>();
-        networkSync.Id = (string)parameters[8];
-        networkSync.Owner = (GameController.Role)parameters[9];
-    }
-
     #endregion
 
     #region Private Functions
@@ -180,8 +155,6 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 
     private void OnFinishLoadGameEvent()
     {
-        objectsToSync = GameObject.FindObjectsOfType<NetworkSync>().OrderBy(x => x.Id);
-
         if (IsMine())
         {
             DoorController[] doorsScripts = FindObjectsOfType<DoorController>();

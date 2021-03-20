@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Arm;
 using Other;
 using UnityEngine;
 
@@ -52,10 +53,10 @@ public class TransportableSpawner : MonoBehaviour
         {
             foreach (var t in TransportablesPrefab)
             {
-                if (t.GetComponent<TransportableByConveyor>().GetType() == levelController.GetNextTypeInSequence())
+                if (t.GetComponent<Pickable>().GetType() == levelController.GetNextTypeInSequence())
                 {
                     transportable = Instantiate(t, randomPoint, Quaternion.identity);
-                    transportable.gameObject.GetComponent<TransportableByConveyor>().Color = levelController.GetNextColorInSequence();
+                    transportable.gameObject.GetComponent<Pickable>().Color = levelController.GetNextColorInSequence();
                     break;
                 }
             }
@@ -65,7 +66,7 @@ public class TransportableSpawner : MonoBehaviour
         { 
             transportable = Instantiate(randomPrefab, randomPoint, Quaternion.identity);
             Color randomColor = possibleColors[_random.Next(0, possibleColors.Length)];
-            transportable.gameObject.GetComponent<TransportableByConveyor>().Color = randomColor;
+            transportable.gameObject.GetComponent<Pickable>().Color = randomColor;
             sequenceIndex++;
         }
         

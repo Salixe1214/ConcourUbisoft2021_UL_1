@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Arm;
 using Other;
+using Photon.Pun;
 using TechSupport.Informations;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,7 +30,7 @@ public class Level2Controller : MonoBehaviour, LevelController
     public Color[] GetColors() => _possibleColors;
     public Color GetNextColorInSequence() => _furnace.GetNextColor();
     public int GetCurrentSequenceLenght() => _furnace.GetCurrentSequenceLenght();
-    public TransportableType GetNextTypeInSequence() => _furnace.GetNextItemType();
+    public Other.PickableType GetNextTypeInSequence() => _furnace.GetNextItemType();
 
     private ImageLayout _imageList;
     private List<Sprite> _itemSprites = new List<Sprite>();
@@ -38,15 +40,11 @@ public class Level2Controller : MonoBehaviour, LevelController
     private int _currentListIndex;
     private NetworkController _networkController = null;
 
-
     private void Awake()
     {
         _soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _cameraOriginalPosition = AreaCamera.transform.position;
-
-        //REMOVE
-        StartLevel();
     }
 
     public void StartLevel()
@@ -83,22 +81,19 @@ public class Level2Controller : MonoBehaviour, LevelController
     private void SpawnObject(Bounds solution, Color color)
     {
         GameObject randomPrefab = _transportablesPrefab[_random.Next(0, _transportablesPrefab.Length)];
-        _networkController.GetOwnNetworkPlayer().InstantiateNetworkGameObject(randomPrefab.name, solution.center, Quaternion.identity, GameController.Role.SecurityGuard);
 
-        //GameObject transportable = Instantiate(randomPrefab, solution.center, Quaternion.identity);
-        //transportable.gameObject.GetComponent<TransportableByConveyor>().Color = color; 
+        GameObject gameobject = PhotonNetwork.Instantiate(randomPrefab.name, solution.center, Quaternion.identity);
+        gameobject.GetComponent<Arm.Pickable>().Color = color;
     }
 
-    private void SpawnSequenceObject(Bounds solution, Color color, TransportableType type)
+    private void SpawnSequenceObject(Bounds solution, Color color, Other.PickableType type)
     {
         foreach (var t in _transportablesPrefab)
         {
-            if (t.GetComponent<TransportableByConveyor>().GetType() == type)
+            if (t.GetComponent<Arm.Pickable>().GetType() == type)
             {
-                //GameObject transportable = Instantiate(t, solution.center, Quaternion.identity);
-                //transportable.gameObject.GetComponent<TransportableByConveyor>().Color = color;
-
-                _networkController.GetOwnNetworkPlayer().InstantiateNetworkGameObject(t.name, solution.center, Quaternion.identity, GameController.Role.SecurityGuard);
+                GameObject gameobject = PhotonNetwork.Instantiate(t.name, solution.center, Quaternion.identity);
+                gameobject.GetComponent<Arm.Pickable>().Color = color;
                 break;
             }
         }
@@ -170,25 +165,25 @@ public class Level2Controller : MonoBehaviour, LevelController
 
         for (int i = 0; i < _furnace.GetCurrentSequenceLenght(); i++)
         {
-            TransportableType currentType = sequenceOfColor.types[i];
+            Other.PickableType currentType = sequenceOfColor.types[i];
             GameObject itemImage = new GameObject();
             itemImage.AddComponent<Image>();
 
             switch (currentType)
             {
-                case TransportableType.RobotHead:
+                case Other.PickableType.RobotHead:
                     _itemSprites.Add(RobotHeadImage);
                     break;
-                case TransportableType.Crate:
+                case Other.PickableType.Crate:
                     _itemSprites.Add(CrateImage);
                     break;
-                case TransportableType.Gear:
+                case Other.PickableType.Gear:
                     _itemSprites.Add(GearImage);
                     break;
-                case TransportableType.Battery:
+                case Other.PickableType.Battery:
                     _itemSprites.Add(BatteryImage);
                     break;
-                case TransportableType.Pipe:
+                case Other.PickableType.Pipe:
                     _itemSprites.Add(PipeImage);
                     break;
             }

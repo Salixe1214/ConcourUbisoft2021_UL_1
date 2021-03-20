@@ -16,6 +16,8 @@ public class NetworkController : MonoBehaviourPunCallbacks
     [SerializeField] private bool QuickSetup = false;
     [SerializeField] private List<GameObject> networkObjects = null;
 
+    public List<NetworkSync> NetworkSyncs { get; set; } = new List<NetworkSync>();
+
 #if UNITY_EDITOR 
     [MenuItem("Network/AssignID")]
     public static void DoSomething()
@@ -23,7 +25,9 @@ public class NetworkController : MonoBehaviourPunCallbacks
         NetworkSync[] syncs = GameObject.FindObjectsOfType<NetworkSync>();
         foreach (NetworkSync sync in syncs)
         {
-            sync.Id = Guid.NewGuid().ToString();
+            SerializedObject serializedObject = new SerializedObject(sync);
+            serializedObject.FindProperty("Id").stringValue = Guid.NewGuid().ToString();
+            serializedObject.ApplyModifiedProperties();
         }
     }
 #endif
@@ -139,6 +143,14 @@ public class NetworkController : MonoBehaviourPunCallbacks
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
+        if (QuickSetup && PhotonNetwork.IsMasterClient)
+        {
+            for (int i = 0; i < 70; ++i)
+            {
+                PhotonNetwork.Instantiate("Cube", new Vector3(-6.13f, 0.375f, -4.78f), Quaternion.identity);
+                //GetOwnNetworkPlayer().InstantiateNetworkGameObject("TransportableBox", new Vector3(-6.13f, 0.375f, -4.78f), Quaternion.identity, GameController.Role.SecurityGuard);
+            }
+        }
         OnPlayerJoin?.Invoke();
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)

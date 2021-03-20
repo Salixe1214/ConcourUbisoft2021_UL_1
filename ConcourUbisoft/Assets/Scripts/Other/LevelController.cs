@@ -6,6 +6,6 @@ namespace Other
         Color[] GetColors();
         Color GetNextColorInSequence();
         int GetCurrentSequenceLenght();
-        TransportableType GetNextTypeInSequence();
+        PickableType GetNextTypeInSequence();
     }
 }

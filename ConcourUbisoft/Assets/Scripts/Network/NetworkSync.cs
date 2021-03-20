@@ -28,9 +28,14 @@ public class NetworkSync : MonoBehaviour
     private byte[] _oldData = null;
     private byte[] _newData = null;
 
+    private NetworkController _networkController = null;
+
     private void Awake()
     {
         _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+
+        _networkController.NetworkSyncs.Add(this);
         if (!(_componentToSync is Serializable))
         {
             Debug.LogError($"The component: {_componentToSync.name} must implement the interface ISerializable.");
