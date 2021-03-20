@@ -290,9 +290,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7103350991832317812, guid: 57ef67f21f04aa04ab1a991cdcfc1f4d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7103350991832317812, guid: 57ef67f21f04aa04ab1a991cdcfc1f4d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7103350991832317812, guid: 57ef67f21f04aa04ab1a991cdcfc1f4d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7103350991832317812, guid: 57ef67f21f04aa04ab1a991cdcfc1f4d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7103350991832317812, guid: 57ef67f21f04aa04ab1a991cdcfc1f4d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 7107876366237320925, guid: 57ef67f21f04aa04ab1a991cdcfc1f4d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4
+      value: 2.763
       objectReference: {fileID: 0}
     - target: {fileID: 7201346831306248159, guid: 57ef67f21f04aa04ab1a991cdcfc1f4d, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -11084,11 +11104,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7906135595606664052, guid: ecdc4ef1cf30d5846adf8c2e7bc3639f, type: 3}
   m_PrefabInstance: {fileID: 2261725489133101063}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2261725489133101065 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8688999225611992364, guid: ecdc4ef1cf30d5846adf8c2e7bc3639f, type: 3}
-  m_PrefabInstance: {fileID: 2261725489133101063}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2261725489133101066 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1184295436126516237, guid: ecdc4ef1cf30d5846adf8c2e7bc3639f, type: 3}
@@ -11109,7 +11124,7 @@ MonoBehaviour:
   outlineColor: {r: 1, g: 0, b: 0, a: 1}
   outlineWidth: 10
   canvas: {fileID: 636416298}
-  targetTop: {fileID: 2261725489133101065}
+  targetTop: {fileID: 0}
   inputName: Control
   textures:
     items:
