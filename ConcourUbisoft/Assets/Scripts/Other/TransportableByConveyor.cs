@@ -50,4 +50,9 @@ public class TransportableByConveyor : MonoBehaviour
             return priorityConveyor.First().Value;
         }
     }
+
+    public bool IsOnConveyor()
+    {
+        return priorityConveyor.Count > 0;
+    }
 }

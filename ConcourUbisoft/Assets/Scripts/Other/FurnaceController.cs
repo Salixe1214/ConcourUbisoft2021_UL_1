@@ -24,24 +24,26 @@ public class FurnaceController : MonoBehaviour
     [SerializeField] private int maxColorSequenceLenght=7;
     [SerializeField] private float TimeToConsume = 0.0f;
     [SerializeField] private bool HasBeenPickupNeeded = true;
-
-    private SoundController soundController;
+    [SerializeField] private GameController.Role _owner = GameController.Role.None;
 
     public event Action WhenFurnaceConsumedAll;
     public event Action WhenFurnaceConsumeWrong;
     public event Action WhenFurnaceConsumeAWholeSequenceWithoutFinishing;
-
     public event Action CheckItemOffList;
+
+    private SoundController soundController;
+    private PhotonView _photonView = null;
+    private NetworkController _networkController = null;
 
     private int SucceedSequences = 0;
 
     System.Random _random = new System.Random(0);
-    private PhotonView _photonView = null;
 
     private void Awake()
     {
         SequencesOfColor = new SequenceOfColor[nbColorSequences];
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
+        _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _photonView = GetComponent<PhotonView>();
     }
 
@@ -49,7 +51,7 @@ public class FurnaceController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Pickable pickable = null;
-        if (other.gameObject.TryGetComponent(out pickable) && (HasBeenPickupNeeded && pickable.HasBeenPickup || !HasBeenPickupNeeded) && PhotonNetwork.IsMasterClient)
+        if (other.gameObject.TryGetComponent(out pickable) && (HasBeenPickupNeeded && pickable.HasBeenPickup || !HasBeenPickupNeeded) && _owner == _networkController.GetLocalRole())
         {
             Consume(pickable);
         }
@@ -57,10 +59,10 @@ public class FurnaceController : MonoBehaviour
 
     private void Consume(Pickable pickable)
     {
-        PhotonNetwork.Destroy(pickable.gameObject);
-
         object[] parameters = new object[] { (int)pickable.GetType(), pickable.Color.r, pickable.Color.g, pickable.Color.b, pickable.Color.a, };
         _photonView.RPC("Consumed", RpcTarget.All, parameters as object);
+
+        PhotonNetwork.Destroy(pickable.gameObject);
     }
 
     [PunRPC]
@@ -71,6 +73,7 @@ public class FurnaceController : MonoBehaviour
 
     private void ValidateConsumed(PickableType type, Color color)
     {
+        Debug.Log("Consume");
         SequenceOfColor currentSequence = SequencesOfColor[SucceedSequences];
 
         Color currentSequenceColor = currentSequence.ColorsSequence[currentSequence.SucceedColors];

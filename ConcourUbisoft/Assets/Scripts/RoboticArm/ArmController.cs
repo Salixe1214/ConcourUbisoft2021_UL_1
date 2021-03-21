@@ -8,63 +8,31 @@ using UnityEngine;
 
 namespace Arm
 {
-    public class ArmController : Serializable
+    public class ArmController : MonoBehaviour, IPunObservable
     {
         [SerializeField] private float minRange = 1.5f;
         [SerializeField] float controlSpeed = 3f;
         [SerializeField] private IKSolver armIKSolver;
         [SerializeField] private Transform armRotationRoot;
- 
-        private float maxRange;
+        [SerializeField] private GameController.Role _owner = GameController.Role.None;
+
         public float ControlSpeed => controlSpeed;
         public Transform Head => armIKSolver.transform;
         public Transform ArmTarget { get; private set; } = null;
+        private float maxRange;
 
-        #region Network
+        private NetworkController _networkController = null;
+        private PhotonView _photonView = null;
 
-        public override void Deserialize(byte[] data)
+        private void Awake()
         {
-            using (MemoryStream memoryStream = new MemoryStream(data))
+            _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+            _photonView = GetComponent<PhotonView>();
+            if (_networkController.GetLocalRole() == _owner)
             {
-                using (BinaryReader binaryReader = new BinaryReader(memoryStream))
-                {
-
-                }
+                _photonView.RequestOwnership();
             }
         }
-        public override byte[] Serialize()
-        {
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
-                {
-                    binaryWriter.Write(ArmTarget.position.x);
-                    binaryWriter.Write(ArmTarget.position.y);
-                    binaryWriter.Write(ArmTarget.position.z);
-                }
-
-                return memoryStream.ToArray();
-            }
-        }
-        public override void Smooth(byte[] oldData, byte[] newData, float lag, double lastTime, double currentTime)
-        {
-            using (MemoryStream memoryStreamOld = new MemoryStream(oldData),
-                memoryStreamNew = new MemoryStream(newData))
-            {
-                using (BinaryReader binaryReaderOld = new BinaryReader(memoryStreamOld),
-                    binaryReaderNew = new BinaryReader(memoryStreamNew))
-                {
-                    Vector3 newPosition = new Vector3(
-                        binaryReaderNew.ReadSingle(),
-                        binaryReaderNew.ReadSingle(),
-                        binaryReaderNew.ReadSingle());
-
-                    ArmTarget.position = Vector3.MoveTowards(ArmTarget.position, newPosition, Time.deltaTime * controlSpeed);
-                }
-            }
-        }
-
-        #endregion
 
         private void Start()
         {
@@ -117,6 +85,21 @@ namespace Arm
             Vector3 translation = Vector3.ClampMagnitude(translate, controlSpeed);
 
             ArmTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
+        }
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if(stream.IsWriting)
+            {
+                stream.SendNext(ArmTarget.position.x);
+                stream.SendNext(ArmTarget.position.y);
+                stream.SendNext(ArmTarget.position.z);
+            }
+            else
+            {
+                Vector3 newPostion = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+                ArmTarget.position = Vector3.MoveTowards(ArmTarget.position, newPostion, Time.deltaTime * controlSpeed);
+            }
         }
     }
 }

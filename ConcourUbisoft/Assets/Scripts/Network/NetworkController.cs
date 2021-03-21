@@ -12,25 +12,9 @@ using UnityEditor;
 
 public class NetworkController : MonoBehaviourPunCallbacks
 {
-
     [SerializeField] private bool QuickSetup = false;
     [SerializeField] private List<GameObject> networkObjects = null;
 
-    public List<NetworkSync> NetworkSyncs { get; set; } = new List<NetworkSync>();
-
-#if UNITY_EDITOR 
-    [MenuItem("Network/AssignID")]
-    public static void DoSomething()
-    {
-        NetworkSync[] syncs = GameObject.FindObjectsOfType<NetworkSync>();
-        foreach (NetworkSync sync in syncs)
-        {
-            SerializedObject serializedObject = new SerializedObject(sync);
-            serializedObject.FindProperty("Id").stringValue = Guid.NewGuid().ToString();
-            serializedObject.ApplyModifiedProperties();
-        }
-    }
-#endif
     public float photonPing = 0;
     public int photonSendRate = 30;
     public int photonSendRateSerialize = 30;

@@ -14,37 +14,30 @@ namespace Arm
     public class Pickable : MonoBehaviour, IPunObservable
     {
         [SerializeField] private PickableType type;
-
-
-        public Color Color { get { return _renderer.material.color; } set { _renderer.material.color = value; } }
-
-        private Renderer _renderer = null;
-
-        [SerializeField] private float volumeMultiplier=0.3f;
+        [SerializeField] private float volumeMultiplier = 0.3f;
         [SerializeField] private AudioClip magnetCollisionSound;
         [SerializeField] private bool hasBeenPickup = false;
-        private AudioSource _audioSource;
-        private Rigidbody _rigidbody;
 
-        private Collider _collider;
-        private Outline _outline;
-        private bool hovered;
-        public Rigidbody RB => _rigidbody;
-
+        public Color Color { get { return _renderer.material.color; } set { _renderer.material.color = value; } }
+        public Rigidbody Rigidbody { get; private set; }
         public bool HasBeenPickup { get => hasBeenPickup; set => hasBeenPickup = value; }
 
-        private static int nextId = 0;
-        public int Id { get; private set; }
-        private bool _grabbed = false;
-
+        private Renderer _renderer = null;
+        private AudioSource _audioSource;
+        private Collider _collider;
+        private Outline _outline;
         private NetworkController _networkController = null;
-
         private PhotonView photonView = null;
+        private TransportableByConveyor _transportableByConveyor = null;
+
+        private bool hovered;
+        private bool _grabbed = false;
 
         private void Awake()
         {
             _renderer = GetComponent<Renderer>();
             _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+            _transportableByConveyor = GetComponent<TransportableByConveyor>();
             photonView = GetComponent<PhotonView>();
 
             if (!photonView.IsMine)
@@ -53,7 +46,7 @@ namespace Arm
             }
 
             _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
-            _rigidbody = GetComponent<Rigidbody>();
+            Rigidbody = GetComponent<Rigidbody>();
             _collider = GetComponent<Collider>();
             _outline = GetComponent<Outline>();
             _audioSource = GetComponent<AudioSource>();
@@ -62,11 +55,10 @@ namespace Arm
         private void Start()
         {
             _outline.enabled = false;
-            Id = nextId++;
 
             if (!photonView.IsMine)
             {
-                _rigidbody.isKinematic = true;
+                Rigidbody.isKinematic = true;
             }
         }
 
@@ -88,8 +80,8 @@ namespace Arm
         {
             if (photonView.IsMine)
             {
-                _rigidbody.useGravity = false;
-                _rigidbody.freezeRotation = true;
+                Rigidbody.useGravity = false;
+                Rigidbody.freezeRotation = true;
                 hasBeenPickup = true;
                 _grabbed = true;
                 _audioSource.clip = magnetCollisionSound;
@@ -109,8 +101,8 @@ namespace Arm
             {
                 transform.SetParent(null);
                 _grabbed = false;
-                _rigidbody.useGravity = true;
-                _rigidbody.freezeRotation = false;
+                Rigidbody.useGravity = true;
+                Rigidbody.freezeRotation = false;
             }
         }
 
@@ -130,10 +122,28 @@ namespace Arm
                 stream.SendNext(Color.g);
                 stream.SendNext(Color.b);
                 stream.SendNext(Color.a);
+                stream.SendNext(transform.position.x);
+                stream.SendNext(transform.position.y);
+                stream.SendNext(transform.position.z);
+                stream.SendNext(transform.rotation.x);
+                stream.SendNext(transform.rotation.y);
+                stream.SendNext(transform.rotation.z);
+                stream.SendNext(transform.rotation.w);
             }
             else
             {
                 Color = new Color((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+                Vector3 newPostion = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+                if (Vector3.Distance(newPostion, transform.position) > 3)
+                {
+                    transform.position = newPostion;
+                }
+                else
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, newPostion, Time.deltaTime * (_grabbed ? 4 : _transportableByConveyor.IsOnConveyor() ? 3 : 10));
+                }
+
+                transform.rotation = new Quaternion((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
             }
         }
 

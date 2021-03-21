@@ -47,6 +47,7 @@ MonoBehaviour:
   isControlled: 0
   _armController: {fileID: 7333684692691450136}
   _magnetController: {fileID: 1391509103126180349}
+  _owner: 0
 --- !u!1001 &8698655143566184725
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -54,17 +55,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7906135595606664052}
     m_Modifications:
-    - target: {fileID: 4320733802285747621, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: _owner
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6455222844297920428, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.509
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6455222844297920428, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -2.69
       objectReference: {fileID: 0}
     - target: {fileID: 6459741911634675205, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
       propertyPath: m_RootOrder
@@ -118,16 +115,7 @@ PrefabInstance:
       propertyPath: OutputAudioMixerGroup
       value: 
       objectReference: {fileID: 6237676351217213401, guid: ecf6682e6c8c50945a724780bcfa4240, type: 2}
-    - target: {fileID: 9044187051928265672, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: Id
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9044187051928265672, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
-      propertyPath: _owner
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 838453515, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
 --- !u!4 &2383048279938242320 stripped
 Transform:
