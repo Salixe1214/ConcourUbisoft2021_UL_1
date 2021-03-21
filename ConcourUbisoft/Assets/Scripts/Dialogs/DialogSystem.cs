@@ -122,6 +122,8 @@ public class DialogSystem : MonoBehaviour
         char2Slot.enabled = false;
         textSlot.enabled = false;
         
+        _lineCount = 0;
+        
         _initialised = true;
     }
 
@@ -162,6 +164,8 @@ public class DialogSystem : MonoBehaviour
         char1Slot.enabled = false;
         char2Slot.enabled = false;
         textSlot.enabled = false;
+        
+        _lineCount = 0;
 
         _initialised = true;
     }
@@ -186,5 +190,7 @@ public class DialogSystem : MonoBehaviour
         char1Slot.color = Color.clear;
         char2Slot.color = Color.clear;
         textSlot.text = "";
+        
+        ReadLine();
     }
 }
