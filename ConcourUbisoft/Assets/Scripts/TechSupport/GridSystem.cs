@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace TechSupport
@@ -6,42 +7,50 @@ namespace TechSupport
     public class GridSystem
     {
         private Vector2Int _size = Vector2Int.one;
+        private Rect[] _rects = new Rect[]{};
 
         #region Grid
     
+        public void Init(int elementNbr)
+        {
+            _size = CalculateGridSize(elementNbr);
+            _rects = CalculateGrid(elementNbr, _size);
+        }
+        
         public Vector2Int CalculateGridSize(int size)
         {
             float rLenght = Mathf.Sqrt(size);
 
             return new Vector2Int(Mathf.CeilToInt(rLenght), Mathf.RoundToInt(rLenght));
         }
-    
-        public void Grid(IEnumerable<Camera> cams, Vector2Int size)
-        {
-            float x = 0;
-            float y = 0;
 
-            foreach (Camera camera in cams)
+        public Rect[] CalculateGrid(int len, Vector2Int size)
+        {
+            Rect[] rects = new Rect[len];
+            Vector2 cell = new Vector2(1f / size.x, 1f / size.y);
+            float maxY = 1f - cell.y;
+
+            for (int i = 0; i < len; i++)
             {
-                camera.rect = new Rect(x * (1f / size.x), y * (1f / size.y),
-                    1f / size.x, 1f / size.y);
-                x++;
-                if (x % size.x == 0)
-                {
-                    y++;
-                    x = 0;
-                }
+                float x = (float) i % size.x;
+                rects[i].Set(x * cell.x, maxY - ((float)i - x) / size.y * cell.y,
+                    cell.x, cell.y);
             }
+
+            return rects;
         }
     
+        public void Grid(IEnumerable<Camera> cams)
+        {
+            foreach ((Camera camera, int index) in cams.Select((value, i) => ( value, i )))
+            {
+                camera.rect = _rects[index];
+            }
+        }
+
         #endregion
 
         #region Getter Setter
-
-        public void SearchGridSize(int elementNbr)
-        {
-            _size = CalculateGridSize(elementNbr);
-        }
 
         public Vector2Int GetGridSize()
         {

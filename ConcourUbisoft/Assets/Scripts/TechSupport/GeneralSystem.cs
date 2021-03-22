@@ -65,7 +65,7 @@ namespace TechSupport
             _gameController = GameObject.FindGameObjectWithTag("GameController")?.GetComponent<GameController>();
             cameras.Sort((a, b) => a.number.CompareTo(b.number));
             cameras.ForEach(c => c.items.Init());
-            _gridSystem.SearchGridSize(cameras.Count());
+            _gridSystem.Init(cameras.Count());
             _fullScreenSystem.SetTarget(cameras.First().items);
             SystemSwitch(mode);
         }
@@ -131,8 +131,7 @@ namespace TechSupport
         private void OnGrid()
         {
             EnableAll(true);
-            _gridSystem.Grid(cameras.Select(input => input.items.GetCamera()),
-                _gridSystem.GetGridSize());
+            _gridSystem.Grid(cameras.Select(input => input.items.GetCamera()));
         }
 
         private void OnFullScreen()
