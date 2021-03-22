@@ -59,6 +59,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         
 
         _imageList = _techUI.GetList();
+        _imageList.Clean();
         setItemsImageList();
     }
 
