@@ -24,7 +24,7 @@ namespace Arm
                 Vector3 translation = new Vector3(-Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
 
 
-                    _armController.Translate(translation);
+                _armController.Translate(translation);
                 
 
                 if ((Input.GetButtonDown("Grab") ||

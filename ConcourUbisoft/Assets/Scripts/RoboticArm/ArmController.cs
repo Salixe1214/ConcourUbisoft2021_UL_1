@@ -87,16 +87,13 @@ namespace Arm
 
             if (translate.magnitude >= float.Epsilon)
             {
+                ArmTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
                 _armSound.Volume = 0.3f;//translate.magnitude / (ControlSpeed * Time.deltaTime);
             }
             else
             {
                 _armSound.Volume = 0;
             }
-
-            ArmTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
-
-            
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
