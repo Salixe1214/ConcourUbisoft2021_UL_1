@@ -13,6 +13,7 @@ namespace Arm
         [SerializeField] private float pullForce = 10f;
         [SerializeField] private Transform magnetPullPoint;
         [SerializeField] private GameController.Role _owner = GameController.Role.SecurityGuard;
+        [SerializeField] private MagnetSound _magnetSound = null;
 
         private MagnetTrigger _magnetTrigger;
         private Pickable _currentPickable = null;
@@ -48,6 +49,8 @@ namespace Arm
                         ReleasePickable();
                     }
                 }
+
+                _magnetSound.IsOn = MagnetActive;
             }
             
         }

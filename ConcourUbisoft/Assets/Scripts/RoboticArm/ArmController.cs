@@ -15,6 +15,7 @@ namespace Arm
         [SerializeField] private IKSolver armIKSolver;
         [SerializeField] private Transform armRotationRoot;
         [SerializeField] private GameController.Role _owner = GameController.Role.None;
+        [SerializeField] private ArmSound _armSound = null;
 
         public float ControlSpeed => controlSpeed;
         public Transform Head => armIKSolver.transform;
@@ -27,7 +28,7 @@ namespace Arm
         private void Awake()
         {
             _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
-            _photonView = GetComponent<PhotonView>();
+            _photonView = GetComponentInParent<PhotonView>();
             if (_networkController.GetLocalRole() == _owner)
             {
                 _photonView.RequestOwnership();
@@ -84,7 +85,18 @@ namespace Arm
         {
             Vector3 translation = Vector3.ClampMagnitude(translate, controlSpeed);
 
+            if (translate.magnitude >= float.Epsilon)
+            {
+                _armSound.Volume = 0.3f;
+            }
+            else
+            {
+                _armSound.Volume = 0;
+            }
+
             ArmTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
+
+            
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

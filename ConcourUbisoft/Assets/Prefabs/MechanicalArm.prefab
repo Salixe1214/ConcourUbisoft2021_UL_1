@@ -506,7 +506,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pullForce: 10
   magnetPullPoint: {fileID: 927382909}
-  _owner: 0
+  _owner: 1
+  _magnetSound: {fileID: 1439748898033245251}
 --- !u!82 &8565603360900868797
 AudioSource:
   m_ObjectHideFlags: 0
@@ -815,6 +816,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6459741911634675205}
+  - component: {fileID: 3896696578310646320}
   m_Layer: 0
   m_Name: MechanicalArm
   m_TagString: Untagged
@@ -841,6 +843,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3896696578310646320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6459741911634675207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  observableSearch: 2
+  Synchronization: 3
+  OwnershipTransfer: 1
+  ObservedComponents:
+  - {fileID: 2121669986793875469}
+  - {fileID: 4409781232100943863}
+  - {fileID: 1439748898033245251}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &7379157769131796178
 GameObject:
   m_ObjectHideFlags: 0
@@ -1110,8 +1137,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 6455222844297920428}
   armController: {fileID: 2121669986793875469}
-  smoothIterationCount: 120
-  volumeMultiplier: 0.3
 --- !u!1 &8651452615950820993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1168,7 +1193,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7915232795401323305}
   - component: {fileID: 2121669986793875469}
-  - component: {fileID: 2423377710445305471}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -1206,27 +1230,5 @@ MonoBehaviour:
   controlSpeed: 4
   armIKSolver: {fileID: 1865101538738871938}
   armRotationRoot: {fileID: 6610768617839303362}
-  _owner: 2
---- !u!114 &2423377710445305471
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8875939281911053909}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  observableSearch: 2
-  Synchronization: 3
-  OwnershipTransfer: 1
-  ObservedComponents:
-  - {fileID: 2121669986793875469}
-  viewIdField: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
+  _owner: 1
+  _armSound: {fileID: 4409781232100943863}
