@@ -15,7 +15,7 @@ public class Level1Controller : MonoBehaviour , LevelController
     public Color[] GetColors() => PossibleColors;
     public Color GetNextColorInSequence() => FurnaceController.GetNextColor();
     public int GetCurrentSequenceLenght() => FurnaceController.GetCurrentSequenceLenght();
-    public TransportableType GetNextTypeInSequence() => FurnaceController.GetNextItemType();
+    public PickableType GetNextTypeInSequence() => FurnaceController.GetNextItemType();
 
     [SerializeField] private FurnaceController FurnaceController = null;
     [SerializeField] private TransportableSpawner TransportableSpawner = null;
@@ -107,6 +107,7 @@ public class Level1Controller : MonoBehaviour , LevelController
         Debug.Log("StartLevel");
         soundController.PlayArea1Music();
         imageList = techUI.GetList();
+        imageList.Clean();
         firstWave = true;
         FurnaceController.enabled = true;
         TransportableSpawner.enabled = true;
@@ -214,21 +215,21 @@ public class Level1Controller : MonoBehaviour , LevelController
 
         for (int i = 0; i < FurnaceController.GetCurrentSequenceLenght(); i++)
         {
-            TransportableType currentType = sequenceOfColor.types[i];
+            PickableType currentType = sequenceOfColor.types[i];
             GameObject itemImage = new GameObject();
             itemImage.AddComponent<Image>();
 
             switch (currentType)
             {
-                case TransportableType.RobotHead : itemSprites.Add(RobotHeadImage);
+                case PickableType.RobotHead : itemSprites.Add(RobotHeadImage);
                     break;
-                case TransportableType.Crate : itemSprites.Add(CrateImage);
+                case PickableType.Crate : itemSprites.Add(CrateImage);
                     break;
-                case TransportableType.Gear : itemSprites.Add(GearImage);
+                case PickableType.Gear : itemSprites.Add(GearImage);
                     break;
-                case TransportableType.Battery : itemSprites.Add(BatteryImage);
+                case PickableType.Battery : itemSprites.Add(BatteryImage);
                     break;
-                case TransportableType.Pipe : itemSprites.Add(PipeImage);
+                case PickableType.Pipe : itemSprites.Add(PipeImage);
                     break;
             }
         }

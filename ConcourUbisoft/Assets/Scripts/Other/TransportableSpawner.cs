@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Arm;
 using Other;
+using Photon.Pun;
 using UnityEngine;
 
 public class TransportableSpawner : MonoBehaviour
@@ -17,24 +19,32 @@ public class TransportableSpawner : MonoBehaviour
     // Control conveyor speed according to needs. Ex: Slow conveyor speed might need a speed boost when items are spawned the first time in order to avoid item drought.
     [SerializeField] private Conveyor[] conveyors = null;
 
+    private NetworkController _networkController = null;
+
     private float lastSpawnTime = 0.0f;
     private float currentDelay = 0.0f;
     private int sequenceIndex = 0;
     private LevelController levelController;
     private System.Random _random = new System.Random(0);
-    
+
+   
+
     private void Start()
     {
         levelController = LevelControl.GetComponent<LevelController>();
+        _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
     }
 
     private void Update()
     {
-        if (CanSpawn &&Time.time - lastSpawnTime > currentDelay)
+        if(_networkController.GetLocalRole() == GameController.Role.Technician)
         {
-            Spawn();
-            lastSpawnTime = Time.time;
-            currentDelay = (float)_random.NextDouble()*(DelayBetweenSpawnsInSeconds.y - DelayBetweenSpawnsInSeconds.x) + DelayBetweenSpawnsInSeconds.x;
+            if (CanSpawn && Time.time - lastSpawnTime > currentDelay)
+            {
+                Spawn();
+                lastSpawnTime = Time.time;
+                currentDelay = (float)_random.NextDouble() * (DelayBetweenSpawnsInSeconds.y - DelayBetweenSpawnsInSeconds.x) + DelayBetweenSpawnsInSeconds.x;
+            }
         }
     }
 
@@ -52,20 +62,21 @@ public class TransportableSpawner : MonoBehaviour
         {
             foreach (var t in TransportablesPrefab)
             {
-                if (t.GetComponent<TransportableByConveyor>().GetType() == levelController.GetNextTypeInSequence())
+                if (t.GetComponent<Pickable>().GetType() == levelController.GetNextTypeInSequence())
                 {
-                    transportable = Instantiate(t, randomPoint, Quaternion.identity);
-                    transportable.gameObject.GetComponent<TransportableByConveyor>().Color = levelController.GetNextColorInSequence();
+                    transportable = PhotonNetwork.Instantiate(t.name, randomPoint, Quaternion.identity);
+                    transportable.GetComponent<Arm.Pickable>().Color = levelController.GetNextColorInSequence();
                     break;
                 }
             }
             sequenceIndex = 0;
         }
         else
-        { 
-            transportable = Instantiate(randomPrefab, randomPoint, Quaternion.identity);
+        {
             Color randomColor = possibleColors[_random.Next(0, possibleColors.Length)];
-            transportable.gameObject.GetComponent<TransportableByConveyor>().Color = randomColor;
+            transportable = PhotonNetwork.Instantiate(randomPrefab.name, randomPoint, Quaternion.identity);
+            transportable.gameObject.GetComponent<Pickable>().Color = randomColor;
+            
             sequenceIndex++;
         }
         

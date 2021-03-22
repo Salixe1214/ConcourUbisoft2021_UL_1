@@ -3992,9 +3992,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   QuickSetup: 0
+  networkObjects:
+  - {fileID: 2362435244797905396, guid: 5c6f209095a4e4c45965df0e2a0f6320, type: 3}
+  - {fileID: 2362435244797905396, guid: 53c6bf0970b4d434881b9745e7b7bd23, type: 3}
+  - {fileID: 277212353033363236, guid: 0a01550949ad16e43833742c5e4d8a0c, type: 3}
+  - {fileID: 2362435244797905396, guid: 0528745e7992d8d4b9106518f6b7b0a9, type: 3}
+  - {fileID: 1456006706197027654, guid: e4fe7562363e7f644993aac9e739260e, type: 3}
   photonPing: 0
-  photonSendRate: 20
-  photonSendRateSerialize: 20
+  photonSendRate: 60
+  photonSendRateSerialize: 60
 --- !u!1 &775259506
 GameObject:
   m_ObjectHideFlags: 0
@@ -9569,7 +9575,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 24300002, guid: a5021839ef948684fad985f2af67a32c, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.8
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -11791,7 +11797,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 24300002, guid: 496b9a23679f0bf448e2a6493228c304, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 0
   Mute: 0

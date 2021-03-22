@@ -466,7 +466,6 @@ GameObject:
   - component: {fileID: 5374279495962164282}
   - component: {fileID: 7780099111703666920}
   - component: {fileID: 8565603360900868797}
-  - component: {fileID: 9044187051928265672}
   - component: {fileID: 1439748898033245251}
   - component: {fileID: 1388979893}
   m_Layer: 0
@@ -604,22 +603,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &9044187051928265672
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4302749757479535658}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f32fa626c1773fc478f9f233067cdfe2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _componentToSync: {fileID: 7780099111703666920}
-  _owner: 0
-  _smooth: 1
-  Id: 0
 --- !u!114 &1439748898033245251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1236,7 +1219,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7915232795401323305}
   - component: {fileID: 2121669986793875469}
-  - component: {fileID: 4320733802285747621}
+  - component: {fileID: 2423377710445305471}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -1274,7 +1257,8 @@ MonoBehaviour:
   controlSpeed: 4
   armIKSolver: {fileID: 1865101538738871938}
   armRotationRoot: {fileID: 6610768617839303362}
---- !u!114 &4320733802285747621
+  _owner: 2
+--- !u!114 &2423377710445305471
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1283,10 +1267,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 8875939281911053909}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f32fa626c1773fc478f9f233067cdfe2, type: 3}
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentToSync: {fileID: 2121669986793875469}
-  _owner: 0
-  _smooth: 1
-  Id: 0
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  observableSearch: 2
+  Synchronization: 3
+  OwnershipTransfer: 1
+  ObservedComponents:
+  - {fileID: 2121669986793875469}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

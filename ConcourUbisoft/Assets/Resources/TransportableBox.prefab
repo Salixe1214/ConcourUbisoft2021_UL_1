@@ -17,8 +17,9 @@ GameObject:
   - component: {fileID: 843007250116299105}
   - component: {fileID: 5905518934942538558}
   - component: {fileID: 6319612779888370426}
+  - component: {fileID: 8607090515085413296}
   m_Layer: 3
-  m_Name: TransportablePipe
+  m_Name: TransportableBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,7 +46,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2362435244797905396}
-  m_Mesh: {fileID: -4828790080061949691, guid: 50c1b9acebcdc204ea082022a789d326, type: 3}
+  m_Mesh: {fileID: 9009893830714642796, guid: 58f8c6fafa44bc247adf0d56a5b84a1f, type: 3}
 --- !u!23 &2362435244797905384
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -65,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 1108147716743453759, guid: 50c1b9acebcdc204ea082022a789d326, type: 3}
+  - {fileID: -351022541804052484, guid: 58f8c6fafa44bc247adf0d56a5b84a1f, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -98,8 +99,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.0612572, y: 0.03365422, z: 0.03365419}
-  m_Center: {x: -9.313226e-10, y: -9.313226e-10, z: 9.313226e-10}
+  m_Size: {x: 0.05, y: 0.05, z: 0.05}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &2362435244797905398
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -128,7 +129,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b3d139d0c9f837488bb839403516f38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
 --- !u!114 &843007250116299105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,6 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7884ea6d82d05a84aa5c90ea518e6ca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 1
   volumeMultiplier: 0.3
   magnetCollisionSound: {fileID: 8300000, guid: d0cbf4c91bdfaf9449032b32781825e8, type: 3}
   hasBeenPickup: 0
@@ -5134,3 +5135,26 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8607090515085413296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2362435244797905396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  observableSearch: 2
+  Synchronization: 3
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 843007250116299105}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
