@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 927382909}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PullPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 1681656966304376482}
   - component: {fileID: 3917596799221007512}
   - component: {fileID: 1498445205592341312}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MagnetMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -166,7 +166,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2562518454084687109}
   - component: {fileID: 1865101538738871938}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: IKSolver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 5532708660549812110}
   - component: {fileID: 6045816089373113327}
   - component: {fileID: 2789119806684443227}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: MagnetTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -304,7 +304,7 @@ GameObject:
   - component: {fileID: 10610343932898887}
   - component: {fileID: 1884354475686408729}
   - component: {fileID: 4039916121000120775}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Limb3Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -385,7 +385,7 @@ GameObject:
   - component: {fileID: 6072848471506880127}
   - component: {fileID: 3875949658673628700}
   - component: {fileID: 4398064974788238092}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BaseMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -468,7 +468,7 @@ GameObject:
   - component: {fileID: 8565603360900868797}
   - component: {fileID: 1439748898033245251}
   - component: {fileID: 1388979893}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Magnet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -641,10 +641,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6610768617839303362}
-  - component: {fileID: 6299495944987808156}
-  - component: {fileID: 5750085315589191635}
   - component: {fileID: 6144330531929586566}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -667,55 +665,6 @@ Transform:
   m_Father: {fileID: 6459741911634675205}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6299495944987808156
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4504165374982355606}
-  m_Mesh: {fileID: -2761241842761050351, guid: 0e69a7203c09fde44a6330d483a83be4, type: 3}
---- !u!23 &5750085315589191635
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4504165374982355606}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 3ff936555cd82bb4b89b1c0380b0cc6a, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &6144330531929586566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -740,7 +689,7 @@ GameObject:
   - component: {fileID: 578758160813006358}
   - component: {fileID: 5861645613941224567}
   - component: {fileID: 4161863157481754790}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Limb1Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -820,7 +769,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1255455955827821671}
   - component: {fileID: 8958149929865130225}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Joint3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -903,7 +852,7 @@ GameObject:
   - component: {fileID: 4056633998020785656}
   - component: {fileID: 6585969485157168370}
   - component: {fileID: 7575445809018099549}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Limb2Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -983,7 +932,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3809753468000309618}
   - component: {fileID: 4868718194282804906}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Joint1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1173,7 +1122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7626022950420855214}
   - component: {fileID: 7616734089323256725}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Joint2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
