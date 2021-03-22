@@ -32,7 +32,6 @@ namespace Arm
             _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
             _photonView = GetComponentInParent<PhotonView>();
 
-            newPosition = ArmTarget.position;
             if (_networkController.GetLocalRole() == _owner)
             {
                 _photonView.RequestOwnership();
@@ -43,6 +42,7 @@ namespace Arm
         {
             maxRange = armIKSolver.TotalLength - 0.01f;
             ArmTarget = armIKSolver.Target;
+            newPosition = ArmTarget.position;
         }
 
         void Update()
