@@ -82,6 +82,7 @@ public class GameController : MonoBehaviour
         {
             yield return null;
         } 
+        _soundController.StopAmbientSound();
         _soundController.StopAreaMusic();
        _networkController.LeaveLobby();
     }
