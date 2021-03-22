@@ -87,7 +87,7 @@ namespace Arm
 
             if (translate.magnitude >= float.Epsilon)
             {
-                _armSound.Volume = 0.3f;
+                _armSound.Volume = 0.3f;//translate.magnitude / (ControlSpeed * Time.deltaTime);
             }
             else
             {

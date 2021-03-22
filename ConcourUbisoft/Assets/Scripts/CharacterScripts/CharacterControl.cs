@@ -23,6 +23,9 @@ public class CharacterControl : MonoBehaviour, IPunObservable
     private NetworkController _networkController = null;
     private PhotonView _photonView = null;
 
+    private Vector3 newPosition = new Vector3();
+    private Quaternion newQuartenion = new Quaternion();
+
     private void Awake()
     {
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
@@ -65,6 +68,11 @@ public class CharacterControl : MonoBehaviour, IPunObservable
         {
             playerBody.velocity = inputVector;
         }
+        else
+        {
+            transform.position = Vector3.MoveTowards(transform.position, newPosition, Time.fixedDeltaTime * playerMovementSpeed);
+            transform.rotation = newQuartenion;
+        }
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -85,14 +93,14 @@ public class CharacterControl : MonoBehaviour, IPunObservable
             Vector3 newPostion = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
             if (Vector3.Distance(newPostion, transform.position) > 3)
             {
-                transform.position = newPostion;
+                newPosition = newPostion;
             }
             else
             {
-                transform.position = Vector3.MoveTowards(transform.position, newPostion, Time.deltaTime * playerMovementSpeed);
+                newPosition = newPostion;
+               
             }
-
-            transform.rotation = new Quaternion((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+            newQuartenion = new Quaternion((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
         }
     }
 }

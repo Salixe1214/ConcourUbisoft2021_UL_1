@@ -23,7 +23,8 @@ namespace Arm
             if (IsControlled && (_owner == GameController.Role.None || _owner == _networkController.GetLocalRole())) {
                 Vector3 translation = new Vector3(-Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
 
-                _armController.Translate(translation);
+
+                    _armController.Translate(translation);
                 
 
                 if ((Input.GetButtonDown("Grab") ||

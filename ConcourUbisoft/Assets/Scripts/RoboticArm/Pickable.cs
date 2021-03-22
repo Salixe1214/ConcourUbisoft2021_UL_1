@@ -113,7 +113,6 @@ namespace Arm
             return bounds.center - new Vector3(0, bounds.extents.y, 0);
         }
 
-
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
             if (stream.IsWriting)
