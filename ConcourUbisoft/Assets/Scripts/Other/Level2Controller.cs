@@ -50,6 +50,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         SpawnObjects();
 
         _imageList = _techUI.GetList();
+        _imageList.Clean();
         setItemsImageList();
     }
 

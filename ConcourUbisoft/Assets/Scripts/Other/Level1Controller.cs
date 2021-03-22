@@ -107,6 +107,7 @@ public class Level1Controller : MonoBehaviour , LevelController
         Debug.Log("StartLevel");
         soundController.PlayArea1Music();
         imageList = techUI.GetList();
+        imageList.Clean();
         firstWave = true;
         FurnaceController.enabled = true;
         TransportableSpawner.enabled = true;
