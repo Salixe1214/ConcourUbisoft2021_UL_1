@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace TechSupport
 {
     public class GridSystem
     {
         private Vector2Int _size = Vector2Int.one;
-        private Rect[] _rects = new Rect[]{};
+        private Rect[] _rects = {};
 
         #region Grid
     
@@ -45,6 +46,19 @@ namespace TechSupport
             foreach ((Camera camera, int index) in cams.Select((value, i) => ( value, i )))
             {
                 camera.rect = _rects[index];
+            }
+        }
+
+        public void Grid(IEnumerable<Button> gameObjects)
+        {
+            foreach ((Button go, int index) in gameObjects.Select((value, i) => ( value, i )))
+            {
+                go.GetComponent<RectTransform>().sizeDelta = new Vector2(
+                    _rects[index].width * Screen.width,
+                    _rects[index].height * Screen.height);
+                go.GetComponent<RectTransform>().position = new Vector2(
+                    _rects[index].x * Screen.width + _rects[index].width * Screen.width / 2, 
+                    _rects[index].y * Screen.height + _rects[index].height * Screen.height / 2);
             }
         }
 

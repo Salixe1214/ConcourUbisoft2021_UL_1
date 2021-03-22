@@ -48,7 +48,7 @@ namespace TechSupport.Informations
         private RectTransform _listRectTransform;
         private RectTransform _accordionRectTransform;
 
-        private void Awake()
+        public void Init()
         {
             _items = new List<InformationItem>()
             {

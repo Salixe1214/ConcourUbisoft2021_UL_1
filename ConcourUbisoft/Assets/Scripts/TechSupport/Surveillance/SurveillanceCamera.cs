@@ -26,18 +26,7 @@ namespace TechSupport.Surveillance
                 (rect.x + rect.width) * Screen.width,
                 (rect.y + rect.height) * Screen.height);
         }
-
-        public Vector3 GetCenter()
-        {
-            Rect rect = GetPrintedRect();
-            return new Vector3(rect.x + rect.width / 2, rect.y + rect.height / 2);
-        }
-
-        public Vector3 TranslatePosition(Vector3 from)
-        {
-            return from * GetPrintedRect().size;
-        }
-
+        
         public bool Contains(Vector3 point)
         {
             Rect rect = GetPrintedRect();

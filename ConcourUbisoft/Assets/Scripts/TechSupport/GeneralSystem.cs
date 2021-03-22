@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Inputs;
+using TechSupport.Informations;
 using TechSupport.Surveillance;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
+using UnityEngine.UI;
+using Utils;
 
 namespace TechSupport
 {
@@ -21,7 +24,7 @@ namespace TechSupport
             public int number;
             public SurveillanceCamera items;
 
-            public OrderedItems(int number, SurveillanceCamera items)
+            public OrderedItems(int number, SurveillanceCamera items, Button button)
             {
                 this.items = items;
                 this.number = number;
@@ -30,9 +33,11 @@ namespace TechSupport
 
         private readonly GridSystem _gridSystem = new GridSystem();
         private readonly FullScreenSystem _fullScreenSystem = new FullScreenSystem();
+        private InformationsSystem _informationsSystem;
 
         [SerializeField] private SurveillanceMode mode = SurveillanceMode.Grid; // Default mode : grid
         [SerializeField] private List<OrderedItems> cameras;
+        private List<Button> _buttons;
         private GameController _gameController;
 
         #region Callbacks
@@ -63,32 +68,43 @@ namespace TechSupport
         private void Awake()
         {
             _gameController = GameObject.FindGameObjectWithTag("GameController")?.GetComponent<GameController>();
+            _informationsSystem = GetComponent<InformationsSystem>();
             cameras.Sort((a, b) => a.number.CompareTo(b.number));
-            cameras.ForEach(c => c.items.Init());
+            cameras.ForEach(c =>
+            {
+                c.items.Init();
+            });
             _gridSystem.Init(cameras.Count());
+            _buttons = new List<Button>();
+            foreach (var items in cameras)
+            {
+                Button b = GameObjectsInstantiator.InstantiateButton(transform);
+                b.onClick.AddListener(Focus);
+                _buttons.Add(b);
+            }
+            _gridSystem.Grid(_buttons);
+
             _fullScreenSystem.SetTarget(cameras.First().items);
+            _informationsSystem.Init();
             SystemSwitch(mode);
         }
 
-        // TODO: Improve this basic input system
         private void Update()
         {
-            if((!_gameController || !_gameController.IsGameMenuOpen) && !EventSystem.current.IsPointerOverGameObject())
+            if (_gameController && _gameController.IsGameMenuOpen) return;
+            if (!Input.GetButtonUp(InputManager.GetInputNameByController("CameraEscape"))) return;
+            if (mode == SurveillanceMode.Focused)
             {
-                if (Input.GetMouseButtonUp(0))
-                {
-                    if (mode == SurveillanceMode.Grid)
-                    {
-                        SystemSwitch(SurveillanceMode.Focused);
-                    }
-                }
-                else if (Input.GetButtonUp("CameraEscape"))
-                {
-                    if (mode == SurveillanceMode.Focused)
-                    {
-                        SystemSwitch(SurveillanceMode.Grid);
-                    }
-                }
+                SystemSwitch(SurveillanceMode.Grid);
+            }
+        }
+
+        private void Focus()
+        {
+            if (_gameController && _gameController.IsGameMenuOpen) return;
+            if (mode == SurveillanceMode.Grid)
+            {
+                SystemSwitch(SurveillanceMode.Focused);
             }
         }
 

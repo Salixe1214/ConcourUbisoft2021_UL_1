@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UI;
+using Utils;
 
 namespace TechSupport.Informations.Items
 {
@@ -79,7 +80,7 @@ namespace TechSupport.Informations.Items
 
         private Image InstantiateDirection(Transform parent, DoorController.Direction direction)
         {
-            Image image = InstantiateImage(parent, _arrow, Color.black, Image.Type.Simple);
+            Image image = GameObjectsInstantiator.InstantiateImage(parent, _arrow, Color.black, Image.Type.Simple);
 
             image.transform.Rotate(_directions[direction]);
             return image;
@@ -106,15 +107,15 @@ namespace TechSupport.Informations.Items
         
         private HorizontalLayoutGroup InstantiateLine((DoorCode.Symbol, DoorCode.SymbolColor) combination)
         {
-            HorizontalLayoutGroup line = CreateHorizontalLayoutGroup();
+            HorizontalLayoutGroup line = GameObjectsInstantiator.CreateHorizontalLayoutGroup();
 
 
             line.transform.SetParent(_accordionElement.transform);
-            InstantiateImage(line.gameObject.transform, _symbols[combination.Item1],
+            GameObjectsInstantiator.InstantiateImage(line.gameObject.transform, _symbols[combination.Item1],
                 _colors[combination.Item2], Image.Type.Simple);
             //InstantiateImage(line.gameObject.transform, _symbols[combination.Item1],
              //   _colors[combination.Item2], Image.Type.Simple);
-            InstantiateText(line.gameObject.transform, " = ").fontSize = 16;
+             GameObjectsInstantiator.InstantiateText(line.gameObject.transform, " = ").fontSize = 16;
             DoorCode.GetSymbolCode(combination.Item2, combination.Item1)
                 .ForEach(d => InstantiateDirection(line.gameObject.transform, d));
             //InstantiateText(line.gameObject.transform, " + ").fontSize = 16;
@@ -125,8 +126,8 @@ namespace TechSupport.Informations.Items
 
         public override void Instantiate(Transform parent, Sprite backgroundSprite)
         {
-            _accordionElement = InstantiateNewItem(parent, backgroundSprite);
-            InstantiateHeader(_accordionElement.transform, "Livre du technicien");
+            _accordionElement = GameObjectsInstantiator.InstantiateNewItem(parent, backgroundSprite);
+            GameObjectsInstantiator.InstantiateHeader(_accordionElement.transform, "Livre du technicien");
             _content.ForEach(c => InstantiateLine(c));
             // InstantiateImageLayout()
         }

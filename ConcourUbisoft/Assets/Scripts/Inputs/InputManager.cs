@@ -19,6 +19,9 @@ namespace Inputs
             { new Tuple<Controller, string>(Controller.Xbox, "Control"), "ControlXbo"},
             { new Tuple<Controller, string>(Controller.Playstation, "Control"), "ControlPS"},
             { new Tuple<Controller, string>(Controller.Other, "Control"), "Control"},
+            { new Tuple<Controller, string>(Controller.Xbox, "CameraEscape"), "CameraEscapeXbo"},
+            { new Tuple<Controller, string>(Controller.Playstation, "CameraEscape"), "CameraEscapePS"},
+            { new Tuple<Controller, string>(Controller.Other, "CameraEscape"), "CameraEscape"},
         };
         
         private static Controller _controller = Controller.Other;
@@ -53,7 +56,7 @@ namespace Inputs
 
         public static string GetInputNameByController(string inputName)
         {
-//            SearchForController();
+            SearchForController();
             return Commands[new Tuple<Controller, string>(_controller, inputName)];
         }
     }
