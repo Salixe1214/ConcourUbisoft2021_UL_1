@@ -25,6 +25,8 @@ namespace Arm
         private NetworkController _networkController = null;
         private PhotonView _photonView = null;
 
+        private Vector3 newPosition = new Vector3();
+
         private void Awake()
         {
             _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
@@ -96,6 +98,14 @@ namespace Arm
             }
         }
 
+        private void FixedUpdate()
+        {
+            if (!_photonView.IsMine)
+            {
+                ArmTarget.position = Vector3.MoveTowards(ArmTarget.position, newPosition, Time.deltaTime * controlSpeed);
+            }
+        }
+
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
             if(stream.IsWriting)
@@ -106,8 +116,8 @@ namespace Arm
             }
             else
             {
-                Vector3 newPostion = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
-                ArmTarget.position = Vector3.MoveTowards(ArmTarget.position, newPostion, Time.deltaTime * controlSpeed);
+                newPosition = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+                
             }
         }
     }
