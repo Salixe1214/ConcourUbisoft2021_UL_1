@@ -82,17 +82,17 @@ public class Level1Controller : MonoBehaviour , LevelController
 
     private void OnEnable()
     {
-        FurnaceController.WhenFurnaceConsumedAll += FinishLevel;
-        FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing += InitiateNextSequence;
-        FurnaceController.WhenFurnaceConsumeWrong += ShakeCamera;
+        FurnaceController.WhenFurnaceConsumedAll.AddListener(FinishLevel);
+        FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing.AddListener(InitiateNextSequence);
+        FurnaceController.WhenFurnaceConsumeWrong.AddListener(ShakeCamera);
         FurnaceController.CheckItemOffList += UpdateSpriteColorInList;
     }
 
     private void OnDisable()
     {
-        FurnaceController.WhenFurnaceConsumedAll -= FinishLevel;
-        FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing -= InitiateNextSequence;
-        FurnaceController.WhenFurnaceConsumeWrong -= ShakeCamera;
+        FurnaceController.WhenFurnaceConsumedAll.RemoveListener(FinishLevel);
+        FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing.RemoveListener(InitiateNextSequence);
+        FurnaceController.WhenFurnaceConsumeWrong.RemoveListener(ShakeCamera);
         FurnaceController.CheckItemOffList -= UpdateSpriteColorInList;
     }
 
