@@ -42,9 +42,9 @@ public class LobbyMenu : MonoBehaviour
     public void CreateRoom()
     {
         _menuSoundController.PlayButtonSound();
-        _networkController.CreateRoom(_roomNameCreateInputField.GetComponent<InputField>().text, _togglePrivate.GetComponent<Toggle>().isOn);
+        _networkController.CreateRoom(_roomNameCreateInputField.GetComponent<InputField>().text, false);
         _loadScreenMenuController.Show("Creating Room...");
-        _createRoomPanel.SetActive(false);
+        //_createRoomPanel.SetActive(false);
     }
     public void BackFromCreateRoom()
     {
@@ -70,7 +70,7 @@ public class LobbyMenu : MonoBehaviour
         string text = _roomNameJoinInputField.GetComponent<InputField>().textComponent.text;
         _loadScreenMenuController.Show("Joining Room...");
         _networkController.JoinRoom(text);
-        _joinRoomPanel.SetActive(false);
+        //_joinRoomPanel.SetActive(false);
     }
     public void BackFromJoinRoom()
     {
