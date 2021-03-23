@@ -27,6 +27,8 @@ namespace Arm
 
         private Vector3 newPosition = new Vector3();
 
+        private Vector3 translation = new Vector3();
+
         private void Awake()
         {
             _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
@@ -49,6 +51,26 @@ namespace Arm
         {
             ClampTarget();
             FaceTarget();
+
+            if(_photonView.IsMine)
+            {
+                if (translation.magnitude >= float.Epsilon)
+                {
+                    ArmTarget.transform.Translate(Time.deltaTime * translation.normalized * controlSpeed);
+                    _armSound.Volume = 0.3f;//translate.magnitude / (ControlSpeed * Time.deltaTime);
+                }
+                else
+                {
+                    _armSound.Volume = 0;
+                }
+
+                translation = Vector3.zero;
+            }
+
+            if (!_photonView.IsMine)
+            {
+                ArmTarget.position = Vector3.MoveTowards(ArmTarget.position, newPosition, Time.deltaTime * controlSpeed);
+            }
         }
 
         private void FaceTarget()
@@ -85,27 +107,10 @@ namespace Arm
                     transform.position.z + dirToTarget.z * minRange);
             }
         }
+
         public void Translate(Vector3 translate)
         {
-            Vector3 translation = Vector3.ClampMagnitude(translate, controlSpeed);
-
-            if (translate.magnitude >= float.Epsilon)
-            {
-                ArmTarget.transform.Translate(Time.deltaTime * controlSpeed * translation);
-                _armSound.Volume = 0.3f;//translate.magnitude / (ControlSpeed * Time.deltaTime);
-            }
-            else
-            {
-                _armSound.Volume = 0;
-            }
-        }
-
-        private void FixedUpdate()
-        {
-            if (!_photonView.IsMine)
-            {
-                ArmTarget.position = Vector3.MoveTowards(ArmTarget.position, newPosition, Time.deltaTime * controlSpeed);
-            }
+            translation += translate;
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

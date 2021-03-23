@@ -1,16 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InGameMenuController : MonoBehaviour
 {
     [SerializeField] private GameObject _optionMenu = null;
     [SerializeField] private GameObject _inGameMenu = null;
     [SerializeField] private LoadScreenMenuController _loadScreenMenuController = null;
+    [SerializeField] private EventSystem _eventSystem;
+    [SerializeField] private GameObject _menuFirstSelected;
+    [SerializeField] private GameObject _optionsFirstSelected;
 
     private NetworkController _networkController = null;
     private GameController _gameController = null;
     private SoundController _soundController = null;
+    
 
     public bool IsGameMenuOpen { get; set; } = false;
 
@@ -20,6 +25,8 @@ public class InGameMenuController : MonoBehaviour
         _soundController.PlayButtonSound();
         _inGameMenu.SetActive(false);
         _optionMenu.SetActive(true);
+        _eventSystem.SetSelectedGameObject(null);
+        _eventSystem.SetSelectedGameObject(_optionsFirstSelected);
     }
     public void OnBackOptionButtonClicked()
     {
@@ -28,6 +35,8 @@ public class InGameMenuController : MonoBehaviour
             _soundController.PlayButtonSound();
             _inGameMenu.SetActive(true);
             _optionMenu.SetActive(false);
+            _eventSystem.SetSelectedGameObject(null);
+            _eventSystem.SetSelectedGameObject(_menuFirstSelected);
         }
     }
     public void ReturnToMenu()
@@ -71,6 +80,8 @@ public class InGameMenuController : MonoBehaviour
             {
                 _inGameMenu.SetActive(true);
                 _optionMenu.SetActive(false);
+                _eventSystem.SetSelectedGameObject(null);
+                _eventSystem.SetSelectedGameObject(_menuFirstSelected);
             }
             IsGameMenuOpen = !IsGameMenuOpen;
             _gameController.ToggleCursorLock();

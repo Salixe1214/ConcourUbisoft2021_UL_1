@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -13,6 +14,14 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject _errorPanelErrorPrefab = null;
     [SerializeField] private GameObject _canvas = null;
     [SerializeField] private GameObject _optionMenu = null;
+    [SerializeField] private EventSystem _eventSystem;
+    [SerializeField] private GameObject _menuFirstSelected;
+    [SerializeField] private GameObject _optionsFirstSelected;
+    [SerializeField] private GameObject _lobbyFirstSelected;
+    [SerializeField] private GameObject _OptionsBackFirstSelected;
+    [SerializeField] private GameObject _lobbyBackFirstSelected;
+    [SerializeField] private GameObject _roomFirstSelected;
+    [SerializeField] private GameObject _roomBackFirstSelected;
 
     private NetworkController _networkController = null;
     private GameController _gameController = null;
@@ -25,6 +34,8 @@ public class MenuController : MonoBehaviour
         _startMenu.SetActive(false);
         _loadScreenMenuController.Show("Joining Lobby...");
         _networkController.JoinLobby();
+        _eventSystem.SetSelectedGameObject(null);
+        _eventSystem.SetSelectedGameObject(_lobbyFirstSelected);
     }
     public void OnBackOptionButtonClicked()
     {
@@ -33,6 +44,8 @@ public class MenuController : MonoBehaviour
             _menuSoundController.PlayButtonSound();
             _optionMenu.SetActive(false);
             _startMenu.SetActive(true);
+            _eventSystem.SetSelectedGameObject(null);
+            _eventSystem.SetSelectedGameObject(_OptionsBackFirstSelected);
         }
     }
     public void OnOptionButtonClicked()
@@ -40,12 +53,16 @@ public class MenuController : MonoBehaviour
         _menuSoundController.PlayButtonSound();
         _startMenu.SetActive(false);
         _optionMenu.SetActive(true);
+        _eventSystem.SetSelectedGameObject(null);
+        _eventSystem.SetSelectedGameObject(_optionsFirstSelected);
     }
     public void OnLobbyBackButtonClicked()
     {
         _menuSoundController.PlayButtonSound();
         _loadScreenMenuController.Show("Disconnecting...");
         _networkController.LeaveLobby();
+        _eventSystem.SetSelectedGameObject(null);
+        _eventSystem.SetSelectedGameObject(_lobbyBackFirstSelected);
     }
     public void ExitGame()
     {
@@ -86,22 +103,30 @@ public class MenuController : MonoBehaviour
     private void OnDisconnectEvent()
     {
         _startMenu.SetActive(true);
+        _eventSystem.SetSelectedGameObject(null);
+        _eventSystem.SetSelectedGameObject(_menuFirstSelected);
         _lobbyMenu.SetActive(false);
         _loadScreenMenuController.Hide();
     }
     private void OnJoinedLobby()
     {
         _lobbyMenu.SetActive(true);
+        _eventSystem.SetSelectedGameObject(null);
+        _eventSystem.SetSelectedGameObject(_lobbyFirstSelected);
         _loadScreenMenuController.Hide();
     }
     private void OnJoinedRoom()
     {
         _roomMenu.SetActive(true);
+        _eventSystem.SetSelectedGameObject(null);
+        _eventSystem.SetSelectedGameObject(_roomFirstSelected);
         _loadScreenMenuController.Hide();
     }
     private void OnLeftRoom()
     {
         _lobbyMenu.SetActive(true);
+        _eventSystem.SetSelectedGameObject(null);
+        _eventSystem.SetSelectedGameObject(_roomBackFirstSelected);
         _roomMenu.SetActive(false);
     }
     private void CreateMainMenuError(string errorTitle, string errorMessage)

@@ -2012,6 +2012,9 @@ MonoBehaviour:
   _optionMenu: {fileID: 775259506}
   _inGameMenu: {fileID: 1825345722}
   _loadScreenMenuController: {fileID: 1651900166}
+  _eventSystem: {fileID: 1311755604}
+  _menuFirstSelected: {fileID: 1064576553}
+  _optionsFirstSelected: {fileID: 196127689}
 --- !u!1 &312541825
 GameObject:
   m_ObjectHideFlags: 0
@@ -3189,6 +3192,9 @@ MonoBehaviour:
   _roomNameCreateInputField: {fileID: 679569734}
   _roomNameJoinInputField: {fileID: 902422172}
   _loadScreenMenuController: {fileID: 1651900166}
+  _eventSystem: {fileID: 1311755604}
+  _createRoomPanelFirstSelected: {fileID: 1301530449}
+  _createRoomPanelBackFirstSelected: {fileID: 1380651167}
 --- !u!1 &602999729
 GameObject:
   m_ObjectHideFlags: 0
@@ -6805,8 +6811,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 926528961}
-  m_sendNavigationEvents: 0
+  m_FirstSelected: {fileID: 1832552570}
+  m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &1311755605
 Transform:
@@ -7963,7 +7969,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0.98214287, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -8985,7 +8991,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 636252498}
   m_HandleRect: {fileID: 636252497}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -9741,7 +9747,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 799517739}
   m_HandleRect: {fileID: 799517738}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -9961,6 +9967,14 @@ MonoBehaviour:
   _errorPanelErrorPrefab: {fileID: 156149317677365430, guid: 74050d2aafb13934b9f7e11ccdd74542, type: 3}
   _canvas: {fileID: 1549704403}
   _optionMenu: {fileID: 775259506}
+  _eventSystem: {fileID: 1311755604}
+  _menuFirstSelected: {fileID: 1832552570}
+  _optionsFirstSelected: {fileID: 196127689}
+  _lobbyFirstSelected: {fileID: 1380651167}
+  _OptionsBackFirstSelected: {fileID: 1777141}
+  _lobbyBackFirstSelected: {fileID: 1832552570}
+  _roomFirstSelected: {fileID: 776891356}
+  _roomBackFirstSelected: {fileID: 1380651167}
 --- !u!1 &1788711322
 GameObject:
   m_ObjectHideFlags: 0
@@ -10939,8 +10953,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1449755067}
   m_HandleRect: {fileID: 1449755066}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 0.98214287
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
