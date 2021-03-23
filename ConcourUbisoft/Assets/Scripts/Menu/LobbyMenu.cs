@@ -20,6 +20,11 @@ public class LobbyMenu : MonoBehaviour
     [SerializeField] private EventSystem _eventSystem;
     [SerializeField] private GameObject _createRoomPanelFirstSelected;
     [SerializeField] private GameObject _createRoomPanelBackFirstSelected;
+    [SerializeField] private GameObject _joinRoomPanelFirstSelected;
+    [SerializeField] private GameObject _joinRoomPanelBackFirstSelected;
+
+    [SerializeField] private GameObject createButton;
+    [SerializeField] private GameObject directButton;
 
     private NetworkController _networkController = null;
     private SoundController _menuSoundController = null;
@@ -29,6 +34,8 @@ public class LobbyMenu : MonoBehaviour
     {
         _menuSoundController.PlayButtonSound();
         _createRoomPanel.SetActive(true);
+        createButton.SetActive(false);
+        directButton.SetActive(false);
         _eventSystem.SetSelectedGameObject(null);
         _eventSystem.SetSelectedGameObject(_createRoomPanelFirstSelected);
     }
@@ -43,6 +50,8 @@ public class LobbyMenu : MonoBehaviour
     {
         _menuSoundController.PlayButtonSound();
         _createRoomPanel.SetActive(false);
+        createButton.SetActive(true);
+        directButton.SetActive(true);
         _eventSystem.SetSelectedGameObject(null);
         _eventSystem.SetSelectedGameObject(_createRoomPanelBackFirstSelected);
     }
@@ -50,6 +59,10 @@ public class LobbyMenu : MonoBehaviour
     {
         _menuSoundController.PlayButtonSound();
         _joinRoomPanel.SetActive(true);
+        createButton.SetActive(false);
+        directButton.SetActive(false);
+        _eventSystem.SetSelectedGameObject(null);
+        _eventSystem.SetSelectedGameObject(_joinRoomPanelFirstSelected);
     }
     public void JoinRoom()
     {
@@ -63,6 +76,10 @@ public class LobbyMenu : MonoBehaviour
     {
         _menuSoundController.PlayButtonSound();
         _joinRoomPanel.SetActive(false);
+        createButton.SetActive(true);
+        directButton.SetActive(true);
+        _eventSystem.SetSelectedGameObject(null);
+        _eventSystem.SetSelectedGameObject(_joinRoomPanelBackFirstSelected);
     }
     public void OnTogglePrivate()
     {
