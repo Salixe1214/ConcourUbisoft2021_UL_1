@@ -16,7 +16,7 @@ namespace Arm
         [SerializeField] private Transform armRotationRoot;
         [SerializeField] private GameController.Role _owner = GameController.Role.None;
         [SerializeField] private ArmSound _armSound = null;
-
+        
         public float ControlSpeed => controlSpeed;
         public Transform Head => armIKSolver.transform;
         public Transform ArmTarget { get; private set; } = null;

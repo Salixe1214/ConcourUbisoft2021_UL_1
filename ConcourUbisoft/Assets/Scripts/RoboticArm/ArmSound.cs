@@ -7,18 +7,14 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class ArmSound : MonoBehaviour, IPunObservable
 {
-	[SerializeField] private Transform target;
-	[SerializeField] private ArmController armController;
-	private Vector3 lastHeadPosition;
+    [SerializeField] private ArmController armController;
 	private AudioSource audioSource;
 
     public float Volume { get; set; } = 0.0f;
-
+    private float smoothSound;
     void Start()
 	{
-		lastHeadPosition = armController.Head.position;
-
-		audioSource = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
 		audioSource.loop = true;
         audioSource.Play();
 
@@ -26,7 +22,7 @@ public class ArmSound : MonoBehaviour, IPunObservable
 
     private void Update()
     {
-        audioSource.volume = Volume;
+        audioSource.volume = Volume*0.3f;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
