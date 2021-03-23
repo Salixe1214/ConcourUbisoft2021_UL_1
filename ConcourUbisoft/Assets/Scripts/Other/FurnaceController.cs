@@ -6,6 +6,7 @@ using Arm;
 using Other;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FurnaceController : MonoBehaviour
 {
@@ -26,9 +27,9 @@ public class FurnaceController : MonoBehaviour
     [SerializeField] private bool HasBeenPickupNeeded = true;
     [SerializeField] private GameController.Role _owner = GameController.Role.None;
 
-    public event Action WhenFurnaceConsumedAll;
-    public event Action WhenFurnaceConsumeWrong;
-    public event Action WhenFurnaceConsumeAWholeSequenceWithoutFinishing;
+    public UnityEvent WhenFurnaceConsumedAll;
+    public UnityEvent WhenFurnaceConsumeWrong;
+    public UnityEvent WhenFurnaceConsumeAWholeSequenceWithoutFinishing;
     public event Action CheckItemOffList;
 
     private SoundController soundController;

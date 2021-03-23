@@ -104,7 +104,6 @@ public class RoomMenu : MonoBehaviour
             roomElement.transform.Find("KickButton").GetComponent<Button>().onClick.AddListener(new UnityAction(() => { _menuSoundController.PlayButtonSound(); _networkController.KickPlayer(playerNetwork.Id); }));
         }
 
-        Debug.Log(children.Count() + playerNetworksNotFoundInScene.Count());
         if (_networkController.GetNumberOfPlayer() != 2)
         {
             Instantiate(_waitingForAnotherPlayer, _content.transform);

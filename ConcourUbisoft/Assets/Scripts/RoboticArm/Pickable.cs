@@ -32,6 +32,7 @@ namespace Arm
 
         private bool hovered;
         private bool _grabbed = false;
+        private float _conveyorSpeed = 0.0f;
 
         private Vector3 _newPosition = new Vector3();
 
@@ -74,7 +75,14 @@ namespace Arm
         {
             if (!_photonView.IsMine)
             {
-                transform.position = Vector3.MoveTowards(transform.position, _newPosition, (_grabbed ? 4 : _transportableByConveyor.IsOnConveyor() ? 3 : 10) * Time.deltaTime);
+                if(Vector3.Distance(transform.position, _newPosition) > 3)
+                {
+                    transform.position = _newPosition;
+                }
+                else
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, _newPosition, (_grabbed ? 4 : _conveyorSpeed > 0 ? _conveyorSpeed : 10) * Time.deltaTime);
+                }
             }
 
             if (_outline.enabled && !hovered)
@@ -131,6 +139,7 @@ namespace Arm
         {
             if (stream.IsWriting)
             {
+                stream.SendNext(_transportableByConveyor.ConveyorSpeed());
                 stream.SendNext(_grabbed);
                 stream.SendNext(Color.r);
                 stream.SendNext(Color.g);
@@ -146,6 +155,7 @@ namespace Arm
             }
             else
             {
+                _conveyorSpeed = (float)stream.ReceiveNext();
                 _grabbed = (bool)stream.ReceiveNext();
                 Color = new Color((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
                 _newPosition = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());

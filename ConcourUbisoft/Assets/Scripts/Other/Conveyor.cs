@@ -56,14 +56,14 @@ public abstract class Conveyor : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         toRemoveNullReference.Clear();
         foreach (KeyValuePair<TransportableByConveyor, ConveyorObjectData> objectOnConveyor in objectsOnConveyor)
         {
             if (objectOnConveyor.Key != null)
             {
-                if (objectOnConveyor.Value.TransportableByConveyor.GetFirstConveyorToAffectObject() == (object)this)
+                if (objectOnConveyor.Value.TransportableByConveyor.GetFirstConveyorToAffectObject() == this)
                 {
                     MoveObject(objectOnConveyor.Value.Rigidbody);
                 }
@@ -79,6 +79,11 @@ public abstract class Conveyor : MonoBehaviour
     public void SetSpeed(float speed)
     {
         Speed = speed;
+    }
+
+    public float GetSpeed()
+    {
+        return Speed;
     }
 
     protected abstract void MoveObject(Rigidbody rigidbody);

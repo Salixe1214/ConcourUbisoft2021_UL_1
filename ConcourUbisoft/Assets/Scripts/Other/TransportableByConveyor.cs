@@ -11,7 +11,7 @@ public class TransportableByConveyor : MonoBehaviour
 {
     public bool HasBeenPickUp { get { return pickable.HasBeenPickup;  } set { pickable.HasBeenPickup = value; } }
 
-    private SortedList<int, object> priorityConveyor = new SortedList<int, object>();
+    private SortedList<int, Conveyor> priorityConveyor = new SortedList<int, Conveyor>();
     private Pickable pickable = null;
 
     private void Awake()
@@ -19,7 +19,7 @@ public class TransportableByConveyor : MonoBehaviour
         pickable = GetComponent<Pickable>();
     }
 
-    public void AddConveyor(int priority, object conveyor)
+    public void AddConveyor(int priority, Conveyor conveyor)
     {
         if (!priorityConveyor.ContainsKey(priority))
         {
@@ -34,12 +34,12 @@ public class TransportableByConveyor : MonoBehaviour
         }
     }
 
-    public void RemoveConveyor(object conveyor)
+    public void RemoveConveyor(Conveyor conveyor)
     {
         priorityConveyor.RemoveAt(priorityConveyor.IndexOfValue(conveyor));
     }
 
-    public object GetFirstConveyorToAffectObject()
+    public Conveyor GetFirstConveyorToAffectObject()
     {
         if (priorityConveyor.Count == 0)
         {
@@ -54,5 +54,15 @@ public class TransportableByConveyor : MonoBehaviour
     public bool IsOnConveyor()
     {
         return priorityConveyor.Count > 0;
+    }
+
+    public float ConveyorSpeed()
+    {
+        if(priorityConveyor.Count == 0)
+        {
+            return 0.0f;
+        }
+
+        return priorityConveyor.First().Value.GetSpeed();
     }
 }
