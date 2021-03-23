@@ -26,6 +26,7 @@ public class RoomMenu : MonoBehaviour
     {
         _menuSoundController.PlayButtonSound();
         _networkController.LeaveRoom();
+        Debug.Log("Try to leave room");
         _lobbyPanelJoinButton.SetActive(true);
         _lobbyPanelCreateButton.SetActive(true);
         _lobbyPanelRoomNameInputField.SetActive(true);
