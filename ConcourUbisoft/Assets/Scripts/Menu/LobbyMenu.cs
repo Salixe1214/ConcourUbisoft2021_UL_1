@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using System.Linq;
 using Photon.Pun;
+using UnityEngine.EventSystems;
 
 public class LobbyMenu : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class LobbyMenu : MonoBehaviour
     [SerializeField] private GameObject _roomNameCreateInputField = null;
     [SerializeField] private GameObject _roomNameJoinInputField = null;
     [SerializeField] private LoadScreenMenuController _loadScreenMenuController = null;
+    [SerializeField] private EventSystem _eventSystem;
+    [SerializeField] private GameObject _createRoomPanelFirstSelected;
+    [SerializeField] private GameObject _createRoomPanelBackFirstSelected;
 
     private NetworkController _networkController = null;
     private SoundController _menuSoundController = null;
@@ -25,6 +29,8 @@ public class LobbyMenu : MonoBehaviour
     {
         _menuSoundController.PlayButtonSound();
         _createRoomPanel.SetActive(true);
+        _eventSystem.SetSelectedGameObject(null);
+        _eventSystem.SetSelectedGameObject(_createRoomPanelFirstSelected);
     }
     public void CreateRoom()
     {
@@ -37,6 +43,8 @@ public class LobbyMenu : MonoBehaviour
     {
         _menuSoundController.PlayButtonSound();
         _createRoomPanel.SetActive(false);
+        _eventSystem.SetSelectedGameObject(null);
+        _eventSystem.SetSelectedGameObject(_createRoomPanelBackFirstSelected);
     }
     public void OpenJoinRoomPanel()
     {
