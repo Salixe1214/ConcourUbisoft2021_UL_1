@@ -12,8 +12,10 @@ public class RoomMenu : MonoBehaviour
     [SerializeField] private GameObject _waitingForAnotherPlayer = null;
     [SerializeField] private Button _startButton = null;
     [SerializeField] private Text _errorText = null;
-    [SerializeField] private GameObject _createButton;
-    [SerializeField] private GameObject _directButton;
+    [SerializeField] private GameObject _lobbyPanelCreateButton;
+    [SerializeField] private GameObject _lobbyPanelJoinButton;
+    [SerializeField] private GameObject _lobbyPanelRoomNameInputField;
+    [SerializeField] private GameObject _lobbyPanelBackButton;
 
     private NetworkController _networkController = null;
     private GameController _gameController = null;
@@ -24,8 +26,10 @@ public class RoomMenu : MonoBehaviour
     {
         _menuSoundController.PlayButtonSound();
         _networkController.LeaveRoom();
-        _directButton.SetActive(true);
-        _createButton.SetActive(true);
+        _lobbyPanelJoinButton.SetActive(true);
+        _lobbyPanelCreateButton.SetActive(true);
+        _lobbyPanelRoomNameInputField.SetActive(true);
+        _lobbyPanelBackButton.SetActive(true);
     }
     public void StartGame()
     {
