@@ -27,20 +27,23 @@ namespace Arm
         private Collider _collider;
         private Outline _outline;
         private NetworkController _networkController = null;
-        private PhotonView photonView = null;
+        private PhotonView _photonView = null;
         private TransportableByConveyor _transportableByConveyor = null;
 
         private bool hovered;
         private bool _grabbed = false;
 
+        private Vector3 _newPosition = new Vector3();
+
         private void Awake()
         {
+            _newPosition = transform.position;
             _renderer = GetComponent<Renderer>();
             _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
             _transportableByConveyor = GetComponent<TransportableByConveyor>();
-            photonView = GetComponent<PhotonView>();
+            _photonView = GetComponent<PhotonView>();
 
-            if (!photonView.IsMine)
+            if (!_photonView.IsMine)
             {
                 GetComponent<TransportableByConveyor>().enabled = false;
             }
@@ -56,7 +59,7 @@ namespace Arm
         {
             _outline.enabled = false;
 
-            if (!photonView.IsMine)
+            if (!_photonView.IsMine)
             {
                 Rigidbody.isKinematic = true;
             }
@@ -69,6 +72,11 @@ namespace Arm
 
         private void Update()
         {
+            if (!_photonView.IsMine)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, _newPosition, (_grabbed ? 4 : _transportableByConveyor.IsOnConveyor() ? 3 : 10) * Time.deltaTime);
+            }
+
             if (_outline.enabled && !hovered)
                 _outline.enabled = false;
             else if (hovered)
@@ -78,16 +86,22 @@ namespace Arm
 
         public void OnGrab()
         {
-            if (photonView.IsMine)
+            if (_photonView.IsMine)
             {
                 Rigidbody.useGravity = false;
                 Rigidbody.freezeRotation = true;
                 hasBeenPickup = true;
                 _grabbed = true;
-                _audioSource.clip = magnetCollisionSound;
-                _audioSource.volume = volumeMultiplier;
-                _audioSource.Play();
+                _photonView.RPC("PlayMagnetSound", RpcTarget.All);
             }
+        }
+
+        [PunRPC]
+        public void PlayMagnetSound()
+        {
+            _audioSource.clip = magnetCollisionSound;
+            _audioSource.volume = volumeMultiplier;
+            _audioSource.Play();
         }
 
         public void OnHover()
@@ -97,7 +111,7 @@ namespace Arm
 
         public void OnRelease()
         {
-            if (photonView.IsMine)
+            if (_photonView.IsMine)
             {
                 transform.SetParent(null);
                 _grabbed = false;
@@ -117,6 +131,7 @@ namespace Arm
         {
             if (stream.IsWriting)
             {
+                stream.SendNext(_grabbed);
                 stream.SendNext(Color.r);
                 stream.SendNext(Color.g);
                 stream.SendNext(Color.b);
@@ -131,17 +146,9 @@ namespace Arm
             }
             else
             {
+                _grabbed = (bool)stream.ReceiveNext();
                 Color = new Color((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
-                Vector3 newPostion = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
-                if (Vector3.Distance(newPostion, transform.position) > 3)
-                {
-                    transform.position = newPostion;
-                }
-                else
-                {
-                    transform.position = Vector3.MoveTowards(transform.position, newPostion, Time.deltaTime * (_grabbed ? 4 : _transportableByConveyor.IsOnConveyor() ? 3 : 10));
-                }
-
+                _newPosition = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
                 transform.rotation = new Quaternion((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
             }
         }
