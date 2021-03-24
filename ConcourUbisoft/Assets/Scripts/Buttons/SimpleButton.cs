@@ -45,7 +45,6 @@ public class SimpleButton : MonoBehaviour
         {
             if (_inPerimeter)
             {
-                Debug.Log("Enter Hover");
                 _animator.SetBool("hover", true);
                 _isHover = true;
                 _outline.enabled = true;
@@ -57,7 +56,6 @@ public class SimpleButton : MonoBehaviour
         {
             if (_isHover)
             {
-                Debug.Log("Exit Hover");
                 _isHover = false;
                 _animator.SetBool("hover", false);
                 _outline.enabled = false;
@@ -94,7 +92,6 @@ public class SimpleButton : MonoBehaviour
         _inPerimeter = true;
         if (_reachable)
         {
-            Debug.Log("Enter Hover");
             _animator.SetBool("hover", true);
             _isHover = true;
             _outline.enabled = true;
@@ -106,7 +103,6 @@ public class SimpleButton : MonoBehaviour
         _inPerimeter = false;
         if (_isHover)
         {
-            Debug.Log("Exit Hover");
             _isHover = false;
             _animator.SetBool("hover", false);
             _outline.enabled = false;

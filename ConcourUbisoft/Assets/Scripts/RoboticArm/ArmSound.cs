@@ -1,41 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
 using Arm;
+using Photon.Pun;
 using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
-public class ArmSound : MonoBehaviour
+public class ArmSound : MonoBehaviour, IPunObservable
 {
-    [SerializeField] private Transform target;
     [SerializeField] private ArmController armController;
-    [SerializeField] private int smoothIterationCount = 10;
-    [SerializeField] private float volumeMultiplier = 1;
-    private Vector3 lastHeadPosition;
-    private AudioSource audioSource;
+	private AudioSource audioSource;
 
+    public float Volume { get; set; } = 0.0f;
+    private float smoothSound;
     void Start()
-    {
-        lastHeadPosition = armController.Head.position;
-
+	{
         audioSource = GetComponent<AudioSource>();
-        audioSource.loop = true;
+		audioSource.loop = true;
+        audioSource.Play();
+
     }
 
-    void LateUpdate()
+    private void Update()
     {
-        float distance = Vector3.Distance( armController.Head.position, lastHeadPosition);
-        if (distance >= float.Epsilon)
+        audioSource.volume = Volume*0.3f;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if(stream.IsWriting)
         {
-            float volume = distance / (armController.ControlSpeed * Time.deltaTime);
-            audioSource.volume =
-                (((audioSource.volume * smoothIterationCount) + volume) / (smoothIterationCount + 1)) *
-                volumeMultiplier;
+            stream.SendNext(Volume);
         }
         else
         {
-            audioSource.volume = 0;
+            Volume = (float)stream.ReceiveNext();
         }
-
-        lastHeadPosition =  armController.Head.position;
     }
 }

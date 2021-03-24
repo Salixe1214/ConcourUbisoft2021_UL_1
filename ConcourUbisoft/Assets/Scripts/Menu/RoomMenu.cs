@@ -12,6 +12,8 @@ public class RoomMenu : MonoBehaviour
     [SerializeField] private GameObject _waitingForAnotherPlayer = null;
     [SerializeField] private Button _startButton = null;
     [SerializeField] private Text _errorText = null;
+    [SerializeField] private GameObject _createButton;
+    [SerializeField] private GameObject _directButton;
 
     private NetworkController _networkController = null;
     private GameController _gameController = null;
@@ -22,6 +24,8 @@ public class RoomMenu : MonoBehaviour
     {
         _menuSoundController.PlayButtonSound();
         _networkController.LeaveRoom();
+        _directButton.SetActive(true);
+        _createButton.SetActive(true);
     }
     public void StartGame()
     {
@@ -104,7 +108,6 @@ public class RoomMenu : MonoBehaviour
             roomElement.transform.Find("KickButton").GetComponent<Button>().onClick.AddListener(new UnityAction(() => { _menuSoundController.PlayButtonSound(); _networkController.KickPlayer(playerNetwork.Id); }));
         }
 
-        Debug.Log(children.Count() + playerNetworksNotFoundInScene.Count());
         if (_networkController.GetNumberOfPlayer() != 2)
         {
             Instantiate(_waitingForAnotherPlayer, _content.transform);

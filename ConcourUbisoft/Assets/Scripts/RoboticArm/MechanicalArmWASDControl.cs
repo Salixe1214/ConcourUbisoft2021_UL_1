@@ -21,15 +21,16 @@ namespace Arm
         private void Update()
         {
             if (IsControlled && (_owner == GameController.Role.None || _owner == _networkController.GetLocalRole())) {
-                Vector3 translation = new Vector3(-Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
-                if(translation != Vector3.zero)
-                {
-                    _armController.Translate(translation);
-                }
+                Vector3 translation = new Vector3(-Input.GetAxisRaw("Vertical"), 0, Input.GetAxisRaw("Horizontal"));
 
-                _magnetController.MagnetActive = (Input.GetButton("Grab") ||
-                                    Input.GetButton("GrabControllerXBO") ||
-                                    Input.GetButton("GrabControllerPS"));
+
+                _armController.Translate(translation);
+                
+
+                if ((Input.GetButtonDown("Grab") ||
+                     Input.GetButtonDown("GrabControllerXBO") ||
+                     Input.GetButtonDown("GrabControllerPS")))
+                    _magnetController.MagnetActive = !_magnetController.MagnetActive;
             }
         }
     }

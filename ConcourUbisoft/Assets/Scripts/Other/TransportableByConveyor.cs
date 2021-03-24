@@ -2,7 +2,6 @@ using Arm;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Other;
 using UnityEngine;
 
 [RequireComponent(typeof(Renderer))]
@@ -10,26 +9,17 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class TransportableByConveyor : MonoBehaviour
 {
-    [SerializeField]private TransportableType type;
-    public bool HasBeenPickUp { get { return pickable.HasBeenPickup; } set { pickable.HasBeenPickup = value; } }
+    public bool HasBeenPickUp { get { return pickable.HasBeenPickup;  } set { pickable.HasBeenPickup = value; } }
 
-    public Color Color { get { return renderer.material.color; } set { renderer.material.color = value; } }
-
-    private SortedList<int, object> priorityConveyor = new SortedList<int, object>();
-
-    private new Renderer renderer = null;
-    private new Collider collider = null;
+    private SortedList<int, Conveyor> priorityConveyor = new SortedList<int, Conveyor>();
     private Pickable pickable = null;
-    
 
     private void Awake()
     {
-        renderer = GetComponent<Renderer>();
         pickable = GetComponent<Pickable>();
-        collider = GetComponent<Collider>();
     }
 
-    public void AddConveyor(int priority, object conveyor)
+    public void AddConveyor(int priority, Conveyor conveyor)
     {
         if (!priorityConveyor.ContainsKey(priority))
         {
@@ -44,12 +34,12 @@ public class TransportableByConveyor : MonoBehaviour
         }
     }
 
-    public void RemoveConveyor(object conveyor)
+    public void RemoveConveyor(Conveyor conveyor)
     {
         priorityConveyor.RemoveAt(priorityConveyor.IndexOfValue(conveyor));
     }
 
-    public object GetFirstConveyorToAffectObject()
+    public Conveyor GetFirstConveyorToAffectObject()
     {
         if (priorityConveyor.Count == 0)
         {
@@ -61,13 +51,18 @@ public class TransportableByConveyor : MonoBehaviour
         }
     }
 
-    public void Consume()
+    public bool IsOnConveyor()
     {
-        collider.enabled = false;
+        return priorityConveyor.Count > 0;
     }
 
-    public TransportableType GetType()
+    public float ConveyorSpeed()
     {
-        return type;
+        if(priorityConveyor.Count == 0)
+        {
+            return 0.0f;
+        }
+
+        return priorityConveyor.First().Value.GetSpeed();
     }
 }

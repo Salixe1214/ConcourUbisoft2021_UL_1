@@ -8,16 +8,19 @@ using System.Linq;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System;
+using UnityEditor;
 
 public class NetworkController : MonoBehaviourPunCallbacks
 {
     [SerializeField] private bool QuickSetup = false;
+    [SerializeField] private List<GameObject> networkObjects = null;
 
     public float photonPing = 0;
     public int photonSendRate = 30;
     public int photonSendRateSerialize = 30;
 
     private GameController _gameController = null;
+    private PlayerNetwork ownNetworkPlayer = null;
 
     #region Unity Callbacks
     private void Awake()
@@ -124,6 +127,14 @@ public class NetworkController : MonoBehaviourPunCallbacks
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
+        if (QuickSetup && PhotonNetwork.IsMasterClient)
+        {
+            for (int i = 0; i < 70; ++i)
+            {
+                PhotonNetwork.Instantiate("Cube", new Vector3(-6.13f, 0.375f, -4.78f), Quaternion.identity);
+                //GetOwnNetworkPlayer().InstantiateNetworkGameObject("TransportableBox", new Vector3(-6.13f, 0.375f, -4.78f), Quaternion.identity, GameController.Role.SecurityGuard);
+            }
+        }
         OnPlayerJoin?.Invoke();
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -183,5 +194,19 @@ public class NetworkController : MonoBehaviourPunCallbacks
     {
         return PhotonNetwork.CurrentRoom.PlayerCount;
     }
+
+    public GameObject GetPrefab(string name)
+    {
+        return networkObjects.Where(x => x.name == name).FirstOrDefault();
+    }
+    public PlayerNetwork GetOwnNetworkPlayer()
+    {
+        if (ownNetworkPlayer == null) {
+            ownNetworkPlayer = GameObject.FindObjectsOfType<PlayerNetwork>().Where(x => x.PlayerRole == GetLocalRole()).FirstOrDefault();
+        }
+
+        return ownNetworkPlayer;
+    }
+
     #endregion
 }

@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,7 +15,6 @@ public class DoorLight : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("Color: " + defaultColor);
         for(int i = 0 ; i < _indicatorLights.Count ; i++)
         {
             _color.Insert(i, defaultColor);
@@ -59,9 +59,7 @@ public class DoorLight : MonoBehaviour
         if (_numYellowLights < _indicatorLights.Count)
         {
             _numYellowLights += 1;
-            _color[_numYellowLights-1] = Color.yellow;
         }
-        Debug.Log(_numYellowLights);
     }
 
     IEnumerator Flash(Color pColor)
@@ -71,9 +69,11 @@ public class DoorLight : MonoBehaviour
             _color[i] = pColor;
         }
         yield return new WaitForSeconds(4);
-        for(int i = 0 ; i < _indicatorLights.Count ; i++)
-        {
-            _color[i] = defaultColor;
+        if (_color[0] == Color.red) {
+            for (int i = 0; i < _indicatorLights.Count; i++)
+            {
+                _color[i] = defaultColor;
+            }
         }
     }
 }

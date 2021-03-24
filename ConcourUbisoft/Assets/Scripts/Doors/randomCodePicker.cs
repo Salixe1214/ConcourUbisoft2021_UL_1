@@ -43,7 +43,6 @@ public class randomCodePicker : MonoBehaviour
         // Choice of the first symbol
         var symbolValues = Enum.GetValues(typeof(Symbol)); // List of the symbols
         int firstSymbolIndex = _random.Next(0, symbolValues.Length); // Random index in this list
-        Debug.Log("Index1: " + firstSymbolIndex);
         Symbol randomSymbol1 = (Symbol)symbolValues.GetValue(firstSymbolIndex); // Expliciting this symbol
 
         // We can't choose this symbol again

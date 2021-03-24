@@ -81,10 +81,10 @@ public class GameController : MonoBehaviour
         while (!operation.isDone)
         {
             yield return null;
-        }
-
-       // _soundController.StopAmbientSound();
-        _networkController.LeaveLobby();
+        } 
+        _soundController.StopAmbientSound();
+        _soundController.StopAreaMusic();
+       _networkController.LeaveLobby();
     }
     private void ResetController()
     {
