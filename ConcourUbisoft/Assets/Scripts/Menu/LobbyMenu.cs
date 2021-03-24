@@ -23,9 +23,12 @@ public class LobbyMenu : MonoBehaviour
     [SerializeField] private GameObject _joinRoomPanelFirstSelected;
     [SerializeField] private GameObject _joinRoomPanelBackFirstSelected;
 
-    [SerializeField] private GameObject createButton;
-    [SerializeField] private GameObject directButton;
-
+    [SerializeField] private GameObject _createButton;
+    [SerializeField] private GameObject _joinButton;
+    [SerializeField] private GameObject _roomNameInput;
+    [SerializeField] private GameObject _backButton;
+    [SerializeField] private GameObject _lobbyListHeader;
+ 
     private NetworkController _networkController = null;
     private SoundController _menuSoundController = null;
 
@@ -34,24 +37,32 @@ public class LobbyMenu : MonoBehaviour
     {
         _menuSoundController.PlayButtonSound();
         _createRoomPanel.SetActive(true);
-        createButton.SetActive(false);
-        directButton.SetActive(false);
+        _createButton.SetActive(false);
+        _joinButton.SetActive(false);
+        _backButton.SetActive(false);
         _eventSystem.SetSelectedGameObject(null);
         _eventSystem.SetSelectedGameObject(_createRoomPanelFirstSelected);
     }
     public void CreateRoom()
     {
         _menuSoundController.PlayButtonSound();
-        _networkController.CreateRoom(_roomNameCreateInputField.GetComponent<InputField>().text, _togglePrivate.GetComponent<Toggle>().isOn);
+        _networkController.CreateRoom(_roomNameCreateInputField.GetComponent<InputField>().text, false);
         _loadScreenMenuController.Show("Creating Room...");
-        _createRoomPanel.SetActive(false);
+        _createButton.SetActive(false);
+        _joinButton.SetActive(false);
+        _roomNameInput.SetActive(false);
+        _backButton.SetActive(false);
+        _lobbyListHeader.SetActive(false);
+        //_createRoomPanel.SetActive(false);
     }
     public void BackFromCreateRoom()
     {
         _menuSoundController.PlayButtonSound();
         _createRoomPanel.SetActive(false);
-        createButton.SetActive(true);
-        directButton.SetActive(true);
+        _createButton.SetActive(true);
+        _joinButton.SetActive(true);
+        _backButton.SetActive(true);
+        _lobbyListHeader.SetActive(true);
         _eventSystem.SetSelectedGameObject(null);
         _eventSystem.SetSelectedGameObject(_createRoomPanelBackFirstSelected);
     }
@@ -59,8 +70,10 @@ public class LobbyMenu : MonoBehaviour
     {
         _menuSoundController.PlayButtonSound();
         _joinRoomPanel.SetActive(true);
-        createButton.SetActive(false);
-        directButton.SetActive(false);
+        _createButton.SetActive(false);
+        _joinButton.SetActive(false);
+        _backButton.SetActive(false);
+        _lobbyListHeader.SetActive(false);
         _eventSystem.SetSelectedGameObject(null);
         _eventSystem.SetSelectedGameObject(_joinRoomPanelFirstSelected);
     }
@@ -69,15 +82,23 @@ public class LobbyMenu : MonoBehaviour
         _menuSoundController.PlayButtonSound();
         string text = _roomNameJoinInputField.GetComponent<InputField>().textComponent.text;
         _loadScreenMenuController.Show("Joining Room...");
+        _createButton.SetActive(false);
+        _joinButton.SetActive(false);
+        _roomNameInput.SetActive(false);
+        _backButton.SetActive(false);
+        _lobbyListHeader.SetActive(false);
         _networkController.JoinRoom(text);
-        _joinRoomPanel.SetActive(false);
+        //_joinRoomPanel.SetActive(false);
     }
     public void BackFromJoinRoom()
     {
         _menuSoundController.PlayButtonSound();
         _joinRoomPanel.SetActive(false);
-        createButton.SetActive(true);
-        directButton.SetActive(true);
+        _createButton.SetActive(true);
+        _joinButton.SetActive(true);
+        _roomNameInput.SetActive(true);
+        _backButton.SetActive(true);
+        _lobbyListHeader.SetActive(true);
         _eventSystem.SetSelectedGameObject(null);
         _eventSystem.SetSelectedGameObject(_joinRoomPanelBackFirstSelected);
     }

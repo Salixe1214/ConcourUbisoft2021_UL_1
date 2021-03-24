@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Inputs;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -15,6 +17,8 @@ public class ErrorPromptController : MonoBehaviour
     private SoundController _menuSoundController = null;
     private EventSystem _eventSystem = null;
 
+    public event Action onOkButtonClicked;
+
     #region Unity Callbacks
     private void Start()
     {
@@ -28,6 +32,7 @@ public class ErrorPromptController : MonoBehaviour
     public void Close()
     {
         _menuSoundController.PlayButtonSound();
+        onOkButtonClicked?.Invoke();
         Destroy(this.gameObject);
     }
     #endregion
