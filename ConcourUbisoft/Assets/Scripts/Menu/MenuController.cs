@@ -22,6 +22,10 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject _lobbyBackFirstSelected;
     [SerializeField] private GameObject _roomFirstSelected;
     [SerializeField] private GameObject _roomBackFirstSelected;
+    [SerializeField] private GameObject _lobbyPanelCreateButton;
+    [SerializeField] private GameObject _lobbyPanelJoinButton;
+    [SerializeField] private GameObject _lobbyPanelRoomNameInputField;
+    [SerializeField] private GameObject _lobbyPanelBackButton;
 
     private NetworkController _networkController = null;
     private GameController _gameController = null;
@@ -136,6 +140,11 @@ public class MenuController : MonoBehaviour
         ErrorPromptController errorPromptController = errorPanelError.GetComponent<ErrorPromptController>();
         errorPromptController.ErrorTitle = errorTitle;
         errorPromptController.ErrorMessage = errorMessage;
+        _lobbyMenu.SetActive(true);
+        _lobbyPanelCreateButton.SetActive(true);
+        _lobbyPanelJoinButton.SetActive(true);
+        _lobbyPanelRoomNameInputField.SetActive(true);
+        _lobbyPanelBackButton.SetActive(true);
     }
     private void OnLoadGame()
     {
