@@ -10,7 +10,7 @@ public class RoomMenu : MonoBehaviour
     [SerializeField] private GameObject _content = null;
     [SerializeField] private GameObject _roomMenuElementPrefab = null;
     [SerializeField] private GameObject _waitingForAnotherPlayer = null;
-    [SerializeField] private Button _startButton = null;
+    [SerializeField] private GameObject _startButton = null;
     [SerializeField] private Text _errorText = null;
     [SerializeField] private GameObject _lobbyPanelCreateButton;
     [SerializeField] private GameObject _lobbyPanelJoinButton;
@@ -78,14 +78,7 @@ public class RoomMenu : MonoBehaviour
     }
     private void Update()
     {
-        if (_networkController.IsMasterClient())
-        {
-            _startButton.interactable = true;
-        }
-        else
-        {
-            _startButton.interactable = false;
-        }
+        _startButton.SetActive(_networkController.IsMasterClient());
     }
     #endregion
     #region Event Callbacks

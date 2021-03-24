@@ -180,7 +180,13 @@ public class MenuController : MonoBehaviour
     }
     private void OnJoinedRoom()
     {
+        _lobbyMenu.SetActive(false);
         _roomMenu.SetActive(true);
+        /*_lobbyPanelCreateButton.SetActive(false);
+        _lobbyPanelJoinButton.SetActive(false);
+        _lobbyPanelRoomNameInputField.SetActive(false);
+        _lobbyPanelBackButton.SetActive(false);
+        _lobbyListHeader.SetActive(false); */
         _currentMenu = Menus.Room;
         if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
         {
