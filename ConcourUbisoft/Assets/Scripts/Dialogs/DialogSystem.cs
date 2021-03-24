@@ -63,7 +63,7 @@ public class DialogSystem : MonoBehaviour
             int.TryParse(parsedLine[0], out leftCharacterID); //< Extracting ID of the left character
             int.TryParse(parsedLine[1], out rightCharacterID);//< Extracting ID of the right character
         
-            // Character 1
+            // Left slot
             switch (leftCharacterID)
             {
                 case 0:
@@ -84,7 +84,7 @@ public class DialogSystem : MonoBehaviour
                     break;
             }
             
-            // Character 2
+            // Right slot
             switch (rightCharacterID)
             {
                 case 0:
