@@ -187,7 +187,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 0}
+    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -293,6 +293,38 @@ MonoBehaviour:
         - m_Target: {fileID: 1022823257}
           m_TargetAssemblyTypeName: Other.TextColor, Assembly-CSharp
           m_MethodName: OnExit
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1022823257}
+          m_TargetAssemblyTypeName: Other.TextColor, Assembly-CSharp
+          m_MethodName: OnSelectedEnter
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 10
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1022823257}
+          m_TargetAssemblyTypeName: Other.TextColor, Assembly-CSharp
+          m_MethodName: OnSelectedExit
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -494,7 +526,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 0}
+    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -600,6 +632,38 @@ MonoBehaviour:
         - m_Target: {fileID: 672043760}
           m_TargetAssemblyTypeName: Other.TextColor, Assembly-CSharp
           m_MethodName: OnExit
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 672043760}
+          m_TargetAssemblyTypeName: Other.TextColor, Assembly-CSharp
+          m_MethodName: OnSelectedEnter
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 10
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 672043760}
+          m_TargetAssemblyTypeName: Other.TextColor, Assembly-CSharp
+          m_MethodName: OnSelectedExit
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -4320,7 +4384,7 @@ GameObject:
   - component: {fileID: 1197873290}
   m_Layer: 0
   m_Name: InputManager
-  m_TagString: Untagged
+  m_TagString: InputManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7363,12 +7427,12 @@ MonoBehaviour:
   _canvas: {fileID: 1549704403}
   _optionMenu: {fileID: 775259506}
   _eventSystem: {fileID: 1311755604}
-  _menuFirstSelected: {fileID: 0}
+  _menuFirstSelected: {fileID: 1832552570}
   _optionsFirstSelected: {fileID: 196127689}
-  _lobbyFirstSelected: {fileID: 0}
+  _lobbyFirstSelected: {fileID: 926528961}
   _OptionsBackFirstSelected: {fileID: 1777141}
   _lobbyBackFirstSelected: {fileID: 1832552570}
-  _roomFirstSelected: {fileID: 0}
+  _roomFirstSelected: {fileID: 1784915761}
   _roomBackFirstSelected: {fileID: 1380651167}
   _lobbyPanelCreateButton: {fileID: 926528961}
   _lobbyPanelJoinButton: {fileID: 1850841803}
@@ -7913,6 +7977,38 @@ MonoBehaviour:
         - m_Target: {fileID: 202568279}
           m_TargetAssemblyTypeName: Other.TextColor, Assembly-CSharp
           m_MethodName: OnExit
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 202568279}
+          m_TargetAssemblyTypeName: Other.TextColor, Assembly-CSharp
+          m_MethodName: OnSelectedEnter
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 10
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 202568279}
+          m_TargetAssemblyTypeName: Other.TextColor, Assembly-CSharp
+          m_MethodName: OnSelectedExit
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

@@ -15,6 +15,7 @@ TagManager:
   - Arm1
   - Arm2
   - MovingControllable
+  - InputManager
   layers:
   - Default
   - TransparentFX

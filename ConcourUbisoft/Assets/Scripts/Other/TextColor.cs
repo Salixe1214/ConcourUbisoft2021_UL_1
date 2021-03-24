@@ -25,5 +25,15 @@ namespace Other
         {
             _text.color = _defaultColor;
         }
+
+        public void OnSelectedEnter()
+        {
+            _text.color = onChangeColor;
+        }
+
+        public void OnSelectedExit()
+        {
+            _text.color = _defaultColor;
+        }
     }
 }
