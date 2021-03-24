@@ -18,7 +18,7 @@ public class DialogSystem : MonoBehaviour
     
     // Line separators
     [SerializeField] private char lineSep = '\n';
-    [SerializeField] private char itemSep = ',';
+    [SerializeField] private char itemSep = ';';
     
     private List<string> _lines = new List<string>(); //< Contains all the lines (and the informations of the characters shown)
     /*
@@ -34,6 +34,8 @@ public class DialogSystem : MonoBehaviour
      * 1 or 2 for character 1 or 2 (defined by the sprites)
      * 0 for none
      */
+
+    private bool newDialog = true;
 
     private void Awake()
     {
@@ -117,13 +119,13 @@ public class DialogSystem : MonoBehaviour
             
             textSlot.text = "";
             textSlot.enabled = false;
+
+            newDialog = true;
         }
     }
     
     public void StartDialog(string pFile)
     {
-        bool newDialog = _lines.Count == 0;
-        
         // Loading text file
         TextAsset txtAsset = Resources.Load("Dialog/" + pFile) as TextAsset;
         string rawTxt = "";
@@ -138,6 +140,8 @@ public class DialogSystem : MonoBehaviour
         
         if (newDialog)
         {
+            newDialog = false;
+            
             leftCharSlot.enabled = true;
             rightCharSlot.enabled = true;
             textSlot.enabled = true;

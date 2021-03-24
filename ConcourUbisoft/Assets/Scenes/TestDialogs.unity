@@ -456,6 +456,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6604083769676665091, guid: a51ff5321372f1a4fa1c92fb8d0ce5d4, type: 3}
+      propertyPath: itemSep
+      value: 59
+      objectReference: {fileID: 0}
     - target: {fileID: 6604083769676665214, guid: a51ff5321372f1a4fa1c92fb8d0ce5d4, type: 3}
       propertyPath: m_Name
       value: DialogUI

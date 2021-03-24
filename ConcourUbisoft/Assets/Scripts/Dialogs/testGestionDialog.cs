@@ -16,6 +16,6 @@ public class testGestionDialog : MonoBehaviour
     void Update()
     {
         if(Input.GetButtonDown("Fire3"))
-            _dialogSystem.StartDialog("DialogTest");
+            _dialogSystem.StartDialog("DialogTest2");
     }
 }
