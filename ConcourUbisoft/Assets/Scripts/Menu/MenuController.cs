@@ -134,6 +134,7 @@ public class MenuController : MonoBehaviour
         _gameController.OnLoadGameEvent += OnLoadGame;
         _gameController.OnFinishLoadGameEvent += OnFinishLoadGame;
         _inputManager.OnControllerTypeChanged += OnControllerTypeChanged;
+        _errorPanelErrorPrefab.GetComponent<ErrorPromptController>().onOkButtonClicked += onErrorClosed;
     }
     private void OnDisable()
     {
@@ -145,6 +146,7 @@ public class MenuController : MonoBehaviour
         _gameController.OnLoadGameEvent -= OnLoadGame;
         _gameController.OnFinishLoadGameEvent -= OnFinishLoadGame;
         _inputManager.OnControllerTypeChanged -= OnControllerTypeChanged;
+        _errorPanelErrorPrefab.GetComponent<ErrorPromptController>().onOkButtonClicked -= onErrorClosed;
     }
     #endregion
     #region Event Callbacks
@@ -198,6 +200,7 @@ public class MenuController : MonoBehaviour
         _loadScreenMenuController.Hide();
         GameObject errorPanelError = Instantiate(_errorPanelErrorPrefab, _canvas.transform);
         ErrorPromptController errorPromptController = errorPanelError.GetComponent<ErrorPromptController>();
+        errorPromptController.onOkButtonClicked += onErrorClosed;
         errorPromptController.ErrorTitle = errorTitle;
         errorPromptController.ErrorMessage = errorMessage;
         _lobbyMenu.SetActive(true);
@@ -259,8 +262,15 @@ public class MenuController : MonoBehaviour
             }
              
         }
+    }
 
-        
+    private void onErrorClosed()
+    {
+        if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
+        {
+            _eventSystem.SetSelectedGameObject(null);
+            _eventSystem.SetSelectedGameObject(_lobbyFirstSelected);
+        }
     }
 
     #endregion
