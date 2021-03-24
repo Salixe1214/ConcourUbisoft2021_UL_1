@@ -14,6 +14,10 @@ namespace Inputs
     
     public class InputManager : MonoBehaviour
     {
+        public event Action OnControllerTypeChanged;
+
+        private Controller _previousController;
+        
         private static readonly Dictionary<Tuple<Controller, string>, string> Commands = new Dictionary<Tuple<Controller, string>, string>()
         {
             { new Tuple<Controller, string>(Controller.Xbox, "Control"), "ControlXbo"},
@@ -27,6 +31,18 @@ namespace Inputs
         {
             SearchForController();
         }
+
+        private void Update()
+        {
+            SearchForController();
+
+            if (_previousController != _controller)
+            {
+                OnControllerTypeChanged?.Invoke();
+                _previousController = _controller;
+            }
+        }
+        
 
         private static void SearchForController()
         {
@@ -53,7 +69,7 @@ namespace Inputs
 
         public static string GetInputNameByController(string inputName)
         {
-//            SearchForController();
+            SearchForController();
             return Commands[new Tuple<Controller, string>(_controller, inputName)];
         }
     }

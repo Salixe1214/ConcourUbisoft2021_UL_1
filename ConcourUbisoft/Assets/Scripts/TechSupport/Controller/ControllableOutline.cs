@@ -17,7 +17,8 @@ namespace TechSupport.Controller
         private Controllable _controllable;
         private Outline _outline;
         private RawImage _image;
-        
+        private InputManager _inputManager;
+
         private bool _wasControlled = false;
 
         [Header("Outline")]
@@ -44,12 +45,21 @@ namespace TechSupport.Controller
             _controllable = GetComponent<Controllable>();
             _gameController = GameObject.FindGameObjectWithTag("GameController")?.GetComponent<GameController>();
             _networkController = GameObject.FindGameObjectWithTag("NetworkController")?.GetComponent<NetworkController>();
-
+            _inputManager = GameObject.FindWithTag("InputManager")?.GetComponent<InputManager>();
             SetupOutline();
             SetupInputImage();
             enabled = false;
             _outline.enabled = false;
             _image.enabled = false;
+        }
+        
+        private void OnEnable()
+        {
+            _inputManager.OnControllerTypeChanged += OnControllerChanged;
+        }
+        private void OnDisable()
+        {
+            _inputManager.OnControllerTypeChanged -= OnControllerChanged;
         }
 
         #region Object Setup
@@ -57,7 +67,6 @@ namespace TechSupport.Controller
         private void SetupOutline()
         {
             _outline = GetComponent<Outline>();
-
             _outline.OutlineColor = outlineColor;
             _outline.OutlineWidth = outlineWidth;
             _outline.OutlineMode = Outline.Mode.OutlineAll;
@@ -101,7 +110,7 @@ namespace TechSupport.Controller
         {
             if (GameMenuOpen() || NetworkOwnerInvalid())
                 return;
-            
+
             if (Input.GetButtonUp(InputManager.GetInputNameByController(inputName)))
             {
                 _controllable.IsControlled = !_controllable.IsControlled;
@@ -114,6 +123,11 @@ namespace TechSupport.Controller
             if (FullScreenSystem.Current == null)
                 return;
             _image.gameObject.transform.position = FullScreenSystem.Current.WorldToScreenPoint(targetTop.transform.position);
+        }
+
+        private void OnControllerChanged()
+        {
+            _image.texture = textures[InputManager.GetController()];
         }
 
         public void Enable(bool enabledOutline, Camera c)
