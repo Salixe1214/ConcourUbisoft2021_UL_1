@@ -16,6 +16,6 @@ public class testGestionDialog : MonoBehaviour
     void Update()
     {
         if(Input.GetButtonDown("Fire3"))
-            _dialogSystem.StartDialog("DialogTest2");
+            _dialogSystem.StartCustomLine("Allo, Est-ce que ca marche?", 1, 2);
     }
 }

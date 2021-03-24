@@ -35,7 +35,7 @@ public class DialogSystem : MonoBehaviour
      * 0 for none
      */
 
-    private bool newDialog = true;
+    private bool isEmpty = true;
 
     private void Awake()
     {
@@ -120,11 +120,11 @@ public class DialogSystem : MonoBehaviour
             textSlot.text = "";
             textSlot.enabled = false;
 
-            newDialog = true;
+            isEmpty = true;
         }
     }
     
-    public void StartDialog(string pFile)
+    public void StartDialog(string pFile,  bool pAutoRead = false, int pTimeBetweenLines = 3)
     {
         // Loading text file
         TextAsset txtAsset = Resources.Load("Dialog/" + pFile) as TextAsset;
@@ -138,9 +138,9 @@ public class DialogSystem : MonoBehaviour
         for(int i = 0 ; i < tmpLines.Length - 1 ; i++)
             _lines.Add(tmpLines[i]);
         
-        if (newDialog)
+        if (isEmpty)
         {
-            newDialog = false;
+            isEmpty = false;
             
             leftCharSlot.enabled = true;
             rightCharSlot.enabled = true;
@@ -150,6 +150,42 @@ public class DialogSystem : MonoBehaviour
             rightCharSlot.color = Color.clear;
             textSlot.text = "";
             
+            ReadLine();
+            
+            if(pAutoRead)
+                StartCoroutine(ReadAll(pTimeBetweenLines));
+        }
+    }
+    
+    public void StartCustomLine(string pLine, int pIdLeft, int pIdRight = 0, bool pAutoRead = false, int pTimeBetweenLines = 3)
+    {
+        _lines.Add(pIdLeft + itemSep.ToString() + pIdRight + itemSep.ToString() + pLine);
+        Debug.Log(pIdLeft + itemSep.ToString() + pIdRight + itemSep.ToString() + pLine);
+        
+        if (isEmpty)
+        {
+            isEmpty = false;
+            
+            leftCharSlot.enabled = true;
+            rightCharSlot.enabled = true;
+            textSlot.enabled = true;
+        
+            leftCharSlot.color = Color.clear;
+            rightCharSlot.color = Color.clear;
+            textSlot.text = "";
+            
+            ReadLine();
+            
+            if(pAutoRead)
+                StartCoroutine(ReadAll(pTimeBetweenLines));
+        }
+    }
+
+    IEnumerator ReadAll(int pTimeBetweenLines)
+    {
+        while (!isEmpty)
+        {
+            yield return new WaitForSeconds(5);
             ReadLine();
         }
     }
