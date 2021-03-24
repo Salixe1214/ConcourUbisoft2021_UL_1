@@ -37,6 +37,7 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject _lobbyPanelJoinButton;
     [SerializeField] private GameObject _lobbyPanelRoomNameInputField;
     [SerializeField] private GameObject _lobbyPanelBackButton;
+    [SerializeField] private GameObject _lobbyListHeader;
 
     private NetworkController _networkController = null;
     private GameController _gameController = null;
@@ -116,6 +117,11 @@ public class MenuController : MonoBehaviour
     private void Start()
     {
         _currentController = InputManager.GetController();
+        if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
+        {
+            _eventSystem.SetSelectedGameObject(null);
+            _eventSystem.SetSelectedGameObject(_menuFirstSelected);
+        }
     }
 
     private void OnEnable()
@@ -200,6 +206,7 @@ public class MenuController : MonoBehaviour
         _lobbyPanelJoinButton.SetActive(true);
         _lobbyPanelRoomNameInputField.SetActive(true);
         _lobbyPanelBackButton.SetActive(true);
+        _lobbyListHeader.SetActive(true);
     }
     private void OnLoadGame()
     {

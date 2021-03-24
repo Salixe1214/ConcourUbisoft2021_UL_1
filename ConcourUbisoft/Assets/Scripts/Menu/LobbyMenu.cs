@@ -27,6 +27,7 @@ public class LobbyMenu : MonoBehaviour
     [SerializeField] private GameObject _joinButton;
     [SerializeField] private GameObject _roomNameInput;
     [SerializeField] private GameObject _backButton;
+    [SerializeField] private GameObject _lobbyListHeader;
  
     private NetworkController _networkController = null;
     private SoundController _menuSoundController = null;
@@ -51,6 +52,7 @@ public class LobbyMenu : MonoBehaviour
         _joinButton.SetActive(false);
         _roomNameInput.SetActive(false);
         _backButton.SetActive(false);
+        _lobbyListHeader.SetActive(false);
         //_createRoomPanel.SetActive(false);
     }
     public void BackFromCreateRoom()
@@ -60,6 +62,7 @@ public class LobbyMenu : MonoBehaviour
         _createButton.SetActive(true);
         _joinButton.SetActive(true);
         _backButton.SetActive(true);
+        _lobbyListHeader.SetActive(true);
         _eventSystem.SetSelectedGameObject(null);
         _eventSystem.SetSelectedGameObject(_createRoomPanelBackFirstSelected);
     }
@@ -70,6 +73,7 @@ public class LobbyMenu : MonoBehaviour
         _createButton.SetActive(false);
         _joinButton.SetActive(false);
         _backButton.SetActive(false);
+        _lobbyListHeader.SetActive(false);
         _eventSystem.SetSelectedGameObject(null);
         _eventSystem.SetSelectedGameObject(_joinRoomPanelFirstSelected);
     }
@@ -82,6 +86,7 @@ public class LobbyMenu : MonoBehaviour
         _joinButton.SetActive(false);
         _roomNameInput.SetActive(false);
         _backButton.SetActive(false);
+        _lobbyListHeader.SetActive(false);
         _networkController.JoinRoom(text);
         //_joinRoomPanel.SetActive(false);
     }
@@ -93,6 +98,7 @@ public class LobbyMenu : MonoBehaviour
         _joinButton.SetActive(true);
         _roomNameInput.SetActive(true);
         _backButton.SetActive(true);
+        _lobbyListHeader.SetActive(true);
         _eventSystem.SetSelectedGameObject(null);
         _eventSystem.SetSelectedGameObject(_joinRoomPanelBackFirstSelected);
     }
