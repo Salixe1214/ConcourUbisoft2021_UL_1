@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,8 +27,13 @@ public class DialogSystem : MonoBehaviour
     private int _selfId;
 
     private bool _initialised = false;
-    private bool _active = false;
+    static bool _active = false;
     private bool _ready = false;
+
+    private void Awake()
+    {
+        InitiateDialog(null, lineSep, itemSep);
+    }
 
     void Update()
     {
@@ -85,7 +91,6 @@ public class DialogSystem : MonoBehaviour
         
         _lineCount += 1;
         _ready = true;
-        Debug.Log(_lineCount);
     }
 
     public void InitiateDialog(TextAsset pRawText = null, char pLineSeparator = '\n', char pItemSep = ',')
