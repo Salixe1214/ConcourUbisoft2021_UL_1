@@ -7193,10 +7193,10 @@ MonoBehaviour:
   _lobbyBackFirstSelected: {fileID: 1832552570}
   _roomFirstSelected: {fileID: 0}
   _roomBackFirstSelected: {fileID: 1380651167}
-  _lobbyPanelCreateButton: {fileID: 0}
-  _lobbyPanelJoinButton: {fileID: 0}
-  _lobbyPanelRoomNameInputField: {fileID: 0}
-  _lobbyPanelBackButton: {fileID: 0}
+  _lobbyPanelCreateButton: {fileID: 926528961}
+  _lobbyPanelJoinButton: {fileID: 1850841803}
+  _lobbyPanelRoomNameInputField: {fileID: 2022626340}
+  _lobbyPanelBackButton: {fileID: 1380651167}
 --- !u!1 &1788711322
 GameObject:
   m_ObjectHideFlags: 0
