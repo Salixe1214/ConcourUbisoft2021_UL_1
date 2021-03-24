@@ -78,11 +78,11 @@ public class LobbyMenu : MonoBehaviour
         _menuSoundController.PlayButtonSound();
         string text = _roomNameJoinInputField.GetComponent<InputField>().textComponent.text;
         _loadScreenMenuController.Show("Joining Room...");
-        _networkController.JoinRoom(text);
         _createButton.SetActive(false);
         _joinButton.SetActive(false);
         _roomNameInput.SetActive(false);
         _backButton.SetActive(false);
+        _networkController.JoinRoom(text);
         //_joinRoomPanel.SetActive(false);
     }
     public void BackFromJoinRoom()
