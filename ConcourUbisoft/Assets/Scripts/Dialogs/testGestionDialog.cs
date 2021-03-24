@@ -9,8 +9,7 @@ public class testGestionDialog : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //_dialogSystem.InitiateDialog(null, '\n', ',');
-        _dialogSystem.StartDialog();
+        _dialogSystem.StartDialog("DialogTest");
     }
 
     // Update is called once per frame
