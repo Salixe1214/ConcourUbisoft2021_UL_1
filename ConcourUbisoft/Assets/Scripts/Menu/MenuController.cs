@@ -53,6 +53,11 @@ public class MenuController : MonoBehaviour
         _startMenu.SetActive(false);
         _loadScreenMenuController.Show("Joining Lobby...");
         _networkController.JoinLobby();
+        _lobbyPanelCreateButton.SetActive(true);
+        _lobbyPanelJoinButton.SetActive(true);
+        _lobbyPanelRoomNameInputField.SetActive(true);
+        _lobbyPanelBackButton.SetActive(true);
+        _lobbyListHeader.SetActive(true);
         if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
         {
             _eventSystem.SetSelectedGameObject(null);
