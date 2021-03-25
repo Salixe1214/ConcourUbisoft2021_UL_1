@@ -1,3 +1,0 @@
-1;2;Ceci, est un deuxieme dialogue!
-2;1;Tout me semble fonctionner.
-0;0;Merci

@@ -30,6 +30,7 @@ public class CharacterControl : MonoBehaviour, IPunObservable
     {
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _photonView = GetComponent<PhotonView>();
+        transform.Rotate(Vector3.up, Mathf.Deg2Rad * 180);
         if (_networkController.GetLocalRole() == _owner)
         {
             _photonView.RequestOwnership();

@@ -11,6 +11,7 @@ public class DialogSystem : MonoBehaviour
     [SerializeField] private Image leftCharSlot;  //< Character slot at the left
     [SerializeField] private Image rightCharSlot; //< Character slot at the right
     [SerializeField] private Text textSlot;       //< Text slot
+    [SerializeField] private GameObject panel = null;
 
     // Sprites
     [SerializeField] private Sprite char1Sprite;
@@ -119,6 +120,7 @@ public class DialogSystem : MonoBehaviour
             
             textSlot.text = "";
             textSlot.enabled = false;
+            panel.SetActive(false);
 
             isEmpty = true;
         }
@@ -145,7 +147,8 @@ public class DialogSystem : MonoBehaviour
             leftCharSlot.enabled = true;
             rightCharSlot.enabled = true;
             textSlot.enabled = true;
-        
+            panel.SetActive(true);
+
             leftCharSlot.color = Color.clear;
             rightCharSlot.color = Color.clear;
             textSlot.text = "";

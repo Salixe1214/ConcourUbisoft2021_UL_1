@@ -16,6 +16,7 @@ TagManager:
   - Arm2
   - MovingControllable
   - InputManager
+  - DialogSystem
   layers:
   - Default
   - TransparentFX
