@@ -114,7 +114,7 @@ public class FurnaceController : MonoBehaviour
             sc.types = new Other.PickableType[currentSequenceLenght];
             for (int j = 0; j < currentSequenceLenght; j++)
             {
-                int nextType = _random.Next(0, 2);
+                int nextType = _random.Next(0, 5);
                 int nextColor = _random.Next(0, allColors.Length);
                 sc.ColorsSequence[j] = allColors[nextColor];
                 sc.types[j] = (Other.PickableType)nextType;
