@@ -10,6 +10,7 @@ public class CharacterControl : MonoBehaviour, IPunObservable
 {
     [SerializeField] private float playerMovementSpeed = 1f;
     [SerializeField] private GameController.Role _owner = GameController.Role.SecurityGuard;
+    [SerializeField] private Animator _animator = null;
 
     private Rigidbody playerBody;
     private Vector3 inputVector;
@@ -25,6 +26,7 @@ public class CharacterControl : MonoBehaviour, IPunObservable
 
     private Vector3 newPosition = new Vector3();
     private Quaternion newQuartenion = new Quaternion();
+    private bool _isMoving = false;
 
     private void Awake()
     {
@@ -60,14 +62,18 @@ public class CharacterControl : MonoBehaviour, IPunObservable
             {
                 inputVector = Vector3.ClampMagnitude(inputVector, playerMovementSpeed);
             }
+
+            _isMoving = inputVector != Vector3.zero;
         }
+
+        _animator.SetBool("IsMoving",_isMoving);
     }
 
     private void FixedUpdate()
     {
         if (_owner == _networkController.GetLocalRole())
         {
-            playerBody.velocity = inputVector;
+            playerBody.MovePosition(playerBody.position + inputVector*Time.fixedDeltaTime);
         }
         else
         {
@@ -80,7 +86,7 @@ public class CharacterControl : MonoBehaviour, IPunObservable
     {
         if (stream.IsWriting)
         {
-            
+            stream.SendNext(_isMoving);
             stream.SendNext(transform.position.x);
             stream.SendNext(transform.position.y);
             stream.SendNext(transform.position.z);
@@ -91,6 +97,7 @@ public class CharacterControl : MonoBehaviour, IPunObservable
         }
         else
         {
+            _isMoving = (bool)stream.ReceiveNext();
             Vector3 newPostion = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
             if (Vector3.Distance(newPostion, transform.position) > 3)
             {

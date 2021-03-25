@@ -34,10 +34,6 @@ public class CameraMovement : MonoBehaviour
     {
         joysticks = Input.GetJoystickNames();
         Cursor.lockState = CursorLockMode.Locked;
-        mouseXAccumulator = 180;
-        controllerXAccumulator = 180;
-        xRotationControllerPS = 180;
-        xRotationControllerXBO = 180;
     }
 
     //PS = playstation
