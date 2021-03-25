@@ -38,12 +38,23 @@ public class DialogSystem : MonoBehaviour
 
     private bool isEmpty = true;
 
+    private NetworkController _networkController = null;
+
     private void Awake()
     {
         rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
         leftCharSlot.enabled = false;
         rightCharSlot.enabled = false;
         textSlot.enabled = false;
+
+        _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+
+        if(_networkController.GetLocalRole() == GameController.Role.SecurityGuard)
+        {
+            var temp = leftCharSlot;
+            leftCharSlot = rightCharSlot;
+            rightCharSlot = temp;
+        }
     }
 
     void Update()
