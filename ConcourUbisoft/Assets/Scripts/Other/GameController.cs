@@ -20,12 +20,15 @@ public class GameController : MonoBehaviour
 
     private SoundController _soundController = null;
     private NetworkController _networkController = null;
-    
+    private DialogSystem _dialogSystem = null;
+
     public bool IsGameLoading { get; private set; }
     public bool IsGameStart { get; set; }
     public Role GameRole { get; set; }
     public OptionController OptionController { get => _optionController; }
     public bool IsGameMenuOpen { get => _inGameMenuController.IsGameMenuOpen; }
+
+
 
     #region Events
     public event Action OnLoadGameEvent;
@@ -62,6 +65,9 @@ public class GameController : MonoBehaviour
         IsGameLoading = false;
         IsGameStart = true;
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(_sceneToStartName));
+        Debug.Log("StartDialog");
+        _dialogSystem = GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>();
+        _dialogSystem.StartDialog("Introduction");
         OnFinishLoadGameEvent?.Invoke();
         //_soundController.PlayAmbientSound();
         if (GameRole == Role.SecurityGuard)
