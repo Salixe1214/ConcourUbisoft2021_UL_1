@@ -33,6 +33,12 @@ public class CharacterControl : MonoBehaviour, IPunObservable
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _photonView = GetComponent<PhotonView>();
         transform.Rotate(Vector3.up, Mathf.Deg2Rad * 180);
+        SimpleButton[] buttons = GameObject.FindObjectsOfType<SimpleButton>();
+        foreach (SimpleButton button in buttons)
+        {
+            button.Actions.AddListener(() => _animator.SetTrigger("HavePressedButton"));
+        }
+
         if (_networkController.GetLocalRole() == _owner)
         {
             _photonView.RequestOwnership();
