@@ -38,9 +38,9 @@ namespace TechSupport.Informations
             new SerializableDictionary<DoorCode.Symbol, Sprite>(
                 new Dictionary<DoorCode.Symbol, Sprite>
                 {
-                    {DoorCode.Symbol.One, null},
-                    {DoorCode.Symbol.Two, null},
-                    {DoorCode.Symbol.Three, null}
+                    { DoorCode.Symbol.One, null },
+                    { DoorCode.Symbol.Two, null },
+                    { DoorCode.Symbol.Three, null }
                 });
 
         [SerializeField] private Sprite arrow;

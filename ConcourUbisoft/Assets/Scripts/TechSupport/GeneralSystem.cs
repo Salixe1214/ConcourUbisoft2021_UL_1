@@ -69,21 +69,11 @@ namespace TechSupport
         {
             _gameController = GameObject.FindGameObjectWithTag("GameController")?.GetComponent<GameController>();
             _informationsSystem = GetComponent<InformationsSystem>();
-            cameras.Sort((a, b) => a.number.CompareTo(b.number));
-            cameras.ForEach(c =>
-            {
-                c.items.Init();
-            });
-            _gridSystem.Init(cameras.Count());
-            _buttons = new List<Button>();
-            foreach (var items in cameras)
-            {
-                Button b = GameObjectsInstantiator.InstantiateButton(transform);
-                b.onClick.AddListener(Focus);
-                _buttons.Add(b);
-            }
-            _gridSystem.Grid(_buttons);
 
+            cameras.Sort((a, b) => a.number.CompareTo(b.number));
+            cameras.ForEach(c => c.items.Init());
+            _gridSystem.Init(cameras.Count());
+            GridInterface();
             _fullScreenSystem.SetTarget(cameras.First().items);
             _informationsSystem.Init();
             SystemSwitch(mode);
@@ -107,6 +97,35 @@ namespace TechSupport
                 SystemSwitch(SurveillanceMode.Focused);
             }
         }
+
+        #region Interface
+        
+        private void GridInterface()
+        {
+            _buttons = new List<Button>();
+            foreach (var items in cameras)
+            {
+                Button b = GameObjectsInstantiator.InstantiateButton(transform);
+                b.onClick.AddListener(Focus);
+                b.GetComponent<Image>().color = new Color(255,255,255,0);
+                b.gameObject.AddComponent<UnityEngine.UI.Outline>().effectColor = Color.black;
+                _buttons.Add(b);
+            }
+            _gridSystem.Grid(_buttons);
+            FindObjectOfType<EventSystem>().firstSelectedGameObject = _buttons.First().gameObject;
+        }
+
+        private void HideGeneralInformation(bool hide)
+        {
+            _informationsSystem.GetInformationDisplay().gameObject.SetActive(!hide);
+        }
+
+        private void ActivateGridInterface(bool activate)
+        {
+            _buttons.ForEach(b => b.gameObject.SetActive(activate));
+        }
+        
+        #endregion
 
         #region Camera
 
@@ -138,6 +157,8 @@ namespace TechSupport
         {
             SurveillanceCamera selected =
                 cameras.First(item => item.items.Contains(Input.mousePosition)).items;
+            ActivateGridInterface(false);
+            HideGeneralInformation(true);
             if (selected != null)
             {
                 _fullScreenSystem.SetTarget(selected);
@@ -147,6 +168,8 @@ namespace TechSupport
         private void OnGrid()
         {
             EnableAll(true);
+            ActivateGridInterface(true);
+            HideGeneralInformation(false);
             _gridSystem.Grid(cameras.Select(input => input.items.GetCamera()));
         }
 
