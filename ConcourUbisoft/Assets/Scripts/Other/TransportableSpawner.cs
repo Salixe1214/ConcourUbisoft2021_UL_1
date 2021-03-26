@@ -27,8 +27,6 @@ public class TransportableSpawner : MonoBehaviour
     private LevelController levelController;
     private System.Random _random = new System.Random(0);
 
-   
-
     private void Start()
     {
         levelController = LevelControl.GetComponent<LevelController>();

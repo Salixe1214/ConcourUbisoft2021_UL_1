@@ -129,11 +129,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
     {
         if (QuickSetup && PhotonNetwork.IsMasterClient)
         {
-            for (int i = 0; i < 70; ++i)
-            {
-                PhotonNetwork.Instantiate("Cube", new Vector3(-6.13f, 0.375f, -4.78f), Quaternion.identity);
-                //GetOwnNetworkPlayer().InstantiateNetworkGameObject("TransportableBox", new Vector3(-6.13f, 0.375f, -4.78f), Quaternion.identity, GameController.Role.SecurityGuard);
-            }
+
         }
         OnPlayerJoin?.Invoke();
     }
