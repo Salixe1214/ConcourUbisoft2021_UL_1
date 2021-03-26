@@ -1,6 +1,6 @@
 namespace Other
 {
-    public enum TransportableType
+    public enum PickableType
     {
         RobotHead =0,
         Crate=1,

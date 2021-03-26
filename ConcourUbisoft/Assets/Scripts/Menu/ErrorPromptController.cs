@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Inputs;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ErrorPromptController : MonoBehaviour
@@ -12,17 +15,24 @@ public class ErrorPromptController : MonoBehaviour
     [SerializeField] private Text _message = null;
 
     private SoundController _menuSoundController = null;
+    private EventSystem _eventSystem = null;
+
+    public event Action onOkButtonClicked;
 
     #region Unity Callbacks
     private void Start()
     {
+        _eventSystem = GameObject.FindObjectOfType<EventSystem>();
         _menuSoundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
+        _eventSystem.SetSelectedGameObject(null);
+        _eventSystem.SetSelectedGameObject(GameObject.Find("OKButton"));
     }
     #endregion
     #region UI Actions
     public void Close()
     {
         _menuSoundController.PlayButtonSound();
+        onOkButtonClicked?.Invoke();
         Destroy(this.gameObject);
     }
     #endregion

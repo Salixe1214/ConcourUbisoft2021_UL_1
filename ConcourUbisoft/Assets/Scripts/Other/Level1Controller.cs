@@ -15,10 +15,10 @@ public class Level1Controller : MonoBehaviour , LevelController
     public Color[] GetColors() => PossibleColors;
     public Color GetNextColorInSequence() => FurnaceController.GetNextColor();
     public int GetCurrentSequenceLenght() => FurnaceController.GetCurrentSequenceLenght();
-    public TransportableType GetNextTypeInSequence() => FurnaceController.GetNextItemType();
+    public PickableType GetNextTypeInSequence() => FurnaceController.GetNextItemType();
 
     [SerializeField] private FurnaceController FurnaceController = null;
-    [SerializeField] private TransportableSpawner TransportableSpawner = null;
+    [SerializeField] private List<TransportableSpawner> TransportableSpawners = null;
     [SerializeField] private Camera AreaCamera = null;
     [SerializeField] private InformationsSystem techUI;
     [SerializeField] private Sprite RobotHeadImage;
@@ -67,7 +67,11 @@ public class Level1Controller : MonoBehaviour , LevelController
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         FurnaceController.GenerateNewColorSequences(PossibleColors);
         FurnaceController.enabled = false;
-        TransportableSpawner.enabled = false;
+        foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+        {
+            transportableSpawner.enabled = false;
+        }
+       
         conveyorOperatingSpeed = MinConveyorSpeed;
         cameraOriginalPosition = AreaCamera.transform.position;
     }
@@ -82,23 +86,27 @@ public class Level1Controller : MonoBehaviour , LevelController
 
     private void OnEnable()
     {
-        FurnaceController.WhenFurnaceConsumedAll += FinishLevel;
-        FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing += InitiateNextSequence;
-        FurnaceController.WhenFurnaceConsumeWrong += ShakeCamera;
+        FurnaceController.WhenFurnaceConsumedAll.AddListener(FinishLevel);
+        FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing.AddListener(InitiateNextSequence);
+        FurnaceController.WhenFurnaceConsumeWrong.AddListener(ShakeCamera);
         FurnaceController.CheckItemOffList += UpdateSpriteColorInList;
     }
 
     private void OnDisable()
     {
-        FurnaceController.WhenFurnaceConsumedAll -= FinishLevel;
-        FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing -= InitiateNextSequence;
-        FurnaceController.WhenFurnaceConsumeWrong -= ShakeCamera;
+        FurnaceController.WhenFurnaceConsumedAll.RemoveListener(FinishLevel);
+        FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing.RemoveListener(InitiateNextSequence);
+        FurnaceController.WhenFurnaceConsumeWrong.RemoveListener(ShakeCamera);
         FurnaceController.CheckItemOffList -= UpdateSpriteColorInList;
     }
 
     public void FinishLevel()
     {
-        TransportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
+        foreach(TransportableSpawner transportableSpawner in TransportableSpawners)
+        {
+            transportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
+        }
+        
         StartCoroutine(EndLevel());
     }
 
@@ -107,11 +115,21 @@ public class Level1Controller : MonoBehaviour , LevelController
         Debug.Log("StartLevel");
         soundController.PlayArea1Music();
         imageList = techUI.GetList();
+        imageList.Clean();
         firstWave = true;
         FurnaceController.enabled = true;
-        TransportableSpawner.enabled = true;
+        foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+        {
+            transportableSpawner.enabled = true;
+        }
+        
         ActivateItemSpawning(false);
-        TransportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
+
+        foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+        {
+            transportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
+        }
+        
         Debug.Log("ConveyorSpeed Max");
         StartCoroutine(SpawnFreshItems(FastItemSpawningTimeSeconds));
     }
@@ -120,7 +138,13 @@ public class Level1Controller : MonoBehaviour , LevelController
     {
         ActivateItemSpawning(false);
         soundController.PlayLevelSequenceClearedSuccessSound();
-        TransportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
+
+        foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+        {
+            transportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
+        }
+
+        
         StartCoroutine(SpawnFreshItems(FastItemSpawningTimeSeconds));
     }
 
@@ -131,12 +155,19 @@ public class Level1Controller : MonoBehaviour , LevelController
 
     private void ActivateItemSpawning(bool canSpawn)
     {
-        TransportableSpawner.ActivateSpawning(canSpawn);
+        foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+        {
+            transportableSpawner.ActivateSpawning(canSpawn);
+        }
+       
     }
 
     private void SetDelayBetweenItemSpawns(Vector2 delayRange)
     {
-        TransportableSpawner.SetDelayBetweenSpawns(delayRange);
+        foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+        {
+            transportableSpawner.SetDelayBetweenSpawns(delayRange);
+        }
     }
 
     IEnumerator waitForItemsToClear(float seconds)
@@ -163,13 +194,21 @@ public class Level1Controller : MonoBehaviour , LevelController
         SetDelayBetweenItemSpawns(DelayBetweenItemSpawnsSecondsHighest);
         if (firstWave)
         {
-            TransportableSpawner.SetConveyorsSpeed(conveyorOperatingSpeed);
+            foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+            {
+                transportableSpawner.SetConveyorsSpeed(conveyorOperatingSpeed);
+            }
+
             Debug.Log("ConveyorSpeed Normal");
             firstWave = false;
         }
         else
-        {            
-            TransportableSpawner.SetConveyorsSpeed(conveyorOperatingSpeed+=ConveyorSpeedIncrement); 
+        {
+            foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+            {
+                transportableSpawner.SetConveyorsSpeed(conveyorOperatingSpeed += ConveyorSpeedIncrement);
+            }
+            
             Debug.Log("ConveyorSpeed Normal");
         }
         Debug.Log("Highest Spawning Delay");
@@ -182,8 +221,11 @@ public class Level1Controller : MonoBehaviour , LevelController
         soundController.PlayLevelSequenceClearedSuccessSound();
         imageList.Clean();
         FurnaceController.enabled = false;
-        TransportableSpawner.enabled = false;
-        TransportableSpawner.gameObject.SetActive(false);
+        foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+        {
+            transportableSpawner.enabled = false;
+            transportableSpawner.gameObject.SetActive(false);
+        }
         soundController.StopAreaMusic();
     }
     
@@ -214,21 +256,21 @@ public class Level1Controller : MonoBehaviour , LevelController
 
         for (int i = 0; i < FurnaceController.GetCurrentSequenceLenght(); i++)
         {
-            TransportableType currentType = sequenceOfColor.types[i];
+            PickableType currentType = sequenceOfColor.types[i];
             GameObject itemImage = new GameObject();
             itemImage.AddComponent<Image>();
 
             switch (currentType)
             {
-                case TransportableType.RobotHead : itemSprites.Add(RobotHeadImage);
+                case PickableType.RobotHead : itemSprites.Add(RobotHeadImage);
                     break;
-                case TransportableType.Crate : itemSprites.Add(CrateImage);
+                case PickableType.Crate : itemSprites.Add(CrateImage);
                     break;
-                case TransportableType.Gear : itemSprites.Add(GearImage);
+                case PickableType.Gear : itemSprites.Add(GearImage);
                     break;
-                case TransportableType.Battery : itemSprites.Add(BatteryImage);
+                case PickableType.Battery : itemSprites.Add(BatteryImage);
                     break;
-                case TransportableType.Pipe : itemSprites.Add(PipeImage);
+                case PickableType.Pipe : itemSprites.Add(PipeImage);
                     break;
             }
         }

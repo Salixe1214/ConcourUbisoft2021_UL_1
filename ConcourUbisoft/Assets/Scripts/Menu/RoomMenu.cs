@@ -10,8 +10,13 @@ public class RoomMenu : MonoBehaviour
     [SerializeField] private GameObject _content = null;
     [SerializeField] private GameObject _roomMenuElementPrefab = null;
     [SerializeField] private GameObject _waitingForAnotherPlayer = null;
-    [SerializeField] private Button _startButton = null;
+    [SerializeField] private GameObject _startButton = null;
     [SerializeField] private Text _errorText = null;
+    [SerializeField] private GameObject _lobbyPanelCreateButton;
+    [SerializeField] private GameObject _lobbyPanelJoinButton;
+    [SerializeField] private GameObject _lobbyPanelRoomNameInputField;
+    [SerializeField] private GameObject _lobbyPanelBackButton;
+    [SerializeField] private GameObject _lobbyListHeader;
 
     private NetworkController _networkController = null;
     private GameController _gameController = null;
@@ -22,6 +27,12 @@ public class RoomMenu : MonoBehaviour
     {
         _menuSoundController.PlayButtonSound();
         _networkController.LeaveRoom();
+        Debug.Log("Try to leave room");
+        _lobbyPanelJoinButton.SetActive(true);
+        _lobbyPanelCreateButton.SetActive(true);
+        _lobbyPanelRoomNameInputField.SetActive(true);
+        _lobbyPanelBackButton.SetActive(true);
+        _lobbyListHeader.SetActive(true);
     }
     public void StartGame()
     {
@@ -67,14 +78,7 @@ public class RoomMenu : MonoBehaviour
     }
     private void Update()
     {
-        if (_networkController.IsMasterClient())
-        {
-            _startButton.interactable = true;
-        }
-        else
-        {
-            _startButton.interactable = false;
-        }
+        _startButton.SetActive(_networkController.IsMasterClient());
     }
     #endregion
     #region Event Callbacks
@@ -104,7 +108,6 @@ public class RoomMenu : MonoBehaviour
             roomElement.transform.Find("KickButton").GetComponent<Button>().onClick.AddListener(new UnityAction(() => { _menuSoundController.PlayButtonSound(); _networkController.KickPlayer(playerNetwork.Id); }));
         }
 
-        Debug.Log(children.Count() + playerNetworksNotFoundInScene.Count());
         if (_networkController.GetNumberOfPlayer() != 2)
         {
             Instantiate(_waitingForAnotherPlayer, _content.transform);

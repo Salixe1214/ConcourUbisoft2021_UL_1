@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,22 +6,12 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-public class CharacterControl : Serializable
+public class CharacterControl : MonoBehaviour, IPunObservable
 {
-    [Serializable]
-    public class DTO
-    {
-        public float PositionX { get; set; }
-        public float PositionY { get; set; }
-        public float PositionZ { get; set; }
-        public float RotationX { get; set; }
-        public float RotationY { get; set; }
-        public float RotationZ { get; set; }
-        public float RotationW { get; set; }
-    }
-
     [SerializeField] private float playerMovementSpeed = 1f;
     [SerializeField] private GameController.Role _owner = GameController.Role.SecurityGuard;
+    [SerializeField] private Animator _animator = null;
+
     private Rigidbody playerBody;
     private Vector3 inputVector;
     private Vector3 gravityVector;
@@ -31,11 +22,32 @@ public class CharacterControl : Serializable
     private float controllerVertical ;
 
     private NetworkController _networkController = null;
-    
+    private PhotonView _photonView = null;
+
+    private Vector3 newPosition = new Vector3();
+    private Quaternion newQuartenion = new Quaternion();
+    private bool _isMoving = false;
+
+    private void Awake()
+    {
+        _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+        _photonView = GetComponent<PhotonView>();
+        transform.Rotate(Vector3.up, Mathf.Deg2Rad * 180);
+        SimpleButton[] buttons = GameObject.FindObjectsOfType<SimpleButton>();
+        foreach (SimpleButton button in buttons)
+        {
+            button.Actions.AddListener(() => _animator.SetTrigger("HavePressedButton"));
+        }
+
+        if (_networkController.GetLocalRole() == _owner)
+        {
+            _photonView.RequestOwnership();
+        }
+    }
+
     void Start()
     {
         playerBody = GetComponent<Rigidbody>();
-        _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
     }
     
     void Update()
@@ -56,55 +68,53 @@ public class CharacterControl : Serializable
             {
                 inputVector = Vector3.ClampMagnitude(inputVector, playerMovementSpeed);
             }
+
+            _isMoving = inputVector != Vector3.zero;
         }
+
+        _animator.SetBool("IsMoving",_isMoving);
     }
 
     private void FixedUpdate()
     {
         if (_owner == _networkController.GetLocalRole())
         {
-            playerBody.velocity = inputVector;
+            playerBody.MovePosition(playerBody.position + inputVector*Time.fixedDeltaTime);
+        }
+        else
+        {
+            transform.position = Vector3.MoveTowards(transform.position, newPosition, Time.fixedDeltaTime * playerMovementSpeed);
+            transform.rotation = newQuartenion;
         }
     }
 
-    public override void Deserialize(byte[] data)
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-
-    }
-
-    public override byte[] Serialize()
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        using (MemoryStream memoryStream = new MemoryStream())
+        if (stream.IsWriting)
         {
-            bf.Serialize(memoryStream, new DTO()
-            {
-                PositionX = transform.transform.position.x,
-                PositionY = transform.transform.position.y,
-                PositionZ = transform.transform.position.z,
-                RotationX = transform.transform.rotation.x,
-                RotationY = transform.transform.rotation.y,
-                RotationZ = transform.transform.rotation.z,
-                RotationW = transform.transform.rotation.w,
-            });
-
-            return memoryStream.ToArray();
+            stream.SendNext(_isMoving);
+            stream.SendNext(transform.position.x);
+            stream.SendNext(transform.position.y);
+            stream.SendNext(transform.position.z);
+            stream.SendNext(transform.rotation.x);
+            stream.SendNext(transform.rotation.y);
+            stream.SendNext(transform.rotation.z);
+            stream.SendNext(transform.rotation.w);
         }
-    }
-    public override void Smooth(byte[] oldData, byte[] newData, float lag, double lastTime, double currentTime)
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        using (var memStream = new MemoryStream())
+        else
         {
-            using (MemoryStream memoryStream = new MemoryStream())
+            _isMoving = (bool)stream.ReceiveNext();
+            Vector3 newPostion = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+            if (Vector3.Distance(newPostion, transform.position) > 3)
             {
-                memStream.Write(newData, 0, newData.Length);
-                memStream.Seek(0, SeekOrigin.Begin);
-                DTO dto = (DTO)bf.Deserialize(memStream);
-
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(dto.PositionX, dto.PositionY, dto.PositionZ), Time.deltaTime * playerMovementSpeed);
-                transform.rotation = new Quaternion(dto.RotationX, dto.RotationY, dto.RotationZ, dto.RotationW);
+                newPosition = newPostion;
             }
+            else
+            {
+                newPosition = newPostion;
+               
+            }
+            newQuartenion = new Quaternion((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
         }
     }
 }
