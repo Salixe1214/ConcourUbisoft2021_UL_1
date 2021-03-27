@@ -18,7 +18,8 @@ public class Level1Controller : MonoBehaviour , LevelController
     public PickableType GetNextTypeInSequence() => FurnaceController.GetNextItemType();
 
     [SerializeField] private FurnaceController FurnaceController = null;
-    [SerializeField] private List<TransportableSpawner> TransportableSpawners = null;
+    [SerializeField] private TransportableSpawner InteriorConveyorSpawner;
+    [SerializeField] private TransportableSpawner ExteriorConveyorSpawner;
     [SerializeField] private Camera AreaCamera = null;
     [SerializeField] private InformationsSystem techUI;
     [SerializeField] private Sprite RobotHeadImage;
@@ -32,19 +33,28 @@ public class Level1Controller : MonoBehaviour , LevelController
     [Tooltip("Duration (Seconds) of items spawning rapidly at the start of a new sequence.")]
     [SerializeField] private float FastItemSpawningTimeSeconds = 4;
     [Tooltip("Speed at wich the conveyor goes when spawning items at the start of a new sequence. Also used for clearing Items after a sequence.")]
-    [SerializeField] private float MaxConveyorSpeed = 15;
+    [SerializeField] private float MaxInteriorConveyorSpeed = 15;
+    [Tooltip("Speed at wich the conveyor goes when spawning items at the start of a new sequence. Also used for clearing Items after a sequence.")]
+    [SerializeField] private float MaxExteriorConveyorSpeed = 15;
     [Tooltip("Speed at wich the conveyor starts at after spawning items rapidly.")]
     [SerializeField] private float MinConveyorSpeed = 1.5f;
     [Tooltip("Added to previous MinConveyorSpeed after a successful sequence.")]
     [SerializeField] private float ConveyorSpeedIncrement = 0.2f;
-    [Tooltip("Longest delay range (Seconds) between each two items spawning back to back.")]
-    [SerializeField] private Vector2 DelayBetweenItemSpawnsSecondsHighest = new Vector2(1f,1.5f);
-    [Tooltip("Shortest delay range (Seconds) between each two items spawning back to back. Used for rapidly spawning items at high speed.")]
-    [SerializeField] private Vector2 DelayBetweenItemSpawnsSecondsLowest = new Vector2(0.1f,0.2f);
+    [Tooltip("Longest delay range (Seconds) between each two items spawning back to back. Interior Conveyor")]
+    [SerializeField] private Vector2 DelayItemSpawnsHighestInteriorConveyor = new Vector2(1f,1.5f);
+    [Tooltip("Shortest delay range (Seconds) between each two items spawning back to back. Used for rapidly spawning items at high speed. Interior Conveyor")]
+    [SerializeField] private Vector2 DelayItemSpawnsLowestInteriorConveyor = new Vector2(0.1f,0.2f);
+    [Tooltip("Longest delay range (Seconds) between each two items spawning back to back. Exterior Conveyor")]
+    [SerializeField] private Vector2 DelayItemSpawnsHighestExteriorConveyor = new Vector2(1f,1.5f);
+    [Tooltip("Shortest delay range (Seconds) between each two items spawning back to back. Used for rapidly spawning items at high speed. Exterior Conveyor")]
+    [SerializeField] private Vector2 DelayItemSpawnsLowestExteriorConveyor = new Vector2(0.1f,0.2f);
     [Tooltip("Intensity of the AreaCamera Shake Effect")]
     [SerializeField] private float cameraShakeForce = 0.3f;
     [Tooltip("Duration (Seconds) of the AreaCamera Shake effect.")]
     [SerializeField] private float cameraShakeDurationSeconds = 0.2f;
+    [Tooltip("Duration (Seconds) before next required item is spawned.")]
+    [SerializeField] private float delayBeforeNextRequiredItem = 6f;
+    
 
     private float conveyorOperatingSpeed;
     private bool firstWave = false;
@@ -54,26 +64,33 @@ public class Level1Controller : MonoBehaviour , LevelController
     private List<Sprite> itemSprites;
     private SoundController soundController;
     private int currentListIndex;
+    private List<TransportableSpawner> TransportableSpawners;
 
     private void Awake()
     {
         itemSprites = new List<Sprite>();
+        TransportableSpawners = new List<TransportableSpawner>();
     }
 
     public void Start()
     {
-        
+        TransportableSpawners.Add(InteriorConveyorSpawner);
+        TransportableSpawners.Add(ExteriorConveyorSpawner);
         currentListIndex = 0;
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         FurnaceController.GenerateNewColorSequences(PossibleColors);
         FurnaceController.enabled = false;
-        foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+       /* foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
         {
             transportableSpawner.enabled = false;
-        }
-       
+        }*/
+
+        InteriorConveyorSpawner.enabled = false;
+        ExteriorConveyorSpawner.enabled = false;
+        
         conveyorOperatingSpeed = MinConveyorSpeed;
         cameraOriginalPosition = AreaCamera.transform.position;
+        
     }
 
     private void Update()
@@ -90,6 +107,8 @@ public class Level1Controller : MonoBehaviour , LevelController
         FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing.AddListener(InitiateNextSequence);
         FurnaceController.WhenFurnaceConsumeWrong.AddListener(ShakeCamera);
         FurnaceController.CheckItemOffList += UpdateSpriteColorInList;
+        InteriorConveyorSpawner.requiredItemHasSpawned += SpawnNextRequiredItem;
+        ExteriorConveyorSpawner.requiredItemHasSpawned += SpawnNextRequiredItem;
     }
 
     private void OnDisable()
@@ -98,15 +117,17 @@ public class Level1Controller : MonoBehaviour , LevelController
         FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing.RemoveListener(InitiateNextSequence);
         FurnaceController.WhenFurnaceConsumeWrong.RemoveListener(ShakeCamera);
         FurnaceController.CheckItemOffList -= UpdateSpriteColorInList;
+        InteriorConveyorSpawner.requiredItemHasSpawned -= SpawnNextRequiredItem;
+        ExteriorConveyorSpawner.requiredItemHasSpawned -= SpawnNextRequiredItem;
     }
 
     public void FinishLevel()
     {
-        foreach(TransportableSpawner transportableSpawner in TransportableSpawners)
+       /* foreach(TransportableSpawner transportableSpawner in TransportableSpawners)
         {
             transportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
-        }
-        
+        }*/
+        SetConveyorSpeed(MaxInteriorConveyorSpeed,MaxExteriorConveyorSpeed);
         StartCoroutine(EndLevel());
     }
 
@@ -118,61 +139,76 @@ public class Level1Controller : MonoBehaviour , LevelController
         imageList.Clean();
         firstWave = true;
         FurnaceController.enabled = true;
-        foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+        /*foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
         {
             transportableSpawner.enabled = true;
-        }
+        }*/
+        InteriorConveyorSpawner.enabled = true;
+        ExteriorConveyorSpawner.enabled = true;
         
         ActivateItemSpawning(false);
 
-        foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+        /*foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
         {
             transportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
-        }
+        }*/
+        SetConveyorSpeed(MaxInteriorConveyorSpeed,MaxExteriorConveyorSpeed);
         
         Debug.Log("ConveyorSpeed Max");
         StartCoroutine(SpawnFreshItems(FastItemSpawningTimeSeconds));
     }
 
-    public void InitiateNextSequence()
+    private void InitiateNextSequence()
     {
         ActivateItemSpawning(false);
         soundController.PlayLevelSequenceClearedSuccessSound();
 
-        foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+       /* foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
         {
             transportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
-        }
-
-        
+        }*/
+        SetConveyorSpeed(MaxInteriorConveyorSpeed,MaxExteriorConveyorSpeed);
         StartCoroutine(SpawnFreshItems(FastItemSpawningTimeSeconds));
     }
 
-    public void ShakeCamera()
+    private void ShakeCamera()
     {
         StartCoroutine(StartCameraShake(cameraShakeDurationSeconds));
     }
 
     private void ActivateItemSpawning(bool canSpawn)
     {
-        foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+        /*foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
         {
             transportableSpawner.ActivateSpawning(canSpawn);
-        }
-       
+        }*/
+        ExteriorConveyorSpawner.canSpawnNextRequiredItem = true;
+        InteriorConveyorSpawner.ActivateSpawning(canSpawn);
+        ExteriorConveyorSpawner.ActivateSpawning(canSpawn);
+        
     }
 
-    private void SetDelayBetweenItemSpawns(Vector2 delayRange)
+    private void SetDelayBetweenItemSpawns(Vector2 delayRangeInteriorConveyor, Vector2 delayRangeExteriorConveyor)
     {
-        foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+        /*foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
         {
             transportableSpawner.SetDelayBetweenSpawns(delayRange);
-        }
+        }*/
+        InteriorConveyorSpawner.SetDelayBetweenSpawns(delayRangeInteriorConveyor);
+        ExteriorConveyorSpawner.SetDelayBetweenSpawns(delayRangeExteriorConveyor);
     }
 
     IEnumerator waitForItemsToClear(float seconds)
     {
         yield return new WaitForSeconds(seconds);
+    }
+
+    IEnumerator waitBeforeSpawningRequiredItem(int nextSpawnerIndex)
+    {
+        yield return new WaitForSeconds(delayBeforeNextRequiredItem);
+        Debug.Log(nextSpawnerIndex + "is true");
+        TransportableSpawners[nextSpawnerIndex].canSpawnNextRequiredItem = true;
+        Debug.Log(TransportableSpawners[nextSpawnerIndex].canSpawnNextRequiredItem);
     }
 
     IEnumerator SpawnFreshItems(float seconds)
@@ -185,29 +221,32 @@ public class Level1Controller : MonoBehaviour , LevelController
             imageList.Clean();
             yield return waitForItemsToClear(ClearItemsTimeSeconds);
         }      
-        SetDelayBetweenItemSpawns(DelayBetweenItemSpawnsSecondsLowest);
+        SetDelayBetweenItemSpawns(DelayItemSpawnsLowestInteriorConveyor,DelayItemSpawnsLowestExteriorConveyor);
         Debug.Log("Lowest Spawning Delay");
         
         setItemsImageList();
         ActivateItemSpawning(true);
         yield return new WaitForSeconds(seconds);
-        SetDelayBetweenItemSpawns(DelayBetweenItemSpawnsSecondsHighest);
+        SetDelayBetweenItemSpawns(DelayItemSpawnsHighestInteriorConveyor,DelayItemSpawnsHighestExteriorConveyor);
         if (firstWave)
         {
-            foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+            /*foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
             {
                 transportableSpawner.SetConveyorsSpeed(conveyorOperatingSpeed);
-            }
+            }*/
+            SetConveyorSpeed(conveyorOperatingSpeed,conveyorOperatingSpeed);
 
             Debug.Log("ConveyorSpeed Normal");
             firstWave = false;
         }
         else
         {
-            foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+            /*foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
             {
                 transportableSpawner.SetConveyorsSpeed(conveyorOperatingSpeed += ConveyorSpeedIncrement);
-            }
+            }*/
+            conveyorOperatingSpeed += ConveyorSpeedIncrement;
+            SetConveyorSpeed(conveyorOperatingSpeed,conveyorOperatingSpeed);
             
             Debug.Log("ConveyorSpeed Normal");
         }
@@ -221,11 +260,17 @@ public class Level1Controller : MonoBehaviour , LevelController
         soundController.PlayLevelSequenceClearedSuccessSound();
         imageList.Clean();
         FurnaceController.enabled = false;
-        foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+        /*foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
         {
             transportableSpawner.enabled = false;
             transportableSpawner.gameObject.SetActive(false);
-        }
+        }*/
+
+        InteriorConveyorSpawner.enabled = false;
+        ExteriorConveyorSpawner.enabled = false;
+        InteriorConveyorSpawner.gameObject.SetActive(false);
+        ExteriorConveyorSpawner.gameObject.SetActive(false);
+        
         soundController.StopAreaMusic();
     }
     
@@ -244,9 +289,10 @@ public class Level1Controller : MonoBehaviour , LevelController
         currentListIndex++;
     }
 
-    private void HighLightCurrentItemInList()
+    private void SetConveyorSpeed(float interiorConveyorSpeed, float exteriorConveyorSpeed)
     {
-        
+        InteriorConveyorSpawner.SetConveyorsSpeed(interiorConveyorSpeed);
+        ExteriorConveyorSpawner.SetConveyorsSpeed(exteriorConveyorSpeed);
     }
 
     private void setItemsImageList()
@@ -275,5 +321,21 @@ public class Level1Controller : MonoBehaviour , LevelController
             }
         }
         imageList.CreateLayout(itemSprites,sequenceOfColor.ColorsSequence);
+    }
+
+    private void SpawnNextRequiredItem()
+    {
+        if (TransportableSpawners[0].canSpawnNextRequiredItem)
+        {
+            Debug.Log("Interior was true");
+            TransportableSpawners[0].canSpawnNextRequiredItem = false;
+            waitBeforeSpawningRequiredItem(1);
+        }
+        else
+        {
+            Debug.Log("Exterior was true");
+            TransportableSpawners[1].canSpawnNextRequiredItem = false;
+            waitBeforeSpawningRequiredItem(0);
+        }
     }
 }
