@@ -42,6 +42,11 @@ public class DisplaySpeaking : MonoBehaviour
         _playerTwoSound.SetActive(false);
     }
 
+    private void OnDestroy()
+    {
+        
+    }
+
     private void Update()
     {
         _playerTwoImage.gameObject.SetActive(_networkController.GetNumberOfPlayer() == 2);
