@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Buttons;
 using Inputs;
 using TechSupport.Informations;
 using TechSupport.Surveillance;
@@ -35,8 +36,20 @@ namespace TechSupport
         private readonly FullScreenSystem _fullScreenSystem = new FullScreenSystem();
         private InformationsSystem _informationsSystem;
 
+        [Header("Surveillance System")]
         [SerializeField] private SurveillanceMode mode = SurveillanceMode.Grid; // Default mode : grid
         [SerializeField] private List<OrderedItems> cameras;
+        [SerializeField] public SerializableDictionary<SurveillanceMode, UnityEngine.UI.Outline> switchButtons 
+                = new SerializableDictionary<SurveillanceMode, UnityEngine.UI.Outline>(
+                    new Dictionary<SurveillanceMode, UnityEngine.UI.Outline> {
+                        { SurveillanceMode.Focused, null },
+                        { SurveillanceMode.Grid, null },
+                    })
+            ;
+        [Header("Button to Select camera")]
+        [SerializeField] private Sprite outlineSprite;
+        [SerializeField] private ColorBlock colors;
+
         private List<Button> _buttons;
         private GameController _gameController;
 
@@ -105,14 +118,13 @@ namespace TechSupport
             _buttons = new List<Button>();
             foreach (var items in cameras)
             {
-                Button b = GameObjectsInstantiator.InstantiateButton(transform);
+                OutlineButton b = GameObjectsInstantiator.InstantiateOutlineButton(transform);
+                b.colors = colors;
+                b.image.sprite = outlineSprite;
                 b.onClick.AddListener(Focus);
-                b.GetComponent<Image>().color = new Color(255,255,255,0);
-                b.gameObject.AddComponent<UnityEngine.UI.Outline>().effectColor = Color.black;
                 _buttons.Add(b);
             }
             _gridSystem.Grid(_buttons);
-            FindObjectOfType<EventSystem>().firstSelectedGameObject = _buttons.First().gameObject;
         }
 
         private void HideGeneralInformation(bool hide)
@@ -142,10 +154,12 @@ namespace TechSupport
         {
             if (mode != newMode)
             {
+                switchButtons[mode].enabled = false;
                 _exitMethods[mode]?.Invoke();
             }
             _onSwitchMethods[mode = newMode]?.Invoke();
             OnModeSwitched?.Invoke();
+            switchButtons[newMode].enabled = true;
         }
 
         private void ExitFullScreen()

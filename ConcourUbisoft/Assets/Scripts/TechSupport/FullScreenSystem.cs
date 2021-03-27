@@ -17,6 +17,7 @@ namespace TechSupport
         {
             _target.Enable(true);
             _target.EnableController(true);
+            _target.ActivateClock(true);
             _originRect = _target.GetCamera().rect;
             _target.GetCamera().rect = _fullSize;
         }
@@ -24,6 +25,7 @@ namespace TechSupport
         public void EscapeFullScreen()
         {
             _target.EnableController(false);
+            _target.ActivateClock(false);
             _target.GetCamera().rect = _originRect;
         }
 

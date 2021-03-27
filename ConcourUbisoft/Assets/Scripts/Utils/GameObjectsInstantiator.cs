@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Buttons;
 using TechSupport.Informations;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,9 +20,9 @@ namespace Utils
             return new GameObject()?.AddComponent<HorizontalLayoutGroup>();
         }
 
-        public static Button CreateButton()
+        public static OutlineButton CreateButton()
         {
-            return new GameObject()?.AddComponent<Button>();
+            return new GameObject()?.AddComponent<OutlineButton>();
         }
         
         public static Text InstantiateText(Transform parent, string content)
@@ -102,11 +103,10 @@ namespace Utils
             return AddImage(go, sprite, Color.clear, Image.Type.Simple);
         }
 
-        public static Button InstantiateButton(Transform parent)
+        public static OutlineButton InstantiateOutlineButton(Transform parent)
         {
-            Button button = CreateButton();
+            OutlineButton button = CreateButton();
 
-            button.gameObject.AddComponent<Image>().color = Color.clear;
             button.transform.SetParent(parent);
             if (!button)
                 Debug.Log("No Button created or return");
