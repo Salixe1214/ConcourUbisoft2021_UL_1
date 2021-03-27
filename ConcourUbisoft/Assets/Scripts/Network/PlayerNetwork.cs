@@ -39,13 +39,21 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         _gameController.OnLoadGameEvent += OnLoadGameEvent;
         _gameController.OnFinishLoadGameEvent += OnFinishLoadGameEvent;
         _gameController.OnFinishGameEvent += OnFinishGameEvent;
+        _networkController.OnMasterChanged += _networkController_OnMasterChanged;
+    }
+
+    private void _networkController_OnMasterChanged()
+    {
+        Name = $"Player {(_photonView.Owner.IsMasterClient ? "1" : "2")}";
     }
 
     private void OnDisable()
     {
+        Debug.Log("MasterChanged");
         _gameController.OnLoadGameEvent -= OnLoadGameEvent;
         _gameController.OnFinishLoadGameEvent -= OnFinishLoadGameEvent;
         _gameController.OnFinishGameEvent -= OnFinishGameEvent;
+        _networkController.OnMasterChanged -= _networkController_OnMasterChanged;
     }
 
     #endregion

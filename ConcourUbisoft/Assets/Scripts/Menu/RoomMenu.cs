@@ -86,6 +86,7 @@ public class RoomMenu : MonoBehaviour
     }
     #endregion
     #region Event Callbacks
+
     private void RefreshRoomInterface()
     {
         List<Transform> children = new List<Transform>();

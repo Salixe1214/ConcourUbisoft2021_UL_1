@@ -57,23 +57,13 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public delegate void OnNetworkErrorHandler(string errorTitle, string errorMessage);
     public event OnNetworkErrorHandler OnNetworkErrorEvent;
 
-    public delegate void OnJoinedRoomHandler();
-    public event OnJoinedRoomHandler OnJoinedRoomEvent;
-
-    public delegate void OnPlayerJoinRoomHandler();
-    public event OnPlayerJoinRoomHandler OnPlayerJoin;
-
-    public delegate void OnPlayerLeftRoomHandler();
-    public event OnPlayerLeftRoomHandler OnPlayerLeftEvent;
-
-    public delegate void OnLeftRoomHandler();
-    public event OnLeftRoomHandler OnLeftRoomEvent;
-
-    public delegate void OnDisconnectHandler();
-    public event OnDisconnectHandler OnDisconnectEvent;
-
-    public delegate void OnPlayerNetworkInstantiateHandler();
-    public event OnPlayerNetworkInstantiateHandler OnPlayerObjectCreate;
+    public event Action OnJoinedRoomEvent;
+    public event Action OnPlayerJoin;
+    public event Action OnPlayerLeftEvent;
+    public event Action OnLeftRoomEvent;
+    public event Action OnDisconnectEvent;
+    public event Action OnPlayerObjectCreate;
+    public event Action OnMasterChanged;
 
     #endregion
     #region Photon Callbacks
@@ -139,6 +129,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
             OnNetworkErrorEvent?.Invoke("A player left the game.", "A player left the game while the game was in progress. ");
         }
         OnPlayerLeftEvent?.Invoke();
+    }
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        OnMasterChanged?.Invoke();
     }
     #endregion
     #region Public Functions
