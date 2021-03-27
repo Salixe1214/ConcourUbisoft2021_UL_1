@@ -12,6 +12,7 @@ public class DialogSystem : MonoBehaviour
     [SerializeField] private Image rightCharSlot; //< Character slot at the right
     [SerializeField] private Text textSlot;       //< Text slot
     [SerializeField] private GameObject panel = null;
+    [SerializeField] private float _delayBetweenCharReveal = 0.1f;
 
     // Sprites
     [SerializeField] private Sprite char1Sprite;
@@ -37,11 +38,15 @@ public class DialogSystem : MonoBehaviour
      */
 
     private bool isEmpty = true;
+    private bool _isReading = false;
 
     private NetworkController _networkController = null;
+    private AudioSource _audioSource = null;
 
     private void Awake()
     {
+        _audioSource = GetComponent<AudioSource>();
+
         rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
         leftCharSlot.enabled = false;
         rightCharSlot.enabled = false;
@@ -61,7 +66,15 @@ public class DialogSystem : MonoBehaviour
     {
         if (Input.GetButtonDown("Submit"))
         {
-            ReadLine();
+            if(!_isReading)
+            {
+                ReadLine();
+            }
+            else
+            {
+                _isReading = false;
+            }
+            
         }
     }
 
@@ -119,7 +132,7 @@ public class DialogSystem : MonoBehaviour
                     break;
             }
 
-            textSlot.text = parsedLine[2];
+            StartCoroutine(SlowRead(parsedLine[2]));
         }
         else
         {
@@ -171,6 +184,25 @@ public class DialogSystem : MonoBehaviour
         }
     }
     
+    IEnumerator SlowRead(string text)
+    {
+        _isReading = true;
+        int i = 0;
+        while (i < text.Length && _isReading)
+        {
+            textSlot.text = text.Substring(0, i + 1);
+            if (_audioSource.isPlaying == false)
+            {
+                _audioSource.Play();
+            }
+            
+            i++;
+            yield return new WaitForSeconds(_delayBetweenCharReveal);
+        }
+        textSlot.text = text;
+        _isReading = false;
+    }
+
     public void StartCustomLine(string pLine, int pIdLeft, int pIdRight = 0, bool pAutoRead = false, int pTimeBetweenLines = 3)
     {
         _lines.Add(pIdLeft + itemSep.ToString() + pIdRight + itemSep.ToString() + pLine);

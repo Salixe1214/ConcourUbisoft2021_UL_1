@@ -24,7 +24,6 @@ public class FurnaceController : MonoBehaviour
     [SerializeField] private int minColorSequencelenght=3;
     [SerializeField] private int maxColorSequenceLenght=7;
     [SerializeField] private float TimeToConsume = 0.0f;
-    [SerializeField] private bool HasBeenPickupNeeded = true;
     [SerializeField] private GameController.Role _owner = GameController.Role.None;
 
     public UnityEvent WhenFurnaceConsumedAll;
@@ -52,7 +51,7 @@ public class FurnaceController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Pickable pickable = null;
-        if (other.gameObject.TryGetComponent(out pickable) && (HasBeenPickupNeeded && pickable.HasBeenPickup || !HasBeenPickupNeeded) && _owner == _networkController.GetLocalRole())
+        if (other.gameObject.TryGetComponent(out pickable) && _owner == _networkController.GetLocalRole())
         {
             Consume(pickable);
         }

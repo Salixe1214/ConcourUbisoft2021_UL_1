@@ -16,11 +16,9 @@ namespace Arm
         [SerializeField] private PickableType type;
         [SerializeField] private float volumeMultiplier = 0.3f;
         [SerializeField] private AudioClip magnetCollisionSound;
-        [SerializeField] private bool hasBeenPickup = false;
 
         public Color Color { get { return _renderer.material.color; } set { _renderer.material.color = value; } }
         public Rigidbody Rigidbody { get; private set; }
-        public bool HasBeenPickup { get => hasBeenPickup; set => hasBeenPickup = value; }
 
         private Renderer _renderer = null;
         private AudioSource _audioSource;
@@ -44,10 +42,10 @@ namespace Arm
             _transportableByConveyor = GetComponent<TransportableByConveyor>();
             _photonView = GetComponent<PhotonView>();
 
-            if (!_photonView.IsMine)
-            {
-                GetComponent<TransportableByConveyor>().enabled = false;
-            }
+            //if (!_photonView.IsMine)
+            //{
+            //    GetComponent<TransportableByConveyor>().enabled = false;
+            //}
 
             _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
             Rigidbody = GetComponent<Rigidbody>();
@@ -60,10 +58,10 @@ namespace Arm
         {
             _outline.enabled = false;
 
-            if (!_photonView.IsMine)
-            {
-                Rigidbody.isKinematic = true;
-            }
+            //if (!_photonView.IsMine)
+            //{
+            //    Rigidbody.isKinematic = true;
+            //}
         }
 
         public bool Contains(Vector3 point)
@@ -73,7 +71,7 @@ namespace Arm
 
         private void Update()
         {
-            if (!_photonView.IsMine)
+            if (!_photonView.IsMine && _conveyorSpeed == 0.0f)
             {
                 if(Vector3.Distance(transform.position, _newPosition) > 3)
                 {
@@ -81,7 +79,7 @@ namespace Arm
                 }
                 else
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, _newPosition, (_grabbed ? 4 : _conveyorSpeed > 0 ? _conveyorSpeed : 10) * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, _newPosition, (_grabbed ? 4 : 10) * Time.deltaTime);
                 }
             }
 
@@ -98,7 +96,6 @@ namespace Arm
             {
                 Rigidbody.useGravity = false;
                 Rigidbody.freezeRotation = true;
-                hasBeenPickup = true;
                 _grabbed = true;
                 _photonView.RPC("PlayMagnetSound", RpcTarget.All);
             }
@@ -145,21 +142,30 @@ namespace Arm
                 stream.SendNext(Color.g);
                 stream.SendNext(Color.b);
                 stream.SendNext(Color.a);
-                stream.SendNext(transform.position.x);
-                stream.SendNext(transform.position.y);
-                stream.SendNext(transform.position.z);
-                stream.SendNext(transform.rotation.x);
-                stream.SendNext(transform.rotation.y);
-                stream.SendNext(transform.rotation.z);
-                stream.SendNext(transform.rotation.w);
+                if(_transportableByConveyor.ConveyorSpeed() == 0.0f)
+                {
+                    stream.SendNext(transform.position.x);
+                    stream.SendNext(transform.position.y);
+                    stream.SendNext(transform.position.z);
+                    stream.SendNext(transform.rotation.x);
+                    stream.SendNext(transform.rotation.y);
+                    stream.SendNext(transform.rotation.z);
+                    stream.SendNext(transform.rotation.w);
+                }
+                
             }
             else
             {
                 _conveyorSpeed = (float)stream.ReceiveNext();
                 _grabbed = (bool)stream.ReceiveNext();
                 Color = new Color((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
-                _newPosition = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
-                transform.rotation = new Quaternion((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+                if(_conveyorSpeed == 0.0f)
+                {
+                    _newPosition = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+                    transform.rotation = new Quaternion((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+                }
+
+                Rigidbody.isKinematic = _conveyorSpeed == 0.0f;
             }
         }
 

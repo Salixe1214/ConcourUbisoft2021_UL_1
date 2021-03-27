@@ -2882,8 +2882,8 @@ MonoBehaviour:
   - {fileID: 2362435244797905396, guid: 0528745e7992d8d4b9106518f6b7b0a9, type: 3}
   - {fileID: 1456006706197027654, guid: e4fe7562363e7f644993aac9e739260e, type: 3}
   photonPing: 0
-  photonSendRate: 30
-  photonSendRateSerialize: 30
+  photonSendRate: 60
+  photonSendRateSerialize: 60
 --- !u!1 &775259506
 GameObject:
   m_ObjectHideFlags: 0
