@@ -1,3 +1,4 @@
+using Photon.Voice.PUN;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ public class RoomMenu : MonoBehaviour
     [SerializeField] private GameObject _waitingForAnotherPlayer = null;
     [SerializeField] private GameObject _startButton = null;
     [SerializeField] private Text _errorText = null;
+    [SerializeField] private GameObject _speaking = null;
     [SerializeField] private GameObject _lobbyPanelCreateButton;
     [SerializeField] private GameObject _lobbyPanelJoinButton;
     [SerializeField] private GameObject _lobbyPanelRoomNameInputField;
@@ -66,12 +68,14 @@ public class RoomMenu : MonoBehaviour
     }
     private void OnEnable()
     {
+        _speaking.SetActive(true);
         _networkController.OnPlayerObjectCreate += RefreshRoomInterface;
         _networkController.OnJoinedRoomEvent += OnJoinedRoomEvent;
         _networkController.OnPlayerLeftEvent += RefreshRoomInterface;
     }
     private void OnDisable()
     {
+        _speaking.SetActive(false);
         _networkController.OnPlayerObjectCreate -= RefreshRoomInterface;
         _networkController.OnJoinedRoomEvent -= OnJoinedRoomEvent;
         _networkController.OnPlayerLeftEvent -= RefreshRoomInterface;

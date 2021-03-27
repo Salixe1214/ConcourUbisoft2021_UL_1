@@ -186,6 +186,12 @@ public class NetworkController : MonoBehaviourPunCallbacks
         IEnumerable<PlayerNetwork> playerNetworks = GameObject.FindGameObjectsWithTag("PlayerNetwork").Select(x => x.GetComponent<PlayerNetwork>()).Where(x => x.IsMine());
         return playerNetworks.Count() > 0 ? playerNetworks.First().PlayerRole : GameController.Role.None;
     }
+    public GameController.Role GetDistantRole()
+    {
+        IEnumerable<PlayerNetwork> playerNetworks = GameObject.FindGameObjectsWithTag("PlayerNetwork").Select(x => x.GetComponent<PlayerNetwork>()).Where(x => !x.IsMine());
+        return playerNetworks.Count() > 0 ? playerNetworks.First().PlayerRole : GameController.Role.None;
+    }
+
     public int GetNumberOfPlayer()
     {
         return PhotonNetwork.CurrentRoom.PlayerCount;
