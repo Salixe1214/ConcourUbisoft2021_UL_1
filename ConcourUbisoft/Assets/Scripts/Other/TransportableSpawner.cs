@@ -27,8 +27,13 @@ public class TransportableSpawner : MonoBehaviour
     private LevelController levelController;
     private System.Random _random = new System.Random(0);
 
+    public bool canSpawnNextRequiredItem =false;
+
+    public event Action requiredItemHasSpawned;
+
     private void Start()
     {
+        Debug.Log("Calling Start Spawners");
         levelController = LevelControl.GetComponent<LevelController>();
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
     }
@@ -56,7 +61,8 @@ public class TransportableSpawner : MonoBehaviour
 
         GameObject transportable;
 
-        if (sequenceIndex > levelController.GetCurrentSequenceLenght())
+        Debug.Log(canSpawnNextRequiredItem);
+        if (canSpawnNextRequiredItem)
         {
             foreach (var t in TransportablesPrefab)
             {
@@ -64,18 +70,17 @@ public class TransportableSpawner : MonoBehaviour
                 {
                     transportable = PhotonNetwork.Instantiate(t.name, randomPoint, Quaternion.identity);
                     transportable.GetComponent<Arm.Pickable>().Color = levelController.GetNextColorInSequence();
+                    Debug.Log("INVOKED");
+                    requiredItemHasSpawned?.Invoke();
                     break;
                 }
             }
-            sequenceIndex = 0;
         }
         else
         {
             Color randomColor = possibleColors[_random.Next(0, possibleColors.Length)];
             transportable = PhotonNetwork.Instantiate(randomPrefab.name, randomPoint, Quaternion.identity);
             transportable.gameObject.GetComponent<Pickable>().Color = randomColor;
-            
-            sequenceIndex++;
         }
         
     }

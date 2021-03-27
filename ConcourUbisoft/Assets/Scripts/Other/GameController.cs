@@ -27,9 +27,7 @@ public class GameController : MonoBehaviour
     public Role GameRole { get; set; }
     public OptionController OptionController { get => _optionController; }
     public bool IsGameMenuOpen { get => _inGameMenuController.IsGameMenuOpen; }
-
-
-
+    
     #region Events
     public event Action OnLoadGameEvent;
     public event Action OnFinishLoadGameEvent;
