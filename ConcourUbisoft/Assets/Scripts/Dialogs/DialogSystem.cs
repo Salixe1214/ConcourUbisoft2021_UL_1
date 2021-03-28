@@ -96,18 +96,22 @@ public class DialogSystem : MonoBehaviour
                 case 0:
                     leftCharSlot.sprite = null;
                     leftCharSlot.color = Color.clear;
+                    leftCharSlot.transform.parent.gameObject.SetActive(false);
                     break;
                 case 1:
                     leftCharSlot.sprite = char1Sprite;
                     leftCharSlot.color = Color.white;
+                    leftCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
                 case 2:
                     leftCharSlot.sprite = char2Sprite;
                     leftCharSlot.color = Color.white;
+                    leftCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
                 default:
                     leftCharSlot.sprite = null;
                     leftCharSlot.color = Color.clear;
+                    leftCharSlot.transform.parent.gameObject.SetActive(false);
                     break;
             }
             
@@ -117,18 +121,22 @@ public class DialogSystem : MonoBehaviour
                 case 0:
                     rightCharSlot.sprite = null;
                     rightCharSlot.color = Color.clear;
+                    rightCharSlot.transform.parent.gameObject.SetActive(false);
                     break;
                 case 1:
                     rightCharSlot.sprite = char1Sprite;
                     rightCharSlot.color = Color.white;
+                    rightCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
                 case 2:
                     rightCharSlot.sprite = char2Sprite;
                     rightCharSlot.color = Color.white;
+                    rightCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
                 default:
                     rightCharSlot.sprite = null;
                     rightCharSlot.color = Color.clear;
+                    rightCharSlot.transform.parent.gameObject.SetActive(false);
                     break;
             }
 
@@ -138,10 +146,13 @@ public class DialogSystem : MonoBehaviour
         {
             leftCharSlot.color = Color.clear;
             leftCharSlot.enabled = false;
-            
+            leftCharSlot.transform.parent.gameObject.SetActive(false);
+
             rightCharSlot.color = Color.clear;
             rightCharSlot.enabled = false;
-            
+            rightCharSlot.transform.parent.gameObject.SetActive(false);
+
+
             textSlot.text = "";
             textSlot.enabled = false;
             panel.SetActive(false);
@@ -214,6 +225,8 @@ public class DialogSystem : MonoBehaviour
             
             leftCharSlot.enabled = true;
             rightCharSlot.enabled = true;
+            leftCharSlot.transform.parent.gameObject.SetActive(true);
+            rightCharSlot.transform.parent.gameObject.SetActive(true);
             textSlot.enabled = true;
         
             leftCharSlot.color = Color.clear;
