@@ -29,7 +29,12 @@ namespace Inputs
         
         private void Awake()
         {
+            _previousController = Controller.Other;
             SearchForController();
+            Debug.Log("Awake Controller type");
+            Debug.Log(_controller);
+            Debug.Log("Awake previous controller type");
+            Debug.Log(_previousController);
         }
 
         private void Update()
@@ -39,6 +44,7 @@ namespace Inputs
             if (_previousController != _controller)
             {
                 OnControllerTypeChanged?.Invoke();
+                Debug.Log("Controller type changed");
                 _previousController = _controller;
             }
         }

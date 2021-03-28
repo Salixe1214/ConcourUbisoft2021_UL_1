@@ -109,6 +109,7 @@ public class InGameMenuController : MonoBehaviour
     
     private void OnEnable()
     {
+        Debug.Log("Subscribed to controller type changed event");
         _inputManager.OnControllerTypeChanged += OnControllerTypeChanged;
     }
     private void OnDisable()
@@ -126,25 +127,17 @@ public class InGameMenuController : MonoBehaviour
         }
         else
         {
-            if (_currentController == Controller.Playstation || _currentController == Controller.Xbox )
+            if (_currentMenu == Menus.InGame)
             {
-                _currentController = newController;
+                _eventSystem.SetSelectedGameObject(null);
+                _eventSystem.SetSelectedGameObject(_menuFirstSelected);
             }
-            else
+            else if (_currentMenu == Menus.Options)
             {
-                if (_currentMenu == Menus.InGame)
-                {
-                    _eventSystem.SetSelectedGameObject(null);
-                    _eventSystem.SetSelectedGameObject(_menuFirstSelected);
-                }
-                else if (_currentMenu == Menus.Options)
-                {
-                    _eventSystem.SetSelectedGameObject(null);
-                    _eventSystem.SetSelectedGameObject(_optionsFirstSelected);
-                }
-                _currentController = newController;
+                _eventSystem.SetSelectedGameObject(null);
+                _eventSystem.SetSelectedGameObject(_optionsFirstSelected);
             }
-             
+            _currentController = newController;
         }
     }
 
