@@ -60,8 +60,7 @@ public class TransportableSpawner : MonoBehaviour
         Vector3 randomPoint = PointA.position + _random.Next(0, 100) / 100.0f * (PointB.position - PointA.position);
 
         GameObject transportable;
-
-        Debug.Log(canSpawnNextRequiredItem);
+        
         if (canSpawnNextRequiredItem)
         {
             foreach (var t in TransportablesPrefab)

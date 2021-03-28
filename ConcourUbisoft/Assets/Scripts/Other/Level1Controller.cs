@@ -145,7 +145,8 @@ public class Level1Controller : MonoBehaviour , LevelController
         }*/
         InteriorConveyorSpawner.enabled = true;
         ExteriorConveyorSpawner.enabled = true;
-        
+        Debug.Log(TransportableSpawners[0]);
+        Debug.Log(TransportableSpawners[1]);
         ActivateItemSpawning(false);
 
         /*foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
@@ -329,13 +330,13 @@ public class Level1Controller : MonoBehaviour , LevelController
         {
             Debug.Log("Interior was true");
             TransportableSpawners[0].canSpawnNextRequiredItem = false;
-            waitBeforeSpawningRequiredItem(1);
+            StartCoroutine(waitBeforeSpawningRequiredItem(1));
         }
-        else
+        else if (TransportableSpawners[1].canSpawnNextRequiredItem)
         {
             Debug.Log("Exterior was true");
             TransportableSpawners[1].canSpawnNextRequiredItem = false;
-            waitBeforeSpawningRequiredItem(0);
+            StartCoroutine(waitBeforeSpawningRequiredItem(0));
         }
     }
 }
