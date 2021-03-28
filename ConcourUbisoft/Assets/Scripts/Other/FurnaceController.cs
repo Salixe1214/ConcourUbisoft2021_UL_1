@@ -148,9 +148,24 @@ public class FurnaceController : MonoBehaviour
         return currentSequence.types[currentSequence.SucceedColors];
     }
 
+    public PickableType[] GetAllNextItemTypes()
+    {
+        return GetCurrentSequence().types;
+    }
+
+    public int GetCurrentSequenceIndex()
+    {
+        return GetCurrentSequence().SucceedColors;
+    }
+
     public SequenceOfColor[] GetAllSequences()
     {
         return SequencesOfColor;
+    }
+
+    public Color[] GetAllNextItemColors()
+    {
+        return GetCurrentSequence().ColorsSequence;
     }
 
     public int GetItemCount()

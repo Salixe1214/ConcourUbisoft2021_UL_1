@@ -16,6 +16,12 @@ public class Level1Controller : MonoBehaviour , LevelController
     public Color GetNextColorInSequence() => FurnaceController.GetNextColor();
     public int GetCurrentSequenceLenght() => FurnaceController.GetCurrentSequenceLenght();
     public PickableType GetNextTypeInSequence() => FurnaceController.GetNextItemType();
+    public PickableType[] GetAllNextItemTypes() => FurnaceController.GetAllNextItemTypes();
+    public Color[] GetAllNextItemColors() => FurnaceController.GetAllNextItemColors();
+
+    public int GetCurrentSequenceIndex() => FurnaceController.GetCurrentSequenceIndex();
+    
+    
 
     [SerializeField] private FurnaceController FurnaceController = null;
     [SerializeField] private TransportableSpawner InteriorConveyorSpawner;
@@ -183,6 +189,7 @@ public class Level1Controller : MonoBehaviour , LevelController
         {
             transportableSpawner.ActivateSpawning(canSpawn);
         }*/
+        InteriorConveyorSpawner.canSpawnNextRequiredItem = false;
         ExteriorConveyorSpawner.canSpawnNextRequiredItem = true;
         InteriorConveyorSpawner.ActivateSpawning(canSpawn);
         ExteriorConveyorSpawner.ActivateSpawning(canSpawn);

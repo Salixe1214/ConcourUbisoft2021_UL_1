@@ -63,14 +63,22 @@ public class TransportableSpawner : MonoBehaviour
         
         if (canSpawnNextRequiredItem)
         {
+            PickableType[] sequenceTypes = levelController.GetAllNextItemTypes();
+            Color[] sequenceColors = levelController.GetAllNextItemColors();
             foreach (var t in TransportablesPrefab)
             {
-                if (t.GetComponent<Pickable>().GetType() == levelController.GetNextTypeInSequence())
+                if (sequenceIndex >= levelController.GetCurrentSequenceLenght())
+                {
+                    sequenceIndex = levelController.GetCurrentSequenceIndex();
+                }
+
+                if (t.GetComponent<Pickable>().GetType() == sequenceTypes[sequenceIndex])
                 {
                     transportable = PhotonNetwork.Instantiate(t.name, randomPoint, Quaternion.identity);
-                    transportable.GetComponent<Arm.Pickable>().Color = levelController.GetNextColorInSequence();
+                    transportable.GetComponent<Arm.Pickable>().Color = sequenceColors[sequenceIndex];
                     Debug.Log("INVOKED");
                     requiredItemHasSpawned?.Invoke();
+                    sequenceIndex++;
                     break;
                 }
             }
@@ -87,6 +95,7 @@ public class TransportableSpawner : MonoBehaviour
     public void ActivateSpawning(bool canSpawn)
     {
         CanSpawn = canSpawn;
+        sequenceIndex = 0;
     }
 
     public void SetConveyorsSpeed(float speed)
@@ -102,5 +111,4 @@ public class TransportableSpawner : MonoBehaviour
         DelayBetweenSpawnsInSeconds = delay;
     }
 
-    
 }
