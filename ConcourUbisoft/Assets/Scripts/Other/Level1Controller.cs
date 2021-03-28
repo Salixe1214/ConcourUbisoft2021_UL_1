@@ -20,7 +20,9 @@ public class Level1Controller : MonoBehaviour , LevelController
     public PickableType[] GetAllNextItemTypes() => FurnaceController.GetAllNextItemTypes();
     public Color[] GetAllNextItemColors() => FurnaceController.GetAllNextItemColors();
     public int GetCurrentSequenceIndex() => FurnaceController.GetCurrentSequenceIndex();
+    public int GetCurrentRequiredItemIndex() => GetCurrentRequiredSpawningIndex();
     
+
     [SerializeField] private FurnaceController FurnaceController = null;
     [SerializeField] private TransportableSpawner InteriorConveyorSpawner;
     [SerializeField] private TransportableSpawner ExteriorConveyorSpawner;
@@ -69,6 +71,7 @@ public class Level1Controller : MonoBehaviour , LevelController
     private SoundController soundController;
     private int currentListIndex;
     private List<TransportableSpawner> TransportableSpawners;
+    private int currentRequiredItemIndex = 0;
 
     private void Awake()
     {
@@ -160,6 +163,7 @@ public class Level1Controller : MonoBehaviour , LevelController
         if (canSpawn)
         {
             ExteriorConveyorSpawner.canSpawnNextRequiredItem = true;
+            currentRequiredItemIndex = 0;
             Debug.Log("Spawner Values Set");
             Debug.Log(InteriorConveyorSpawner.canSpawnNextRequiredItem);
             Debug.Log(ExteriorConveyorSpawner.canSpawnNextRequiredItem);
@@ -307,5 +311,15 @@ public class Level1Controller : MonoBehaviour , LevelController
             TransportableSpawners[1].canSpawnNextRequiredItem = false;
             StartCoroutine(waitBeforeSpawningRequiredItem(0));
         }
+    }
+
+    private int GetCurrentRequiredSpawningIndex()
+    {
+        if (currentRequiredItemIndex >= GetCurrentSequenceLenght())
+        {
+            currentRequiredItemIndex = GetCurrentSequenceIndex();
+        }
+        currentRequiredItemIndex++;
+        return currentRequiredItemIndex-1;
     }
 }

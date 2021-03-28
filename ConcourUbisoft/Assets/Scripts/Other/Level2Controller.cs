@@ -33,7 +33,11 @@ public class Level2Controller : MonoBehaviour, LevelController
     public Other.PickableType GetNextTypeInSequence() => _furnace.GetNextItemType();
     public PickableType[] GetAllNextItemTypes() => _furnace.GetAllNextItemTypes();
     public int GetCurrentSequenceIndex() => _furnace.GetCurrentSequenceIndex();
-    
+    public int GetCurrentRequiredItemIndex()
+    {
+        return 0;
+    }
+
     public Color[] GetAllNextItemColors() => _furnace.GetAllNextItemColors();
     
 
@@ -217,7 +221,6 @@ public class Level2Controller : MonoBehaviour, LevelController
         {
             Debug.Log("Number of items in sequences are superior to the amount of spawning positions available.");
         }
-
         
     }
 }

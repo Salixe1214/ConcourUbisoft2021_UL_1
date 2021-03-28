@@ -23,7 +23,6 @@ public class TransportableSpawner : MonoBehaviour
 
     private float lastSpawnTime = 0.0f;
     private float currentDelay = 0.0f;
-    private int sequenceIndex = 0;
     private LevelController levelController;
     private System.Random _random = new System.Random(0);
     private PickableType[] currentSequenceTypes;
@@ -61,24 +60,18 @@ public class TransportableSpawner : MonoBehaviour
         Vector3 randomPoint = PointA.position + _random.Next(0, 100) / 100.0f * (PointB.position - PointA.position);
 
         GameObject transportable;
-        
-        
+
         if (canSpawnNextRequiredItem)
         {
+            int sequenceIndex = levelController.GetCurrentRequiredItemIndex();
             foreach (var t in TransportablesPrefab)
             {
-                if (sequenceIndex >= levelController.GetCurrentSequenceLenght())
-                {
-                    sequenceIndex = levelController.GetCurrentSequenceIndex();
-                }
-
                 if (t.GetComponent<Pickable>().GetType() == currentSequenceTypes[sequenceIndex])
                 {
                     transportable = PhotonNetwork.Instantiate(t.name, randomPoint, Quaternion.identity);
                     transportable.GetComponent<Arm.Pickable>().Color = currentSequenceColors[sequenceIndex];
                     Debug.Log("INVOKED");
                     requiredItemHasSpawned?.Invoke();
-                    sequenceIndex++;
                     break;
                 }
             }
@@ -99,7 +92,6 @@ public class TransportableSpawner : MonoBehaviour
         {
             currentSequenceTypes = levelController.GetAllNextItemTypes(); 
             currentSequenceColors = levelController.GetAllNextItemColors();
-            sequenceIndex = 0;
         }
     }
 

@@ -11,5 +11,8 @@ namespace Other
 
         Color[] GetAllNextItemColors();
         public int GetCurrentSequenceIndex();
+
+        public int GetCurrentRequiredItemIndex();
+
     }
 }
