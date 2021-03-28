@@ -5,6 +5,7 @@ using ExitGames.Client.Photon.StructWrapping;
 using JetBrains.Annotations;
 using Other;
 using TechSupport.Informations;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -18,11 +19,8 @@ public class Level1Controller : MonoBehaviour , LevelController
     public PickableType GetNextTypeInSequence() => FurnaceController.GetNextItemType();
     public PickableType[] GetAllNextItemTypes() => FurnaceController.GetAllNextItemTypes();
     public Color[] GetAllNextItemColors() => FurnaceController.GetAllNextItemColors();
-
     public int GetCurrentSequenceIndex() => FurnaceController.GetCurrentSequenceIndex();
     
-    
-
     [SerializeField] private FurnaceController FurnaceController = null;
     [SerializeField] private TransportableSpawner InteriorConveyorSpawner;
     [SerializeField] private TransportableSpawner ExteriorConveyorSpawner;
@@ -86,17 +84,8 @@ public class Level1Controller : MonoBehaviour , LevelController
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         FurnaceController.GenerateNewColorSequences(PossibleColors);
         FurnaceController.enabled = false;
-       /* foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
-        {
-            transportableSpawner.enabled = false;
-        }*/
-
-        InteriorConveyorSpawner.enabled = false;
-        ExteriorConveyorSpawner.enabled = false;
-        
         conveyorOperatingSpeed = MinConveyorSpeed;
         cameraOriginalPosition = AreaCamera.transform.position;
-        
     }
 
     private void Update()
@@ -129,11 +118,9 @@ public class Level1Controller : MonoBehaviour , LevelController
 
     public void FinishLevel()
     {
-       /* foreach(TransportableSpawner transportableSpawner in TransportableSpawners)
-        {
-            transportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
-        }*/
         SetConveyorSpeed(MaxInteriorConveyorSpeed,MaxExteriorConveyorSpeed);
+        ActivateItemSpawning(false);
+        Debug.Log("Items are not spawning");
         StartCoroutine(EndLevel());
     }
 
@@ -145,22 +132,11 @@ public class Level1Controller : MonoBehaviour , LevelController
         imageList.Clean();
         firstWave = true;
         FurnaceController.enabled = true;
-        /*foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
-        {
-            transportableSpawner.enabled = true;
-        }*/
-        InteriorConveyorSpawner.enabled = true;
-        ExteriorConveyorSpawner.enabled = true;
         Debug.Log(TransportableSpawners[0]);
         Debug.Log(TransportableSpawners[1]);
         ActivateItemSpawning(false);
-
-        /*foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
-        {
-            transportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
-        }*/
+        Debug.Log("Items are not spawning");
         SetConveyorSpeed(MaxInteriorConveyorSpeed,MaxExteriorConveyorSpeed);
-        
         Debug.Log("ConveyorSpeed Max");
         StartCoroutine(SpawnFreshItems(FastItemSpawningTimeSeconds));
     }
@@ -168,12 +144,8 @@ public class Level1Controller : MonoBehaviour , LevelController
     private void InitiateNextSequence()
     {
         ActivateItemSpawning(false);
+        Debug.Log("Items are not spawning");
         soundController.PlayLevelSequenceClearedSuccessSound();
-
-       /* foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
-        {
-            transportableSpawner.SetConveyorsSpeed(MaxConveyorSpeed);
-        }*/
         SetConveyorSpeed(MaxInteriorConveyorSpeed,MaxExteriorConveyorSpeed);
         StartCoroutine(SpawnFreshItems(FastItemSpawningTimeSeconds));
     }
@@ -185,23 +157,29 @@ public class Level1Controller : MonoBehaviour , LevelController
 
     private void ActivateItemSpawning(bool canSpawn)
     {
-        /*foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
+        if (canSpawn)
         {
-            transportableSpawner.ActivateSpawning(canSpawn);
-        }*/
-        InteriorConveyorSpawner.canSpawnNextRequiredItem = false;
-        ExteriorConveyorSpawner.canSpawnNextRequiredItem = true;
+            ExteriorConveyorSpawner.canSpawnNextRequiredItem = true;
+            Debug.Log("Spawner Values Set");
+            Debug.Log(InteriorConveyorSpawner.canSpawnNextRequiredItem);
+            Debug.Log(ExteriorConveyorSpawner.canSpawnNextRequiredItem);
+        }
+        else
+        {
+            InteriorConveyorSpawner.canSpawnNextRequiredItem = false;
+            ExteriorConveyorSpawner.canSpawnNextRequiredItem = false;
+            Debug.Log("Spawner Values Set");
+            Debug.Log(InteriorConveyorSpawner.canSpawnNextRequiredItem);
+            Debug.Log(ExteriorConveyorSpawner.canSpawnNextRequiredItem);
+        }
         InteriorConveyorSpawner.ActivateSpawning(canSpawn);
         ExteriorConveyorSpawner.ActivateSpawning(canSpawn);
-        
+        Debug.Log("Can spawn changed");
+        Debug.Log(canSpawn);
     }
 
     private void SetDelayBetweenItemSpawns(Vector2 delayRangeInteriorConveyor, Vector2 delayRangeExteriorConveyor)
     {
-        /*foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
-        {
-            transportableSpawner.SetDelayBetweenSpawns(delayRange);
-        }*/
         InteriorConveyorSpawner.SetDelayBetweenSpawns(delayRangeInteriorConveyor);
         ExteriorConveyorSpawner.SetDelayBetweenSpawns(delayRangeExteriorConveyor);
     }
@@ -234,14 +212,11 @@ public class Level1Controller : MonoBehaviour , LevelController
         
         setItemsImageList();
         ActivateItemSpawning(true);
+        Debug.Log("Items are spawning");
         yield return new WaitForSeconds(seconds);
         SetDelayBetweenItemSpawns(DelayItemSpawnsHighestInteriorConveyor,DelayItemSpawnsHighestExteriorConveyor);
         if (firstWave)
         {
-            /*foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
-            {
-                transportableSpawner.SetConveyorsSpeed(conveyorOperatingSpeed);
-            }*/
             SetConveyorSpeed(conveyorOperatingSpeed,conveyorOperatingSpeed);
 
             Debug.Log("ConveyorSpeed Normal");
@@ -249,10 +224,6 @@ public class Level1Controller : MonoBehaviour , LevelController
         }
         else
         {
-            /*foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
-            {
-                transportableSpawner.SetConveyorsSpeed(conveyorOperatingSpeed += ConveyorSpeedIncrement);
-            }*/
             conveyorOperatingSpeed += ConveyorSpeedIncrement;
             SetConveyorSpeed(conveyorOperatingSpeed,conveyorOperatingSpeed);
             
@@ -263,23 +234,14 @@ public class Level1Controller : MonoBehaviour , LevelController
 
     IEnumerator EndLevel()
     {
-        waitForItemsToClear(ClearItemsTimeSeconds);
-        yield return null;
-        soundController.PlayLevelSequenceClearedSuccessSound();
         imageList.Clean();
+        StartCoroutine(waitForItemsToClear(ClearItemsTimeSeconds));
+        soundController.PlayLevelSequenceClearedSuccessSound();
         FurnaceController.enabled = false;
-        /*foreach (TransportableSpawner transportableSpawner in TransportableSpawners)
-        {
-            transportableSpawner.enabled = false;
-            transportableSpawner.gameObject.SetActive(false);
-        }*/
-
-        InteriorConveyorSpawner.enabled = false;
-        ExteriorConveyorSpawner.enabled = false;
+        soundController.StopAreaMusic();
         InteriorConveyorSpawner.gameObject.SetActive(false);
         ExteriorConveyorSpawner.gameObject.SetActive(false);
-        
-        soundController.StopAreaMusic();
+        yield return null;
     }
     
     IEnumerator StartCameraShake(float duration)
@@ -335,13 +297,13 @@ public class Level1Controller : MonoBehaviour , LevelController
     {
         if (TransportableSpawners[0].canSpawnNextRequiredItem)
         {
-            Debug.Log("Interior was true");
+            Debug.Log("Interior was true and spawned");
             TransportableSpawners[0].canSpawnNextRequiredItem = false;
             StartCoroutine(waitBeforeSpawningRequiredItem(1));
         }
         else if (TransportableSpawners[1].canSpawnNextRequiredItem)
         {
-            Debug.Log("Exterior was true");
+            Debug.Log("Exterior was true and spawned");
             TransportableSpawners[1].canSpawnNextRequiredItem = false;
             StartCoroutine(waitBeforeSpawningRequiredItem(0));
         }

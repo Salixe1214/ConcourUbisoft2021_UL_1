@@ -14,7 +14,7 @@ public class TransportableSpawner : MonoBehaviour
     [SerializeField] private Transform PointB = null;
     [SerializeField] public GameObject LevelControl = null;
     [SerializeField] private Vector2 DelayBetweenSpawnsInSeconds = new Vector2(0.5f, 1);
-    [SerializeField] private bool CanSpawn = true;
+    [SerializeField] private bool CanSpawn = false;
 
     // Control conveyor speed according to needs. Ex: Slow conveyor speed might need a speed boost when items are spawned the first time in order to avoid item drought.
     [SerializeField] private Conveyor[] conveyors = null;
@@ -26,9 +26,10 @@ public class TransportableSpawner : MonoBehaviour
     private int sequenceIndex = 0;
     private LevelController levelController;
     private System.Random _random = new System.Random(0);
+    private PickableType[] currentSequenceTypes;
+    private Color[] currentSequenceColors;
 
     public bool canSpawnNextRequiredItem =false;
-
     public event Action requiredItemHasSpawned;
 
     private void Start()
@@ -61,10 +62,9 @@ public class TransportableSpawner : MonoBehaviour
 
         GameObject transportable;
         
+        
         if (canSpawnNextRequiredItem)
         {
-            PickableType[] sequenceTypes = levelController.GetAllNextItemTypes();
-            Color[] sequenceColors = levelController.GetAllNextItemColors();
             foreach (var t in TransportablesPrefab)
             {
                 if (sequenceIndex >= levelController.GetCurrentSequenceLenght())
@@ -72,10 +72,10 @@ public class TransportableSpawner : MonoBehaviour
                     sequenceIndex = levelController.GetCurrentSequenceIndex();
                 }
 
-                if (t.GetComponent<Pickable>().GetType() == sequenceTypes[sequenceIndex])
+                if (t.GetComponent<Pickable>().GetType() == currentSequenceTypes[sequenceIndex])
                 {
                     transportable = PhotonNetwork.Instantiate(t.name, randomPoint, Quaternion.identity);
-                    transportable.GetComponent<Arm.Pickable>().Color = sequenceColors[sequenceIndex];
+                    transportable.GetComponent<Arm.Pickable>().Color = currentSequenceColors[sequenceIndex];
                     Debug.Log("INVOKED");
                     requiredItemHasSpawned?.Invoke();
                     sequenceIndex++;
@@ -95,7 +95,12 @@ public class TransportableSpawner : MonoBehaviour
     public void ActivateSpawning(bool canSpawn)
     {
         CanSpawn = canSpawn;
-        sequenceIndex = 0;
+        if (canSpawn)
+        {
+            currentSequenceTypes = levelController.GetAllNextItemTypes(); 
+            currentSequenceColors = levelController.GetAllNextItemColors();
+            sequenceIndex = 0;
+        }
     }
 
     public void SetConveyorsSpeed(float speed)
