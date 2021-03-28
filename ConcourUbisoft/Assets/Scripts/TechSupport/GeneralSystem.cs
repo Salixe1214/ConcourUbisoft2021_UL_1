@@ -92,17 +92,16 @@ namespace TechSupport
             SystemSwitch(mode);
         }
 
-        private void Update()
+        public void Escape()
         {
-            if (_gameController && _gameController.IsGameMenuOpen) return;
-            if (!Input.GetButtonUp(InputManager.GetInputNameByController("CameraEscape"))) return;
+            if (_gameController && _gameController.IsGameMenuOpen) return; 
             if (mode == SurveillanceMode.Focused)
             {
                 SystemSwitch(SurveillanceMode.Grid);
             }
         }
 
-        private void Focus()
+        public void Focus()
         {
             if (_gameController && _gameController.IsGameMenuOpen) return;
             if (mode == SurveillanceMode.Grid)
@@ -129,7 +128,7 @@ namespace TechSupport
 
         private void HideGeneralInformation(bool hide)
         {
-            _informationsSystem.GetInformationDisplay().gameObject.SetActive(!hide);
+            //_informationsSystem.GetInformationDisplay().gameObject.SetActive(!hide);
         }
 
         private void ActivateGridInterface(bool activate)
@@ -159,6 +158,7 @@ namespace TechSupport
             }
             _onSwitchMethods[mode = newMode]?.Invoke();
             OnModeSwitched?.Invoke();
+            _informationsSystem.ActvivateInformation(newMode == SurveillanceMode.Focused);
             switchButtons[newMode].enabled = true;
         }
 

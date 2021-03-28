@@ -9,6 +9,9 @@ using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Utils;
 
+
+// TODO: <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+
 namespace TechSupport.Informations
 {
     public class InformationsSystem : MonoBehaviour
@@ -28,8 +31,11 @@ namespace TechSupport.Informations
         private ImageLayout _imageLayout;
 
         [Header("Accordion")]
+        [SerializeField] private Button button;
+        [SerializeField] private GameObject informationPanel;
         [SerializeField] private Sprite background;
         [SerializeField] private Sprite front;
+        private Animator _animator;
         private Accordion _accordion;
         private List<InformationItem> _items;
         
@@ -50,13 +56,14 @@ namespace TechSupport.Informations
 
         public void Init()
         {
+            _animator = informationPanel.GetComponent<Animator>();
             _items = new List<InformationItem>()
             {
                 new TechnicienBook(symbols, arrow)
             };
 
             CreateList();
-            CreateAccordion();
+            //CreateAccordion();
         }
 
         private void Update()
@@ -103,6 +110,26 @@ namespace TechSupport.Informations
         public Accordion GetInformationDisplay()
         {
             return _accordion;
+        }
+
+        public void ActvivateInformation(bool activation)
+        {
+//            informationPanel.SetActive(false);
+            button.gameObject.SetActive(activation);
+            if (_animator != null)
+            {
+                _animator.SetBool("Showed", false);
+            }
+        }
+
+        public void OpenInfo()
+        {
+            Debug.Log("Hello world");
+            if (_animator != null)
+            {
+                bool isShowed = _animator.GetBool("Showed");
+                _animator.SetBool("Showed", !isShowed);
+            }
         }
     }
 }
