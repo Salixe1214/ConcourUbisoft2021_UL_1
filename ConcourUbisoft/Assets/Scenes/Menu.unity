@@ -1719,6 +1719,8 @@ MonoBehaviour:
   _menuFirstSelected: {fileID: 2119091084}
   _optionsFirstSelected: {fileID: 196127689}
   _optionBackSelected: {fileID: 1064576553}
+  _returnButton: {fileID: 1356723713}
+  _exitButton: {fileID: 1788711322}
 --- !u!1 &312541825
 GameObject:
   m_ObjectHideFlags: 0
