@@ -3716,7 +3716,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8331158517350510427}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: model:geo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7003,7 +7003,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8725802930410767446}
   - component: {fileID: 8386193287408072531}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: model:model_geo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8047,7 +8047,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3304849841784819159}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.31, z: -0.0040000915}
+  m_LocalPosition: {x: 0, y: 1.31, z: -0.172}
   m_LocalScale: {x: 1, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 3938257864989625635}
@@ -8076,7 +8076,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.7
+  near clip plane: 0.75
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -8084,7 +8084,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 895
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -13512,7 +13512,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5959331146623622841}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.078}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3938257864989625635}
@@ -13528,10 +13528,10 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: 23df7791d0f2e7540a1a75fd52f3cb0c, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.44024497
-  m_Height: 1.7334158
+  m_Radius: 0.46493584
+  m_Height: 1.733416
   m_Direction: 1
-  m_Center: {x: 0, y: 0.8, z: 0}
+  m_Center: {x: 0, y: 0.8, z: -0.024690866}
 --- !u!1 &5980302403486082505
 GameObject:
   m_ObjectHideFlags: 0
@@ -15510,6 +15510,8 @@ MonoBehaviour:
   playerMovementSpeed: 5
   _owner: 0
   _animator: {fileID: 2181269547397559183}
+  _camera: {fileID: 8197004576664571489}
+  _mesh: {fileID: 3203615937950718432}
 --- !u!114 &5505834633674258076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15547,7 +15549,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 1
 --- !u!1 &7036141613460793873
 GameObject:
