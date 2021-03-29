@@ -29,11 +29,11 @@ namespace Arm
 
 		private Vector3 translation = new Vector3();
 		private bool initialialized = false;
+        private Matrix4x4 aligment = new Matrix4x4(new Vector4(1,0,0,0),new Vector4(0,1,0,0), new Vector4(0,0,1,0), new Vector4(0,0,0,0));
 
 		private void Awake()
 		{
-
-			_networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+            _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
 			_photonView = GetComponentInParent<PhotonView>();
 
 			if (_networkController.GetLocalRole() == _owner)
@@ -60,7 +60,7 @@ namespace Arm
 			{
 				if (translation.magnitude >= float.Epsilon)
 				{
-					ArmTarget.transform.Translate(Time.deltaTime * translation.normalized * controlSpeed);
+					ArmTarget.transform.Translate(Time.deltaTime * aligment.MultiplyVector(translation.normalized) * controlSpeed);
 					_armSound.Volume = 0.3f; //translate.magnitude / (ControlSpeed * Time.deltaTime);
 				}
 				else
@@ -118,11 +118,21 @@ namespace Arm
 			}
 		}
 
+        public void InverseX()
+        {
+            aligment.SetRow(0, aligment.GetRow(0) * -1);
+        }
+
+        public void InverseZ()
+        {
+            aligment.SetRow(2, aligment.GetRow(2) * -1);
+        }
 
 		public void Translate(Vector3 translate)
 		{
 			translation += translate;
 		}
+
 #if UNITY_EDITOR
 
 		public void OnDrawGizmos()
