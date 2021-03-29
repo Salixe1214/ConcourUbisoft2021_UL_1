@@ -120,6 +120,11 @@ namespace TechSupport
                 b.onClick.AddListener(Focus);
                 _buttons.Add(b);
             }
+
+            if (InputManager.GetController() != Inputs.Controller.Other)
+            {
+                FindObjectOfType<EventSystem>().firstSelectedGameObject = _buttons.First().gameObject;
+            }
         }
 
         private void HideGeneralInformation(bool hide)
