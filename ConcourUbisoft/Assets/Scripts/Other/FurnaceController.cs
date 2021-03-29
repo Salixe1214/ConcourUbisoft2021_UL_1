@@ -25,6 +25,7 @@ public class FurnaceController : MonoBehaviour
     [SerializeField] private int maxColorSequenceLenght=7;
     [SerializeField] private float TimeToConsume = 0.0f;
     [SerializeField] private GameController.Role _owner = GameController.Role.None;
+    [SerializeField] private bool _finishAfterOnce = false;
 
     public UnityEvent WhenFurnaceConsumedAll;
     public UnityEvent WhenFurnaceConsumeWrong;
@@ -79,27 +80,34 @@ public class FurnaceController : MonoBehaviour
         Color currentSequenceColor = currentSequence.ColorsSequence[currentSequence.SucceedColors];
         PickableType currentType = currentSequence.types[currentSequence.SucceedColors];
 
-        if (currentSequenceColor.r == (color).r && currentSequenceColor.g == (color).g && currentSequenceColor.b == (color).b && currentType == type)
+        if(_finishAfterOnce)
         {
-            soundController.PlayLevelPartialSequenceSuccessSound();
-            CheckItemOffList?.Invoke();
-            currentSequence.SucceedColors++;
-            if (currentSequence.SucceedColors == currentSequence.ColorsSequence.Length)
-            {
-                SucceedSequences++;
-                if (SucceedSequences == SequencesOfColor.Length)
-                {
-                    WhenFurnaceConsumedAll?.Invoke();
-                }
-                else
-                {
-                    WhenFurnaceConsumeAWholeSequenceWithoutFinishing?.Invoke();
-                }
-            }
+            WhenFurnaceConsumedAll?.Invoke();
         }
         else
         {
-            WhenFurnaceConsumeWrong?.Invoke();
+            if (currentSequenceColor.r == (color).r && currentSequenceColor.g == (color).g && currentSequenceColor.b == (color).b && currentType == type)
+            {
+                soundController.PlayLevelPartialSequenceSuccessSound();
+                CheckItemOffList?.Invoke();
+                currentSequence.SucceedColors++;
+                if (currentSequence.SucceedColors == currentSequence.ColorsSequence.Length)
+                {
+                    SucceedSequences++;
+                    if (SucceedSequences == SequencesOfColor.Length)
+                    {
+                        WhenFurnaceConsumedAll?.Invoke();
+                    }
+                    else
+                    {
+                        WhenFurnaceConsumeAWholeSequenceWithoutFinishing?.Invoke();
+                    }
+                }
+            }
+            else
+            {
+                WhenFurnaceConsumeWrong?.Invoke();
+            }
         }
     }
 
