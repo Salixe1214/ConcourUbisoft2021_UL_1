@@ -36,7 +36,8 @@ public class CharacterControl : MonoBehaviour, IPunObservable
         SimpleButton[] buttons = GameObject.FindObjectsOfType<SimpleButton>();
         foreach (SimpleButton button in buttons)
         {
-            button.Actions.AddListener(() => _animator.SetTrigger("HavePressedButton"));
+            button.BeforeActions.AddListener(() => _animator.SetBool("PressingButton", true));
+            button.AfterActions.AddListener(() => _animator.SetBool("PressingButton", false));
         }
 
         if (_networkController.GetLocalRole() == _owner)

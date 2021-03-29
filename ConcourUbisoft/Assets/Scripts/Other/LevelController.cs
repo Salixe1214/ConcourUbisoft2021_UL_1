@@ -7,5 +7,12 @@ namespace Other
         Color GetNextColorInSequence();
         int GetCurrentSequenceLenght();
         PickableType GetNextTypeInSequence();
+        PickableType[] GetAllNextItemTypes();
+
+        Color[] GetAllNextItemColors();
+        public int GetCurrentSequenceIndex();
+
+        public int GetCurrentRequiredItemIndex();
+
     }
 }

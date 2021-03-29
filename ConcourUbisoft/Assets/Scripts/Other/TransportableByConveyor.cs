@@ -9,8 +9,6 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class TransportableByConveyor : MonoBehaviour
 {
-    public bool HasBeenPickUp { get { return pickable.HasBeenPickup;  } set { pickable.HasBeenPickup = value; } }
-
     private SortedList<int, Conveyor> priorityConveyor = new SortedList<int, Conveyor>();
     private Pickable pickable = null;
 

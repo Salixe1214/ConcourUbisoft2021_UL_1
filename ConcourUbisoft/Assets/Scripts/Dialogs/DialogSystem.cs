@@ -12,6 +12,7 @@ public class DialogSystem : MonoBehaviour
     [SerializeField] private Image rightCharSlot; //< Character slot at the right
     [SerializeField] private Text textSlot;       //< Text slot
     [SerializeField] private GameObject panel = null;
+    [SerializeField] private float _delayBetweenCharReveal = 0.1f;
 
     // Sprites
     [SerializeField] private Sprite char1Sprite;
@@ -37,11 +38,15 @@ public class DialogSystem : MonoBehaviour
      */
 
     private bool isEmpty = true;
+    private bool _isReading = false;
 
     private NetworkController _networkController = null;
+    private AudioSource _audioSource = null;
 
     private void Awake()
     {
+        _audioSource = GetComponent<AudioSource>();
+
         rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
         leftCharSlot.enabled = false;
         rightCharSlot.enabled = false;
@@ -61,7 +66,15 @@ public class DialogSystem : MonoBehaviour
     {
         if (Input.GetButtonDown("Submit"))
         {
-            ReadLine();
+            if(!_isReading)
+            {
+                ReadLine();
+            }
+            else
+            {
+                _isReading = false;
+            }
+            
         }
     }
 
@@ -83,18 +96,22 @@ public class DialogSystem : MonoBehaviour
                 case 0:
                     leftCharSlot.sprite = null;
                     leftCharSlot.color = Color.clear;
+                    leftCharSlot.transform.parent.gameObject.SetActive(false);
                     break;
                 case 1:
                     leftCharSlot.sprite = char1Sprite;
                     leftCharSlot.color = Color.white;
+                    leftCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
                 case 2:
                     leftCharSlot.sprite = char2Sprite;
                     leftCharSlot.color = Color.white;
+                    leftCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
                 default:
                     leftCharSlot.sprite = null;
                     leftCharSlot.color = Color.clear;
+                    leftCharSlot.transform.parent.gameObject.SetActive(false);
                     break;
             }
             
@@ -104,31 +121,38 @@ public class DialogSystem : MonoBehaviour
                 case 0:
                     rightCharSlot.sprite = null;
                     rightCharSlot.color = Color.clear;
+                    rightCharSlot.transform.parent.gameObject.SetActive(false);
                     break;
                 case 1:
                     rightCharSlot.sprite = char1Sprite;
                     rightCharSlot.color = Color.white;
+                    rightCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
                 case 2:
                     rightCharSlot.sprite = char2Sprite;
                     rightCharSlot.color = Color.white;
+                    rightCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
                 default:
                     rightCharSlot.sprite = null;
                     rightCharSlot.color = Color.clear;
+                    rightCharSlot.transform.parent.gameObject.SetActive(false);
                     break;
             }
 
-            textSlot.text = parsedLine[2];
+            StartCoroutine(SlowRead(parsedLine[2]));
         }
         else
         {
             leftCharSlot.color = Color.clear;
             leftCharSlot.enabled = false;
-            
+            leftCharSlot.transform.parent.gameObject.SetActive(false);
+
             rightCharSlot.color = Color.clear;
             rightCharSlot.enabled = false;
-            
+            rightCharSlot.transform.parent.gameObject.SetActive(false);
+
+
             textSlot.text = "";
             textSlot.enabled = false;
             panel.SetActive(false);
@@ -171,6 +195,25 @@ public class DialogSystem : MonoBehaviour
         }
     }
     
+    IEnumerator SlowRead(string text)
+    {
+        _isReading = true;
+        int i = 0;
+        while (i < text.Length && _isReading)
+        {
+            textSlot.text = text.Substring(0, i + 1);
+            if (_audioSource.isPlaying == false)
+            {
+                _audioSource.Play();
+            }
+            
+            i++;
+            yield return new WaitForSeconds(_delayBetweenCharReveal);
+        }
+        textSlot.text = text;
+        _isReading = false;
+    }
+
     public void StartCustomLine(string pLine, int pIdLeft, int pIdRight = 0, bool pAutoRead = false, int pTimeBetweenLines = 3)
     {
         _lines.Add(pIdLeft + itemSep.ToString() + pIdRight + itemSep.ToString() + pLine);
@@ -182,6 +225,8 @@ public class DialogSystem : MonoBehaviour
             
             leftCharSlot.enabled = true;
             rightCharSlot.enabled = true;
+            leftCharSlot.transform.parent.gameObject.SetActive(true);
+            rightCharSlot.transform.parent.gameObject.SetActive(true);
             textSlot.enabled = true;
         
             leftCharSlot.color = Color.clear;

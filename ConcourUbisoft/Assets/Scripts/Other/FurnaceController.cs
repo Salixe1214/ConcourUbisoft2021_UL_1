@@ -24,8 +24,8 @@ public class FurnaceController : MonoBehaviour
     [SerializeField] private int minColorSequencelenght=3;
     [SerializeField] private int maxColorSequenceLenght=7;
     [SerializeField] private float TimeToConsume = 0.0f;
-    [SerializeField] private bool HasBeenPickupNeeded = true;
     [SerializeField] private GameController.Role _owner = GameController.Role.None;
+    [SerializeField] private bool _finishAfterOnce = false;
 
     public UnityEvent WhenFurnaceConsumedAll;
     public UnityEvent WhenFurnaceConsumeWrong;
@@ -52,7 +52,7 @@ public class FurnaceController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Pickable pickable = null;
-        if (other.gameObject.TryGetComponent(out pickable) && (HasBeenPickupNeeded && pickable.HasBeenPickup || !HasBeenPickupNeeded) && _owner == _networkController.GetLocalRole())
+        if (other.gameObject.TryGetComponent(out pickable) && _owner == _networkController.GetLocalRole())
         {
             Consume(pickable);
         }
@@ -80,27 +80,34 @@ public class FurnaceController : MonoBehaviour
         Color currentSequenceColor = currentSequence.ColorsSequence[currentSequence.SucceedColors];
         PickableType currentType = currentSequence.types[currentSequence.SucceedColors];
 
-        if (currentSequenceColor.r == (color).r && currentSequenceColor.g == (color).g && currentSequenceColor.b == (color).b && currentType == type)
+        if(_finishAfterOnce)
         {
-            soundController.PlayLevelPartialSequenceSuccessSound();
-            CheckItemOffList?.Invoke();
-            currentSequence.SucceedColors++;
-            if (currentSequence.SucceedColors == currentSequence.ColorsSequence.Length)
-            {
-                SucceedSequences++;
-                if (SucceedSequences == SequencesOfColor.Length)
-                {
-                    WhenFurnaceConsumedAll?.Invoke();
-                }
-                else
-                {
-                    WhenFurnaceConsumeAWholeSequenceWithoutFinishing?.Invoke();
-                }
-            }
+            WhenFurnaceConsumedAll?.Invoke();
         }
         else
         {
-            WhenFurnaceConsumeWrong?.Invoke();
+            if (currentSequenceColor.r == (color).r && currentSequenceColor.g == (color).g && currentSequenceColor.b == (color).b && currentType == type)
+            {
+                soundController.PlayLevelPartialSequenceSuccessSound();
+                CheckItemOffList?.Invoke();
+                currentSequence.SucceedColors++;
+                if (currentSequence.SucceedColors == currentSequence.ColorsSequence.Length)
+                {
+                    SucceedSequences++;
+                    if (SucceedSequences == SequencesOfColor.Length)
+                    {
+                        WhenFurnaceConsumedAll?.Invoke();
+                    }
+                    else
+                    {
+                        WhenFurnaceConsumeAWholeSequenceWithoutFinishing?.Invoke();
+                    }
+                }
+            }
+            else
+            {
+                WhenFurnaceConsumeWrong?.Invoke();
+            }
         }
     }
 
@@ -149,9 +156,24 @@ public class FurnaceController : MonoBehaviour
         return currentSequence.types[currentSequence.SucceedColors];
     }
 
+    public PickableType[] GetAllNextItemTypes()
+    {
+        return GetCurrentSequence().types;
+    }
+
+    public int GetCurrentSequenceIndex()
+    {
+        return GetCurrentSequence().SucceedColors;
+    }
+
     public SequenceOfColor[] GetAllSequences()
     {
         return SequencesOfColor;
+    }
+
+    public Color[] GetAllNextItemColors()
+    {
+        return GetCurrentSequence().ColorsSequence;
     }
 
     public int GetItemCount()

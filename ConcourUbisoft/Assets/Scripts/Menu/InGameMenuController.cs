@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Inputs;
+using Other;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class InGameMenuController : MonoBehaviour
 {
@@ -13,6 +15,8 @@ public class InGameMenuController : MonoBehaviour
     [SerializeField] private GameObject _menuFirstSelected;
     [SerializeField] private GameObject _optionsFirstSelected;
     [SerializeField] private GameObject _optionBackSelected;
+    [SerializeField] private GameObject _returnButton;
+    [SerializeField] private GameObject _exitButton;
 
     private NetworkController _networkController = null;
     private GameController _gameController = null;
@@ -91,6 +95,7 @@ public class InGameMenuController : MonoBehaviour
             {
                 _inGameMenu.SetActive(false);
                 _optionMenu.SetActive(false);
+                ResetButtonTextColor();
             }
             else
             {
@@ -109,6 +114,7 @@ public class InGameMenuController : MonoBehaviour
     
     private void OnEnable()
     {
+        Debug.Log("Subscribed to controller type changed event");
         _inputManager.OnControllerTypeChanged += OnControllerTypeChanged;
     }
     private void OnDisable()
@@ -126,26 +132,26 @@ public class InGameMenuController : MonoBehaviour
         }
         else
         {
-            if (_currentController == Controller.Playstation || _currentController == Controller.Xbox )
+            if (_currentMenu == Menus.InGame)
             {
-                _currentController = newController;
+                _eventSystem.SetSelectedGameObject(null);
+                _eventSystem.SetSelectedGameObject(_menuFirstSelected);
             }
-            else
+            else if (_currentMenu == Menus.Options)
             {
-                if (_currentMenu == Menus.InGame)
-                {
-                    _eventSystem.SetSelectedGameObject(null);
-                    _eventSystem.SetSelectedGameObject(_menuFirstSelected);
-                }
-                else if (_currentMenu == Menus.Options)
-                {
-                    _eventSystem.SetSelectedGameObject(null);
-                    _eventSystem.SetSelectedGameObject(_optionsFirstSelected);
-                }
-                _currentController = newController;
+                _eventSystem.SetSelectedGameObject(null);
+                _eventSystem.SetSelectedGameObject(_optionsFirstSelected);
             }
-             
+            _currentController = newController;
         }
+    }
+
+    private void ResetButtonTextColor()
+    {
+        _menuFirstSelected.GetComponentInChildren<TextColor>().OnExit();
+        _optionBackSelected.GetComponentInChildren<TextColor>().OnExit();
+        _returnButton.GetComponentInChildren<TextColor>().OnExit();
+        _exitButton.GetComponentInChildren<TextColor>().OnExit();
     }
 
     #endregion

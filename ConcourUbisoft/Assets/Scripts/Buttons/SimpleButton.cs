@@ -8,7 +8,9 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(AudioSource))]
 public class SimpleButton : MonoBehaviour
 {
-    [SerializeField] public UnityEvent Actions = null;
+    [SerializeField] public UnityEvent Actions = new UnityEvent();
+    [SerializeField] public UnityEvent BeforeActions = new UnityEvent();
+    [SerializeField] public UnityEvent AfterActions = new UnityEvent();
 
     protected Animator _animator = null;
     protected AudioSource _audioSource;
@@ -20,6 +22,7 @@ public class SimpleButton : MonoBehaviour
     private bool _reachable;
     private bool _inPerimeter = false;
     private GameObject _player = null;
+    private bool _isPress = false;
 
     private void Awake()
     {
@@ -71,20 +74,41 @@ public class SimpleButton : MonoBehaviour
             }
             else
             {
+                if(_isPress)
+                {
+                    Debug.Log("After");
+                    AfterActions?.Invoke();
+                }
+                _isPress = false;
                 soundPlayed = false;
             }
+        }
+        else if(_isPress)
+        {
+            Debug.Log("After");
+            AfterActions?.Invoke();
+            _isPress = false;
         }
     }
 
     protected virtual void PressButton()
     {
         _animator.SetTrigger("click");
-        Actions?.Invoke();
         if (!soundPlayed)
         {
             _audioSource.Play();
             soundPlayed = true;
         }
+
+        if(!_isPress)
+        {
+            Debug.Log("Before");
+            BeforeActions?.Invoke();
+        }
+
+        Actions?.Invoke();
+
+        _isPress = true;
     }
 
     private void OnMouseEnter()

@@ -122,6 +122,7 @@ public class MenuController : MonoBehaviour
     private void Start()
     {
         _currentController = InputManager.GetController();
+        Debug.Log("Menu Controller Start, controller type is" + _currentController);
         if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
         {
             _eventSystem.SetSelectedGameObject(null);
@@ -240,38 +241,32 @@ public class MenuController : MonoBehaviour
         {
             _eventSystem.SetSelectedGameObject(null);
             _currentController = newController;
+            Debug.Log("New controller type is other");
         }
         else
         {
-            if (_currentController == Controller.Playstation || _currentController == Controller.Xbox )
+            if (_currentMenu == Menus.MainMenu)
             {
-                _currentController = newController;
+                _eventSystem.SetSelectedGameObject(null);
+                _eventSystem.SetSelectedGameObject(_menuFirstSelected);
             }
-            else
+            else if (_currentMenu == Menus.Options)
             {
-                if (_currentMenu == Menus.MainMenu)
-                {
-                    _eventSystem.SetSelectedGameObject(null);
-                    _eventSystem.SetSelectedGameObject(_menuFirstSelected);
-                }
-                else if (_currentMenu == Menus.Options)
-                {
-                    _eventSystem.SetSelectedGameObject(null);
-                    _eventSystem.SetSelectedGameObject(_optionsFirstSelected);
-                }
-                else if (_currentMenu == Menus.Lobby)
-                {
-                    _eventSystem.SetSelectedGameObject(null);
-                    _eventSystem.SetSelectedGameObject(_lobbyFirstSelected);
-                }
-                else if (_currentMenu == Menus.Room)
-                {
-                    _eventSystem.SetSelectedGameObject(null);
-                    _eventSystem.SetSelectedGameObject(_roomFirstSelected);
-                }
-                _currentController = newController;
+                _eventSystem.SetSelectedGameObject(null);
+                _eventSystem.SetSelectedGameObject(_optionsFirstSelected);
             }
-             
+            else if (_currentMenu == Menus.Lobby)
+            {
+                _eventSystem.SetSelectedGameObject(null);
+                _eventSystem.SetSelectedGameObject(_lobbyFirstSelected);
+            }
+            else if (_currentMenu == Menus.Room)
+            {
+                _eventSystem.SetSelectedGameObject(null);
+                _eventSystem.SetSelectedGameObject(_roomFirstSelected);
+            }
+            _currentController = newController;
+            Debug.Log("New controller type is "+ newController);
         }
     }
 
