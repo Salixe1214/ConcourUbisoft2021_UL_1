@@ -11,26 +11,6 @@ namespace TechSupport.Informations.Items
     public class TechnicienBook : InformationItem
     {
         private AccordionElement _accordionElement;
-
-       /* private readonly List<((DoorCode.Symbol, DoorCode.SymbolColor), (DoorCode.Symbol, DoorCode.SymbolColor))> _content =
-            new List<((DoorCode.Symbol, DoorCode.SymbolColor), (DoorCode.Symbol, DoorCode.SymbolColor))>()
-        {
-            ((DoorCode.Symbol.One, DoorCode.SymbolColor.Blue), (DoorCode.Symbol.Two, DoorCode.SymbolColor.Green)),
-            ((DoorCode.Symbol.One, DoorCode.SymbolColor.Blue), (DoorCode.Symbol.Two, DoorCode.SymbolColor.Yellow)),
-            ((DoorCode.Symbol.One, DoorCode.SymbolColor.Red), (DoorCode.Symbol.Two, DoorCode.SymbolColor.Green)),
-            ((DoorCode.Symbol.One, DoorCode.SymbolColor.Red), (DoorCode.Symbol.Two, DoorCode.SymbolColor.Yellow)),
-            ((DoorCode.Symbol.One, DoorCode.SymbolColor.Green), (DoorCode.Symbol.Three, DoorCode.SymbolColor.Blue)),
-            ((DoorCode.Symbol.One, DoorCode.SymbolColor.Yellow), (DoorCode.Symbol.Three, DoorCode.SymbolColor.Blue)),
-            ((DoorCode.Symbol.One, DoorCode.SymbolColor.Green), (DoorCode.Symbol.Three, DoorCode.SymbolColor.Red)),
-            ((DoorCode.Symbol.One, DoorCode.SymbolColor.Yellow), (DoorCode.Symbol.Three, DoorCode.SymbolColor.Red)),
-            ((DoorCode.Symbol.One, DoorCode.SymbolColor.Purple), (DoorCode.Symbol.Three, DoorCode.SymbolColor.Green)),
-            ((DoorCode.Symbol.Two, DoorCode.SymbolColor.Blue), (DoorCode.Symbol.Three, DoorCode.SymbolColor.Yellow)),
-            ((DoorCode.Symbol.Two, DoorCode.SymbolColor.Blue), (DoorCode.Symbol.Three, DoorCode.SymbolColor.Green)),
-            ((DoorCode.Symbol.Two, DoorCode.SymbolColor.Red), (DoorCode.Symbol.Three, DoorCode.SymbolColor.Yellow)),
-            ((DoorCode.Symbol.Two, DoorCode.SymbolColor.Red), (DoorCode.Symbol.Three, DoorCode.SymbolColor.Purple)),
-            ((DoorCode.Symbol.Two, DoorCode.SymbolColor.Green), (DoorCode.Symbol.Three, DoorCode.SymbolColor.Purple)),
-            
-        }; */
         
         private readonly List<(DoorCode.Symbol, DoorCode.SymbolColor)> _content =
             new List<(DoorCode.Symbol, DoorCode.SymbolColor)>()
@@ -86,41 +66,16 @@ namespace TechSupport.Informations.Items
             return image;
         }
 
-        /*private HorizontalLayoutGroup InstantiateLine(((DoorCode.Symbol, DoorCode.SymbolColor), (DoorCode.Symbol, DoorCode.SymbolColor)) combination)
-        {
-            HorizontalLayoutGroup line = CreateHorizontalLayoutGroup();
-
-
-            line.transform.SetParent(_accordionElement.transform);
-            InstantiateImage(line.gameObject.transform, _symbols[combination.Item1.Item1],
-                _colors[combination.Item1.Item2], Image.Type.Simple);
-            InstantiateImage(line.gameObject.transform, _symbols[combination.Item2.Item1],
-                _colors[combination.Item2.Item2], Image.Type.Simple);
-            InstantiateText(line.gameObject.transform, " = ").fontSize = 16;
-            DoorCode.GetSymbolCode(combination.Item1.Item2, combination.Item1.Item1)
-                .ForEach(d => InstantiateDirection(line.gameObject.transform, d));
-            InstantiateText(line.gameObject.transform, " + ").fontSize = 16;
-            DoorCode.GetSymbolCode(combination.Item2.Item2, combination.Item2.Item1)
-                .ForEach(d => InstantiateDirection(line.gameObject.transform, d));
-            return line;
-        }*/
-        
         private HorizontalLayoutGroup InstantiateLine((DoorCode.Symbol, DoorCode.SymbolColor) combination)
         {
             HorizontalLayoutGroup line = GameObjectsInstantiator.CreateHorizontalLayoutGroup();
 
-
             line.transform.SetParent(_accordionElement.transform);
             GameObjectsInstantiator.InstantiateImage(line.gameObject.transform, _symbols[combination.Item1],
                 _colors[combination.Item2], Image.Type.Simple);
-            //InstantiateImage(line.gameObject.transform, _symbols[combination.Item1],
-             //   _colors[combination.Item2], Image.Type.Simple);
              GameObjectsInstantiator.InstantiateText(line.gameObject.transform, " = ").fontSize = 16;
             DoorCode.GetSymbolCode(combination.Item2, combination.Item1)
                 .ForEach(d => InstantiateDirection(line.gameObject.transform, d));
-            //InstantiateText(line.gameObject.transform, " + ").fontSize = 16;
-           // DoorCode.GetSymbolCode(combination.Item2, combination.Item1)
-           //     .ForEach(d => InstantiateDirection(line.gameObject.transform, d));
             return line;
         }
 
@@ -129,7 +84,6 @@ namespace TechSupport.Informations.Items
             _accordionElement = GameObjectsInstantiator.InstantiateNewItem(parent, backgroundSprite);
             GameObjectsInstantiator.InstantiateHeader(_accordionElement.transform, "Livre du technicien");
             _content.ForEach(c => InstantiateLine(c));
-            // InstantiateImageLayout()
         }
 
         public override void UpdateItem(InformationItem item)
@@ -139,7 +93,7 @@ namespace TechSupport.Informations.Items
 
         public override void Delete()
         {
-            Object.Destroy(_accordionElement); // The theorie want the book to delete his children
+            Object.Destroy(_accordionElement);
         }
     }
 }

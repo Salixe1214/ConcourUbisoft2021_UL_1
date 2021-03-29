@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Buttons;
 using Inputs;
+using JetBrains.Annotations;
 using TechSupport.Informations;
 using TechSupport.Surveillance;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Utils;
 
@@ -39,13 +41,8 @@ namespace TechSupport
         [Header("Surveillance System")]
         [SerializeField] private SurveillanceMode mode = SurveillanceMode.Grid; // Default mode : grid
         [SerializeField] private List<OrderedItems> cameras;
-        [SerializeField] public SerializableDictionary<SurveillanceMode, UnityEngine.UI.Outline> switchButtons 
-                = new SerializableDictionary<SurveillanceMode, UnityEngine.UI.Outline>(
-                    new Dictionary<SurveillanceMode, UnityEngine.UI.Outline> {
-                        { SurveillanceMode.Focused, null },
-                        { SurveillanceMode.Grid, null },
-                    })
-            ;
+        [SerializeField] [NotNull] public GameObject tabulationIndicationButton;
+        
         [Header("Button to Select camera")]
         [SerializeField] private Sprite outlineSprite;
         [SerializeField] private ColorBlock colors;
@@ -117,13 +114,12 @@ namespace TechSupport
             _buttons = new List<Button>();
             foreach (var items in cameras)
             {
-                OutlineButton b = GameObjectsInstantiator.InstantiateOutlineButton(transform);
+                OutlineButton b = items.items.gameObject.GetComponentInChildren<OutlineButton>();
                 b.colors = colors;
                 b.image.sprite = outlineSprite;
                 b.onClick.AddListener(Focus);
                 _buttons.Add(b);
             }
-            _gridSystem.Grid(_buttons);
         }
 
         private void HideGeneralInformation(bool hide)
@@ -153,17 +149,16 @@ namespace TechSupport
         {
             if (mode != newMode)
             {
-                switchButtons[mode].enabled = false;
                 _exitMethods[mode]?.Invoke();
             }
+            _informationsSystem.ActvivateInformation(newMode == SurveillanceMode.Focused);
             _onSwitchMethods[mode = newMode]?.Invoke();
             OnModeSwitched?.Invoke();
-            _informationsSystem.ActvivateInformation(newMode == SurveillanceMode.Focused);
-            switchButtons[newMode].enabled = true;
         }
 
         private void ExitFullScreen()
         {
+            tabulationIndicationButton.SetActive(false);
             _fullScreenSystem.EscapeFullScreen();
         }
 
@@ -190,6 +185,7 @@ namespace TechSupport
         private void OnFullScreen()
         {
             EnableAll(false);
+            tabulationIndicationButton.SetActive(true);
             _fullScreenSystem.RenderFullScreen();
         }
 

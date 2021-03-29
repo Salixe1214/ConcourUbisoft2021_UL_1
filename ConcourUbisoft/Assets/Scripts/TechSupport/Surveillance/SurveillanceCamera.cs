@@ -72,7 +72,7 @@ namespace TechSupport.Surveillance
 
         public void ActivateClock(bool activation)
         {
-            clockText.gameObject.SetActive(activation);
+            // clockText.gameObject.SetActive(activation);
         }
     }
 }

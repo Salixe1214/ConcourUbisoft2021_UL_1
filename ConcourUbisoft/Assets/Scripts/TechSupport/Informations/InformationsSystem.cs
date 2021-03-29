@@ -16,17 +16,7 @@ namespace TechSupport.Informations
 {
     public class InformationsSystem : MonoBehaviour
     {
-        enum DevMode
-        {
-            Test,
-            Game
-        }
-        
-        [Header("Général")] [SerializeField] private DevMode mode = DevMode.Game;
-
         [Header("List")] 
-        [SerializeField] private List<Sprite> imagesList;
-        [SerializeField] private Color[] colors;
         [SerializeField] private Vector2 sizeList;
         private ImageLayout _imageLayout;
 
@@ -63,7 +53,6 @@ namespace TechSupport.Informations
             };
 
             CreateList();
-            //CreateAccordion();
         }
 
         private void Update()
@@ -87,10 +76,6 @@ namespace TechSupport.Informations
             _listRectTransform = _imageLayout.GetComponent<RectTransform>();
             _listRectTransform.SetParent(transform);
             SetSize(_listRectTransform, sizeList);
-            if (mode == DevMode.Test)
-            {
-                _imageLayout.CreateLayout(imagesList, colors);
-            }
         } 
 
         private void CreateAccordion()
@@ -114,20 +99,20 @@ namespace TechSupport.Informations
 
         public void ActvivateInformation(bool activation)
         {
-//            informationPanel.SetActive(false);
-            button.gameObject.SetActive(activation);
             if (_animator != null)
             {
                 _animator.SetBool("Showed", false);
             }
+            button.gameObject.SetActive(activation);
         }
 
         public void OpenInfo()
         {
-            Debug.Log("Hello world");
             if (_animator != null)
             {
                 bool isShowed = _animator.GetBool("Showed");
+                
+                button.gameObject.SetActive(isShowed);
                 _animator.SetBool("Showed", !isShowed);
             }
         }
