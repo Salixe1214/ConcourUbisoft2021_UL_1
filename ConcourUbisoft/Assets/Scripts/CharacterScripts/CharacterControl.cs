@@ -11,6 +11,8 @@ public class CharacterControl : MonoBehaviour, IPunObservable
     [SerializeField] private float playerMovementSpeed = 1f;
     [SerializeField] private GameController.Role _owner = GameController.Role.SecurityGuard;
     [SerializeField] private Animator _animator = null;
+    [SerializeField] private new Camera _camera = null;
+    [SerializeField] private Transform _mesh;
 
     private Rigidbody playerBody;
     private Vector3 inputVector;
@@ -60,14 +62,14 @@ public class CharacterControl : MonoBehaviour, IPunObservable
             controllerHorizontal = Input.GetAxis("LeftJoystickHorizontal");
             controllerVertical = Input.GetAxis("LeftJoystickVertical");
 
-            Vector3 controllerInput = (transform.right * controllerHorizontal + transform.forward * controllerVertical) * (playerMovementSpeed);
-            Vector3 keyboardInput = (playerBody.transform.right * keyboardHorizontal + playerBody.transform.forward * keyBoardVertical) * (playerMovementSpeed);
+            Vector3 controllerInput = (_camera.transform.right* controllerHorizontal + Vector3.ProjectOnPlane(_camera.transform.forward , Vector3.up).normalized * controllerVertical) * (playerMovementSpeed);
+            Vector3 keyboardInput = (_camera.transform.right * keyboardHorizontal + Vector3.ProjectOnPlane(_camera.transform.forward, Vector3.up).normalized * keyBoardVertical) * (playerMovementSpeed);
 
-            inputVector = controllerInput + keyboardInput;
+            inputVector = Vector3.ClampMagnitude(controllerInput + keyboardInput, playerMovementSpeed);
 
-            if (inputVector.magnitude > playerMovementSpeed)
+            if (inputVector.magnitude > float.Epsilon)
             {
-                inputVector = Vector3.ClampMagnitude(inputVector, playerMovementSpeed);
+                _mesh.rotation = Quaternion.LookRotation(inputVector, Vector3.up);
             }
 
             _isMoving = inputVector != Vector3.zero;
@@ -80,7 +82,7 @@ public class CharacterControl : MonoBehaviour, IPunObservable
     {
         if (_owner == _networkController.GetLocalRole())
         {
-            playerBody.MovePosition(playerBody.position + inputVector*Time.fixedDeltaTime);
+            playerBody.velocity = inputVector;
         }
         else
         {

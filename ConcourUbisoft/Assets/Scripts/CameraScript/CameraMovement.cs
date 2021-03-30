@@ -59,8 +59,12 @@ public class CameraMovement : MonoBehaviour
             controllerYAccumulator -= controllerY_XBO;
             controllerXAccumulator += controllerX_XBO;
             controllerYAccumulator = Mathf.Clamp(controllerYAccumulator, -90f, 90f);
-            transform.localRotation = Quaternion.Slerp(transform.localRotation,Quaternion.Euler(controllerYAccumulator,0,0),cameraRotationSmoothingSpeed);
-            playerBody.MoveRotation(Quaternion.Slerp(playerBody.rotation,Quaternion.Euler(playerBody.rotation.x,controllerXAccumulator,playerBody.rotation.z),cameraRotationSmoothingSpeed));
+
+            //transform.localRotation = Quaternion.Slerp(transform.localRotation,Quaternion.Euler(controllerYAccumulator,0,0),cameraRotationSmoothingSpeed);
+            Quaternion rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(controllerYAccumulator, controllerXAccumulator, 0), cameraRotationSmoothingSpeed);
+            transform.rotation = rotation;
+            //playerBody.MoveRotation(Quaternion.Slerp(playerBody.rotation,Quaternion.Euler(playerBody.rotation.x,controllerXAccumulator,playerBody.rotation.z),cameraRotationSmoothingSpeed));
+
             //playerBody.MoveRotation(Quaternion.Euler(playerBody.rotation.x,controllerXAccumulator,playerBody.rotation.z));
         }
         else if (joysticks.Contains("Wireless Controller"))
@@ -68,9 +72,13 @@ public class CameraMovement : MonoBehaviour
             controllerYAccumulator -= controllerY_PS;
             controllerXAccumulator += controllerX_PS;
             controllerYAccumulator = Mathf.Clamp(controllerYAccumulator, -90f, 90f);
-            transform.localRotation = Quaternion.Slerp(transform.localRotation,Quaternion.Euler(controllerYAccumulator,0,0),cameraRotationSmoothingSpeed);
-            playerBody.MoveRotation(Quaternion.Slerp(playerBody.rotation,Quaternion.Euler(playerBody.rotation.x,controllerXAccumulator,playerBody.rotation.z),cameraRotationSmoothingSpeed));
-           // playerBody.MoveRotation(Quaternion.Euler(playerBody.rotation.x,controllerXAccumulator,playerBody.rotation.z));
+            //transform.localRotation = Quaternion.Slerp(transform.localRotation,Quaternion.Euler(controllerYAccumulator,0,0),cameraRotationSmoothingSpeed);
+            Quaternion rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(controllerXAccumulator, controllerYAccumulator, 0), cameraRotationSmoothingSpeed);
+            transform.rotation = rotation;
+
+            //playerBody.MoveRotation(Quaternion.Slerp(playerBody.rotation,Quaternion.Euler(playerBody.rotation.x,controllerXAccumulator,playerBody.rotation.z),cameraRotationSmoothingSpeed));
+            // playerBody.MoveRotation(Quaternion.Euler(playerBody.rotation.x,controllerXAccumulator,playerBody.rotation.z));
+            //transform.rotation = Quaternion.Slerp(playerBody.rotation, Quaternion.Euler(playerBody.rotation.x, controllerXAccumulator, playerBody.rotation.z), cameraRotationSmoothingSpeed);
         }
         else
         {
@@ -78,8 +86,10 @@ public class CameraMovement : MonoBehaviour
             float previousMouseY = mouseYAccumulator;
             mouseYAccumulator -= mouseY;
             mouseYAccumulator = Mathf.Clamp(mouseYAccumulator, -90f, 90f);
-            transform.localRotation = Quaternion.Slerp(transform.localRotation,Quaternion.Euler(mouseYAccumulator,0,0),cameraRotationSmoothingSpeed);
-            playerBody.MoveRotation(Quaternion.Slerp(playerBody.rotation,Quaternion.Euler(playerBody.rotation.x,mouseXAccumulator,playerBody.rotation.z),cameraRotationSmoothingSpeed));
+            Quaternion rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(mouseYAccumulator, mouseXAccumulator, 0),cameraRotationSmoothingSpeed);
+            transform.rotation = rotation;
+            //playerBody.MoveRotation(Quaternion.Slerp(playerBody.rotation,Quaternion.Euler(playerBody.rotation.x,mouseXAccumulator,playerBody.rotation.z),cameraRotationSmoothingSpeed));
+            //transform.rotation = (Quaternion.Slerp(transform.rotation,Quaternion.Euler(transform.rotation.x,mouseXAccumulator, transform.rotation.z),cameraRotationSmoothingSpeed));
            
         }
     }
