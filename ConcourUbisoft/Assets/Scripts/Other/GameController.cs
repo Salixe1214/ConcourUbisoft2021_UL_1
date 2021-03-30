@@ -1,11 +1,27 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
+    [Serializable]
+    public class ColorName
+    {
+        [SerializeField] private Color _color;
+        [SerializeField] private string _name;
+
+        public Color Color { get => _color; set => _color = value; }
+        public string Name { get => _name; set => _name = value; }
+
+        public bool IsColor(Color color)
+        {
+            return Math.Abs(color.r - _color.r) < 0.1f && Math.Abs(color.g - _color.g) < 0.1f && Math.Abs(color.b - _color.b) < 0.1f;
+        }
+    }
+
     public enum Role
     {
         SecurityGuard,
@@ -18,6 +34,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private OptionController _optionController = null;
     [SerializeField] private InGameMenuController _inGameMenuController = null;
     [SerializeField] private GameObject _speaking = null;
+    [SerializeField] private ColorName[] _colorNames = null;
 
     private SoundController _soundController = null;
     private NetworkController _networkController = null;
@@ -142,6 +159,11 @@ public class GameController : MonoBehaviour
 
     #endregion
     #region Public Functions
+    public string GetColorName(Color color)
+    {
+        return _colorNames.Where(x => x.IsColor(color)).FirstOrDefault()?.Name ?? "Undefined";
+    }
+
     public void StartGame(Role role)
     {
         Debug.Log($"Start Game with role {role}");

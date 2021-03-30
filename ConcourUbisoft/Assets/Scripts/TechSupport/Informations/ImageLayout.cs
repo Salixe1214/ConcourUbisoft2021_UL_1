@@ -8,6 +8,9 @@ namespace TechSupport.Informations
     public class ImageLayout : HorizontalLayoutGroup
     {
         private readonly List<Image> _images;
+        public Font Font { get; set; }
+
+        private GameController _gameController = null;
 
         public ImageLayout()
         {
@@ -16,6 +19,8 @@ namespace TechSupport.Informations
 
         protected override void Awake()
         {
+            _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+
             base.Awake();
             childAlignment = TextAnchor.MiddleCenter;
             gameObject.SetActive(true);
@@ -28,6 +33,13 @@ namespace TechSupport.Informations
         {
             Image image = (new GameObject()).AddComponent<Image>();
 
+            Text text = (new GameObject()).AddComponent<Text>();
+            text.text = "";
+            text.font = Font;
+            text.alignment = TextAnchor.UpperCenter;
+            text.transform.Translate(new Vector3(0, -75.0f, 0));
+            text.GetComponent<RectTransform>().SetParent(image.transform);
+            
             image.preserveAspect = true;
             image.GetComponent<RectTransform>()?.SetParent(gameObject.transform);
             return image;
@@ -75,6 +87,7 @@ namespace TechSupport.Informations
             image.color = color;
             image.sprite = sprite;
             image.gameObject.SetActive(true);
+            image.GetComponentInChildren<Text>().text = _gameController.GetColorName(color);
             _images.Add(image);
         }
 

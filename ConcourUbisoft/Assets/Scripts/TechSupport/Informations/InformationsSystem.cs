@@ -25,6 +25,8 @@ namespace TechSupport.Informations
         [SerializeField] private GameObject informationPanel;
         [SerializeField] private Sprite background;
         [SerializeField] private Sprite front;
+        [SerializeField] private Font _font;
+
         private Animator _animator;
         private Accordion _accordion;
         private List<InformationItem> _items;
@@ -73,6 +75,7 @@ namespace TechSupport.Informations
         private void CreateList()
         {
             _imageLayout = new GameObject().AddComponent<ImageLayout>();
+            _imageLayout.Font = _font;
             _listRectTransform = _imageLayout.GetComponent<RectTransform>();
             _listRectTransform.SetParent(transform);
             SetSize(_listRectTransform, sizeList);
