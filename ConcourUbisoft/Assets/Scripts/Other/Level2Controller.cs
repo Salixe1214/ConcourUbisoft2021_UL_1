@@ -20,6 +20,8 @@ public class Level2Controller : MonoBehaviour, LevelController
     [SerializeField] private Sprite BatteryImage;
     [SerializeField] private Sprite PipeImage;
     [SerializeField] private Camera AreaCamera = null;
+    [SerializeField] private ArmController _armController = null;
+    [SerializeField] private float _delayInverse = 10;
 
     [Tooltip("Intensity of the AreaCamera Shake Effect")]
     [SerializeField] private float cameraShakeForce = 0.3f;
@@ -48,6 +50,8 @@ public class Level2Controller : MonoBehaviour, LevelController
     private Vector3 _cameraOriginalPosition;
     private int _currentListIndex;
     private NetworkController _networkController = null;
+    private float _lastTimeInverseControl = 0;
+
 
     private void Awake()
     {
@@ -118,6 +122,11 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     public void InitiateNextSequence()
     {
+        if(_furnace.SucceedSequences == 1)
+        {
+            _armController.InverseX();
+            _armController.InverseZ();
+        }
         _soundController.PlayLevelSequenceClearedSuccessSound();
         _imageList.Clean();
         setItemsImageList();
@@ -156,6 +165,16 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     private void Update()
     {
+        if (_furnace.SucceedSequences >= 2)
+        {
+            if(Time.time - _lastTimeInverseControl > _delayInverse)
+            {
+                _armController.InverseX();
+                _armController.InverseZ();
+                _lastTimeInverseControl = Time.time;
+            }
+        }
+
         if (cameraMustShake)
         {
             AreaCamera.transform.position = _cameraOriginalPosition + Random.insideUnitSphere * cameraShakeForce;

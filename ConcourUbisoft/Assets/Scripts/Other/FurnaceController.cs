@@ -36,7 +36,7 @@ public class FurnaceController : MonoBehaviour
     private PhotonView _photonView = null;
     private NetworkController _networkController = null;
 
-    private int SucceedSequences = 0;
+    public int SucceedSequences { get; private set; } = 0;
 
     System.Random _random = new System.Random(0);
 
@@ -86,7 +86,9 @@ public class FurnaceController : MonoBehaviour
         }
         else
         {
-            if (currentSequenceColor.r == (color).r && currentSequenceColor.g == (color).g && currentSequenceColor.b == (color).b && currentType == type)
+            if (Math.Abs(currentSequenceColor.r - (color).r) < 0.01f 
+                && Math.Abs(currentSequenceColor.g - (color).g) < 0.01f
+                && Math.Abs(currentSequenceColor.b - (color).b) < 0.01f && currentType == type)
             {
                 soundController.PlayLevelPartialSequenceSuccessSound();
                 CheckItemOffList?.Invoke();
