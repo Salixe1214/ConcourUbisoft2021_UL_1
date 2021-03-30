@@ -4959,6 +4959,7 @@ MonoBehaviour:
   _audioListener: {fileID: 182247870}
   _optionController: {fileID: 775259508}
   _inGameMenuController: {fileID: 286970534}
+  _speaking: {fileID: 1322349464}
 --- !u!4 &1209276559
 Transform:
   m_ObjectHideFlags: 0

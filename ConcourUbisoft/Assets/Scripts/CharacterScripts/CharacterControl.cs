@@ -32,6 +32,7 @@ public class CharacterControl : MonoBehaviour, IPunObservable
 
     private void Awake()
     {
+        newPosition = transform.position;
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _photonView = GetComponent<PhotonView>();
         transform.Rotate(Vector3.up, Mathf.Deg2Rad * 180);
@@ -87,7 +88,7 @@ public class CharacterControl : MonoBehaviour, IPunObservable
         else
         {
             transform.position = Vector3.MoveTowards(transform.position, newPosition, Time.fixedDeltaTime * playerMovementSpeed);
-            transform.rotation = newQuartenion;
+            _mesh.rotation = newQuartenion;
         }
     }
 
@@ -99,10 +100,10 @@ public class CharacterControl : MonoBehaviour, IPunObservable
             stream.SendNext(transform.position.x);
             stream.SendNext(transform.position.y);
             stream.SendNext(transform.position.z);
-            stream.SendNext(transform.rotation.x);
-            stream.SendNext(transform.rotation.y);
-            stream.SendNext(transform.rotation.z);
-            stream.SendNext(transform.rotation.w);
+            stream.SendNext(_mesh.rotation.x);
+            stream.SendNext(_mesh.rotation.y);
+            stream.SendNext(_mesh.rotation.z);
+            stream.SendNext(_mesh.rotation.w);
         }
         else
         {

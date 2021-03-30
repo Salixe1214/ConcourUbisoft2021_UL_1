@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject _audioListener = null;
     [SerializeField] private OptionController _optionController = null;
     [SerializeField] private InGameMenuController _inGameMenuController = null;
+    [SerializeField] private GameObject _speaking = null;
 
     private SoundController _soundController = null;
     private NetworkController _networkController = null;
@@ -67,6 +68,7 @@ public class GameController : MonoBehaviour
         _dialogSystem = GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>();
         _dialogSystem.StartDialog("Introduction");
         OnFinishLoadGameEvent?.Invoke();
+        _speaking.SetActive(true);
         //_soundController.PlayAmbientSound();
         if (GameRole == Role.SecurityGuard)
         {
