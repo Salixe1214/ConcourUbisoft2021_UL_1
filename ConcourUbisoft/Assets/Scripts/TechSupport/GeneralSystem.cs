@@ -98,6 +98,14 @@ namespace TechSupport
             _currentController = InputManager.GetController();
         }
 
+        private void Update()
+        {
+            if (Input.GetButtonUp(InputManager.GetInputNameByController("CameraEscape")))
+            {
+                FocusBack();
+            }
+        }
+
         private void OnEnable()
         {
             _inputManager.OnControllerTypeChanged += OnControllerTypeChanged;
@@ -118,6 +126,29 @@ namespace TechSupport
         }
 
         public void Focus()
+        {
+            if (_gameController && _gameController.IsGameMenuOpen) return;
+            if (mode == SurveillanceMode.Grid)
+            {
+                SurveillanceCamera selected;
+
+                if (_currentController == Inputs.Controller.Playstation || _currentController == Inputs.Controller.Xbox)
+                {
+                    selected =_eventSystem.currentSelectedGameObject.GetComponentInParent<SurveillanceCamera>();
+                }
+                else
+                {
+                    selected = cameras.First(item => item.items.Contains(Input.mousePosition)).items;
+                }
+                if (selected != null)
+                {
+                    _fullScreenSystem.SetTarget(selected);
+                }
+                SystemSwitch(SurveillanceMode.Focused);
+            }
+        }
+        
+        public void FocusBack()
         {
             if (_gameController && _gameController.IsGameMenuOpen) return;
             if (mode == SurveillanceMode.Grid)
@@ -189,24 +220,12 @@ namespace TechSupport
 
         private void ExitGrid()
         {
-            SurveillanceCamera selected;
-            if (_currentController == Inputs.Controller.Playstation || _currentController == Inputs.Controller.Xbox)
-            {
-                selected =_eventSystem.currentSelectedGameObject.GetComponentInParent<SurveillanceCamera>();
-            }
-            else
-            {
-                selected = cameras.First(item => item.items.Contains(Input.mousePosition)).items;
-            }
 
             _eventSystem.SetSelectedGameObject(null);
             
             ActivateGridInterface(false);
             HideGeneralInformation(true);
-            if (selected != null)
-            {
-                _fullScreenSystem.SetTarget(selected);
-            }
+
         }
 
         private void OnGrid()
