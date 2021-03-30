@@ -43,6 +43,11 @@ public class DialogSystem : MonoBehaviour
     private NetworkController _networkController = null;
     private AudioSource _audioSource = null;
 
+    // Long press parameters
+    [SerializeField] private float longPressDuration = 1;
+    private bool bIsPressed = false;
+    private float bDownTime = 0;
+
     private void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
@@ -52,20 +57,51 @@ public class DialogSystem : MonoBehaviour
         rightCharSlot.enabled = false;
         textSlot.enabled = false;
 
-        _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+        /*_networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
 
         if(_networkController.GetLocalRole() == GameController.Role.SecurityGuard)
         {
             var temp = leftCharSlot;
             leftCharSlot = rightCharSlot;
             rightCharSlot = temp;
-        }
+        }*/
     }
 
     void Update()
     {
         if (Input.GetButtonDown("Submit"))
         {
+            bDownTime = 0;
+            bIsPressed = true;
+            
+        }
+
+        if (bIsPressed && Input.GetButton("Submit"))
+        {
+            Debug.Log(bDownTime);
+            bDownTime += Time.deltaTime;
+
+            if (bDownTime >= longPressDuration)
+            {
+                bIsPressed = false;
+                while (!isEmpty)
+                {
+                    if(!_isReading)
+                    {
+                        ReadLine();
+                    }
+                    else
+                    {
+                        _isReading = false;
+                    }
+                }
+            }
+        }
+
+        if (bIsPressed && Input.GetButtonUp("Submit"))
+        {
+            bIsPressed = false;
+
             if(!_isReading)
             {
                 ReadLine();
@@ -74,7 +110,6 @@ public class DialogSystem : MonoBehaviour
             {
                 _isReading = false;
             }
-            
         }
     }
 
