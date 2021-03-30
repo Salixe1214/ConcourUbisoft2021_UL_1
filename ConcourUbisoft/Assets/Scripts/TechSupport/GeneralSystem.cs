@@ -49,6 +49,9 @@ namespace TechSupport
 
         private List<Button> _buttons;
         private GameController _gameController;
+        private Inputs.Controller _currentController;
+        private EventSystem _eventSystem;
+        private InputManager _inputManager;
 
         #region Callbacks
 
@@ -79,14 +82,30 @@ namespace TechSupport
         {
             _gameController = GameObject.FindGameObjectWithTag("GameController")?.GetComponent<GameController>();
             _informationsSystem = GetComponent<InformationsSystem>();
-
+            _eventSystem = EventSystem.current;
+            _inputManager = GameObject.FindWithTag("InputManager")?.GetComponent<InputManager>();
             cameras.Sort((a, b) => a.number.CompareTo(b.number));
             cameras.ForEach(c => c.items.Init());
             _gridSystem.Init(cameras.Count());
-            GridInterface();
             _fullScreenSystem.SetTarget(cameras.First().items);
+            GridInterface();
             _informationsSystem.Init();
             SystemSwitch(mode);
+        }
+
+        private void Start()
+        {
+            _currentController = InputManager.GetController();
+        }
+
+        private void OnEnable()
+        {
+            _inputManager.OnControllerTypeChanged += OnControllerTypeChanged;
+        }
+
+        private void OnDisable()
+        {
+            _inputManager.OnControllerTypeChanged -= OnControllerTypeChanged;
         }
 
         public void Escape()
@@ -121,10 +140,11 @@ namespace TechSupport
                 _buttons.Add(b);
             }
 
-            if (InputManager.GetController() != Inputs.Controller.Other)
+           /*if (InputManager.GetController() != Inputs.Controller.Other)
             {
-                FindObjectOfType<EventSystem>().firstSelectedGameObject = _buttons.First().gameObject;
-            }
+                _eventSystem.SetSelectedGameObject(null);
+                _eventSystem.SetSelectedGameObject(_fullScreenSystem.GetTarget().gameObject.GetComponentInChildren<OutlineButton>().gameObject);
+            }*/
         }
 
         private void HideGeneralInformation(bool hide)
@@ -169,8 +189,18 @@ namespace TechSupport
 
         private void ExitGrid()
         {
-            SurveillanceCamera selected =
-                cameras.First(item => item.items.Contains(Input.mousePosition)).items;
+            SurveillanceCamera selected;
+            if (_currentController == Inputs.Controller.Playstation || _currentController == Inputs.Controller.Xbox)
+            {
+                selected =_eventSystem.currentSelectedGameObject.GetComponentInParent<SurveillanceCamera>();
+            }
+            else
+            {
+                selected = cameras.First(item => item.items.Contains(Input.mousePosition)).items;
+            }
+
+            _eventSystem.SetSelectedGameObject(null);
+            
             ActivateGridInterface(false);
             HideGeneralInformation(true);
             if (selected != null)
@@ -183,6 +213,15 @@ namespace TechSupport
         {
             EnableAll(true);
             ActivateGridInterface(true);
+            if (_currentController == Inputs.Controller.Playstation || _currentController == Inputs.Controller.Xbox)
+            {
+                _eventSystem.SetSelectedGameObject(null);
+                _eventSystem.SetSelectedGameObject(_fullScreenSystem.GetTarget().gameObject.GetComponentInChildren<OutlineButton>().gameObject);
+            }
+            else
+            {
+                _eventSystem.SetSelectedGameObject(null);
+            }
             HideGeneralInformation(false);
             _gridSystem.Grid(cameras.Select(input => input.items.GetCamera()));
         }
@@ -192,6 +231,31 @@ namespace TechSupport
             EnableAll(false);
             tabulationIndicationButton.SetActive(true);
             _fullScreenSystem.RenderFullScreen();
+        }
+
+        private void OnControllerTypeChanged()
+        {
+            Inputs.Controller newController = InputManager.GetController();
+
+            Debug.Log("Controller type changed GeneralSystem");
+            
+            if (newController == Inputs.Controller.Playstation || newController == Inputs.Controller.Xbox)
+            {
+                if (mode == SurveillanceMode.Grid)
+                {
+                    _eventSystem.SetSelectedGameObject(null);
+                    _eventSystem.SetSelectedGameObject(_fullScreenSystem.GetTarget().gameObject.GetComponentInChildren<OutlineButton>().gameObject);
+                }
+                else if(mode == SurveillanceMode.Focused)
+                {
+                    _eventSystem.SetSelectedGameObject(null);
+                }
+            }
+            else
+            {
+                _eventSystem.SetSelectedGameObject(null);
+            }
+            _currentController = newController;
         }
 
         #endregion
