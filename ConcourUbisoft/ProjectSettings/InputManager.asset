@@ -983,10 +983,10 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: OpenInfo
-    descriptiveName: i
+    descriptiveName: e
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: i
+    positiveButton: e
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1
