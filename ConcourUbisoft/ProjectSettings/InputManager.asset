@@ -711,7 +711,7 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: CameraEscapePS
-    descriptiveName: y
+    descriptiveName: triangle
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: joystick button 3
@@ -1002,7 +1002,7 @@ InputManager:
     descriptiveName: lt
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: 
+    positiveButton: joystick button 5
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1
@@ -1018,7 +1018,7 @@ InputManager:
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: 
+    positiveButton: joystick button 5
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1
