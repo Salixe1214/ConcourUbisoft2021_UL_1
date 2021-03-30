@@ -196,7 +196,7 @@ public class DialogSystem : MonoBehaviour
         }
     }
     
-    public void StartDialog(string pFile,  bool pAutoRead = false, int pTimeBetweenLines = 3)
+    public void StartDialog(string pFile,  bool pAutoRead = true, int pTimeBetweenLines = 3)
     {
         // Loading text file
         TextAsset txtAsset = Resources.Load("Dialog/" + pFile) as TextAsset;
