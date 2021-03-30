@@ -9,27 +9,23 @@ using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Utils;
 
+
+// TODO: <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+
 namespace TechSupport.Informations
 {
     public class InformationsSystem : MonoBehaviour
     {
-        enum DevMode
-        {
-            Test,
-            Game
-        }
-        
-        [Header("Général")] [SerializeField] private DevMode mode = DevMode.Game;
-
         [Header("List")] 
-        [SerializeField] private List<Sprite> imagesList;
-        [SerializeField] private Color[] colors;
         [SerializeField] private Vector2 sizeList;
         private ImageLayout _imageLayout;
 
         [Header("Accordion")]
+        [SerializeField] private Button button;
+        [SerializeField] private GameObject informationPanel;
         [SerializeField] private Sprite background;
         [SerializeField] private Sprite front;
+        private Animator _animator;
         private Accordion _accordion;
         private List<InformationItem> _items;
         
@@ -38,9 +34,9 @@ namespace TechSupport.Informations
             new SerializableDictionary<DoorCode.Symbol, Sprite>(
                 new Dictionary<DoorCode.Symbol, Sprite>
                 {
-                    {DoorCode.Symbol.One, null},
-                    {DoorCode.Symbol.Two, null},
-                    {DoorCode.Symbol.Three, null}
+                    { DoorCode.Symbol.One, null },
+                    { DoorCode.Symbol.Two, null },
+                    { DoorCode.Symbol.Three, null }
                 });
 
         [SerializeField] private Sprite arrow;
@@ -48,15 +44,15 @@ namespace TechSupport.Informations
         private RectTransform _listRectTransform;
         private RectTransform _accordionRectTransform;
 
-        private void Awake()
+        public void Init()
         {
+            _animator = informationPanel.GetComponent<Animator>();
             _items = new List<InformationItem>()
             {
                 new TechnicienBook(symbols, arrow)
             };
 
             CreateList();
-            CreateAccordion();
         }
 
         private void Update()
@@ -80,10 +76,6 @@ namespace TechSupport.Informations
             _listRectTransform = _imageLayout.GetComponent<RectTransform>();
             _listRectTransform.SetParent(transform);
             SetSize(_listRectTransform, sizeList);
-            if (mode == DevMode.Test)
-            {
-                _imageLayout.CreateLayout(imagesList, colors);
-            }
         } 
 
         private void CreateAccordion()
@@ -103,6 +95,26 @@ namespace TechSupport.Informations
         public Accordion GetInformationDisplay()
         {
             return _accordion;
+        }
+
+        public void ActvivateInformation(bool activation)
+        {
+            if (_animator != null)
+            {
+                _animator.SetBool("Showed", false);
+            }
+            button.gameObject.SetActive(activation);
+        }
+
+        public void OpenInfo()
+        {
+            if (_animator != null)
+            {
+                bool isShowed = _animator.GetBool("Showed");
+                
+                button.gameObject.SetActive(isShowed);
+                _animator.SetBool("Showed", !isShowed);
+            }
         }
     }
 }

@@ -1,10 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Buttons;
+using Inputs;
+using JetBrains.Annotations;
+using TechSupport.Informations;
 using TechSupport.Surveillance;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
+using Utils;
 
 namespace TechSupport
 {
@@ -21,7 +27,7 @@ namespace TechSupport
             public int number;
             public SurveillanceCamera items;
 
-            public OrderedItems(int number, SurveillanceCamera items)
+            public OrderedItems(int number, SurveillanceCamera items, Button button)
             {
                 this.items = items;
                 this.number = number;
@@ -30,10 +36,22 @@ namespace TechSupport
 
         private readonly GridSystem _gridSystem = new GridSystem();
         private readonly FullScreenSystem _fullScreenSystem = new FullScreenSystem();
+        private InformationsSystem _informationsSystem;
 
+        [Header("Surveillance System")]
         [SerializeField] private SurveillanceMode mode = SurveillanceMode.Grid; // Default mode : grid
         [SerializeField] private List<OrderedItems> cameras;
+        [SerializeField] [NotNull] public GameObject tabulationIndicationButton;
+        
+        [Header("Button to Select camera")]
+        [SerializeField] private Sprite outlineSprite;
+        [SerializeField] private ColorBlock colors;
+
+        private List<Button> _buttons;
         private GameController _gameController;
+        private Inputs.Controller _currentController;
+        private EventSystem _eventSystem;
+        private InputManager _inputManager;
 
         #region Callbacks
 
@@ -63,34 +81,114 @@ namespace TechSupport
         private void Awake()
         {
             _gameController = GameObject.FindGameObjectWithTag("GameController")?.GetComponent<GameController>();
+            _informationsSystem = GetComponent<InformationsSystem>();
+            _eventSystem = EventSystem.current;
+            _inputManager = GameObject.FindWithTag("InputManager")?.GetComponent<InputManager>();
             cameras.Sort((a, b) => a.number.CompareTo(b.number));
             cameras.ForEach(c => c.items.Init());
-            _gridSystem.SearchGridSize(cameras.Count());
+            _gridSystem.Init(cameras.Count());
             _fullScreenSystem.SetTarget(cameras.First().items);
+            GridInterface();
+            _informationsSystem.Init();
             SystemSwitch(mode);
         }
 
-        // TODO: Improve this basic input system
+        private void Start()
+        {
+            _currentController = InputManager.GetController();
+        }
+
         private void Update()
         {
-            if((!_gameController || !_gameController.IsGameMenuOpen) && !EventSystem.current.IsPointerOverGameObject())
+            if (Input.GetButtonUp(InputManager.GetInputNameByController("CameraEscape")))
             {
-                if (Input.GetMouseButtonUp(0))
-                {
-                    if (mode == SurveillanceMode.Grid)
-                    {
-                        SystemSwitch(SurveillanceMode.Focused);
-                    }
-                }
-                else if (Input.GetButtonUp("CameraEscape"))
-                {
-                    if (mode == SurveillanceMode.Focused)
-                    {
-                        SystemSwitch(SurveillanceMode.Grid);
-                    }
-                }
+                FocusBack();
             }
         }
+
+        private void OnEnable()
+        {
+            _inputManager.OnControllerTypeChanged += OnControllerTypeChanged;
+        }
+
+        private void OnDisable()
+        {
+            _inputManager.OnControllerTypeChanged -= OnControllerTypeChanged;
+        }
+
+        public void Escape()
+        {
+            if (_gameController && _gameController.IsGameMenuOpen) return; 
+            if (mode == SurveillanceMode.Focused)
+            {
+                SystemSwitch(SurveillanceMode.Grid);
+            }
+        }
+
+        public void Focus()
+        {
+            if (_gameController && _gameController.IsGameMenuOpen) return;
+            if (mode == SurveillanceMode.Grid)
+            {
+                SurveillanceCamera selected;
+
+                if (_currentController == Inputs.Controller.Playstation || _currentController == Inputs.Controller.Xbox)
+                {
+                    selected =_eventSystem.currentSelectedGameObject.GetComponentInParent<SurveillanceCamera>();
+                }
+                else
+                {
+                    selected = cameras.First(item => item.items.Contains(Input.mousePosition)).items;
+                }
+                if (selected != null)
+                {
+                    _fullScreenSystem.SetTarget(selected);
+                }
+                SystemSwitch(SurveillanceMode.Focused);
+            }
+        }
+        
+        public void FocusBack()
+        {
+            if (_gameController && _gameController.IsGameMenuOpen) return;
+            if (mode == SurveillanceMode.Grid)
+            {
+                SystemSwitch(SurveillanceMode.Focused);
+            }
+        }
+
+        #region Interface
+        
+        private void GridInterface()
+        {
+            _buttons = new List<Button>();
+            foreach (var items in cameras)
+            {
+                OutlineButton b = items.items.gameObject.GetComponentInChildren<OutlineButton>();
+                b.colors = colors;
+                b.image.sprite = outlineSprite;
+                b.onClick.AddListener(Focus);
+                _buttons.Add(b);
+            }
+
+           /*if (InputManager.GetController() != Inputs.Controller.Other)
+            {
+                _eventSystem.SetSelectedGameObject(null);
+                _eventSystem.SetSelectedGameObject(_fullScreenSystem.GetTarget().gameObject.GetComponentInChildren<OutlineButton>().gameObject);
+            }*/
+        }
+
+        private void HideGeneralInformation(bool hide)
+        {
+            //_informationsSystem.GetInformationDisplay().gameObject.SetActive(!hide);
+        }
+
+        private void ActivateGridInterface(bool activate)
+        {
+            _buttons.ForEach(b => b.gameObject.SetActive(activate));
+        }
+        
+        #endregion
 
         #region Camera
 
@@ -109,36 +207,74 @@ namespace TechSupport
             {
                 _exitMethods[mode]?.Invoke();
             }
+            _informationsSystem.ActvivateInformation(newMode == SurveillanceMode.Focused);
             _onSwitchMethods[mode = newMode]?.Invoke();
             OnModeSwitched?.Invoke();
         }
 
         private void ExitFullScreen()
         {
+            tabulationIndicationButton.SetActive(false);
             _fullScreenSystem.EscapeFullScreen();
         }
 
         private void ExitGrid()
         {
-            SurveillanceCamera selected =
-                cameras.First(item => item.items.Contains(Input.mousePosition)).items;
-            if (selected != null)
-            {
-                _fullScreenSystem.SetTarget(selected);
-            }
+
+            _eventSystem.SetSelectedGameObject(null);
+            
+            ActivateGridInterface(false);
+            HideGeneralInformation(true);
+
         }
 
         private void OnGrid()
         {
             EnableAll(true);
-            _gridSystem.Grid(cameras.Select(input => input.items.GetCamera()),
-                _gridSystem.GetGridSize());
+            ActivateGridInterface(true);
+            if (_currentController == Inputs.Controller.Playstation || _currentController == Inputs.Controller.Xbox)
+            {
+                _eventSystem.SetSelectedGameObject(null);
+                _eventSystem.SetSelectedGameObject(_fullScreenSystem.GetTarget().gameObject.GetComponentInChildren<OutlineButton>().gameObject);
+            }
+            else
+            {
+                _eventSystem.SetSelectedGameObject(null);
+            }
+            HideGeneralInformation(false);
+            _gridSystem.Grid(cameras.Select(input => input.items.GetCamera()));
         }
 
         private void OnFullScreen()
         {
             EnableAll(false);
+            tabulationIndicationButton.SetActive(true);
             _fullScreenSystem.RenderFullScreen();
+        }
+
+        private void OnControllerTypeChanged()
+        {
+            Inputs.Controller newController = InputManager.GetController();
+
+            Debug.Log("Controller type changed GeneralSystem");
+            
+            if (newController == Inputs.Controller.Playstation || newController == Inputs.Controller.Xbox)
+            {
+                if (mode == SurveillanceMode.Grid)
+                {
+                    _eventSystem.SetSelectedGameObject(null);
+                    _eventSystem.SetSelectedGameObject(_fullScreenSystem.GetTarget().gameObject.GetComponentInChildren<OutlineButton>().gameObject);
+                }
+                else if(mode == SurveillanceMode.Focused)
+                {
+                    _eventSystem.SetSelectedGameObject(null);
+                }
+            }
+            else
+            {
+                _eventSystem.SetSelectedGameObject(null);
+            }
+            _currentController = newController;
         }
 
         #endregion

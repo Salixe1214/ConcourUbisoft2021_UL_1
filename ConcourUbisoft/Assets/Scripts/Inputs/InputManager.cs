@@ -20,9 +20,18 @@ namespace Inputs
         
         private static readonly Dictionary<Tuple<Controller, string>, string> Commands = new Dictionary<Tuple<Controller, string>, string>()
         {
-            { new Tuple<Controller, string>(Controller.Xbox, "Control"), "ControlXbo"},
+            { new Tuple<Controller, string>(Controller.Xbox, "Control"), "ControlXBO"},
             { new Tuple<Controller, string>(Controller.Playstation, "Control"), "ControlPS"},
             { new Tuple<Controller, string>(Controller.Other, "Control"), "Control"},
+            { new Tuple<Controller, string>(Controller.Xbox, "CameraEscape"), "CameraEscapeXBO"},
+            { new Tuple<Controller, string>(Controller.Playstation, "CameraEscape"), "CameraEscapePS"},
+            { new Tuple<Controller, string>(Controller.Other, "CameraEscape"), "CameraEscape"},
+            { new Tuple<Controller, string>(Controller.Xbox, "Confirm"), "ConfirmXBO"},
+            { new Tuple<Controller, string>(Controller.Playstation, "Confirm"), "ConfirmPS"},
+            { new Tuple<Controller, string>(Controller.Other, "Confirm"), "Confirm"},
+            { new Tuple<Controller, string>(Controller.Xbox, "OpenInfo"), "OpenInfoXBO"},
+            { new Tuple<Controller, string>(Controller.Playstation, "OpenInfo"), "OpenInfoPS"},
+            { new Tuple<Controller, string>(Controller.Other, "OpenInfo"), "OpenInfo"},
         };
         
         private static Controller _controller = Controller.Other;
