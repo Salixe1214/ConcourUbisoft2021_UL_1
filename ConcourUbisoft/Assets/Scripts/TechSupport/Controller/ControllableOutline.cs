@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Inputs;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
@@ -31,6 +32,7 @@ namespace TechSupport.Controller
         
         [Header("Inputs")]
         [SerializeField] private string inputName = "Control";
+        [SerializeField] [NotNull] private GameObject controls;
         [SerializeField] public SerializableDictionary<Inputs.Controller, Texture> textures 
             = new SerializableDictionary<Inputs.Controller, Texture>(
             new Dictionary<Inputs.Controller, Texture> {
@@ -114,6 +116,7 @@ namespace TechSupport.Controller
             if (Input.GetButtonUp(InputManager.GetInputNameByController(inputName)))
             {
                 _controllable.IsControlled = !_controllable.IsControlled;
+                controls.SetActive(_controllable.IsControlled);
                 UpdateOutline();
             }
         }
@@ -144,6 +147,7 @@ namespace TechSupport.Controller
             }
             _outline.enabled = enabledOutline && !_controllable.IsControlled;
             _image.enabled = enabledOutline && !_controllable.IsControlled;
+            controls.SetActive(enabledOutline && _controllable.IsControlled);
         }
     }
 }
