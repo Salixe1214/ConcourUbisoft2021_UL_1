@@ -57,14 +57,14 @@ public class DialogSystem : MonoBehaviour
         rightCharSlot.enabled = false;
         textSlot.enabled = false;
 
-        /*_networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+        _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
 
         if(_networkController.GetLocalRole() == GameController.Role.SecurityGuard)
         {
             var temp = leftCharSlot;
             leftCharSlot = rightCharSlot;
             rightCharSlot = temp;
-        }*/
+        }
     }
 
     void Update()
@@ -78,7 +78,6 @@ public class DialogSystem : MonoBehaviour
 
         if (bIsPressed && Input.GetButton("Submit"))
         {
-            Debug.Log(bDownTime);
             bDownTime += Time.deltaTime;
 
             if (bDownTime >= longPressDuration)
