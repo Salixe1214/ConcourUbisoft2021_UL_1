@@ -1,0 +1,1 @@
+1;0;I am now remotely controlling the arm. Looks like my visual is a little dated. You’ll have to help me out with the colors.
