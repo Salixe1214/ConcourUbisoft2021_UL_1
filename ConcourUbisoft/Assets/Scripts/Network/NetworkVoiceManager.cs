@@ -1,16 +1,27 @@
 using Photon.Voice.Unity;
 using UnityEngine;
 using System.Linq;
+using Photon.Pun;
+using Photon.Realtime;
+using Photon.Voice.PUN;
+using Photon.Voice.Unity.UtilityScripts;
 
 [RequireComponent(typeof(VoiceConnection))]
 public class NetworkVoiceManager : MonoBehaviour
 {
     private Recorder recorder;
+    private ConnectAndJoin cAJ;
+    private VoiceConnection vc;
+    private NetworkController _networkController;
     
-    private void Awake()
+    private void Start()
     {
+        vc = gameObject.GetComponent<VoiceConnection>();
         recorder = GetComponent<Recorder>();
         recorder.IsRecording = false;
+        recorder.Init(vc);
+
+        
     }
 
     private void Update()
