@@ -69,35 +69,25 @@ public class DialogSystem : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Submit"))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             bDownTime = 0;
             bIsPressed = true;
             
         }
 
-        if (bIsPressed && Input.GetButton("Submit"))
+        if (bIsPressed && Input.GetKey(KeyCode.Q))
         {
             bDownTime += Time.deltaTime;
 
             if (bDownTime >= longPressDuration)
             {
                 bIsPressed = false;
-                while (!isEmpty)
-                {
-                    if(!_isReading)
-                    {
-                        ReadLine();
-                    }
-                    else
-                    {
-                        _isReading = false;
-                    }
-                }
+                StartCoroutine(SkipAll());
             }
         }
 
-        if (bIsPressed && Input.GetButtonUp("Submit"))
+        if (bIsPressed && Input.GetKeyUp(KeyCode.Q))
         {
             bIsPressed = false;
 
@@ -222,7 +212,14 @@ public class DialogSystem : MonoBehaviour
             rightCharSlot.color = Color.clear;
             textSlot.text = "";
             
-            ReadLine();
+            if(!_isReading)
+            {
+                ReadLine();
+            }
+            else
+            {
+                _isReading = false;
+            }
             
             if(pAutoRead)
                 StartCoroutine(ReadAll(pTimeBetweenLines));
@@ -267,7 +264,14 @@ public class DialogSystem : MonoBehaviour
             rightCharSlot.color = Color.clear;
             textSlot.text = "";
             
-            ReadLine();
+            if(!_isReading)
+            {
+                ReadLine();
+            }
+            else
+            {
+                _isReading = false;
+            }
             
             if(pAutoRead)
                 StartCoroutine(ReadAll(pTimeBetweenLines));
@@ -279,7 +283,31 @@ public class DialogSystem : MonoBehaviour
         while (!isEmpty)
         {
             yield return new WaitForSeconds(5);
-            ReadLine();
+            if(!_isReading)
+            {
+                ReadLine();
+            }
+            else
+            {
+                _isReading = false;
+            }
+        }
+    }
+    
+    IEnumerator SkipAll()
+    {
+        while (!isEmpty)
+        {
+            yield return null;
+            if(!_isReading)
+            {
+                ReadLine();
+            }
+            else
+            {
+                _isReading = false;
+            }
+            
         }
     }
 }
