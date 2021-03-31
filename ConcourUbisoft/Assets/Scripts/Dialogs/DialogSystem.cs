@@ -43,6 +43,11 @@ public class DialogSystem : MonoBehaviour
     private NetworkController _networkController = null;
     private AudioSource _audioSource = null;
 
+    // Long press parameters
+    [SerializeField] private float longPressDuration = 1;
+    private bool bIsPressed = false;
+    private float bDownTime = 0;
+
     private void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
@@ -66,6 +71,36 @@ public class DialogSystem : MonoBehaviour
     {
         if (Input.GetButtonDown("Submit"))
         {
+            bDownTime = 0;
+            bIsPressed = true;
+            
+        }
+
+        if (bIsPressed && Input.GetButton("Submit"))
+        {
+            bDownTime += Time.deltaTime;
+
+            if (bDownTime >= longPressDuration)
+            {
+                bIsPressed = false;
+                while (!isEmpty)
+                {
+                    if(!_isReading)
+                    {
+                        ReadLine();
+                    }
+                    else
+                    {
+                        _isReading = false;
+                    }
+                }
+            }
+        }
+
+        if (bIsPressed && Input.GetButtonUp("Submit"))
+        {
+            bIsPressed = false;
+
             if(!_isReading)
             {
                 ReadLine();
@@ -74,7 +109,6 @@ public class DialogSystem : MonoBehaviour
             {
                 _isReading = false;
             }
-            
         }
     }
 
@@ -161,7 +195,7 @@ public class DialogSystem : MonoBehaviour
         }
     }
     
-    public void StartDialog(string pFile,  bool pAutoRead = false, int pTimeBetweenLines = 3)
+    public void StartDialog(string pFile,  bool pAutoRead = true, int pTimeBetweenLines = 3)
     {
         // Loading text file
         TextAsset txtAsset = Resources.Load("Dialog/" + pFile) as TextAsset;
