@@ -15,8 +15,6 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float controllerSensivityY=120;
     [SerializeField] private float cameraRotationSmoothingSpeed = 0.7f;
     
-    private float xRotation = 0f;
-    private float yRotation = 0f;
     private float mouseYAccumulator = 0f;
     private float mouseXAccumulator = 0f;
     private float controllerYAccumulator = 0f;
@@ -28,20 +26,42 @@ public class CameraMovement : MonoBehaviour
     private float accumulatedDeltaTime = 0.0f;
     
     private string[] joysticks;
-    
-    
+    private Vector3 _cameraDifference = new Vector3();
+    private CharacterControl _characterControl = null;
+    private GameController _gameController = null;
+
+    private void Awake()
+    {
+        _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        _characterControl = playerBody.GetComponent<CharacterControl>();
+
+        mouseXAccumulator = transform.rotation.eulerAngles.y;
+        controllerXAccumulator = transform.rotation.eulerAngles.y;
+        xRotationControllerPS = transform.rotation.eulerAngles.y;
+        xRotationControllerXBO = transform.rotation.eulerAngles.y;
+    }
+
     void Start()
     {
         joysticks = Input.GetJoystickNames();
         Cursor.lockState = CursorLockMode.Locked;
+
+        _cameraDifference = transform.position - playerBody.transform.position;
     }
+
+
 
     //PS = playstation
     //XBO = xbox one
     void Update()
     {
         joysticks = Input.GetJoystickNames();
-        RotateCamera();
+        if(!_gameController.IsGameMenuOpen)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, playerBody.transform.position + _cameraDifference, _characterControl.playerMovementSpeed * Time.deltaTime);
+
+            RotateCamera();
+        }
     }
 
     private void RotateCamera()
