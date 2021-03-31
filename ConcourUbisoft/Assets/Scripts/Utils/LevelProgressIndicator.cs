@@ -10,6 +10,7 @@ public class LevelProgressIndicator : MonoBehaviour
     };
     
     [SerializeField] private Color defaultColor = Color.black;
+    [SerializeField] private Color completedColor = Color.white;
     
     [SerializeField] private List<GameObject> indicatorLights;
     private List<Renderer> _renderers = new List<Renderer>();
@@ -35,7 +36,7 @@ public class LevelProgressIndicator : MonoBehaviour
             if(i < _numYellowLights)
             {
                 _renderers[i].material.color = Color.yellow;
-                _renderers[i].material.SetColor("_EmissionColor", Color.yellow * 15);
+                _renderers[i].material.SetColor("_EmissionColor", completedColor * 15);
             }
             else
             {

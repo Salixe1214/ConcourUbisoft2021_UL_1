@@ -4973,6 +4973,7 @@ MonoBehaviour:
     _name: Blue
   - _color: {r: 0.039215688, g: 0.15686275, b: 0.29411766, a: 1}
     _name: Blue 2
+  ColorBlindMode: 1
 --- !u!4 &1209276559
 Transform:
   m_ObjectHideFlags: 0

@@ -25,6 +25,7 @@ public class Level2Controller : MonoBehaviour, LevelController
     [SerializeField] private float _delayInverse = 10;
     [SerializeField] private Canvas _information = null;
     [SerializeField] private Font _font;
+    [SerializeField] private GameController.Role _emissionVisibleBy = GameController.Role.None;
 
     [Tooltip("Intensity of the AreaCamera Shake Effect")]
     [SerializeField] private float cameraShakeForce = 0.3f;
@@ -43,7 +44,6 @@ public class Level2Controller : MonoBehaviour, LevelController
     {
         return 0;
     }
-
     public Color[] GetAllNextItemColors() => _furnace.GetAllNextItemColors();
     
 
@@ -63,6 +63,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _cameraOriginalPosition = AreaCamera.transform.position;
         _dialogSystem = GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>();
+
     }
 
     public void StartLevel()
@@ -120,7 +121,10 @@ public class Level2Controller : MonoBehaviour, LevelController
         GameObject randomPrefab = _transportablesPrefab[_random.Next(0, _transportablesPrefab.Length)];
 
         GameObject gameobject = PhotonNetwork.Instantiate(randomPrefab.name, solution.center, Quaternion.identity);
-        gameobject.GetComponent<Arm.Pickable>().Color = color;
+        Pickable pickable = gameobject.GetComponent<Arm.Pickable>();
+        pickable.Color = color;
+        pickable.Furnace = _furnace;
+        pickable.SetEmissionVisibleBy(_emissionVisibleBy);
     }
 
     private void SpawnSequenceObject(Bounds solution, Color color, Other.PickableType type)
@@ -130,7 +134,10 @@ public class Level2Controller : MonoBehaviour, LevelController
             if (t.GetComponent<Arm.Pickable>().GetType() == type)
             {
                 GameObject gameobject = PhotonNetwork.Instantiate(t.name, solution.center, Quaternion.identity);
-                gameobject.GetComponent<Arm.Pickable>().Color = color;
+                Pickable pickable = gameobject.GetComponent<Arm.Pickable>();
+                pickable.Color = color;
+                pickable.Furnace = _furnace;
+                pickable.SetEmissionVisibleBy(_emissionVisibleBy);
                 break;
             }
         }

@@ -35,6 +35,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private InGameMenuController _inGameMenuController = null;
     [SerializeField] private GameObject _speaking = null;
     [SerializeField] private ColorName[] _colorNames = null;
+    [SerializeField] public bool ColorBlindMode = false;
 
     private SoundController _soundController = null;
     private NetworkController _networkController = null;
