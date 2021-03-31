@@ -18,8 +18,10 @@ public class NetworkVoiceManager : MonoBehaviour
     {
         vc = gameObject.GetComponent<VoiceConnection>();
         recorder = GetComponent<Recorder>();
-        recorder.IsRecording = true;
+        recorder.IsRecording = false;
         recorder.Init(vc);
+
+        
     }
 
     private void Update()
