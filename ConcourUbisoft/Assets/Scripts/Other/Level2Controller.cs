@@ -6,6 +6,7 @@ using Photon.Pun;
 using TechSupport.Informations;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 public class Level2Controller : MonoBehaviour, LevelController
 {
@@ -20,17 +21,31 @@ public class Level2Controller : MonoBehaviour, LevelController
     [SerializeField] private Sprite BatteryImage;
     [SerializeField] private Sprite PipeImage;
     [SerializeField] private Camera AreaCamera = null;
+    [SerializeField] private ArmController _armController = null;
+    [SerializeField] private float _delayInverse = 10;
+    [SerializeField] private Canvas _information = null;
+    [SerializeField] private Font _font;
+    [SerializeField] private GameController.Role _emissionVisibleBy = GameController.Role.None;
 
     [Tooltip("Intensity of the AreaCamera Shake Effect")]
     [SerializeField] private float cameraShakeForce = 0.3f;
     [Tooltip("Duration (Seconds) of the AreaCamera Shake effect.")]
     [SerializeField] private float cameraShakeDurationSeconds = 0.2f;
     private bool cameraMustShake = false;
+    private DialogSystem _dialogSystem;
 
     public Color[] GetColors() => _possibleColors;
     public Color GetNextColorInSequence() => _furnace.GetNextColor();
     public int GetCurrentSequenceLenght() => _furnace.GetCurrentSequenceLenght();
     public Other.PickableType GetNextTypeInSequence() => _furnace.GetNextItemType();
+    public PickableType[] GetAllNextItemTypes() => _furnace.GetAllNextItemTypes();
+    public int GetCurrentSequenceIndex() => _furnace.GetCurrentSequenceIndex();
+    public int GetCurrentRequiredItemIndex()
+    {
+        return 0;
+    }
+    public Color[] GetAllNextItemColors() => _furnace.GetAllNextItemColors();
+    
 
     private ImageLayout _imageList;
     private List<Sprite> _itemSprites = new List<Sprite>();
@@ -39,12 +54,16 @@ public class Level2Controller : MonoBehaviour, LevelController
     private Vector3 _cameraOriginalPosition;
     private int _currentListIndex;
     private NetworkController _networkController = null;
+    private float _lastTimeInverseControl = 0;
+
 
     private void Awake()
     {
         _soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _cameraOriginalPosition = AreaCamera.transform.position;
+        _dialogSystem = GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>();
+
     }
 
     public void StartLevel()
@@ -56,11 +75,29 @@ public class Level2Controller : MonoBehaviour, LevelController
         {
             SpawnObjects();
         }
-        
 
-        _imageList = _techUI.GetList();
+        _techUI.GetList().Clean();
+
+        _imageList = new GameObject().AddComponent<ImageLayout>();
+        _imageList.GetComponent<RectTransform>().SetParent(_information.transform);
+        _imageList.Font = _font;
+        _imageList.TextOffset = -75.0f;
+        RectTransform rectTransform = _imageList.GetComponent<RectTransform>();
+        rectTransform.sizeDelta = new Vector2(430, 175);
+        rectTransform.anchorMax = new Vector2(0,0);
+        rectTransform.anchorMin = new Vector2(0,0);
+        rectTransform.pivot = new Vector2(0,0);
+        rectTransform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+        rectTransform.localPosition = new Vector3(0,0,0);
+        rectTransform.localRotation = Quaternion.identity;
+        rectTransform.anchoredPosition = new Vector2(0,0);
+
+        //_imageList = _techUI.GetList();
         _imageList.Clean();
         setItemsImageList();
+        _dialogSystem.StartDialog("Area02_start");
+
+        
     }
 
     public void SpawnObjects()
@@ -84,7 +121,10 @@ public class Level2Controller : MonoBehaviour, LevelController
         GameObject randomPrefab = _transportablesPrefab[_random.Next(0, _transportablesPrefab.Length)];
 
         GameObject gameobject = PhotonNetwork.Instantiate(randomPrefab.name, solution.center, Quaternion.identity);
-        gameobject.GetComponent<Arm.Pickable>().Color = color;
+        Pickable pickable = gameobject.GetComponent<Arm.Pickable>();
+        pickable.Color = color;
+        pickable.Furnace = _furnace;
+        pickable.SetEmissionVisibleBy(_emissionVisibleBy);
     }
 
     private void SpawnSequenceObject(Bounds solution, Color color, Other.PickableType type)
@@ -94,7 +134,10 @@ public class Level2Controller : MonoBehaviour, LevelController
             if (t.GetComponent<Arm.Pickable>().GetType() == type)
             {
                 GameObject gameobject = PhotonNetwork.Instantiate(t.name, solution.center, Quaternion.identity);
-                gameobject.GetComponent<Arm.Pickable>().Color = color;
+                Pickable pickable = gameobject.GetComponent<Arm.Pickable>();
+                pickable.Color = color;
+                pickable.Furnace = _furnace;
+                pickable.SetEmissionVisibleBy(_emissionVisibleBy);
                 break;
             }
         }
@@ -105,10 +148,21 @@ public class Level2Controller : MonoBehaviour, LevelController
         _soundController.PlayLevelSequenceClearedSuccessSound();
         _imageList.Clean();
         _soundController.StopAreaMusic();
+        _dialogSystem.StartDialog("Area02_end");
     }
 
     public void InitiateNextSequence()
     {
+        if(_furnace.SucceedSequences == 1)
+        {
+            _dialogSystem.StartDialog("Area02_first_sequence_done");
+            _armController.InverseX();
+            _armController.InverseZ();
+        }
+        else if (_furnace.SucceedSequences ==2)
+        {
+            _dialogSystem.StartDialog("Area02_second_sequence_done");
+        }
         _soundController.PlayLevelSequenceClearedSuccessSound();
         _imageList.Clean();
         setItemsImageList();
@@ -147,6 +201,16 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     private void Update()
     {
+        if (_furnace.SucceedSequences >= 2)
+        {
+            if(Time.time - _lastTimeInverseControl > _delayInverse)
+            {
+                _armController.InverseX();
+                _armController.InverseZ();
+                _lastTimeInverseControl = Time.time;
+            }
+        }
+
         if (cameraMustShake)
         {
             AreaCamera.transform.position = _cameraOriginalPosition + Random.insideUnitSphere * cameraShakeForce;
@@ -212,7 +276,6 @@ public class Level2Controller : MonoBehaviour, LevelController
         {
             Debug.Log("Number of items in sequences are superior to the amount of spawning positions available.");
         }
-
         
     }
 }

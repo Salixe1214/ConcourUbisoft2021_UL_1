@@ -1,6 +1,7 @@
 using Other;
 using Photon.Pun;
 using System;
+using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
@@ -16,11 +17,11 @@ namespace Arm
         [SerializeField] private PickableType type;
         [SerializeField] private float volumeMultiplier = 0.3f;
         [SerializeField] private AudioClip magnetCollisionSound;
-        [SerializeField] private bool hasBeenPickup = false;
 
         public Color Color { get { return _renderer.material.color; } set { _renderer.material.color = value; } }
         public Rigidbody Rigidbody { get; private set; }
-        public bool HasBeenPickup { get => hasBeenPickup; set => hasBeenPickup = value; }
+        
+        public FurnaceController Furnace { get; set; } = null;
 
         private Renderer _renderer = null;
         private AudioSource _audioSource;
@@ -29,27 +30,28 @@ namespace Arm
         private NetworkController _networkController = null;
         private PhotonView _photonView = null;
         private TransportableByConveyor _transportableByConveyor = null;
+        private GameController _gameController = null;
 
         private bool hovered;
         private bool _grabbed = false;
         private float _conveyorSpeed = 0.0f;
-
+        public GameController.Role _emissionVisibleBy = GameController.Role.None;
         private Vector3 _newPosition = new Vector3();
+        public bool _isRightColor = false;
+        [SerializeField] private float _intensity = 0.0f;
+        [SerializeField] private int _directionIntensity = 1;
+        [SerializeField] private float _intensityGainSpeed = 0.2f;
+        [SerializeField] private float _intensityUpperBound = 0.4f;
+        [SerializeField] private float _intensityBottomBound = 0.0f;
 
         private void Awake()
         {
             _newPosition = transform.position;
             _renderer = GetComponent<Renderer>();
             _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+            _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
             _transportableByConveyor = GetComponent<TransportableByConveyor>();
             _photonView = GetComponent<PhotonView>();
-
-            if (!_photonView.IsMine)
-            {
-                GetComponent<TransportableByConveyor>().enabled = false;
-            }
-
-            _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
             Rigidbody = GetComponent<Rigidbody>();
             _collider = GetComponent<Collider>();
             _outline = GetComponent<Outline>();
@@ -60,10 +62,6 @@ namespace Arm
         {
             _outline.enabled = false;
 
-            if (!_photonView.IsMine)
-            {
-                Rigidbody.isKinematic = true;
-            }
         }
 
         public bool Contains(Vector3 point)
@@ -73,7 +71,44 @@ namespace Arm
 
         private void Update()
         {
-            if (!_photonView.IsMine)
+            if (_gameController.ColorBlindMode && Furnace != null)
+            {
+                Color color = Furnace.GetNextColor();
+                _isRightColor = Math.Abs(color.r - Color.r) < 0.1f && Math.Abs(color.g - Color.g) < 0.1f && Math.Abs(color.b - Color.b) < 0.1f;
+            }
+
+            if (_networkController.GetLocalRole() == _emissionVisibleBy && _isRightColor)
+            {
+                _renderer.material.SetColor("_EmissionColor", Color * _intensity);
+                if(!_renderer.material.IsKeywordEnabled("_EMISSION"))
+                {
+                    _renderer.material.EnableKeyword("_EMISSION");
+                }
+                _intensity = _intensity + _directionIntensity * Time.deltaTime * _intensityGainSpeed;
+
+                if(_intensity < _intensityBottomBound)
+                {
+                    _intensity = _intensityBottomBound;
+                    _directionIntensity = 1;
+                }
+
+                if(_intensity > _intensityUpperBound)
+                {
+                    _intensity = _intensityUpperBound;
+                    _directionIntensity = -1;
+                }
+            }
+            else
+            {
+                if (_renderer.material.IsKeywordEnabled("_EMISSION"))
+                {
+                    _directionIntensity = 1;
+                    _intensity = _intensityBottomBound;
+                    _renderer.material.DisableKeyword("_EMISSION");
+                }
+            }
+
+            if (!_photonView.IsMine && _conveyorSpeed == 0.0f)
             {
                 if(Vector3.Distance(transform.position, _newPosition) > 3)
                 {
@@ -81,7 +116,7 @@ namespace Arm
                 }
                 else
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, _newPosition, (_grabbed ? 4 : _conveyorSpeed > 0 ? _conveyorSpeed : 10) * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, _newPosition, (_grabbed ? 4 : 10) * Time.deltaTime);
                 }
             }
 
@@ -98,14 +133,24 @@ namespace Arm
             {
                 Rigidbody.useGravity = false;
                 Rigidbody.freezeRotation = true;
-                hasBeenPickup = true;
                 _grabbed = true;
                 _photonView.RPC("PlayMagnetSound", RpcTarget.All);
             }
         }
 
+        public void SetEmissionVisibleBy(GameController.Role role)
+        {
+            _photonView.RPC("SetEmissionVisibleByRPC", RpcTarget.All, new object[] { (int)role } as object);
+        }
+
         [PunRPC]
-        public void PlayMagnetSound()
+        private void SetEmissionVisibleByRPC(object[] parameters)
+        {
+            _emissionVisibleBy = (GameController.Role) parameters[0];
+        }
+
+        [PunRPC]
+        private void PlayMagnetSound()
         {
             _audioSource.clip = magnetCollisionSound;
             _audioSource.volume = volumeMultiplier;
@@ -145,21 +190,32 @@ namespace Arm
                 stream.SendNext(Color.g);
                 stream.SendNext(Color.b);
                 stream.SendNext(Color.a);
-                stream.SendNext(transform.position.x);
-                stream.SendNext(transform.position.y);
-                stream.SendNext(transform.position.z);
-                stream.SendNext(transform.rotation.x);
-                stream.SendNext(transform.rotation.y);
-                stream.SendNext(transform.rotation.z);
-                stream.SendNext(transform.rotation.w);
+                stream.SendNext(_isRightColor);
+                if(_transportableByConveyor.ConveyorSpeed() == 0.0f)
+                {
+                    stream.SendNext(transform.position.x);
+                    stream.SendNext(transform.position.y);
+                    stream.SendNext(transform.position.z);
+                    stream.SendNext(transform.rotation.x);
+                    stream.SendNext(transform.rotation.y);
+                    stream.SendNext(transform.rotation.z);
+                    stream.SendNext(transform.rotation.w);
+                }
+                
             }
             else
             {
                 _conveyorSpeed = (float)stream.ReceiveNext();
                 _grabbed = (bool)stream.ReceiveNext();
                 Color = new Color((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
-                _newPosition = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
-                transform.rotation = new Quaternion((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+                _isRightColor = (bool)stream.ReceiveNext();
+                if (_conveyorSpeed == 0.0f)
+                {
+                    _newPosition = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+                    transform.rotation = new Quaternion((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+                }
+
+                Rigidbody.isKinematic = _conveyorSpeed == 0.0f;
             }
         }
 

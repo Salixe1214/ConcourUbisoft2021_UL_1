@@ -14,7 +14,9 @@ public class TransportableSpawner : MonoBehaviour
     [SerializeField] private Transform PointB = null;
     [SerializeField] public GameObject LevelControl = null;
     [SerializeField] private Vector2 DelayBetweenSpawnsInSeconds = new Vector2(0.5f, 1);
-    [SerializeField] private bool CanSpawn = true;
+    [SerializeField] private bool CanSpawn = false;
+    [SerializeField] private FurnaceController _furnace = null;
+    [SerializeField] private GameController.Role _emissionVisibleBy = GameController.Role.None;
 
     // Control conveyor speed according to needs. Ex: Slow conveyor speed might need a speed boost when items are spawned the first time in order to avoid item drought.
     [SerializeField] private Conveyor[] conveyors = null;
@@ -23,14 +25,17 @@ public class TransportableSpawner : MonoBehaviour
 
     private float lastSpawnTime = 0.0f;
     private float currentDelay = 0.0f;
-    private int sequenceIndex = 0;
     private LevelController levelController;
     private System.Random _random = new System.Random(0);
+    private PickableType[] currentSequenceTypes;
+    private Color[] currentSequenceColors;
 
-   
+    public bool canSpawnNextRequiredItem =false;
+    public event Action requiredItemHasSpawned;
 
     private void Start()
     {
+        Debug.Log("Calling Start Spawners");
         levelController = LevelControl.GetComponent<LevelController>();
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
     }
@@ -58,26 +63,31 @@ public class TransportableSpawner : MonoBehaviour
 
         GameObject transportable;
 
-        if (sequenceIndex > levelController.GetCurrentSequenceLenght())
+        if (canSpawnNextRequiredItem)
         {
+            int sequenceIndex = levelController.GetCurrentRequiredItemIndex();
             foreach (var t in TransportablesPrefab)
             {
-                if (t.GetComponent<Pickable>().GetType() == levelController.GetNextTypeInSequence())
+                if (t.GetComponent<Pickable>().GetType() == currentSequenceTypes[sequenceIndex])
                 {
                     transportable = PhotonNetwork.Instantiate(t.name, randomPoint, Quaternion.identity);
-                    transportable.GetComponent<Arm.Pickable>().Color = levelController.GetNextColorInSequence();
+                    Pickable pickable = transportable.GetComponent<Arm.Pickable>();
+                    pickable.Color = currentSequenceColors[sequenceIndex];
+                    pickable.Furnace = _furnace;
+                    pickable.SetEmissionVisibleBy(_emissionVisibleBy);
+                    requiredItemHasSpawned?.Invoke();
                     break;
                 }
             }
-            sequenceIndex = 0;
         }
         else
         {
             Color randomColor = possibleColors[_random.Next(0, possibleColors.Length)];
             transportable = PhotonNetwork.Instantiate(randomPrefab.name, randomPoint, Quaternion.identity);
-            transportable.gameObject.GetComponent<Pickable>().Color = randomColor;
-            
-            sequenceIndex++;
+            Pickable pickable = transportable.GetComponent<Arm.Pickable>();
+            pickable.Color = randomColor;
+            pickable.Furnace = _furnace;
+            pickable.SetEmissionVisibleBy(_emissionVisibleBy);
         }
         
     }
@@ -85,6 +95,11 @@ public class TransportableSpawner : MonoBehaviour
     public void ActivateSpawning(bool canSpawn)
     {
         CanSpawn = canSpawn;
+        if (canSpawn)
+        {
+            currentSequenceTypes = levelController.GetAllNextItemTypes(); 
+            currentSequenceColors = levelController.GetAllNextItemColors();
+        }
     }
 
     public void SetConveyorsSpeed(float speed)
@@ -100,5 +115,4 @@ public class TransportableSpawner : MonoBehaviour
         DelayBetweenSpawnsInSeconds = delay;
     }
 
-    
 }

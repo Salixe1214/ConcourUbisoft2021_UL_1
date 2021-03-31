@@ -57,23 +57,13 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public delegate void OnNetworkErrorHandler(string errorTitle, string errorMessage);
     public event OnNetworkErrorHandler OnNetworkErrorEvent;
 
-    public delegate void OnJoinedRoomHandler();
-    public event OnJoinedRoomHandler OnJoinedRoomEvent;
-
-    public delegate void OnPlayerJoinRoomHandler();
-    public event OnPlayerJoinRoomHandler OnPlayerJoin;
-
-    public delegate void OnPlayerLeftRoomHandler();
-    public event OnPlayerLeftRoomHandler OnPlayerLeftEvent;
-
-    public delegate void OnLeftRoomHandler();
-    public event OnLeftRoomHandler OnLeftRoomEvent;
-
-    public delegate void OnDisconnectHandler();
-    public event OnDisconnectHandler OnDisconnectEvent;
-
-    public delegate void OnPlayerNetworkInstantiateHandler();
-    public event OnPlayerNetworkInstantiateHandler OnPlayerObjectCreate;
+    public event Action OnJoinedRoomEvent;
+    public event Action OnPlayerJoin;
+    public event Action OnPlayerLeftEvent;
+    public event Action OnLeftRoomEvent;
+    public event Action OnDisconnectEvent;
+    public event Action OnPlayerObjectCreate;
+    public event Action OnMasterChanged;
 
     #endregion
     #region Photon Callbacks
@@ -129,11 +119,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
     {
         if (QuickSetup && PhotonNetwork.IsMasterClient)
         {
-            for (int i = 0; i < 70; ++i)
-            {
-                PhotonNetwork.Instantiate("Cube", new Vector3(-6.13f, 0.375f, -4.78f), Quaternion.identity);
-                //GetOwnNetworkPlayer().InstantiateNetworkGameObject("TransportableBox", new Vector3(-6.13f, 0.375f, -4.78f), Quaternion.identity, GameController.Role.SecurityGuard);
-            }
+
         }
         OnPlayerJoin?.Invoke();
     }
@@ -143,6 +129,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
             OnNetworkErrorEvent?.Invoke("A player left the game.", "A player left the game while the game was in progress. ");
         }
         OnPlayerLeftEvent?.Invoke();
+    }
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        OnMasterChanged?.Invoke();
     }
     #endregion
     #region Public Functions
@@ -190,6 +180,12 @@ public class NetworkController : MonoBehaviourPunCallbacks
         IEnumerable<PlayerNetwork> playerNetworks = GameObject.FindGameObjectsWithTag("PlayerNetwork").Select(x => x.GetComponent<PlayerNetwork>()).Where(x => x.IsMine());
         return playerNetworks.Count() > 0 ? playerNetworks.First().PlayerRole : GameController.Role.None;
     }
+    public GameController.Role GetDistantRole()
+    {
+        IEnumerable<PlayerNetwork> playerNetworks = GameObject.FindGameObjectsWithTag("PlayerNetwork").Select(x => x.GetComponent<PlayerNetwork>()).Where(x => !x.IsMine());
+        return playerNetworks.Count() > 0 ? playerNetworks.First().PlayerRole : GameController.Role.None;
+    }
+
     public int GetNumberOfPlayer()
     {
         return PhotonNetwork.CurrentRoom.PlayerCount;

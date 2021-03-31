@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -1360991219368177298, guid: 81710624946b21b4caf1a5b3b62ed078, type: 3}
+  - {fileID: 2100000, guid: 18eb4b70676d4d446937ce5aa039ed50, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -144,7 +144,13 @@ MonoBehaviour:
   type: 3
   volumeMultiplier: 0.3
   magnetCollisionSound: {fileID: 8300000, guid: d0cbf4c91bdfaf9449032b32781825e8, type: 3}
-  hasBeenPickup: 0
+  _emissionVisibleBy: 2
+  _isRightColor: 0
+  _intensity: 0
+  _directionIntensity: 1
+  _intensityGainSpeed: 0.2
+  _intensityUpperBound: 0.4
+  _intensityBottomBound: 0
 --- !u!114 &5905518934942538558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5156,7 +5162,6 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 843007250116299105}
-  - {fileID: 0}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0

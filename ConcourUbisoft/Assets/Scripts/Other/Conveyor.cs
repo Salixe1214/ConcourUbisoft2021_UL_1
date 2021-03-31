@@ -26,7 +26,6 @@ public abstract class Conveyor : MonoBehaviour
         Rigidbody rigidbody = null;
         if (collision.gameObject.TryGetComponent(out transportableByConveyor) && collision.gameObject.TryGetComponent(out rigidbody))
         {
-            transportableByConveyor.HasBeenPickUp = false;
             if (!objectsOnConveyor.ContainsKey(transportableByConveyor))
             {
                 objectsOnConveyor[transportableByConveyor] = new ConveyorObjectData() { NumberOfTimeOnConveyor = 0, Rigidbody = rigidbody, TransportableByConveyor = transportableByConveyor };

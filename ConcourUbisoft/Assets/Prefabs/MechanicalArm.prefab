@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 927382909}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: PullPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 1681656966304376482}
   - component: {fileID: 3917596799221007512}
   - component: {fileID: 1498445205592341312}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: MagnetMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,7 +135,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1245336481020230262}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Pole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -166,7 +166,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2562518454084687109}
   - component: {fileID: 1865101538738871938}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: IKSolver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 5532708660549812110}
   - component: {fileID: 6045816089373113327}
   - component: {fileID: 2789119806684443227}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: MagnetTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -272,7 +272,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6455222844297920428}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Target
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -287,7 +287,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3261505304481004828}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.07, z: -2.69}
+  m_LocalPosition: {x: 0, y: 2.763, z: -2.69}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 6459741911634675205}
@@ -304,7 +304,7 @@ GameObject:
   - component: {fileID: 10610343932898887}
   - component: {fileID: 1884354475686408729}
   - component: {fileID: 4039916121000120775}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Limb3Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -385,7 +385,7 @@ GameObject:
   - component: {fileID: 6072848471506880127}
   - component: {fileID: 3875949658673628700}
   - component: {fileID: 4398064974788238092}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: BaseMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -468,7 +468,7 @@ GameObject:
   - component: {fileID: 8565603360900868797}
   - component: {fileID: 1439748898033245251}
   - component: {fileID: 1388979893}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Magnet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -506,7 +506,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pullForce: 10
   magnetPullPoint: {fileID: 927382909}
-  _owner: 1
+  _owner: 0
+  _outlineViewer: 1
   _magnetSound: {fileID: 1439748898033245251}
 --- !u!82 &8565603360900868797
 AudioSource:
@@ -643,7 +644,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6610768617839303362}
   - component: {fileID: 6144330531929586566}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -690,7 +691,7 @@ GameObject:
   - component: {fileID: 578758160813006358}
   - component: {fileID: 5861645613941224567}
   - component: {fileID: 4161863157481754790}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Limb1Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -770,7 +771,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1255455955827821671}
   - component: {fileID: 8958149929865130225}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Joint3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -817,7 +818,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6459741911634675205}
   - component: {fileID: 3896696578310646320}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MechanicalArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -879,7 +880,7 @@ GameObject:
   - component: {fileID: 4056633998020785656}
   - component: {fileID: 6585969485157168370}
   - component: {fileID: 7575445809018099549}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Limb2Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -959,7 +960,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3809753468000309618}
   - component: {fileID: 4868718194282804906}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Joint1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1006,7 +1007,7 @@ GameObject:
   - component: {fileID: 674561749183808697}
   - component: {fileID: 1363647597917312281}
   - component: {fileID: 4409781232100943863}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ArmMovementSound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1135,7 +1136,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 942c7c6953f04ebfa4dad9daa2d7a426, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 6455222844297920428}
   armController: {fileID: 2121669986793875469}
 --- !u!1 &8651452615950820993
 GameObject:
@@ -1147,7 +1147,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7626022950420855214}
   - component: {fileID: 7616734089323256725}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Joint2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1193,7 +1193,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7915232795401323305}
   - component: {fileID: 2121669986793875469}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1230,5 +1230,8 @@ MonoBehaviour:
   controlSpeed: 4
   armIKSolver: {fileID: 1865101538738871938}
   armRotationRoot: {fileID: 6610768617839303362}
-  _owner: 1
+  _owner: 0
   _armSound: {fileID: 4409781232100943863}
+  boundingBox:
+    m_Center: {x: 0, y: 6.5, z: 0}
+    m_Extent: {x: 15, y: 7, z: 15}

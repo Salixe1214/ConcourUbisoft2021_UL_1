@@ -1,3 +1,4 @@
+using Photon.Voice.PUN;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,14 @@ public class RoomMenu : MonoBehaviour
     [SerializeField] private GameObject _content = null;
     [SerializeField] private GameObject _roomMenuElementPrefab = null;
     [SerializeField] private GameObject _waitingForAnotherPlayer = null;
-    [SerializeField] private Button _startButton = null;
+    [SerializeField] private GameObject _startButton = null;
     [SerializeField] private Text _errorText = null;
-    [SerializeField] private GameObject _createButton;
-    [SerializeField] private GameObject _directButton;
+    [SerializeField] private GameObject _speaking = null;
+    [SerializeField] private GameObject _lobbyPanelCreateButton;
+    [SerializeField] private GameObject _lobbyPanelJoinButton;
+    [SerializeField] private GameObject _lobbyPanelRoomNameInputField;
+    [SerializeField] private GameObject _lobbyPanelBackButton;
+    [SerializeField] private GameObject _lobbyListHeader;
 
     private NetworkController _networkController = null;
     private GameController _gameController = null;
@@ -24,8 +29,12 @@ public class RoomMenu : MonoBehaviour
     {
         _menuSoundController.PlayButtonSound();
         _networkController.LeaveRoom();
-        _directButton.SetActive(true);
-        _createButton.SetActive(true);
+        Debug.Log("Try to leave room");
+        _lobbyPanelJoinButton.SetActive(true);
+        _lobbyPanelCreateButton.SetActive(true);
+        _lobbyPanelRoomNameInputField.SetActive(true);
+        _lobbyPanelBackButton.SetActive(true);
+        _lobbyListHeader.SetActive(true);
     }
     public void StartGame()
     {
@@ -46,7 +55,6 @@ public class RoomMenu : MonoBehaviour
         //}
 
         _errorText.text = "";
-
         _gameController.StartGame(_networkController.GetLocalRole());
     }
     #endregion
@@ -59,29 +67,25 @@ public class RoomMenu : MonoBehaviour
     }
     private void OnEnable()
     {
+        _speaking.SetActive(true);
         _networkController.OnPlayerObjectCreate += RefreshRoomInterface;
         _networkController.OnJoinedRoomEvent += OnJoinedRoomEvent;
         _networkController.OnPlayerLeftEvent += RefreshRoomInterface;
     }
     private void OnDisable()
     {
+        _speaking.SetActive(false);
         _networkController.OnPlayerObjectCreate -= RefreshRoomInterface;
         _networkController.OnJoinedRoomEvent -= OnJoinedRoomEvent;
         _networkController.OnPlayerLeftEvent -= RefreshRoomInterface;
     }
     private void Update()
     {
-        if (_networkController.IsMasterClient())
-        {
-            _startButton.interactable = true;
-        }
-        else
-        {
-            _startButton.interactable = false;
-        }
+        _startButton.SetActive(_networkController.IsMasterClient());
     }
     #endregion
     #region Event Callbacks
+
     private void RefreshRoomInterface()
     {
         List<Transform> children = new List<Transform>();

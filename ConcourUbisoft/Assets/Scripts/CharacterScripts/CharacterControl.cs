@@ -8,8 +8,11 @@ using UnityEngine;
 
 public class CharacterControl : MonoBehaviour, IPunObservable
 {
-    [SerializeField] private float playerMovementSpeed = 1f;
+    [SerializeField] public float playerMovementSpeed = 1f;
     [SerializeField] private GameController.Role _owner = GameController.Role.SecurityGuard;
+    [SerializeField] private Animator _animator = null;
+    [SerializeField] private new Camera _camera = null;
+    [SerializeField] private Transform _mesh;
 
     private Rigidbody playerBody;
     private Vector3 inputVector;
@@ -25,11 +28,25 @@ public class CharacterControl : MonoBehaviour, IPunObservable
 
     private Vector3 newPosition = new Vector3();
     private Quaternion newQuartenion = new Quaternion();
+    private bool _isMoving = false;
+    private float _horizontalMovement = 0.0f;
+    private float _verticalMovement = 0.0f;
+    private GameController _gameController = null;
 
     private void Awake()
     {
+        _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        newPosition = transform.position;
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _photonView = GetComponent<PhotonView>();
+        transform.Rotate(Vector3.up, Mathf.Deg2Rad * 180);
+        SimpleButton[] buttons = GameObject.FindObjectsOfType<SimpleButton>();
+        foreach (SimpleButton button in buttons)
+        {
+            button.BeforeActions.AddListener(() => _animator.SetBool("PressingButton", true));
+            button.AfterActions.AddListener(() => _animator.SetBool("PressingButton", false));
+        }
+
         if (_networkController.GetLocalRole() == _owner)
         {
             _photonView.RequestOwnership();
@@ -50,16 +67,36 @@ public class CharacterControl : MonoBehaviour, IPunObservable
             controllerHorizontal = Input.GetAxis("LeftJoystickHorizontal");
             controllerVertical = Input.GetAxis("LeftJoystickVertical");
 
-            Vector3 controllerInput = (transform.right * controllerHorizontal + transform.forward * controllerVertical) * (playerMovementSpeed);
-            Vector3 keyboardInput = (playerBody.transform.right * keyboardHorizontal + playerBody.transform.forward * keyBoardVertical) * (playerMovementSpeed);
-
-            inputVector = controllerInput + keyboardInput;
-
-            if (inputVector.magnitude > playerMovementSpeed)
+            if(_gameController.IsGameMenuOpen)
             {
-                inputVector = Vector3.ClampMagnitude(inputVector, playerMovementSpeed);
+                _horizontalMovement = 0;
+                _verticalMovement = 0;
+                inputVector = Vector3.zero;
             }
+            else
+            {
+                Vector3 controllerInput = (_camera.transform.right * controllerHorizontal + Vector3.ProjectOnPlane(_camera.transform.forward, Vector3.up).normalized * controllerVertical);
+                Vector3 keyboardInput = (_camera.transform.right * keyboardHorizontal + Vector3.ProjectOnPlane(_camera.transform.forward, Vector3.up).normalized * keyBoardVertical);
+
+                _horizontalMovement = Mathf.Clamp(Input.GetAxis("Horizontal") + Input.GetAxis("LeftJoystickHorizontal"), -1, 1);
+                _verticalMovement = Mathf.Clamp(Input.GetAxis("Vertical") + Input.GetAxis("LeftJoystickVertical"), -1, 1);
+
+                inputVector = (controllerInput + keyboardInput).normalized * (playerMovementSpeed);
+
+                if(_horizontalMovement == 0 && _verticalMovement == 0)
+                {
+                    inputVector = Vector3.zero;
+                }
+
+                _mesh.rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(_camera.transform.forward, Vector3.up).normalized, Vector3.up);
+            }
+
+            _isMoving = inputVector != Vector3.zero;
         }
+
+        _animator.SetBool("IsMoving",_isMoving);
+        _animator.SetFloat("VerticalMovement", _verticalMovement);
+        _animator.SetFloat("HorizontalMovement", _horizontalMovement);
     }
 
     private void FixedUpdate()
@@ -71,7 +108,7 @@ public class CharacterControl : MonoBehaviour, IPunObservable
         else
         {
             transform.position = Vector3.MoveTowards(transform.position, newPosition, Time.fixedDeltaTime * playerMovementSpeed);
-            transform.rotation = newQuartenion;
+            _mesh.rotation = newQuartenion;
         }
     }
 
@@ -79,17 +116,22 @@ public class CharacterControl : MonoBehaviour, IPunObservable
     {
         if (stream.IsWriting)
         {
-            
+            stream.SendNext(_isMoving);
+            stream.SendNext(_verticalMovement);
+            stream.SendNext(_horizontalMovement);
             stream.SendNext(transform.position.x);
             stream.SendNext(transform.position.y);
             stream.SendNext(transform.position.z);
-            stream.SendNext(transform.rotation.x);
-            stream.SendNext(transform.rotation.y);
-            stream.SendNext(transform.rotation.z);
-            stream.SendNext(transform.rotation.w);
+            stream.SendNext(_mesh.rotation.x);
+            stream.SendNext(_mesh.rotation.y);
+            stream.SendNext(_mesh.rotation.z);
+            stream.SendNext(_mesh.rotation.w);
         }
         else
         {
+            _isMoving = (bool)stream.ReceiveNext();
+            _verticalMovement = (float)stream.ReceiveNext();
+            _horizontalMovement = (float)stream.ReceiveNext();
             Vector3 newPostion = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
             if (Vector3.Distance(newPostion, transform.position) > 3)
             {

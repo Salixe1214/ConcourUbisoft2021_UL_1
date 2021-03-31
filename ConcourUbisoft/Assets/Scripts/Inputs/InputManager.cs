@@ -14,19 +14,50 @@ namespace Inputs
     
     public class InputManager : MonoBehaviour
     {
+        public event Action OnControllerTypeChanged;
+
+        private Controller _previousController;
+        
         private static readonly Dictionary<Tuple<Controller, string>, string> Commands = new Dictionary<Tuple<Controller, string>, string>()
         {
-            { new Tuple<Controller, string>(Controller.Xbox, "Control"), "ControlXbo"},
+            { new Tuple<Controller, string>(Controller.Xbox, "Control"), "ControlXBO"},
             { new Tuple<Controller, string>(Controller.Playstation, "Control"), "ControlPS"},
             { new Tuple<Controller, string>(Controller.Other, "Control"), "Control"},
+            { new Tuple<Controller, string>(Controller.Xbox, "CameraEscape"), "CameraEscapeXBO"},
+            { new Tuple<Controller, string>(Controller.Playstation, "CameraEscape"), "CameraEscapePS"},
+            { new Tuple<Controller, string>(Controller.Other, "CameraEscape"), "CameraEscape"},
+            { new Tuple<Controller, string>(Controller.Xbox, "Confirm"), "ConfirmXBO"},
+            { new Tuple<Controller, string>(Controller.Playstation, "Confirm"), "ConfirmPS"},
+            { new Tuple<Controller, string>(Controller.Other, "Confirm"), "Confirm"},
+            { new Tuple<Controller, string>(Controller.Xbox, "OpenInfo"), "OpenInfoXBO"},
+            { new Tuple<Controller, string>(Controller.Playstation, "OpenInfo"), "OpenInfoPS"},
+            { new Tuple<Controller, string>(Controller.Other, "OpenInfo"), "OpenInfo"},
         };
         
         private static Controller _controller = Controller.Other;
         
         private void Awake()
         {
+            _previousController = Controller.Other;
             SearchForController();
+            Debug.Log("Awake Controller type");
+            Debug.Log(_controller);
+            Debug.Log("Awake previous controller type");
+            Debug.Log(_previousController);
         }
+
+        private void Update()
+        {
+            SearchForController();
+
+            if (_previousController != _controller)
+            {
+                OnControllerTypeChanged?.Invoke();
+                Debug.Log("Controller type changed");
+                _previousController = _controller;
+            }
+        }
+        
 
         private static void SearchForController()
         {
@@ -53,7 +84,7 @@ namespace Inputs
 
         public static string GetInputNameByController(string inputName)
         {
-//            SearchForController();
+            SearchForController();
             return Commands[new Tuple<Controller, string>(_controller, inputName)];
         }
     }

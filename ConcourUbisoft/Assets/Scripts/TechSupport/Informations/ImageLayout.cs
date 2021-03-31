@@ -8,6 +8,10 @@ namespace TechSupport.Informations
     public class ImageLayout : HorizontalLayoutGroup
     {
         private readonly List<Image> _images;
+        public Font Font { get; set; }
+        public float TextOffset { get; set; } = -40.0f;
+
+        private GameController _gameController = null;
 
         public ImageLayout()
         {
@@ -16,6 +20,8 @@ namespace TechSupport.Informations
 
         protected override void Awake()
         {
+            _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+
             base.Awake();
             childAlignment = TextAnchor.MiddleCenter;
             gameObject.SetActive(true);
@@ -28,11 +34,33 @@ namespace TechSupport.Informations
         {
             Image image = (new GameObject()).AddComponent<Image>();
 
+            Text text = (new GameObject()).AddComponent<Text>();
+            text.text = "";
+            text.font = Font;
+            text.alignment = TextAnchor.UpperCenter;
+            text.GetComponent<RectTransform>().SetParent(image.transform);
+
+            RectTransform textTransform = text.GetComponent<RectTransform>();
+            textTransform.sizeDelta = new Vector2(100,20);
+            text.transform.Translate(new Vector3(0, TextOffset, 0));
+
             image.preserveAspect = true;
             image.GetComponent<RectTransform>()?.SetParent(gameObject.transform);
+
+            RectTransform imageTransform = image.GetComponent<RectTransform>();
+            imageTransform.anchorMax = new Vector2(0, 0);
+            imageTransform.anchorMin = new Vector2(0, 0);
+            imageTransform.pivot = new Vector2(0.5f, 0.5f);
+            imageTransform.localScale = new Vector3(1, 1, 1);
+            imageTransform.localPosition = new Vector3(0, 0, 0);
+            imageTransform.localRotation = Quaternion.identity;
+            imageTransform.anchoredPosition = new Vector2(0, 0);
+
+
+
             return image;
         }
-        
+
         public void SetParent(Transform parent)
         {
             rectTransform.SetParent(parent);
@@ -75,6 +103,7 @@ namespace TechSupport.Informations
             image.color = color;
             image.sprite = sprite;
             image.gameObject.SetActive(true);
+            image.GetComponentInChildren<Text>().text = _gameController.GetColorName(color);
             _images.Add(image);
         }
 
