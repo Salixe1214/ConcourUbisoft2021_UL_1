@@ -47,16 +47,16 @@ namespace Utils
             return text;
         }
 
-        //public static ImageLayout InstantiateImageLayout(Transform parent, IEnumerable<Sprite> images, Color[] colors)
-        //{
-        //    if (images.Count() != colors.Length)
-        //        throw new ArgumentException("Images number has to be the same as the color array length");
-        //    ImageLayout imageLayout = new GameObject().AddComponent<ImageLayout>();
+        public static ImageLayout InstantiateImageLayout(Transform parent, IEnumerable<Sprite> images, Color[] colors)
+        {
+            if (images.Count() != colors.Length)
+                throw new ArgumentException("Images number has to be the same as the color array length");
+            ImageLayout imageLayout = new GameObject().AddComponent<ImageLayout>();
 
-        //    imageLayout.CreateLayout(images, colors);
-        //    imageLayout.GetComponent<RectTransform>().SetParent(parent);
-        //    return imageLayout;
-        //}
+            imageLayout.CreateLayout(images, colors);
+            imageLayout.GetComponent<RectTransform>().SetParent(parent);
+            return imageLayout;
+        }
 
         public static void AddVerticalLayoutGroup(GameObject go)
         {

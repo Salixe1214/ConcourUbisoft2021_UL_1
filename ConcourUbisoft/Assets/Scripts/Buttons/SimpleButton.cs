@@ -76,7 +76,6 @@ public class SimpleButton : MonoBehaviour
             {
                 if(_isPress)
                 {
-                    Debug.Log("After");
                     AfterActions?.Invoke();
                 }
                 _isPress = false;
@@ -85,7 +84,6 @@ public class SimpleButton : MonoBehaviour
         }
         else if(_isPress)
         {
-            Debug.Log("After");
             AfterActions?.Invoke();
             _isPress = false;
         }

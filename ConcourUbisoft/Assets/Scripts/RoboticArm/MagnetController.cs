@@ -28,7 +28,6 @@ namespace Arm
 		{
 			transform.rotation = Quaternion.Euler(180, 0, 0);
 			GameController.Role localRole = _networkController.GetLocalRole();
-            Debug.Log(MagnetActive);
 			UpdateCurrentPickable();
 			if (_owner == localRole)
 			{

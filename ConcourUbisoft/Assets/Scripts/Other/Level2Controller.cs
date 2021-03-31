@@ -6,6 +6,7 @@ using Photon.Pun;
 using TechSupport.Informations;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 public class Level2Controller : MonoBehaviour, LevelController
 {
@@ -22,6 +23,8 @@ public class Level2Controller : MonoBehaviour, LevelController
     [SerializeField] private Camera AreaCamera = null;
     [SerializeField] private ArmController _armController = null;
     [SerializeField] private float _delayInverse = 10;
+    [SerializeField] private Canvas _information = null;
+    [SerializeField] private Font _font;
 
     [Tooltip("Intensity of the AreaCamera Shake Effect")]
     [SerializeField] private float cameraShakeForce = 0.3f;
@@ -71,11 +74,29 @@ public class Level2Controller : MonoBehaviour, LevelController
         {
             SpawnObjects();
         }
-        
-        _imageList = _techUI.GetList();
+
+        _techUI.GetList().Clean();
+
+        _imageList = new GameObject().AddComponent<ImageLayout>();
+        _imageList.GetComponent<RectTransform>().SetParent(_information.transform);
+        _imageList.Font = _font;
+        _imageList.TextOffset = -75.0f;
+        RectTransform rectTransform = _imageList.GetComponent<RectTransform>();
+        rectTransform.sizeDelta = new Vector2(430, 175);
+        rectTransform.anchorMax = new Vector2(0,0);
+        rectTransform.anchorMin = new Vector2(0,0);
+        rectTransform.pivot = new Vector2(0,0);
+        rectTransform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+        rectTransform.localPosition = new Vector3(0,0,0);
+        rectTransform.localRotation = Quaternion.identity;
+        rectTransform.anchoredPosition = new Vector2(0,0);
+
+        //_imageList = _techUI.GetList();
         _imageList.Clean();
         setItemsImageList();
         _dialogSystem.StartDialog("Area02_start");
+
+        
     }
 
     public void SpawnObjects()

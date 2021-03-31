@@ -9,6 +9,7 @@ namespace TechSupport.Informations
     {
         private readonly List<Image> _images;
         public Font Font { get; set; }
+        public float TextOffset { get; set; } = -40.0f;
 
         private GameController _gameController = null;
 
@@ -37,14 +38,29 @@ namespace TechSupport.Informations
             text.text = "";
             text.font = Font;
             text.alignment = TextAnchor.UpperCenter;
-            text.transform.Translate(new Vector3(0, -75.0f, 0));
             text.GetComponent<RectTransform>().SetParent(image.transform);
-            
+
+            RectTransform textTransform = text.GetComponent<RectTransform>();
+            textTransform.sizeDelta = new Vector2(100,20);
+            text.transform.Translate(new Vector3(0, TextOffset, 0));
+
             image.preserveAspect = true;
             image.GetComponent<RectTransform>()?.SetParent(gameObject.transform);
+
+            RectTransform imageTransform = image.GetComponent<RectTransform>();
+            imageTransform.anchorMax = new Vector2(0, 0);
+            imageTransform.anchorMin = new Vector2(0, 0);
+            imageTransform.pivot = new Vector2(0.5f, 0.5f);
+            imageTransform.localScale = new Vector3(1, 1, 1);
+            imageTransform.localPosition = new Vector3(0, 0, 0);
+            imageTransform.localRotation = Quaternion.identity;
+            imageTransform.anchoredPosition = new Vector2(0, 0);
+
+
+
             return image;
         }
-        
+
         public void SetParent(Transform parent)
         {
             rectTransform.SetParent(parent);
