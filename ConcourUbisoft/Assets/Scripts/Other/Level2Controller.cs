@@ -28,6 +28,7 @@ public class Level2Controller : MonoBehaviour, LevelController
     [Tooltip("Duration (Seconds) of the AreaCamera Shake effect.")]
     [SerializeField] private float cameraShakeDurationSeconds = 0.2f;
     private bool cameraMustShake = false;
+    private DialogSystem _dialogSystem;
 
     public Color[] GetColors() => _possibleColors;
     public Color GetNextColorInSequence() => _furnace.GetNextColor();
@@ -58,6 +59,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         _soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _cameraOriginalPosition = AreaCamera.transform.position;
+        _dialogSystem = GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>();
     }
 
     public void StartLevel()
@@ -70,10 +72,10 @@ public class Level2Controller : MonoBehaviour, LevelController
             SpawnObjects();
         }
         
-
         _imageList = _techUI.GetList();
         _imageList.Clean();
         setItemsImageList();
+        _dialogSystem.StartDialog("Area02_start");
     }
 
     public void SpawnObjects()
@@ -118,14 +120,20 @@ public class Level2Controller : MonoBehaviour, LevelController
         _soundController.PlayLevelSequenceClearedSuccessSound();
         _imageList.Clean();
         _soundController.StopAreaMusic();
+        _dialogSystem.StartDialog("Area02_end");
     }
 
     public void InitiateNextSequence()
     {
         if(_furnace.SucceedSequences == 1)
         {
+            _dialogSystem.StartDialog("Area02_first_sequence_done");
             _armController.InverseX();
             _armController.InverseZ();
+        }
+        else if (_furnace.SucceedSequences ==2)
+        {
+            _dialogSystem.StartDialog("Area02_second_sequence_done");
         }
         _soundController.PlayLevelSequenceClearedSuccessSound();
         _imageList.Clean();

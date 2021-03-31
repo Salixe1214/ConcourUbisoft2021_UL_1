@@ -72,6 +72,7 @@ public class Level1Controller : MonoBehaviour , LevelController
     private int currentListIndex;
     private List<TransportableSpawner> TransportableSpawners;
     private int currentRequiredItemIndex = 0;
+    private DialogSystem _dialogSystem;
 
     private void Awake()
     {
@@ -81,6 +82,7 @@ public class Level1Controller : MonoBehaviour , LevelController
 
     public void Start()
     {
+        _dialogSystem = GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>();
         TransportableSpawners.Add(InteriorConveyorSpawner);
         TransportableSpawners.Add(ExteriorConveyorSpawner);
         currentListIndex = 0;
@@ -142,6 +144,7 @@ public class Level1Controller : MonoBehaviour , LevelController
         SetConveyorSpeed(MaxInteriorConveyorSpeed,MaxExteriorConveyorSpeed);
         Debug.Log("ConveyorSpeed Max");
         StartCoroutine(SpawnFreshItems(FastItemSpawningTimeSeconds));
+        StartCoroutine(StartLevelDialog(2));
     }
 
     private void InitiateNextSequence()
@@ -246,6 +249,7 @@ public class Level1Controller : MonoBehaviour , LevelController
         InteriorConveyorSpawner.gameObject.SetActive(false);
         ExteriorConveyorSpawner.gameObject.SetActive(false);
         yield return null;
+        _dialogSystem.StartDialog("Area01_end");
     }
     
     IEnumerator StartCameraShake(float duration)
@@ -255,6 +259,12 @@ public class Level1Controller : MonoBehaviour , LevelController
         yield return new WaitForSeconds(duration);
         cameraMustShake = false;
         AreaCamera.transform.position = cameraOriginalPosition;
+    }
+
+    IEnumerator StartLevelDialog(float waitDuration)
+    {
+        yield return new WaitForSeconds(waitDuration);
+        _dialogSystem.StartDialog("Area01_start");
     }
 
     private void UpdateSpriteColorInList()

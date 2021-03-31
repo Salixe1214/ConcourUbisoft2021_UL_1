@@ -1,0 +1,2 @@
+0;2;Damn it, I got shocked by the controls.
+1;0;It looks like the control chip is damaged from your side too. We should hurry up while it's still working.
