@@ -83,17 +83,7 @@ public class DialogSystem : MonoBehaviour
             if (bDownTime >= longPressDuration)
             {
                 bIsPressed = false;
-                while (!isEmpty)
-                {
-                    if(!_isReading)
-                    {
-                        ReadLine();
-                    }
-                    else
-                    {
-                        _isReading = false;
-                    }
-                }
+                StartCoroutine(SkipAll());
             }
         }
 
@@ -222,7 +212,14 @@ public class DialogSystem : MonoBehaviour
             rightCharSlot.color = Color.clear;
             textSlot.text = "";
             
-            ReadLine();
+            if(!_isReading)
+            {
+                ReadLine();
+            }
+            else
+            {
+                _isReading = false;
+            }
             
             if(pAutoRead)
                 StartCoroutine(ReadAll(pTimeBetweenLines));
@@ -267,7 +264,14 @@ public class DialogSystem : MonoBehaviour
             rightCharSlot.color = Color.clear;
             textSlot.text = "";
             
-            ReadLine();
+            if(!_isReading)
+            {
+                ReadLine();
+            }
+            else
+            {
+                _isReading = false;
+            }
             
             if(pAutoRead)
                 StartCoroutine(ReadAll(pTimeBetweenLines));
@@ -279,7 +283,31 @@ public class DialogSystem : MonoBehaviour
         while (!isEmpty)
         {
             yield return new WaitForSeconds(5);
-            ReadLine();
+            if(!_isReading)
+            {
+                ReadLine();
+            }
+            else
+            {
+                _isReading = false;
+            }
+        }
+    }
+    
+    IEnumerator SkipAll()
+    {
+        while (!isEmpty)
+        {
+            yield return null;
+            if(!_isReading)
+            {
+                ReadLine();
+            }
+            else
+            {
+                _isReading = false;
+            }
+            
         }
     }
 }
