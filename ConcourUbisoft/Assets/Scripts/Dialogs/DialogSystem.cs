@@ -69,14 +69,14 @@ public class DialogSystem : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Submit"))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             bDownTime = 0;
             bIsPressed = true;
             
         }
 
-        if (bIsPressed && Input.GetButton("Submit"))
+        if (bIsPressed && Input.GetKey(KeyCode.Q))
         {
             bDownTime += Time.deltaTime;
 
@@ -87,7 +87,7 @@ public class DialogSystem : MonoBehaviour
             }
         }
 
-        if (bIsPressed && Input.GetButtonUp("Submit"))
+        if (bIsPressed && Input.GetKeyUp(KeyCode.Q))
         {
             bIsPressed = false;
 
