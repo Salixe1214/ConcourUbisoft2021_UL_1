@@ -88,7 +88,10 @@ public class Outline : MonoBehaviour
 	private void Awake()
 	{
 		// Cache renderers
-		renderers = GetComponentsInChildren<Renderer>();
+		renderers = GetComponentsInChildren<Renderer>().Where(x => {
+            MeshFilter mesh;
+            return x.TryGetComponent(out mesh);
+            }).ToArray();
 		outlineRenderers = new GameObject[renderers.Length];
 		// Instantiate outline materials
 		outlineMaskMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineMask"));

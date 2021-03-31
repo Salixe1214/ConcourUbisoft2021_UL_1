@@ -5,7 +5,6 @@ namespace Arm
     public class MechanicalArmButtonInput : Controllable
     {
         [SerializeField] private ArmController _armController;
-
         [SerializeField] private MagnetController _magnetController;
 
         public void MoveRight()
