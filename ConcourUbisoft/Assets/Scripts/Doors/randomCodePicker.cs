@@ -7,29 +7,20 @@ using Random = System.Random;
 
 public class randomCodePicker : MonoBehaviour
 {
-    // Those are the colors possible for the syboles
-    // They're used mainly in switches
-    public enum SymbolColor
-    {
-        Blue,
-        Green,
-        Red,
-        Yellow,
-        Purple
-    }
-
     // Those are the types of symbols, to make switches the easy way
     public enum Symbol
     {
         One = 0,
         Two = 1,
-        Three = 2
+        Three = 2,
+        Four = 4,
+        Five = 5
     }
 
     [SerializeField] private int _seedTemp = 0;
 
-    private (Symbol, SymbolColor) _firstSymbol;
-    private (Symbol, SymbolColor) _secondSymbol;
+    private Symbol _firstSymbol;
+    private Symbol _secondSymbol;
     private List<DoorController.Direction> _sequence = new List<DoorController.Direction>();
     private Random _random;
 
@@ -66,39 +57,11 @@ public class randomCodePicker : MonoBehaviour
         #endregion
 
 
-        #region cgoosing Color
-
-        // Choice of the first color
-        var colorValues = Enum.GetValues(typeof(SymbolColor)); // List of the colors
-        int firstColorIndex = _random.Next(0, colorValues.Length); // Random index in this list
-        SymbolColor randomColor1 = (SymbolColor) colorValues.GetValue(firstColorIndex); // Expliciting this symbol
-
-        // We can't choose this color again
-        int secondColorIndex = firstColorIndex;
-
-        infiniteLoopProtection = 1000;
-        while (secondColorIndex == firstColorIndex)
-        {
-            secondColorIndex = _random.Next(0, colorValues.Length);
-
-            // Te ensure there is no infinite loop
-            infiniteLoopProtection = infiniteLoopProtection - 1;
-            if (infiniteLoopProtection <= 0)
-            {
-                throw new Exception("An error occured while selecting the second Symbol");
-            }
-        }
-
-        SymbolColor randomColor2 = (SymbolColor)colorValues.GetValue(secondColorIndex);
-
-        #endregion
-
-
         // Initializing the global variables
-        _firstSymbol = (randomSymbol1, randomColor1);
-        _secondSymbol = (randomSymbol2, randomColor2);
-        _sequence.AddRange(getSymbolCode(_firstSymbol.Item2, _firstSymbol.Item1));
-        _sequence.AddRange(getSymbolCode(_secondSymbol.Item2, _secondSymbol.Item1));
+        _firstSymbol = randomSymbol1;
+        _secondSymbol = randomSymbol2;
+        _sequence.AddRange(getSymbolCode(_firstSymbol));
+        _sequence.AddRange(getSymbolCode(_secondSymbol));
         string a = "";
         foreach (var i in _sequence)
         {
@@ -111,126 +74,36 @@ public class randomCodePicker : MonoBehaviour
     }
 
     // This class return the sequence associated to a symbol and a color
-    private List<DoorController.Direction> getSymbolCode(SymbolColor pColor, Symbol pSymbol)
+    private List<DoorController.Direction> getSymbolCode(Symbol pSymbol)
     {
         List<DoorController.Direction> dirList = new List<DoorController.Direction>();
 
-        switch (pColor)
+        switch (pSymbol)
         {
-            case SymbolColor.Blue:
-                switch (pSymbol)
-                {
-                    case Symbol.One:
-                        dirList.Add(DoorController.Direction.Up);
-                        dirList.Add(DoorController.Direction.Up);
-                        dirList.Add(DoorController.Direction.Left);
-                        break;
-                    case Symbol.Two:
-                        dirList.Add(DoorController.Direction.Bottom);
-                        dirList.Add(DoorController.Direction.Bottom);
-                        dirList.Add(DoorController.Direction.Bottom);
-                        break;
-                    case Symbol.Three:
-                        dirList.Add(DoorController.Direction.Up);
-                        dirList.Add(DoorController.Direction.Left);
-                        dirList.Add(DoorController.Direction.Right);
-                        break;
-                    default:
-                        dirList.Clear();
-                        break;
-                }
+            case Symbol.One:
+                dirList.Add(DoorController.Direction.Up);
+                dirList.Add(DoorController.Direction.Up);
+                dirList.Add(DoorController.Direction.Left);
                 break;
-            case SymbolColor.Green:
-                switch (pSymbol)
-                {
-                    case Symbol.One:
-                        dirList.Add(DoorController.Direction.Left);
-                        dirList.Add(DoorController.Direction.Left);
-                        dirList.Add(DoorController.Direction.Left);
-                        break;
-                    case Symbol.Two:
-                        dirList.Add(DoorController.Direction.Bottom);
-                        dirList.Add(DoorController.Direction.Up);
-                        dirList.Add(DoorController.Direction.Up);
-                        break;
-                    case Symbol.Three:
-                        dirList.Add(DoorController.Direction.Bottom);
-                        dirList.Add(DoorController.Direction.Bottom);
-                        dirList.Add(DoorController.Direction.Bottom);
-                        break;
-                    default:
-                        dirList.Clear();
-                        break;
-                }
+            case Symbol.Two:
+                dirList.Add(DoorController.Direction.Bottom);
+                dirList.Add(DoorController.Direction.Bottom);
+                dirList.Add(DoorController.Direction.Bottom);
                 break;
-            case SymbolColor.Red:
-                switch (pSymbol)
-                {
-                    case Symbol.One:
-                        dirList.Add(DoorController.Direction.Right);
-                        dirList.Add(DoorController.Direction.Left);
-                        dirList.Add(DoorController.Direction.Up);
-                        break;
-                    case Symbol.Two:
-                        dirList.Add(DoorController.Direction.Left);
-                        dirList.Add(DoorController.Direction.Right);
-                        dirList.Add(DoorController.Direction.Right);
-                        break;
-                    case Symbol.Three:
-                        dirList.Add(DoorController.Direction.Right);
-                        dirList.Add(DoorController.Direction.Up);
-                        dirList.Add(DoorController.Direction.Bottom);
-                        break;
-                    default:
-                        dirList.Clear();
-                        break;
-                }
+            case Symbol.Three:
+                dirList.Add(DoorController.Direction.Up);
+                dirList.Add(DoorController.Direction.Left);
+                dirList.Add(DoorController.Direction.Right);
                 break;
-            case SymbolColor.Yellow:
-                switch (pSymbol)
-                {
-                    case Symbol.One:
-                        dirList.Add(DoorController.Direction.Left);
-                        dirList.Add(DoorController.Direction.Right);
-                        dirList.Add(DoorController.Direction.Left);
-                        break;
-                    case Symbol.Two:
-                        dirList.Add(DoorController.Direction.Right);
-                        dirList.Add(DoorController.Direction.Right);
-                        dirList.Add(DoorController.Direction.Right);
-                        break;
-                    case Symbol.Three:
-                        dirList.Add(DoorController.Direction.Up);
-                        dirList.Add(DoorController.Direction.Left);
-                        dirList.Add(DoorController.Direction.Left);
-                        break;
-                    default:
-                        dirList.Clear();
-                        break;
-                }
+            case Symbol.Four:
+                dirList.Add(DoorController.Direction.Left);
+                dirList.Add(DoorController.Direction.Left);
+                dirList.Add(DoorController.Direction.Bottom);
                 break;
-            case SymbolColor.Purple:
-                switch (pSymbol)
-                {
-                    case Symbol.One:
-                        dirList.Add(DoorController.Direction.Up);
-                        dirList.Add(DoorController.Direction.Up);
-                        dirList.Add(DoorController.Direction.Right);
-                        break;
-                    case Symbol.Two:
-                        dirList.Add(DoorController.Direction.Right);
-                        dirList.Add(DoorController.Direction.Bottom);
-                        dirList.Add(DoorController.Direction.Right);
-                        break;
-                    case Symbol.Three:
-                        dirList.Add(DoorController.Direction.Bottom);
-                        dirList.Add(DoorController.Direction.Bottom);
-                        dirList.Add(DoorController.Direction.Up);
-                        break;
-                    default:
-                        dirList.Clear();
-                        break;
-                }
+            case Symbol.Five:
+                dirList.Add(DoorController.Direction.Up);
+                dirList.Add(DoorController.Direction.Right);
+                dirList.Add(DoorController.Direction.Bottom);
                 break;
             default:
                 dirList.Clear();
@@ -242,7 +115,7 @@ public class randomCodePicker : MonoBehaviour
 
     #region getters
 
-    public ((Symbol, SymbolColor), (Symbol, SymbolColor)) GETSymbols()
+    public (Symbol, Symbol) GETSymbols()
     {
         return (_firstSymbol, _secondSymbol);
     }

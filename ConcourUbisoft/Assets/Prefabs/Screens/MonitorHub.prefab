@@ -49,6 +49,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 4e86f27a961229a4cafda611099a6b7a, type: 3}
   - {fileID: 21300000, guid: eec3037292c6b3a47a2222e1d27e2cfb, type: 3}
   - {fileID: 21300000, guid: fed3762b24cd73e46b4b4ffa196bf119, type: 3}
+  - {fileID: 21300000, guid: 6f5ae962ca8d520459f9b7702b3ccc8d, type: 3}
+  - {fileID: 21300000, guid: eed69307b5f3a1941a73deac233736d3, type: 3}
   door: {fileID: 0}
   idSymbol: 2
 --- !u!33 &5209907294389050958
