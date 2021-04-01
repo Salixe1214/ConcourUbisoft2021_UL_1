@@ -108,6 +108,7 @@ public class MenuController : MonoBehaviour
         _menuSoundController.PlayButtonSound();
         Application.Quit();
     }
+    
     #endregion
     #region Unity Callbacks
     private void Awake()
