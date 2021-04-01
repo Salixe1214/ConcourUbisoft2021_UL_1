@@ -10,7 +10,7 @@ namespace Other
         PickableType[] GetAllNextItemTypes();
 
         Color[] GetAllNextItemColors();
-        public int GetCurrentSequenceIndex();
+        public int GetIndexInCurrentSequence();
 
         public int GetCurrentRequiredItemIndex();
 
