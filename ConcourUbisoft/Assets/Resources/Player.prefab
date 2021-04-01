@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RandomRoom: 0
-  autoConnect: 1
+  autoConnect: 0
   autoTransmit: 1
   publishUserId: 0
   RoomName: 

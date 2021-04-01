@@ -49,7 +49,6 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 
     private void OnDisable()
     {
-        Debug.Log("MasterChanged");
         _gameController.OnLoadGameEvent -= OnLoadGameEvent;
         _gameController.OnFinishLoadGameEvent -= OnFinishLoadGameEvent;
         _gameController.OnFinishGameEvent -= OnFinishGameEvent;
