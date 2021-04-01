@@ -46,6 +46,11 @@ public class Level2Controller : MonoBehaviour, LevelController
     private bool _currentSequenceFailed;
     private Coroutine timerCoroutine;
     
+    //TODO start the timer after one correct item is dropped on the conveyor.
+    //TODO add timer visual on techUI.
+    //TODO respawn items when sequence failed.
+    //TODO ajouter son tic toc, et 10, 30 , 60 sec left + text
+    
     public Color[] GetColors() => _possibleColors;
     public Color GetNextColorInSequence() => _furnace.GetNextColor();
     public int GetCurrentSequenceLenght() => _furnace.GetCurrentSequenceLenght();
