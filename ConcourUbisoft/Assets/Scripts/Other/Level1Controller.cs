@@ -59,7 +59,7 @@ public class Level1Controller : MonoBehaviour , LevelController
     [Tooltip("Duration (Seconds) of the AreaCamera Shake effect.")]
     [SerializeField] private float cameraShakeDurationSeconds = 0.2f;
     [Tooltip("Duration (Seconds) before next required item is spawned.")]
-    [SerializeField] private float delayBeforeNextRequiredItem = 6f;
+    [SerializeField] private float delayBeforeNextRequiredItem = 3f;
     
 
     private float conveyorOperatingSpeed;
@@ -73,6 +73,7 @@ public class Level1Controller : MonoBehaviour , LevelController
     private List<TransportableSpawner> TransportableSpawners;
     private int currentRequiredItemIndex = 0;
     private DialogSystem _dialogSystem;
+    private float actualDelayNextRequiredItem;
 
     private void Awake()
     {
@@ -91,6 +92,7 @@ public class Level1Controller : MonoBehaviour , LevelController
         FurnaceController.enabled = false;
         conveyorOperatingSpeed = MinConveyorSpeed;
         cameraOriginalPosition = AreaCamera.transform.position;
+        actualDelayNextRequiredItem = delayBeforeNextRequiredItem;
     }
 
     private void Update()
@@ -107,6 +109,7 @@ public class Level1Controller : MonoBehaviour , LevelController
         FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing.AddListener(InitiateNextSequence);
         FurnaceController.WhenFurnaceConsumeWrong.AddListener(ShakeCamera);
         FurnaceController.CheckItemOffList += UpdateSpriteColorInList;
+        FurnaceController.WhenFurnaceConsumeRight.AddListener(OnCorrectItemDropped);
         InteriorConveyorSpawner.requiredItemHasSpawned += SpawnNextRequiredItem;
         ExteriorConveyorSpawner.requiredItemHasSpawned += SpawnNextRequiredItem;
     }
@@ -117,6 +120,7 @@ public class Level1Controller : MonoBehaviour , LevelController
         FurnaceController.WhenFurnaceConsumeAWholeSequenceWithoutFinishing.RemoveListener(InitiateNextSequence);
         FurnaceController.WhenFurnaceConsumeWrong.RemoveListener(ShakeCamera);
         FurnaceController.CheckItemOffList -= UpdateSpriteColorInList;
+        FurnaceController.WhenFurnaceConsumeRight.RemoveListener(OnCorrectItemDropped);
         InteriorConveyorSpawner.requiredItemHasSpawned -= SpawnNextRequiredItem;
         ExteriorConveyorSpawner.requiredItemHasSpawned -= SpawnNextRequiredItem;
     }
@@ -149,6 +153,7 @@ public class Level1Controller : MonoBehaviour , LevelController
 
     private void InitiateNextSequence()
     {
+        actualDelayNextRequiredItem = delayBeforeNextRequiredItem;
         ActivateItemSpawning(false);
         Debug.Log("Items are not spawning");
         soundController.PlayLevelSequenceClearedSuccessSound();
@@ -260,7 +265,7 @@ public class Level1Controller : MonoBehaviour , LevelController
         cameraMustShake = false;
         AreaCamera.transform.position = cameraOriginalPosition;
     }
-
+    
     IEnumerator StartLevelDialog(float waitDuration)
     {
         yield return new WaitForSeconds(waitDuration);
@@ -331,5 +336,11 @@ public class Level1Controller : MonoBehaviour , LevelController
         }
         currentRequiredItemIndex++;
         return currentRequiredItemIndex-1;
+    }
+
+    private void OnCorrectItemDropped()
+    {
+        soundController.PlayLevelPartialSequenceSuccessSound();
+        actualDelayNextRequiredItem += 1;
     }
 }

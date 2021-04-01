@@ -29,6 +29,7 @@ public class FurnaceController : MonoBehaviour
 
     public UnityEvent WhenFurnaceConsumedAll;
     public UnityEvent WhenFurnaceConsumeWrong;
+    public UnityEvent WhenFurnaceConsumeRight;
     public UnityEvent WhenFurnaceConsumeAWholeSequenceWithoutFinishing;
     public event Action CheckItemOffList;
 
@@ -90,8 +91,8 @@ public class FurnaceController : MonoBehaviour
                 && Math.Abs(currentSequenceColor.g - (color).g) < 0.01f
                 && Math.Abs(currentSequenceColor.b - (color).b) < 0.01f && currentType == type)
             {
-                soundController.PlayLevelPartialSequenceSuccessSound();
                 CheckItemOffList?.Invoke();
+                WhenFurnaceConsumeRight?.Invoke();
                 currentSequence.SucceedColors++;
                 if (currentSequence.SucceedColors == currentSequence.ColorsSequence.Length)
                 {

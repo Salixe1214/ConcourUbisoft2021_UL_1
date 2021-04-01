@@ -96,8 +96,6 @@ public class Level2Controller : MonoBehaviour, LevelController
         _imageList.Clean();
         setItemsImageList();
         _dialogSystem.StartDialog("Area02_start");
-
-        
     }
 
     public void SpawnObjects()
