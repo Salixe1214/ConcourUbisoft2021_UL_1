@@ -19,7 +19,7 @@ public class Level1Controller : MonoBehaviour , LevelController
     public PickableType GetNextTypeInSequence() => FurnaceController.GetNextItemType();
     public PickableType[] GetAllNextItemTypes() => FurnaceController.GetAllNextItemTypes();
     public Color[] GetAllNextItemColors() => FurnaceController.GetAllNextItemColors();
-    public int GetCurrentSequenceIndex() => FurnaceController.GetCurrentSequenceIndex();
+    public int GetIndexInCurrentSequence() => FurnaceController.GetIndexInCurrentSequence();
     public int GetCurrentRequiredItemIndex() => GetCurrentRequiredSpawningIndex();
     
 
@@ -74,6 +74,9 @@ public class Level1Controller : MonoBehaviour , LevelController
     private int currentRequiredItemIndex = 0;
     private DialogSystem _dialogSystem;
     private float actualDelayNextRequiredItem;
+    
+    public event Action<float> OnTimeChanged;
+    public event Action<float> OnBonusTime;
 
     private void Awake()
     {
@@ -332,7 +335,7 @@ public class Level1Controller : MonoBehaviour , LevelController
     {
         if (currentRequiredItemIndex >= GetCurrentSequenceLenght())
         {
-            currentRequiredItemIndex = GetCurrentSequenceIndex();
+            currentRequiredItemIndex = GetIndexInCurrentSequence();
         }
         currentRequiredItemIndex++;
         return currentRequiredItemIndex-1;
