@@ -62,7 +62,7 @@ public class DialogSystem : MonoBehaviour
         leftCharSlot.enabled = false;
         rightCharSlot.enabled = false;
         textSlot.enabled = false;
-        textSlot.resizeTextForBestFit = true;
+        // textSlot.resizeTextForBestFit = true; //< Have a nice effect but math doesn't like it
 
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
 
