@@ -17,6 +17,7 @@ namespace Arm
         [SerializeField] private PickableType type;
         [SerializeField] private float volumeMultiplier = 0.3f;
         [SerializeField] private AudioClip magnetCollisionSound;
+        [SerializeField] private AudioClip onHitSound;
 
         public Color Color { get { return _renderer.material.color; } set { _renderer.material.color = value; } }
         public Rigidbody Rigidbody { get; private set; }
@@ -44,6 +45,9 @@ namespace Arm
         [SerializeField] private float _intensityUpperBound = 0.4f;
         [SerializeField] private float _intensityBottomBound = 0.0f;
 
+
+        private bool _altGrab = false;
+
         private void Awake()
         {
             _newPosition = transform.position;
@@ -62,6 +66,16 @@ namespace Arm
         {
             _outline.enabled = false;
 
+        }
+
+        private void OnCollisionEnter(Collision other)
+        {
+            if (_altGrab)
+            {
+                _audioSource.clip = onHitSound;
+                _audioSource.volume = volumeMultiplier;
+                _audioSource.Play();
+            }
         }
 
         public bool Contains(Vector3 point)
@@ -129,6 +143,7 @@ namespace Arm
 
         public void OnGrab()
         {
+            _altGrab = true;
             if (_photonView.IsMine)
             {
                 Rigidbody.useGravity = false;

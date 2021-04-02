@@ -144,6 +144,7 @@ MonoBehaviour:
   type: 0
   volumeMultiplier: 0.3
   magnetCollisionSound: {fileID: 8300000, guid: d0cbf4c91bdfaf9449032b32781825e8, type: 3}
+  onHitSound: {fileID: 8300000, guid: 260993b617ac50b4881e97a77fa0d733, type: 3}
   _emissionVisibleBy: 2
   _isRightColor: 0
   _intensity: 0
