@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Other;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -18,7 +19,7 @@ public class RoomElementController : MonoBehaviour
     #region UI Actions
     public void OnRoleModify()
     {
-        PlayerNetwork.PlayerRole = (GameController.Role)gameObject.transform.Find("DropdownRole").GetComponent<Dropdown>().value;
+        PlayerNetwork.PlayerRole = (GameController.Role)gameObject.transform.Find("RadioRole").GetComponent<RadioGroup>().Value;
         _menuSoundController.PlayButtonSound();
     }
     #endregion
