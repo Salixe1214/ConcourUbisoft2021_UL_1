@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using Inputs;
 using UnityEngine.UI;
 
 public class DialogSystem : MonoBehaviour
@@ -13,8 +14,10 @@ public class DialogSystem : MonoBehaviour
     [SerializeField] private Text textSlot;       //< Text slot
     [SerializeField] private GameObject panel = null;
     [SerializeField] private float _delayBetweenCharReveal = 0.1f;
+    [SerializeField] private Sprite[] originalKeys;
+    [SerializeField] private Sprite altKey;
     [SerializeField] private Image skipKey;
-    [SerializeField] private Sprite _altSkipKey;
+    private Sprite _altSkipKey;
     private Sprite _originalSkipKey;
 
     // Sprites
@@ -52,10 +55,14 @@ public class DialogSystem : MonoBehaviour
     private float bDownTime = 0;
 
     private IEnumerator _slowReadCoroutine;
+    private Controller _actualController;
 
     private void Awake()
     {
-        _originalSkipKey = skipKey.sprite;
+
+        _originalSkipKey = originalKeys[0];
+        _altSkipKey = altKey;
+        skipKey.sprite = _originalSkipKey;
         _audioSource = GetComponent<AudioSource>();
 
         rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
@@ -76,14 +83,33 @@ public class DialogSystem : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        KeyCode key;
+        if (_actualController != InputManager.GetController())
+        {
+            switch (InputManager.GetController())
+            {
+                case Controller.Playstation:
+                    _originalSkipKey = originalKeys[1];
+                    _altSkipKey = originalKeys[1];
+                    break;
+                case Controller.Xbox:
+                    _originalSkipKey = originalKeys[2];
+                    _altSkipKey = originalKeys[2];
+                    break;
+                default:
+                    _originalSkipKey = originalKeys[0];
+                    _altSkipKey = altKey;
+                    break;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.Joystick1Button4))
         {
             bDownTime = 0;
             bIsPressed = true;
             
         }
 
-        if (bIsPressed && Input.GetKey(KeyCode.Q))
+        if (bIsPressed && (Input.GetKey(KeyCode.Q) || Input.GetKeyDown(KeyCode.Joystick1Button4)))
         {
             bDownTime += Time.deltaTime;
 
@@ -100,7 +126,7 @@ public class DialogSystem : MonoBehaviour
             }
         }
 
-        if (bIsPressed && Input.GetKeyUp(KeyCode.Q))
+        if (bIsPressed && (Input.GetKeyUp(KeyCode.Q) || Input.GetKeyDown(KeyCode.Joystick1Button4)))
         {
             bIsPressed = false;
             
