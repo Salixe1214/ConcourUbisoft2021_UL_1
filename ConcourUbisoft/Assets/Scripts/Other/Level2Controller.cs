@@ -51,10 +51,7 @@ public class Level2Controller : MonoBehaviour, LevelController
     private int _nextWarningIndex;
     
     //TODO start the timer after one correct item is dropped on the conveyor.
-    //TODO add timer visual on techUI.
     //TODO respawn items when sequence failed.
-    //TODO ajouter son tic toc, et 10, 30 , 60 sec left + text
-    
     
     public event Action<float> OnTimeChanged;
     public event Action<float> OnBonusTime;
@@ -178,6 +175,7 @@ public class Level2Controller : MonoBehaviour, LevelController
     public void FinishLevel()
     {
         _levelInProgress = false;
+        TimerPanel.SetActive(false);
         _soundController.PlayLevelSequenceClearedSuccessSound();
         _imageList.Clean();
         _soundController.StopAreaMusic();
