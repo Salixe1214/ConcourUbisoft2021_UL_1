@@ -36,7 +36,7 @@ public class Level2Controller : MonoBehaviour, LevelController
     [SerializeField] private float SuccessfulSequenceBonusTime = 10;
     [SerializeField] private TimerController _timerController;
     [SerializeField] private GameObject TimerPanel;
-    [SerializeField] private float[] TimeLeftWhenWarningPlays;
+    [SerializeField] private List<float> TimeLeftWhenWarningPlays;
 
     [Tooltip("Intensity of the AreaCamera Shake Effect")]
     [SerializeField] private float cameraShakeForce = 0.3f;
@@ -206,6 +206,22 @@ public class Level2Controller : MonoBehaviour, LevelController
         else
         {
             _soundController.PlayLevelOneErrorSound();
+            _nextWarningIndex = 0;
+            foreach (var warningTime in TimeLeftWhenWarningPlays)
+            {
+                if (_timeLeft > warningTime)
+                {
+                    break;
+                }
+
+                _nextWarningIndex++;
+            }
+
+            if (_nextWarningIndex >= TimeLeftWhenWarningPlays.Count)
+            {
+                _nextWarningIndex = TimeLeftWhenWarningPlays.Count - 1;
+            }
+
         }
         _imageList.Clean();
         setItemsImageList();
@@ -356,7 +372,7 @@ public class Level2Controller : MonoBehaviour, LevelController
             OnTimeChanged?.Invoke(_timeLeft);
             
 
-            if (_nextWarningIndex < TimeLeftWhenWarningPlays.Length)
+            if (_nextWarningIndex < TimeLeftWhenWarningPlays.Count)
             {
                 if (_nextWarningIndex >0&&_timeLeft > TimeLeftWhenWarningPlays[_nextWarningIndex-1])
                 {
