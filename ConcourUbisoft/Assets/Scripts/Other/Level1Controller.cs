@@ -74,6 +74,9 @@ public class Level1Controller : MonoBehaviour , LevelController
     private int currentRequiredItemIndex = 0;
     private DialogSystem _dialogSystem;
     private float actualDelayNextRequiredItem;
+    
+    public event Action<float> OnTimeChanged;
+    public event Action<float> OnBonusTime;
 
     private void Awake()
     {

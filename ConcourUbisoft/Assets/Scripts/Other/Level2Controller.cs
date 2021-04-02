@@ -34,6 +34,7 @@ public class Level2Controller : MonoBehaviour, LevelController
     [SerializeField] private float TimeLeftIfThirdSequenceFailed = 50;
     [SerializeField] private float SuccessBonusTime = 5;
     [SerializeField] private float SuccessfulSequenceBonusTime = 10;
+    [SerializeField] private TimerController _timerController;
 
     [Tooltip("Intensity of the AreaCamera Shake Effect")]
     [SerializeField] private float cameraShakeForce = 0.3f;
@@ -51,6 +52,10 @@ public class Level2Controller : MonoBehaviour, LevelController
     //TODO respawn items when sequence failed.
     //TODO ajouter son tic toc, et 10, 30 , 60 sec left + text
     
+    
+    public event Action<float> OnTimeChanged;
+    public event Action<float> OnBonusTime;
+    
     public Color[] GetColors() => _possibleColors;
     public Color GetNextColorInSequence() => _furnace.GetNextColor();
     public int GetCurrentSequenceLenght() => _furnace.GetCurrentSequenceLenght();
@@ -61,6 +66,7 @@ public class Level2Controller : MonoBehaviour, LevelController
     {
         return 0;
     }
+    
     public Color[] GetAllNextItemColors() => _furnace.GetAllNextItemColors();
 
     private int GetCurrentSequenceNumber() => _furnace.GetIndexOfCurrentSequence();
@@ -115,6 +121,9 @@ public class Level2Controller : MonoBehaviour, LevelController
         _imageList.Clean();
         setItemsImageList();
         _dialogSystem.StartDialog("Area02_start");
+        _levelInProgress = true;
+        timerCoroutine = StartCoroutine(StartTimer());
+        OnTimeChanged?.Invoke(_timeLeft);
     }
 
     public void SpawnObjects()
@@ -186,6 +195,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         {
             _soundController.PlayLevelSequenceClearedSuccessSound();
             _timeLeft += SuccessfulSequenceBonusTime;
+            OnBonusTime?.Invoke(SuccessfulSequenceBonusTime);
         }
         else
         {
@@ -310,6 +320,7 @@ public class Level2Controller : MonoBehaviour, LevelController
     private void OnCorrectItemDropped()
     {
         _timeLeft += SuccessBonusTime;
+        OnBonusTime?.Invoke(SuccessBonusTime);
         _soundController.PlayLevelPartialSequenceSuccessSound();
     }
 
@@ -317,6 +328,7 @@ public class Level2Controller : MonoBehaviour, LevelController
     {
         int currentSequenceNumber = GetCurrentSequenceNumber();
         _currentSequenceFailed = true;
+        _furnace.ResetCurrentSequenceSuccess();
         StopCoroutine(timerCoroutine);
         _timeLeft = currentSequenceNumber switch
         {
@@ -335,6 +347,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         {
             yield return new WaitForSeconds(1);
             _timeLeft -= 1;
+            OnTimeChanged?.Invoke(_timeLeft);
         }
 
         if (_timeLeft < 0)

@@ -196,4 +196,9 @@ public class FurnaceController : MonoBehaviour
 
         return total;
     }
+
+    public void ResetCurrentSequenceSuccess()
+    {
+        GetCurrentSequence().SucceedColors = 0;
+    }
 }
