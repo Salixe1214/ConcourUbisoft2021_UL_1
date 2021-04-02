@@ -124,6 +124,11 @@ public class Level2Controller : MonoBehaviour, LevelController
         setItemsImageList();
         _dialogSystem.StartDialog("Area02_start");
         _levelInProgress = true;
+    }
+
+    private void StartLevelTimer()
+    {
+        _dialogSystem.StartDialog("Area02_start_timer");
         _nextWarningIndex = 0;
         timerCoroutine = StartCoroutine(StartTimer());
         TimerPanel.SetActive(true);
@@ -248,6 +253,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         _furnace.WhenFurnaceConsumeWrong.AddListener(ShakeCamera);
         _furnace.WhenFurnaceConsumeRight.AddListener(OnCorrectItemDropped);
         _furnace.CheckItemOffList += UpdateSpriteColorInList;
+        _furnace.OnFirstSuccessfulItemDropped += StartLevelTimer;
     }
 
     private void OnDisable()
@@ -257,6 +263,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         _furnace.WhenFurnaceConsumeWrong.RemoveListener(ShakeCamera);
         _furnace.WhenFurnaceConsumeRight.RemoveListener(OnCorrectItemDropped);
         _furnace.CheckItemOffList -= UpdateSpriteColorInList;
+        _furnace.OnFirstSuccessfulItemDropped -= StartLevelTimer;
     }
 
     private void Update()
