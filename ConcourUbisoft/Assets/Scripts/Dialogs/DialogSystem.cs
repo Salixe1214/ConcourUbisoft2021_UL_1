@@ -202,7 +202,7 @@ public class DialogSystem : MonoBehaviour
         }
     }
     
-    public void StartDialog(string pFile,  bool pAutoRead = true, int pTimeBetweenLines = 3)
+    public void StartDialog(string pFile)
     {
         // Loading text file
         TextAsset txtAsset = Resources.Load("Dialog/" + pFile) as TextAsset;
@@ -266,7 +266,7 @@ public class DialogSystem : MonoBehaviour
         _isReading = false;
     }
 
-    public void StartCustomLine(string pLine, int pIdLeft, int pIdRight = 0, bool pAutoRead = false)
+    public void StartCustomLine(string pLine, int pIdLeft, int pIdRight = 0)
     {
         _lines.Add(pIdLeft + itemSep.ToString() + pIdRight + itemSep.ToString() + pLine);
         Debug.Log(pIdLeft + itemSep.ToString() + pIdRight + itemSep.ToString() + pLine);
