@@ -35,6 +35,7 @@ public class Level2Controller : MonoBehaviour, LevelController
     [SerializeField] private float SuccessBonusTime = 5;
     [SerializeField] private float SuccessfulSequenceBonusTime = 10;
     [SerializeField] private TimerController _timerController;
+    [SerializeField] private GameObject TimerPanel;
 
     [Tooltip("Intensity of the AreaCamera Shake Effect")]
     [SerializeField] private float cameraShakeForce = 0.3f;
@@ -123,6 +124,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         _dialogSystem.StartDialog("Area02_start");
         _levelInProgress = true;
         timerCoroutine = StartCoroutine(StartTimer());
+        TimerPanel.SetActive(true);
         OnTimeChanged?.Invoke(_timeLeft);
     }
 

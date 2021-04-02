@@ -10,18 +10,18 @@ using UnityEngine.UI;
 public class TimerController : MonoBehaviour
 {
     // Start is called before the first frame update
-
-    [SerializeField] private Sprite BonusTimeSprite;
+    
     [SerializeField] private AudioClip TimeLeftSound;
     [SerializeField] private Text _timeTextField;
     [SerializeField] private Text _bonusTimeTextField;
     [SerializeField] private GameObject LevelControl;
+    [SerializeField] private GameObject TimeImageObject;
     [SerializeField] private float BonusTimeShownDuration;
-
+    
     private float _time;
     private LevelController _levelController;
-    private Image _bonusTimeImage;
     private float _timeLeft;
+    private Color _timeTextColor;
 
     private void Awake()
     {
@@ -32,10 +32,7 @@ public class TimerController : MonoBehaviour
     {
         _bonusTimeTextField.text = "";
         _timeTextField.text = "";
-        _bonusTimeImage = GetComponentInChildren<Image>();
-        _bonusTimeImage.sprite = BonusTimeSprite;
-        _bonusTimeTextField.gameObject.SetActive(false);
-        _bonusTimeImage.gameObject.SetActive(false);
+        _timeTextColor = _timeTextField.color;
     }
 
     // Update is called once per frame
@@ -58,16 +55,16 @@ public class TimerController : MonoBehaviour
 
     private void SetTime(float _timeValue)
     {
-        if (!_timeTextField.gameObject.activeSelf)
+        if (!TimeImageObject.activeSelf)
         {
-            _timeTextField.gameObject.SetActive(true);
+            TimeImageObject.SetActive(true);
         }
-        _timeTextField.text = _timeValue.ToString("N");
+        _timeTextField.text = _timeValue.ToString("G");
     }
 
     private void ShowBonusTime(float _bonusTime)
     {
-        _bonusTimeTextField.text = "+ " + _bonusTime.ToString("N");
+        _bonusTimeTextField.text = "+ " + _bonusTime.ToString("G");
         StartCoroutine(StartBonusTimeSequence());
     }
 
@@ -78,11 +75,10 @@ public class TimerController : MonoBehaviour
 
     IEnumerator StartBonusTimeSequence()
     {
-        _bonusTimeTextField.gameObject.SetActive(true);
-        _bonusTimeImage.gameObject.SetActive(true);
+        _timeTextField.color = _bonusTimeTextField.color;
         yield return new WaitForSeconds(BonusTimeShownDuration);
-        _bonusTimeTextField.gameObject.SetActive(false);
-        _bonusTimeImage.gameObject.SetActive(false);
+        _bonusTimeTextField.text ="";
+        _timeTextField.color = _timeTextColor;
     }
     //public float RemaningTime { get { float timeElapsed = Time.time - startTime;  return timeElapsed > gameDuration ? 0 : gameDuration - timeElapsed; } }
 
