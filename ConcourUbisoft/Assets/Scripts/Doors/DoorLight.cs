@@ -51,6 +51,8 @@ public class DoorLight : MonoBehaviour
         for(int i = 0 ; i < _indicatorLights.Count ; i++)
         {
             _color[i] = Color.green;
+            _renderers[i].material.color = _color[i];
+            _renderers[i].material.SetColor("_EmissionColor", _color[i] * 15);
         }
     }
 
