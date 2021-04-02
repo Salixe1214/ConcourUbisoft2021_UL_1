@@ -18,6 +18,7 @@ namespace Other
         public int GetCurrentRequiredItemIndex();
         public event Action<float> OnTimeChanged;
         public event Action<float> OnBonusTime;
+        public event Action<float> OnWarning;
 
     }
 }
