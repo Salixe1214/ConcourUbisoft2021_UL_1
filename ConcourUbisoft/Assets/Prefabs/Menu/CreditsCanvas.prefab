@@ -31,12 +31,12 @@ RectTransform:
   m_Children:
   - {fileID: 9097339382248012783}
   m_Father: {fileID: 197833845320697974}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 340, y: -57.5}
-  m_SizeDelta: {x: 568, y: -715}
+  m_AnchoredPosition: {x: 340, y: -25.003}
+  m_SizeDelta: {x: 568, y: -722.04}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5846370293090186130
 CanvasRenderer:
@@ -59,15 +59,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.6392157, b: 0, a: 1}
+  m_Color: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: ab4ec86dcdc47a54bbbdb9fa02a5de2a, type: 3}
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -110,7 +110,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -127.703156}
+  m_AnchoredPosition: {x: 0.012451172, y: -83}
   m_SizeDelta: {x: 0, y: 125.4061}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2299356729828352761
@@ -167,7 +167,7 @@ GameObject:
   - component: {fileID: 2544594021678055150}
   - component: {fileID: 4612667518226841586}
   m_Layer: 5
-  m_Name: ArtNames
+  m_Name: SoundNames
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -232,8 +232,101 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1.8
-  m_Text: "Adrien Fournier-Mckoy\nLouis-Philippe S\xE9guin\nSamuel Martel"
+    m_LineSpacing: 1
+  m_Text: 'Sounds:
+
+    imphenzia.com
+
+    httpsfreesound.org
+
+    soundbible.com
+
+    mp3cut.net
+
+
+    Keys
+    art:
+
+    thoseawesomeguys.com'
+--- !u!1 &3661803338179374971
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2941703175891032237}
+  - component: {fileID: 6432079888009598064}
+  - component: {fileID: 7739269845167951834}
+  m_Layer: 5
+  m_Name: SuplementsTitle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2941703175891032237
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3661803338179374971}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 197833845320697974}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 629.1601, y: -308}
+  m_SizeDelta: {x: -1351.7, y: 77.351}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &6432079888009598064
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3661803338179374971}
+  m_CullTransparentMesh: 1
+--- !u!114 &7739269845167951834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3661803338179374971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 51331cd718e6467459074b7d3a866485, type: 3}
+    m_FontSize: 50
+    m_FontStyle: 1
+    m_BestFit: 1
+    m_MinSize: 1
+    m_MaxSize: 300
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Suplements
 --- !u!1 &4030806936211845220
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,9 +359,10 @@ RectTransform:
   - {fileID: 3636068925493889439}
   - {fileID: 6906364778684078350}
   - {fileID: 1658598972536792069}
-  - {fileID: 420822479421442685}
   - {fileID: 2449378958950181326}
+  - {fileID: 420822479421442685}
   - {fileID: 458787543629412318}
+  - {fileID: 2941703175891032237}
   - {fileID: 2564988845049060527}
   m_Father: {fileID: 1854226954582392720}
   m_RootOrder: 1
@@ -350,7 +444,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -619.85004, y: -356.02997}
+  m_AnchoredPosition: {x: -620.15, y: -308}
   m_SizeDelta: {x: -1351.7, y: 77.351}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4062827984255819346
@@ -384,7 +478,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 12800000, guid: 51331cd718e6467459074b7d3a866485, type: 3}
     m_FontSize: 50
-    m_FontStyle: 1
+    m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 1
     m_MaxSize: 300
@@ -883,8 +977,8 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1.8
-  m_Text: "Adrien Fournier-Mckoy\nLouis-Philippe S\xE9guin\nSamuel Martel"
+    m_LineSpacing: 1
+  m_Text: "Adrien Fournier-Mckoy\n\nLouis-Philippe S\xE9guin\n\nSamuel Martel"
 --- !u!1 &6067600876561583335
 GameObject:
   m_ObjectHideFlags: 0
@@ -915,11 +1009,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 197833845320697974}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.012451172, y: -356.03}
+  m_AnchoredPosition: {x: -0.012451172, y: -308}
   m_SizeDelta: {x: -1351.7, y: 77.351}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5241915033129665143
@@ -1022,7 +1116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.995283, b: 0.995283, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1041,7 +1135,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
+    m_LineSpacing: 1.5
   m_Text: "Mathieu B\xE9dard\nGabriel Bouchard\nClaire Boutte\nSimon Robidas\nAlexis
     St-Amand"
 --- !u!1 &7152677851335927638
@@ -1191,12 +1285,12 @@ RectTransform:
   m_Children:
   - {fileID: 6187481044030926351}
   m_Father: {fileID: 197833845320697974}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -340, y: -57.5}
-  m_SizeDelta: {x: 568.32495, y: -715}
+  m_AnchoredPosition: {x: -340, y: -25}
+  m_SizeDelta: {x: 568.325, y: -722.046}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3403041859379936745
 CanvasRenderer:
@@ -1219,15 +1313,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0.6666667, a: 1}
+  m_Color: {r: 0.1882353, g: 0.1882353, b: 0.1882353, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: c698eb565a65db440a12dcbdfaf37fad, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1404,8 +1498,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -57.5}
-  m_SizeDelta: {x: 568.32495, y: -715}
+  m_AnchoredPosition: {x: 0.012435, y: -24.997}
+  m_SizeDelta: {x: 568.325, y: -722.04}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3398481589566115011
 CanvasRenderer:
@@ -1428,15 +1522,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0.6666667, a: 1}
+  m_Color: {r: 0.1882353, g: 0.1882353, b: 0.1882353, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 0ea0a2c4c45c3d5439501c1b21bc219c, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
