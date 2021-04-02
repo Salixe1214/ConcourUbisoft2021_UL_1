@@ -212,7 +212,7 @@ public class DialogSystem : MonoBehaviour
         
         // Formating the lines in a list
         string[] tmpLines = rawTxt.Split(lineSep);
-        Debug.LogWarning("Trying to add " + rawTxt);
+        
         // Adding each line to _lines (except the last, which is empty
         for(int i = 0 ; i < tmpLines.Length ; i++)
             if (tmpLines[i].Length > 4)
