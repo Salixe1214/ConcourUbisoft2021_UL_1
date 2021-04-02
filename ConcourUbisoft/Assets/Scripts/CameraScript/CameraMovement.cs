@@ -74,7 +74,7 @@ public class CameraMovement : MonoBehaviour
             controllerYAccumulator = Mathf.Clamp(controllerYAccumulator, -90f, 90f);
 
             //transform.localRotation = Quaternion.Slerp(transform.localRotation,Quaternion.Euler(controllerYAccumulator,0,0),cameraRotationSmoothingSpeed);
-            Quaternion rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(controllerXAccumulator, controllerYAccumulator, 0), cameraRotationSmoothingSpeed);
+            Quaternion rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(controllerYAccumulator, controllerXAccumulator, 0), cameraRotationSmoothingSpeed);
             transform.rotation = rotation;
             //playerBody.MoveRotation(Quaternion.Slerp(playerBody.rotation,Quaternion.Euler(playerBody.rotation.x,controllerXAccumulator,playerBody.rotation.z),cameraRotationSmoothingSpeed));
 
