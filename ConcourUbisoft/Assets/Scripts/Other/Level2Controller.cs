@@ -36,6 +36,7 @@ public class Level2Controller : MonoBehaviour, LevelController
     [SerializeField] private float SuccessfulSequenceBonusTime = 10;
     [SerializeField] private TimerController _timerController;
     [SerializeField] private GameObject TimerPanel;
+    [SerializeField] private float[] TimeLeftWhenWarningPlays;
 
     [Tooltip("Intensity of the AreaCamera Shake Effect")]
     [SerializeField] private float cameraShakeForce = 0.3f;
@@ -47,6 +48,7 @@ public class Level2Controller : MonoBehaviour, LevelController
     private bool _levelInProgress;
     private bool _currentSequenceFailed;
     private Coroutine timerCoroutine;
+    private int _nextWarningIndex;
     
     //TODO start the timer after one correct item is dropped on the conveyor.
     //TODO add timer visual on techUI.
@@ -56,6 +58,8 @@ public class Level2Controller : MonoBehaviour, LevelController
     
     public event Action<float> OnTimeChanged;
     public event Action<float> OnBonusTime;
+    public event Action<float> OnWarning;
+    
     
     public Color[] GetColors() => _possibleColors;
     public Color GetNextColorInSequence() => _furnace.GetNextColor();
@@ -123,6 +127,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         setItemsImageList();
         _dialogSystem.StartDialog("Area02_start");
         _levelInProgress = true;
+        _nextWarningIndex = 0;
         timerCoroutine = StartCoroutine(StartTimer());
         TimerPanel.SetActive(true);
         OnTimeChanged?.Invoke(_timeLeft);
@@ -191,7 +196,6 @@ public class Level2Controller : MonoBehaviour, LevelController
         {
             _dialogSystem.StartDialog("Area02_second_sequence_done");
         }
-        
         
         if (!_currentSequenceFailed)
         {
@@ -345,16 +349,31 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     IEnumerator StartTimer()
     {
-        while (_levelInProgress && _timeLeft>=0)
+        while (_levelInProgress && _timeLeft > 0)
         {
             yield return new WaitForSeconds(1);
             _timeLeft -= 1;
             OnTimeChanged?.Invoke(_timeLeft);
-        }
+            
 
-        if (_timeLeft < 0)
-        {
-            WhenTimeRunsOut();
+            if (_nextWarningIndex < TimeLeftWhenWarningPlays.Length)
+            {
+                if (_nextWarningIndex >0&&_timeLeft > TimeLeftWhenWarningPlays[_nextWarningIndex-1])
+                {
+                    _nextWarningIndex--;
+                }
+
+                if (_timeLeft == TimeLeftWhenWarningPlays[_nextWarningIndex])
+                {
+                    OnWarning?.Invoke(_timeLeft);
+                    _nextWarningIndex++;
+                }
+            }
+
+            if (_timeLeft == 0)
+            {
+                WhenTimeRunsOut();
+            }
         }
     }
 
