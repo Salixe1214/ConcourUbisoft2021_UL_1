@@ -164,9 +164,16 @@ public class FurnaceController : MonoBehaviour
         return GetCurrentSequence().types;
     }
 
-    public int GetCurrentSequenceIndex()
+    //Position in the current sequence
+    public int GetIndexInCurrentSequence()
     {
         return GetCurrentSequence().SucceedColors;
+    }
+
+    //Returns witch sequence it is. Sequence number
+    public int GetIndexOfCurrentSequence()
+    {
+        return SucceedSequences;
     }
 
     public SequenceOfColor[] GetAllSequences()
@@ -188,5 +195,10 @@ public class FurnaceController : MonoBehaviour
         }
 
         return total;
+    }
+
+    public void ResetCurrentSequenceSuccess()
+    {
+        GetCurrentSequence().SucceedColors = 0;
     }
 }

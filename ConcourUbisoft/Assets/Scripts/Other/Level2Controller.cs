@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Arm;
@@ -7,6 +8,7 @@ using TechSupport.Informations;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
+using Random = UnityEngine.Random;
 
 public class Level2Controller : MonoBehaviour, LevelController
 {
@@ -26,6 +28,13 @@ public class Level2Controller : MonoBehaviour, LevelController
     [SerializeField] private Canvas _information = null;
     [SerializeField] private Font _font;
     [SerializeField] private GameController.Role _emissionVisibleBy = GameController.Role.None;
+    [SerializeField] private float LevelMaxAmountOfTimeSeconds = 120;
+    [SerializeField] private float TimeLeftIfFirstSequenceFailed = 120;
+    [SerializeField] private float TimeLeftIfSecondSequenceFailed = 80;
+    [SerializeField] private float TimeLeftIfThirdSequenceFailed = 50;
+    [SerializeField] private float SuccessBonusTime = 5;
+    [SerializeField] private float SuccessfulSequenceBonusTime = 10;
+    [SerializeField] private TimerController _timerController;
 
     [Tooltip("Intensity of the AreaCamera Shake Effect")]
     [SerializeField] private float cameraShakeForce = 0.3f;
@@ -33,19 +42,34 @@ public class Level2Controller : MonoBehaviour, LevelController
     [SerializeField] private float cameraShakeDurationSeconds = 0.2f;
     private bool cameraMustShake = false;
     private DialogSystem _dialogSystem;
-
+    private float _timeLeft;
+    private bool _levelInProgress;
+    private bool _currentSequenceFailed;
+    private Coroutine timerCoroutine;
+    
+    //TODO start the timer after one correct item is dropped on the conveyor.
+    //TODO add timer visual on techUI.
+    //TODO respawn items when sequence failed.
+    //TODO ajouter son tic toc, et 10, 30 , 60 sec left + text
+    
+    
+    public event Action<float> OnTimeChanged;
+    public event Action<float> OnBonusTime;
+    
     public Color[] GetColors() => _possibleColors;
     public Color GetNextColorInSequence() => _furnace.GetNextColor();
     public int GetCurrentSequenceLenght() => _furnace.GetCurrentSequenceLenght();
     public Other.PickableType GetNextTypeInSequence() => _furnace.GetNextItemType();
     public PickableType[] GetAllNextItemTypes() => _furnace.GetAllNextItemTypes();
-    public int GetCurrentSequenceIndex() => _furnace.GetCurrentSequenceIndex();
+    public int GetIndexInCurrentSequence() => _furnace.GetIndexInCurrentSequence();
     public int GetCurrentRequiredItemIndex()
     {
         return 0;
     }
-    public Color[] GetAllNextItemColors() => _furnace.GetAllNextItemColors();
     
+    public Color[] GetAllNextItemColors() => _furnace.GetAllNextItemColors();
+
+    private int GetCurrentSequenceNumber() => _furnace.GetIndexOfCurrentSequence();
 
     private ImageLayout _imageList;
     private List<Sprite> _itemSprites = new List<Sprite>();
@@ -63,7 +87,6 @@ public class Level2Controller : MonoBehaviour, LevelController
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _cameraOriginalPosition = AreaCamera.transform.position;
         _dialogSystem = GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>();
-
     }
 
     public void StartLevel()
@@ -92,10 +115,15 @@ public class Level2Controller : MonoBehaviour, LevelController
         rectTransform.localRotation = Quaternion.identity;
         rectTransform.anchoredPosition = new Vector2(0,0);
 
+        _timeLeft = LevelMaxAmountOfTimeSeconds;
+        _currentSequenceFailed = false;
         //_imageList = _techUI.GetList();
         _imageList.Clean();
         setItemsImageList();
         _dialogSystem.StartDialog("Area02_start");
+        _levelInProgress = true;
+        timerCoroutine = StartCoroutine(StartTimer());
+        OnTimeChanged?.Invoke(_timeLeft);
     }
 
     public void SpawnObjects()
@@ -117,9 +145,8 @@ public class Level2Controller : MonoBehaviour, LevelController
     private void SpawnObject(Bounds solution, Color color)
     {
         GameObject randomPrefab = _transportablesPrefab[_random.Next(0, _transportablesPrefab.Length)];
-
-        GameObject gameobject = PhotonNetwork.Instantiate(randomPrefab.name, solution.center, Quaternion.identity);
-        Pickable pickable = gameobject.GetComponent<Arm.Pickable>();
+        GameObject gameObject = PhotonNetwork.Instantiate(randomPrefab.name, solution.center, Quaternion.identity);
+        Pickable pickable = gameObject.GetComponent<Arm.Pickable>();
         pickable.Color = color;
         pickable.Furnace = _furnace;
         pickable.SetEmissionVisibleBy(_emissionVisibleBy);
@@ -143,6 +170,7 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     public void FinishLevel()
     {
+        _levelInProgress = false;
         _soundController.PlayLevelSequenceClearedSuccessSound();
         _imageList.Clean();
         _soundController.StopAreaMusic();
@@ -161,10 +189,22 @@ public class Level2Controller : MonoBehaviour, LevelController
         {
             _dialogSystem.StartDialog("Area02_second_sequence_done");
         }
-        _soundController.PlayLevelSequenceClearedSuccessSound();
+        
+        
+        if (!_currentSequenceFailed)
+        {
+            _soundController.PlayLevelSequenceClearedSuccessSound();
+            _timeLeft += SuccessfulSequenceBonusTime;
+            OnBonusTime?.Invoke(SuccessfulSequenceBonusTime);
+        }
+        else
+        {
+            _soundController.PlayLevelOneErrorSound();
+        }
         _imageList.Clean();
         setItemsImageList();
         _currentListIndex = 0;
+        _currentSequenceFailed = false;
     }
 
     public void ShakeCamera()
@@ -186,6 +226,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         _furnace.WhenFurnaceConsumedAll.AddListener(FinishLevel);
         _furnace.WhenFurnaceConsumeAWholeSequenceWithoutFinishing.AddListener(InitiateNextSequence);
         _furnace.WhenFurnaceConsumeWrong.AddListener(ShakeCamera);
+        _furnace.WhenFurnaceConsumeRight.AddListener(OnCorrectItemDropped);
         _furnace.CheckItemOffList += UpdateSpriteColorInList;
     }
 
@@ -194,6 +235,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         _furnace.WhenFurnaceConsumedAll.RemoveListener(FinishLevel);
         _furnace.WhenFurnaceConsumeAWholeSequenceWithoutFinishing.RemoveListener(InitiateNextSequence);
         _furnace.WhenFurnaceConsumeWrong.RemoveListener(ShakeCamera);
+        _furnace.WhenFurnaceConsumeRight.RemoveListener(OnCorrectItemDropped);
         _furnace.CheckItemOffList -= UpdateSpriteColorInList;
     }
 
@@ -269,11 +311,53 @@ public class Level2Controller : MonoBehaviour, LevelController
                 }
             }
         }
-
         else
         {
             Debug.Log("Number of items in sequences are superior to the amount of spawning positions available.");
         }
-        
+    }
+
+    private void OnCorrectItemDropped()
+    {
+        _timeLeft += SuccessBonusTime;
+        OnBonusTime?.Invoke(SuccessBonusTime);
+        _soundController.PlayLevelPartialSequenceSuccessSound();
+    }
+
+    private void WhenTimeRunsOut()
+    {
+        int currentSequenceNumber = GetCurrentSequenceNumber();
+        _currentSequenceFailed = true;
+        _furnace.ResetCurrentSequenceSuccess();
+        StopCoroutine(timerCoroutine);
+        _timeLeft = currentSequenceNumber switch
+        {
+            0 => TimeLeftIfFirstSequenceFailed,
+            1 => TimeLeftIfSecondSequenceFailed,
+            2 => TimeLeftIfThirdSequenceFailed,
+            _ => _timeLeft
+        };
+        InitiateNextSequence();
+        timerCoroutine = StartCoroutine(StartTimer());
+    }
+
+    IEnumerator StartTimer()
+    {
+        while (_levelInProgress && _timeLeft>=0)
+        {
+            yield return new WaitForSeconds(1);
+            _timeLeft -= 1;
+            OnTimeChanged?.Invoke(_timeLeft);
+        }
+
+        if (_timeLeft < 0)
+        {
+            WhenTimeRunsOut();
+        }
+    }
+
+    public float GetTimeLeft()
+    {
+        return _timeLeft;
     }
 }

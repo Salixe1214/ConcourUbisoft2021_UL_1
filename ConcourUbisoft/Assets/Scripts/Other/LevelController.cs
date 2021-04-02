@@ -1,4 +1,7 @@
+using System;
 using UnityEngine;
+using UnityEngine.UIElements;
+
 namespace Other
 {
     public interface LevelController
@@ -10,9 +13,11 @@ namespace Other
         PickableType[] GetAllNextItemTypes();
 
         Color[] GetAllNextItemColors();
-        public int GetCurrentSequenceIndex();
+        public int GetIndexInCurrentSequence();
 
         public int GetCurrentRequiredItemIndex();
+        public event Action<float> OnTimeChanged;
+        public event Action<float> OnBonusTime;
 
     }
 }
