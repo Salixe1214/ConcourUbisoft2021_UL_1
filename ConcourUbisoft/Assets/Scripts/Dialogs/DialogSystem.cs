@@ -13,6 +13,9 @@ public class DialogSystem : MonoBehaviour
     [SerializeField] private Text textSlot;       //< Text slot
     [SerializeField] private GameObject panel = null;
     [SerializeField] private float _delayBetweenCharReveal = 0.1f;
+    [SerializeField] private Image skipKey;
+    [SerializeField] private Sprite _altSkipKey;
+    private Sprite _originalSkipKey;
 
     // Sprites
     [SerializeField] private Sprite char1Sprite;
@@ -48,14 +51,18 @@ public class DialogSystem : MonoBehaviour
     private bool bIsPressed = false;
     private float bDownTime = 0;
 
+    private IEnumerator _slowReadCoroutine;
+
     private void Awake()
     {
+        _originalSkipKey = skipKey.sprite;
         _audioSource = GetComponent<AudioSource>();
 
         rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
         leftCharSlot.enabled = false;
         rightCharSlot.enabled = false;
         textSlot.enabled = false;
+        textSlot.resizeTextForBestFit = true;
 
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
 
@@ -80,8 +87,14 @@ public class DialogSystem : MonoBehaviour
         {
             bDownTime += Time.deltaTime;
 
+            skipKey.sprite = _altSkipKey;
+            
+            skipKey.color = Color.Lerp(Color.black, Color.white, bDownTime);
+
             if (bDownTime >= longPressDuration)
             {
+                skipKey.sprite = _originalSkipKey;
+                skipKey.color = Color.white;
                 bIsPressed = false;
                 StartCoroutine(SkipAll());
             }
@@ -90,6 +103,9 @@ public class DialogSystem : MonoBehaviour
         if (bIsPressed && Input.GetKeyUp(KeyCode.Q))
         {
             bIsPressed = false;
+            
+            skipKey.sprite = _originalSkipKey;
+            skipKey.color = Color.white;
 
             if(!_isReading)
             {
@@ -164,7 +180,8 @@ public class DialogSystem : MonoBehaviour
                     break;
             }
 
-            StartCoroutine(SlowRead(parsedLine[2]));
+            _slowReadCoroutine = SlowRead(parsedLine[2]);
+            StartCoroutine(_slowReadCoroutine);
         }
         else
         {
@@ -185,7 +202,7 @@ public class DialogSystem : MonoBehaviour
         }
     }
     
-    public void StartDialog(string pFile,  bool pAutoRead = true, int pTimeBetweenLines = 3)
+    public void StartDialog(string pFile)
     {
         // Loading text file
         TextAsset txtAsset = Resources.Load("Dialog/" + pFile) as TextAsset;
@@ -195,9 +212,13 @@ public class DialogSystem : MonoBehaviour
         
         // Formating the lines in a list
         string[] tmpLines = rawTxt.Split(lineSep);
+        
         // Adding each line to _lines (except the last, which is empty
-        for(int i = 0 ; i < tmpLines.Length - 1 ; i++)
-            _lines.Add(tmpLines[i]);
+        for(int i = 0 ; i < tmpLines.Length ; i++)
+            if (tmpLines[i].Length > 4)
+            {
+                _lines.Add(tmpLines[i]);
+            }
         
         if (isEmpty)
         {
@@ -221,8 +242,8 @@ public class DialogSystem : MonoBehaviour
                 _isReading = false;
             }
             
-            if(pAutoRead)
-                StartCoroutine(ReadAll(pTimeBetweenLines));
+            /*if(pAutoRead)
+                StartCoroutine(ReadAll(autoReadDelay));*/
         }
     }
     
@@ -245,7 +266,7 @@ public class DialogSystem : MonoBehaviour
         _isReading = false;
     }
 
-    public void StartCustomLine(string pLine, int pIdLeft, int pIdRight = 0, bool pAutoRead = false, int pTimeBetweenLines = 3)
+    public void StartCustomLine(string pLine, int pIdLeft, int pIdRight = 0)
     {
         _lines.Add(pIdLeft + itemSep.ToString() + pIdRight + itemSep.ToString() + pLine);
         Debug.Log(pIdLeft + itemSep.ToString() + pIdRight + itemSep.ToString() + pLine);
@@ -273,17 +294,17 @@ public class DialogSystem : MonoBehaviour
                 _isReading = false;
             }
             
-            if(pAutoRead)
-                StartCoroutine(ReadAll(pTimeBetweenLines));
+            /*if(pAutoRead)
+                StartCoroutine(ReadAll(autoReadDelay));*/
         }
     }
 
-    IEnumerator ReadAll(int pTimeBetweenLines)
+    /*IEnumerator ReadAll(float pTimeBetweenLines)
     {
         while (!isEmpty)
         {
-            yield return new WaitForSeconds(5);
-            if(!_isReading)
+            yield return new WaitForSeconds(pTimeBetweenLines);
+            if(_lines.Count > 0)
             {
                 ReadLine();
             }
@@ -292,21 +313,17 @@ public class DialogSystem : MonoBehaviour
                 _isReading = false;
             }
         }
-    }
+    }*/
     
     IEnumerator SkipAll()
     {
-        while (!isEmpty)
+        while (_lines.Count > 0)
         {
             yield return null;
-            if(!_isReading)
-            {
-                ReadLine();
-            }
-            else
-            {
-                _isReading = false;
-            }
+            if(_slowReadCoroutine != null)
+                StopCoroutine(_slowReadCoroutine);
+            _isReading = false;
+            ReadLine();
             
         }
     }
