@@ -14,6 +14,8 @@ public class DialogSystem : MonoBehaviour
     [SerializeField] private GameObject panel = null;
     [SerializeField] private float _delayBetweenCharReveal = 0.1f;
     [SerializeField] private Image skipKey;
+    [SerializeField] private Sprite _altSkipKey;
+    private Sprite _originalSkipKey;
 
     // Sprites
     [SerializeField] private Sprite char1Sprite;
@@ -49,10 +51,11 @@ public class DialogSystem : MonoBehaviour
     private bool bIsPressed = false;
     private float bDownTime = 0;
 
-    private IEnumerator coro;
+    private IEnumerator _slowReadCoroutine;
 
     private void Awake()
     {
+        _originalSkipKey = skipKey.sprite;
         _audioSource = GetComponent<AudioSource>();
 
         rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
@@ -83,11 +86,14 @@ public class DialogSystem : MonoBehaviour
         if (bIsPressed && Input.GetKey(KeyCode.Q))
         {
             bDownTime += Time.deltaTime;
+
+            skipKey.sprite = _altSkipKey;
             
-            skipKey.color = Color.Lerp(Color.white, Color.blue, bDownTime);
+            skipKey.color = Color.Lerp(Color.black, Color.white, bDownTime);
 
             if (bDownTime >= longPressDuration)
             {
+                skipKey.sprite = _originalSkipKey;
                 skipKey.color = Color.white;
                 bIsPressed = false;
                 StartCoroutine(SkipAll());
@@ -97,6 +103,9 @@ public class DialogSystem : MonoBehaviour
         if (bIsPressed && Input.GetKeyUp(KeyCode.Q))
         {
             bIsPressed = false;
+            
+            skipKey.sprite = _originalSkipKey;
+            skipKey.color = Color.white;
 
             if(!_isReading)
             {
@@ -171,8 +180,8 @@ public class DialogSystem : MonoBehaviour
                     break;
             }
 
-            coro = SlowRead(parsedLine[2]);
-            StartCoroutine(coro);
+            _slowReadCoroutine = SlowRead(parsedLine[2]);
+            StartCoroutine(_slowReadCoroutine);
         }
         else
         {
@@ -311,8 +320,8 @@ public class DialogSystem : MonoBehaviour
         while (_lines.Count > 0)
         {
             yield return null;
-            if(coro != null)
-                StopCoroutine(coro);
+            if(_slowReadCoroutine != null)
+                StopCoroutine(_slowReadCoroutine);
             _isReading = false;
             ReadLine();
             

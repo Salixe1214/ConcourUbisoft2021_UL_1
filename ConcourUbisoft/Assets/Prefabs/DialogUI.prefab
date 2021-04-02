@@ -509,6 +509,7 @@ MonoBehaviour:
   panel: {fileID: 1590120408951980643}
   _delayBetweenCharReveal: 0.02
   skipKey: {fileID: 273609343408952117}
+  _altSkipKey: {fileID: 21300000, guid: 849377afc56e6944aba3c4f8d734ee10, type: 3}
   char1Sprite: {fileID: 21300000, guid: 0ea0a2c4c45c3d5439501c1b21bc219c, type: 3}
   char2Sprite: {fileID: 21300000, guid: ab4ec86dcdc47a54bbbdb9fa02a5de2a, type: 3}
   lineSep: 10
