@@ -49,12 +49,14 @@ public class TimerController : MonoBehaviour
     {
         _levelController.OnTimeChanged += SetTime;
         _levelController.OnBonusTime += ShowBonusTime;
+        _levelController.OnWarning += ShowWarning;
     }
 
     private void OnDisable()
     {
         _levelController.OnTimeChanged -= SetTime;
         _levelController.OnBonusTime -= ShowBonusTime;
+        _levelController.OnWarning -= ShowWarning;
     }
 
     private void SetTime(float timeValue)

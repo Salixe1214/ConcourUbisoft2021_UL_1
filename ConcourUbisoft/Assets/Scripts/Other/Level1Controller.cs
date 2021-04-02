@@ -78,6 +78,8 @@ public class Level1Controller : MonoBehaviour , LevelController
     public event Action<float> OnTimeChanged;
     public event Action<float> OnBonusTime;
 
+    public event Action<float> OnWarning;
+
     private void Awake()
     {
         itemSprites = new List<Sprite>();
