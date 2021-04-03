@@ -26,14 +26,15 @@ public class CircleConveyor : Conveyor
         float distanceToDo = Time.deltaTime * Speed;
         float percentOfCircumference = distanceToDo / circumference;
         float angle = percentOfCircumference * 360;
-        float angleInRadian = angle * Mathf.Deg2Rad * (ClockWise ? -1 : 1);
-        Vector2 rotateVector =
-            new Vector2(centerToObject2D.x * Mathf.Cos(angleInRadian) - centerToObject2D.y * Mathf.Sin(angleInRadian),
-                centerToObject2D.x * Mathf.Sin(angleInRadian) + centerToObject2D.y * Mathf.Cos(angleInRadian));
+        //float angleInRadian = angle * Mathf.Deg2Rad * (ClockWise ? -1 : 1);
+        //Vector2 rotateVector =
+        //    new Vector2(centerToObject2D.x * Mathf.Cos(angleInRadian) - centerToObject2D.y * Mathf.Sin(angleInRadian),
+        //        centerToObject2D.x * Mathf.Sin(angleInRadian) + centerToObject2D.y * Mathf.Cos(angleInRadian));
 
-        Vector3 newPosition = center + new Vector3(rotateVector.x, rigidbody.position.y - center.y, rotateVector.y);
+        //Vector3 newPosition = center + new Vector3(rotateVector.x, rigidbody.position.y - center.y, rotateVector.y);
 
-        rigidbody.transform.LookAt(newPosition, Vector3.up);
-        rigidbody.MovePosition(newPosition);
+        //rigidbody.transform.LookAt(newPosition, Vector3.up);
+        rigidbody.transform.RotateAround(center, Vector3.up, (ClockWise ? 1 : -1) * angle);
+        //rigidbody.MovePosition(newPosition);
     }
 }

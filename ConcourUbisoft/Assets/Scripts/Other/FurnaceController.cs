@@ -26,16 +26,19 @@ public class FurnaceController : MonoBehaviour
     [SerializeField] private float TimeToConsume = 0.0f;
     [SerializeField] private GameController.Role _owner = GameController.Role.None;
     [SerializeField] private bool _finishAfterOnce = false;
+    [SerializeField] private float _destroyTime = 5f;
 
     public UnityEvent WhenFurnaceConsumedAll;
     public UnityEvent WhenFurnaceConsumeWrong;
     public UnityEvent WhenFurnaceConsumeRight;
     public UnityEvent WhenFurnaceConsumeAWholeSequenceWithoutFinishing;
     public event Action CheckItemOffList;
+    public event Action OnFirstSuccessfulItemDropped;
 
     private SoundController soundController;
     private PhotonView _photonView = null;
     private NetworkController _networkController = null;
+    private bool _firstSuccessPlayed;
 
     public int SucceedSequences { get; private set; } = 0;
 
@@ -47,13 +50,14 @@ public class FurnaceController : MonoBehaviour
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _photonView = GetComponent<PhotonView>();
+        _firstSuccessPlayed = false;
     }
 
 
     private void OnTriggerEnter(Collider other)
     {
         Pickable pickable = null;
-        if (other.gameObject.TryGetComponent(out pickable) && _owner == _networkController.GetLocalRole())
+        if (other.gameObject.TryGetComponent(out pickable) && _owner == _networkController.GetLocalRole() && !pickable.Consumed)
         {
             Consume(pickable);
         }
@@ -64,6 +68,13 @@ public class FurnaceController : MonoBehaviour
         object[] parameters = new object[] { (int)pickable.GetType(), pickable.Color.r, pickable.Color.g, pickable.Color.b, pickable.Color.a, };
         _photonView.RPC("Consumed", RpcTarget.All, parameters as object);
 
+        pickable.Consumed = true;
+        StartCoroutine(DestroyConsumed(pickable));
+    }
+
+    private IEnumerator DestroyConsumed(Pickable pickable)
+    {
+        yield return new WaitForSeconds(_destroyTime);
         PhotonNetwork.Destroy(pickable.gameObject);
     }
 
@@ -75,7 +86,6 @@ public class FurnaceController : MonoBehaviour
 
     private void ValidateConsumed(PickableType type, Color color)
     {
-        Debug.Log("Consume");
         SequenceOfColor currentSequence = SequencesOfColor[SucceedSequences];
 
         Color currentSequenceColor = currentSequence.ColorsSequence[currentSequence.SucceedColors];
@@ -93,6 +103,12 @@ public class FurnaceController : MonoBehaviour
             {
                 CheckItemOffList?.Invoke();
                 WhenFurnaceConsumeRight?.Invoke();
+                if (!_firstSuccessPlayed)
+                {
+                    OnFirstSuccessfulItemDropped?.Invoke();
+                    _firstSuccessPlayed = true;
+                }
+
                 currentSequence.SucceedColors++;
                 if (currentSequence.SucceedColors == currentSequence.ColorsSequence.Length)
                 {

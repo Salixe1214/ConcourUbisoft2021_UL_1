@@ -17,10 +17,11 @@ namespace Arm
         [SerializeField] private PickableType type;
         [SerializeField] private float volumeMultiplier = 0.3f;
         [SerializeField] private AudioClip magnetCollisionSound;
+        [SerializeField] private AudioClip onHitSound;
 
         public Color Color { get { return _renderer.material.color; } set { _renderer.material.color = value; } }
         public Rigidbody Rigidbody { get; private set; }
-        
+        public bool Consumed { get; set; } = false;        
         public FurnaceController Furnace { get; set; } = null;
 
         private Renderer _renderer = null;
@@ -31,6 +32,7 @@ namespace Arm
         private PhotonView _photonView = null;
         private TransportableByConveyor _transportableByConveyor = null;
         private GameController _gameController = null;
+        private float _xIntensity = 0;
 
         private bool hovered;
         private bool _grabbed = false;
@@ -43,6 +45,8 @@ namespace Arm
         [SerializeField] private float _intensityGainSpeed = 0.2f;
         [SerializeField] private float _intensityUpperBound = 0.4f;
         [SerializeField] private float _intensityBottomBound = 0.0f;
+
+        private bool _altGrab = false;
 
         private void Awake()
         {
@@ -62,6 +66,16 @@ namespace Arm
         {
             _outline.enabled = false;
 
+        }
+
+        private void OnCollisionEnter(Collision other)
+        {
+            if (_altGrab)
+            {
+                _audioSource.clip = onHitSound;
+                _audioSource.volume = volumeMultiplier;
+                _audioSource.Play();
+            }
         }
 
         public bool Contains(Vector3 point)
@@ -84,10 +98,13 @@ namespace Arm
                 {
                     _renderer.material.EnableKeyword("_EMISSION");
                 }
-                _intensity = _intensity + _directionIntensity * Time.deltaTime * _intensityGainSpeed;
+                _xIntensity = _xIntensity + _directionIntensity * Time.deltaTime * _intensityGainSpeed;
+
+                _intensity = _xIntensity * _xIntensity;
 
                 if(_intensity < _intensityBottomBound)
                 {
+                    _xIntensity = 0;
                     _intensity = _intensityBottomBound;
                     _directionIntensity = 1;
                 }
@@ -95,6 +112,7 @@ namespace Arm
                 if(_intensity > _intensityUpperBound)
                 {
                     _intensity = _intensityUpperBound;
+                    _xIntensity = Mathf.Sqrt(_intensity);
                     _directionIntensity = -1;
                 }
             }
@@ -129,6 +147,7 @@ namespace Arm
 
         public void OnGrab()
         {
+            _altGrab = true;
             if (_photonView.IsMine)
             {
                 Rigidbody.useGravity = false;
@@ -201,7 +220,6 @@ namespace Arm
                     stream.SendNext(transform.rotation.z);
                     stream.SendNext(transform.rotation.w);
                 }
-                
             }
             else
             {

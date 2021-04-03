@@ -35,6 +35,8 @@ public class Level2Controller : MonoBehaviour, LevelController
     [SerializeField] private float SuccessBonusTime = 5;
     [SerializeField] private float SuccessfulSequenceBonusTime = 10;
     [SerializeField] private TimerController _timerController;
+    [SerializeField] private GameObject TimerPanel;
+    [SerializeField] private List<float> TimeLeftWhenWarningPlays;
 
     [Tooltip("Intensity of the AreaCamera Shake Effect")]
     [SerializeField] private float cameraShakeForce = 0.3f;
@@ -46,15 +48,14 @@ public class Level2Controller : MonoBehaviour, LevelController
     private bool _levelInProgress;
     private bool _currentSequenceFailed;
     private Coroutine timerCoroutine;
+    private int _nextWarningIndex;
     
-    //TODO start the timer after one correct item is dropped on the conveyor.
-    //TODO add timer visual on techUI.
     //TODO respawn items when sequence failed.
-    //TODO ajouter son tic toc, et 10, 30 , 60 sec left + text
-    
     
     public event Action<float> OnTimeChanged;
     public event Action<float> OnBonusTime;
+    public event Action<float> OnWarning;
+    
     
     public Color[] GetColors() => _possibleColors;
     public Color GetNextColorInSequence() => _furnace.GetNextColor();
@@ -91,14 +92,13 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     public void StartLevel()
     {
-        _soundController.PlayArea2Music();
         _furnace.GenerateNewColorSequences(_possibleColors);
 
-        if(_networkController.GetLocalRole() == GameController.Role.SecurityGuard)
+        if (_networkController.GetLocalRole() == GameController.Role.SecurityGuard)
         {
             SpawnObjects();
         }
-
+        _soundController.PlayArea2Music();
         _techUI.GetList().Clean();
 
         _imageList = new GameObject().AddComponent<ImageLayout>();
@@ -122,7 +122,14 @@ public class Level2Controller : MonoBehaviour, LevelController
         setItemsImageList();
         _dialogSystem.StartDialog("Area02_start");
         _levelInProgress = true;
+    }
+
+    private void StartLevelTimer()
+    {
+        _dialogSystem.StartDialog("Area02_start_timer");
+        _nextWarningIndex = 0;
         timerCoroutine = StartCoroutine(StartTimer());
+        TimerPanel.SetActive(true);
         OnTimeChanged?.Invoke(_timeLeft);
     }
 
@@ -145,7 +152,8 @@ public class Level2Controller : MonoBehaviour, LevelController
     private void SpawnObject(Bounds solution, Color color)
     {
         GameObject randomPrefab = _transportablesPrefab[_random.Next(0, _transportablesPrefab.Length)];
-        GameObject gameObject = PhotonNetwork.Instantiate(randomPrefab.name, solution.center, Quaternion.identity);
+        Quaternion randomRotation = Quaternion.Euler(0, _random.Next(0, 360), 0);
+        GameObject gameObject = PhotonNetwork.Instantiate(randomPrefab.name, solution.center, randomRotation);
         Pickable pickable = gameObject.GetComponent<Arm.Pickable>();
         pickable.Color = color;
         pickable.Furnace = _furnace;
@@ -158,7 +166,8 @@ public class Level2Controller : MonoBehaviour, LevelController
         {
             if (t.GetComponent<Arm.Pickable>().GetType() == type)
             {
-                GameObject gameobject = PhotonNetwork.Instantiate(t.name, solution.center, Quaternion.identity);
+                Quaternion randomRotation = Quaternion.Euler(0, _random.Next(0, 360), 0);
+                GameObject gameobject = PhotonNetwork.Instantiate(t.name, solution.center, randomRotation);
                 Pickable pickable = gameobject.GetComponent<Arm.Pickable>();
                 pickable.Color = color;
                 pickable.Furnace = _furnace;
@@ -171,6 +180,7 @@ public class Level2Controller : MonoBehaviour, LevelController
     public void FinishLevel()
     {
         _levelInProgress = false;
+        TimerPanel.SetActive(false);
         _soundController.PlayLevelSequenceClearedSuccessSound();
         _imageList.Clean();
         _soundController.StopAreaMusic();
@@ -179,17 +189,16 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     public void InitiateNextSequence()
     {
-        if(_furnace.SucceedSequences == 1)
+        if(_furnace.SucceedSequences == 1 && !_currentSequenceFailed)
         {
             _dialogSystem.StartDialog("Area02_first_sequence_done");
             _armController.InverseX();
             _armController.InverseZ();
         }
-        else if (_furnace.SucceedSequences ==2)
+        else if (_furnace.SucceedSequences ==2 && !_currentSequenceFailed)
         {
             _dialogSystem.StartDialog("Area02_second_sequence_done");
         }
-        
         
         if (!_currentSequenceFailed)
         {
@@ -200,6 +209,22 @@ public class Level2Controller : MonoBehaviour, LevelController
         else
         {
             _soundController.PlayLevelOneErrorSound();
+            _nextWarningIndex = 0;
+            foreach (var warningTime in TimeLeftWhenWarningPlays)
+            {
+                if (_timeLeft > warningTime)
+                {
+                    break;
+                }
+
+                _nextWarningIndex++;
+            }
+
+            if (_nextWarningIndex >= TimeLeftWhenWarningPlays.Count)
+            {
+                _nextWarningIndex = TimeLeftWhenWarningPlays.Count - 1;
+            }
+
         }
         _imageList.Clean();
         setItemsImageList();
@@ -228,6 +253,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         _furnace.WhenFurnaceConsumeWrong.AddListener(ShakeCamera);
         _furnace.WhenFurnaceConsumeRight.AddListener(OnCorrectItemDropped);
         _furnace.CheckItemOffList += UpdateSpriteColorInList;
+        _furnace.OnFirstSuccessfulItemDropped += StartLevelTimer;
     }
 
     private void OnDisable()
@@ -237,6 +263,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         _furnace.WhenFurnaceConsumeWrong.RemoveListener(ShakeCamera);
         _furnace.WhenFurnaceConsumeRight.RemoveListener(OnCorrectItemDropped);
         _furnace.CheckItemOffList -= UpdateSpriteColorInList;
+        _furnace.OnFirstSuccessfulItemDropped -= StartLevelTimer;
     }
 
     private void Update()
@@ -319,6 +346,13 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     private void OnCorrectItemDropped()
     {
+        if (_furnace.SucceedSequences == 1
+            && _furnace.GetAllSequences()[_furnace.SucceedSequences].SucceedColors == 1)
+        {
+            _armController.InverseX();
+            _armController.InverseZ();
+        }
+
         _timeLeft += SuccessBonusTime;
         OnBonusTime?.Invoke(SuccessBonusTime);
         _soundController.PlayLevelPartialSequenceSuccessSound();
@@ -330,12 +364,19 @@ public class Level2Controller : MonoBehaviour, LevelController
         _currentSequenceFailed = true;
         _furnace.ResetCurrentSequenceSuccess();
         StopCoroutine(timerCoroutine);
-        _timeLeft = currentSequenceNumber switch
+        switch (currentSequenceNumber)
         {
-            0 => TimeLeftIfFirstSequenceFailed,
-            1 => TimeLeftIfSecondSequenceFailed,
-            2 => TimeLeftIfThirdSequenceFailed,
-            _ => _timeLeft
+            case 0:
+                _timeLeft = TimeLeftIfFirstSequenceFailed;
+                break;
+            case 1:
+                _timeLeft = TimeLeftIfSecondSequenceFailed;
+                    break;
+            case 2:
+                _timeLeft = TimeLeftIfThirdSequenceFailed;
+                break;
+            default:
+                    break;
         };
         InitiateNextSequence();
         timerCoroutine = StartCoroutine(StartTimer());
@@ -343,16 +384,31 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     IEnumerator StartTimer()
     {
-        while (_levelInProgress && _timeLeft>=0)
+        while (_levelInProgress && _timeLeft > 0)
         {
             yield return new WaitForSeconds(1);
             _timeLeft -= 1;
             OnTimeChanged?.Invoke(_timeLeft);
-        }
+            
 
-        if (_timeLeft < 0)
-        {
-            WhenTimeRunsOut();
+            if (_nextWarningIndex < TimeLeftWhenWarningPlays.Count)
+            {
+                if (_nextWarningIndex >0&&_timeLeft > TimeLeftWhenWarningPlays[_nextWarningIndex-1])
+                {
+                    _nextWarningIndex--;
+                }
+
+                if (_timeLeft == TimeLeftWhenWarningPlays[_nextWarningIndex])
+                {
+                    OnWarning?.Invoke(_timeLeft);
+                    _nextWarningIndex++;
+                }
+            }
+
+            if (_timeLeft == 0)
+            {
+                WhenTimeRunsOut();
+            }
         }
     }
 

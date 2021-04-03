@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using Inputs;
 using UnityEngine.UI;
 
 public class DialogSystem : MonoBehaviour
@@ -13,13 +14,16 @@ public class DialogSystem : MonoBehaviour
     [SerializeField] private Text textSlot;       //< Text slot
     [SerializeField] private GameObject panel = null;
     [SerializeField] private float _delayBetweenCharReveal = 0.1f;
+    [SerializeField] private Sprite[] originalKeys;
+    [SerializeField] private Sprite altKey;
     [SerializeField] private Image skipKey;
-    [SerializeField] private Sprite _altSkipKey;
+    private Sprite _altSkipKey;
     private Sprite _originalSkipKey;
 
     // Sprites
     [SerializeField] private Sprite char1Sprite;
     [SerializeField] private Sprite char2Sprite;
+    [SerializeField] private Sprite char3Sprite;
     
     // Line separators
     [SerializeField] private char lineSep = '\n';
@@ -36,7 +40,7 @@ public class DialogSystem : MonoBehaviour
      * 1;0;Hi, my name is john!
      *
      * IDS:
-     * 1 or 2 for character 1 or 2 (defined by the sprites)
+     * 1 ,2 or 3 for character 1 , 2  or 3(defined by the sprites)
      * 0 for none
      */
 
@@ -52,17 +56,24 @@ public class DialogSystem : MonoBehaviour
     private float bDownTime = 0;
 
     private IEnumerator _slowReadCoroutine;
+    private Controller _actualController;
+
+    private bool _skipAfter = false;
+    [SerializeField] private float skipTime = 5;
 
     private void Awake()
     {
-        _originalSkipKey = skipKey.sprite;
+
+        _originalSkipKey = originalKeys[0];
+        _altSkipKey = altKey;
+        skipKey.sprite = _originalSkipKey;
         _audioSource = GetComponent<AudioSource>();
 
         rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
         leftCharSlot.enabled = false;
         rightCharSlot.enabled = false;
         textSlot.enabled = false;
-        textSlot.resizeTextForBestFit = true;
+        // textSlot.resizeTextForBestFit = true; //< Have a nice effect but math doesn't like it. Yeah I dont -Mat
 
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
 
@@ -76,14 +87,33 @@ public class DialogSystem : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        KeyCode key;
+        if (_actualController != InputManager.GetController())
+        {
+            switch (InputManager.GetController())
+            {
+                case Controller.Playstation:
+                    _originalSkipKey = originalKeys[1];
+                    _altSkipKey = originalKeys[1];
+                    break;
+                case Controller.Xbox:
+                    _originalSkipKey = originalKeys[2];
+                    _altSkipKey = originalKeys[2];
+                    break;
+                default:
+                    _originalSkipKey = originalKeys[0];
+                    _altSkipKey = altKey;
+                    break;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.Joystick1Button4))
         {
             bDownTime = 0;
             bIsPressed = true;
             
         }
 
-        if (bIsPressed && Input.GetKey(KeyCode.Q))
+        if (bIsPressed && (Input.GetKey(KeyCode.Q) || Input.GetKeyDown(KeyCode.Joystick1Button4)))
         {
             bDownTime += Time.deltaTime;
 
@@ -100,7 +130,7 @@ public class DialogSystem : MonoBehaviour
             }
         }
 
-        if (bIsPressed && Input.GetKeyUp(KeyCode.Q))
+        if (bIsPressed && (Input.GetKeyUp(KeyCode.Q) || Input.GetKeyDown(KeyCode.Joystick1Button4)))
         {
             bIsPressed = false;
             
@@ -148,6 +178,11 @@ public class DialogSystem : MonoBehaviour
                     leftCharSlot.color = Color.white;
                     leftCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
+                case 3:
+                    leftCharSlot.sprite = char3Sprite;
+                    leftCharSlot.color = Color.white;
+                    leftCharSlot.transform.parent.gameObject.SetActive(true);
+                    break;
                 default:
                     leftCharSlot.sprite = null;
                     leftCharSlot.color = Color.clear;
@@ -159,17 +194,26 @@ public class DialogSystem : MonoBehaviour
             switch (rightCharacterID)
             {
                 case 0:
+                    rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
                     rightCharSlot.sprite = null;
                     rightCharSlot.color = Color.clear;
                     rightCharSlot.transform.parent.gameObject.SetActive(false);
                     break;
                 case 1:
+                    rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
                     rightCharSlot.sprite = char1Sprite;
                     rightCharSlot.color = Color.white;
                     rightCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
                 case 2:
+                    rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
                     rightCharSlot.sprite = char2Sprite;
+                    rightCharSlot.color = Color.white;
+                    rightCharSlot.transform.parent.gameObject.SetActive(true);
+                    break;
+                case 3:
+                    rightCharSlot.transform.localRotation = Quaternion.Euler(0,0,0);
+                    rightCharSlot.sprite = char3Sprite;
                     rightCharSlot.color = Color.white;
                     rightCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
@@ -180,7 +224,7 @@ public class DialogSystem : MonoBehaviour
                     break;
             }
 
-            _slowReadCoroutine = SlowRead(parsedLine[2]);
+            _slowReadCoroutine = SlowRead(parsedLine[2], _skipAfter);
             StartCoroutine(_slowReadCoroutine);
         }
         else
@@ -202,8 +246,10 @@ public class DialogSystem : MonoBehaviour
         }
     }
     
-    public void StartDialog(string pFile)
+    public void StartDialog(string pFile, bool pSkipAfter = false)
     {
+        _skipAfter = pSkipAfter;
+        
         // Loading text file
         TextAsset txtAsset = Resources.Load("Dialog/" + pFile) as TextAsset;
         string rawTxt = "";
@@ -247,7 +293,7 @@ public class DialogSystem : MonoBehaviour
         }
     }
     
-    IEnumerator SlowRead(string text)
+    IEnumerator SlowRead(string text, bool pSkipAfter = false)
     {
         _isReading = true;
         int i = 0;
@@ -264,6 +310,11 @@ public class DialogSystem : MonoBehaviour
         }
         textSlot.text = text;
         _isReading = false;
+        if (pSkipAfter)
+        {
+            yield return new WaitForSeconds(skipTime);
+            ReadLine();
+        }
     }
 
     public void StartCustomLine(string pLine, int pIdLeft, int pIdRight = 0)
@@ -299,6 +350,54 @@ public class DialogSystem : MonoBehaviour
         }
     }
 
+    public void StartSingleLine(string pFile)
+    {
+        _skipAfter = true;
+        // Loading text file
+        TextAsset txtAsset = Resources.Load("Dialog/" + pFile) as TextAsset;
+        string rawTxt = "";
+        if(txtAsset != null)
+            rawTxt = txtAsset.ToString();
+        
+        // Read only the first line
+        string line = rawTxt.Split(lineSep)[0];
+        _lines.Clear();
+        if(_slowReadCoroutine != null)
+            StopCoroutine(_slowReadCoroutine);
+        
+        // Formating the lines in a list
+        string[] tmpLines = rawTxt.Split(lineSep);
+        
+        // Adding each line to _lines (except the last, which is empty
+        for(int i = 0 ; i < tmpLines.Length ; i++)
+            if (tmpLines[i].Length > 4)
+            {
+                _lines.Add(tmpLines[i]);
+            }
+
+        isEmpty = false;
+        
+        leftCharSlot.enabled = true;
+        rightCharSlot.enabled = true;
+        textSlot.enabled = true;
+        panel.SetActive(true);
+
+        leftCharSlot.color = Color.clear;
+        rightCharSlot.color = Color.clear;
+        textSlot.text = "";
+
+        _isReading = false;
+        
+        if(!_isReading)
+        {
+            ReadLine();
+        }
+        else
+        {
+            _isReading = false;
+        }
+    }
+
     /*IEnumerator ReadAll(float pTimeBetweenLines)
     {
         while (!isEmpty)
@@ -326,5 +425,10 @@ public class DialogSystem : MonoBehaviour
             ReadLine();
             
         }
+        if(_slowReadCoroutine != null)
+            StopCoroutine(_slowReadCoroutine);
+        
+        _isReading = false;
+        ReadLine();
     }
 }

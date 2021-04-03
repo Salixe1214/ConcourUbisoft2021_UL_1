@@ -1,0 +1,6 @@
+2;0;I see a control panel with a screen displaying items.
+1;0;The items must be dropped on the conveyor belt in order to teach the system.
+2;0;So... kinda like what we just did?
+1;0;Not quite. Once the first item hits the conveyor belt, there will be limited time to complete our task.
+2;0;No problem. Picking up stuff is way easier than hitting baseballs. We'll be done in no time.
+

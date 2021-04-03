@@ -49,7 +49,10 @@ public class DisplaySpeaking : MonoBehaviour
 
     private void Update()
     {
-        _playerTwoImage.gameObject.SetActive(_networkController.GetNumberOfPlayer() == 2);
+        if(PhotonNetwork.CurrentRoom != null)
+        {
+            _playerTwoImage.gameObject.SetActive(_networkController.GetNumberOfPlayer() == 2);
+        }
 
         if(PhotonNetwork.IsMasterClient)
         {

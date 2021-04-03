@@ -14,7 +14,8 @@ public enum Menus
  Options,
  Lobby,
  Room,
- InGame
+ InGame,
+ Credits
 }
 public class MenuController : MonoBehaviour
 {
@@ -38,6 +39,8 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject _lobbyPanelRoomNameInputField;
     [SerializeField] private GameObject _lobbyPanelBackButton;
     [SerializeField] private GameObject _lobbyListHeader;
+    [SerializeField] private GameObject _creditMenu;
+    [SerializeField] private GameObject _creditFirstSelected;
 
     private NetworkController _networkController = null;
     private GameController _gameController = null;
@@ -45,6 +48,7 @@ public class MenuController : MonoBehaviour
     private InputManager _inputManager;
     private Menus _currentMenu = Menus.MainMenu;
     private Inputs.Controller _currentController;
+    private Menus _beforeCredit;
 
     #region UI Actions
     public void EnterLobby()
@@ -108,7 +112,87 @@ public class MenuController : MonoBehaviour
         _menuSoundController.PlayButtonSound();
         Application.Quit();
     }
+
+    public void OpenCredits()
+    {
+        _menuSoundController.PlayButtonSound();
+        _creditMenu.SetActive(true);
+        _startMenu.SetActive(false);
+        _beforeCredit = _currentMenu;
+        _currentMenu = Menus.Credits;
+        if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
+        {
+            _eventSystem.SetSelectedGameObject(null);
+            _eventSystem.SetSelectedGameObject(_creditFirstSelected);
+        }
+    }
+
+    public void CloseCredits()
+    {
+        if(!_gameController.IsGameStart)
+        {
+            _menuSoundController.PlayButtonSound();
+            _creditMenu.SetActive(false);
+            Debug.LogWarning(_beforeCredit);
+            switch (_beforeCredit)
+            {
+                case Menus.Credits:
+                    if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
+                    {
+                        _eventSystem.SetSelectedGameObject(null);
+                        _eventSystem.SetSelectedGameObject(_creditFirstSelected);
+                    }
+                    break;
+                case Menus.Lobby:
+                    _lobbyMenu.SetActive(true);
+                    if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
+                    {
+                        _eventSystem.SetSelectedGameObject(null);
+                        _eventSystem.SetSelectedGameObject(_lobbyFirstSelected);
+                    }
+                    break;
+                case Menus.Options:
+                    _optionMenu.SetActive(true);
+                    if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
+                    {
+                        _eventSystem.SetSelectedGameObject(null);
+                        _eventSystem.SetSelectedGameObject(_optionsFirstSelected);
+                    }
+                    break;
+                case Menus.Room:
+                    _roomMenu.SetActive(true);
+                    if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
+                    {
+                        _eventSystem.SetSelectedGameObject(null);
+                        _eventSystem.SetSelectedGameObject(_roomFirstSelected);
+                    }
+                    break;
+                case Menus.InGame:
+                    break;
+                case Menus.MainMenu:
+                    if (!_gameController.IsGameStart)
+                    {
+                        _startMenu.SetActive(true);
+                        if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
+                        {
+                            _eventSystem.SetSelectedGameObject(null);
+                            _eventSystem.SetSelectedGameObject(_menuFirstSelected);
+                        }
+                    }
+                    else
+                    {
+                        _optionMenu.SetActive(true);
+                    }
+                    break;
+                default:
+                    break;
+            }
+            _currentMenu = _beforeCredit;
+        }
+    }
+    
     #endregion
+    
     #region Unity Callbacks
     private void Awake()
     {
@@ -155,6 +239,7 @@ public class MenuController : MonoBehaviour
         _errorPanelErrorPrefab.GetComponent<ErrorPromptController>().onOkButtonClicked -= onErrorClosed;
     }
     #endregion
+    
     #region Event Callbacks
     private void OnDisconnectEvent()
     {
