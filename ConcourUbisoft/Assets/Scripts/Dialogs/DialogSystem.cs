@@ -23,6 +23,7 @@ public class DialogSystem : MonoBehaviour
     // Sprites
     [SerializeField] private Sprite char1Sprite;
     [SerializeField] private Sprite char2Sprite;
+    [SerializeField] private Sprite char3Sprite;
     
     // Line separators
     [SerializeField] private char lineSep = '\n';
@@ -69,7 +70,7 @@ public class DialogSystem : MonoBehaviour
         leftCharSlot.enabled = false;
         rightCharSlot.enabled = false;
         textSlot.enabled = false;
-        // textSlot.resizeTextForBestFit = true; //< Have a nice effect but math doesn't like it
+        // textSlot.resizeTextForBestFit = true; //< Have a nice effect but math doesn't like it. Yeah I dont -Mat
 
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
 
@@ -174,6 +175,11 @@ public class DialogSystem : MonoBehaviour
                     leftCharSlot.color = Color.white;
                     leftCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
+                case 3:
+                    leftCharSlot.sprite = char3Sprite;
+                    leftCharSlot.color = Color.white;
+                    leftCharSlot.transform.parent.gameObject.SetActive(true);
+                    break;
                 default:
                     leftCharSlot.sprite = null;
                     leftCharSlot.color = Color.clear;
@@ -185,17 +191,26 @@ public class DialogSystem : MonoBehaviour
             switch (rightCharacterID)
             {
                 case 0:
+                    rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
                     rightCharSlot.sprite = null;
                     rightCharSlot.color = Color.clear;
                     rightCharSlot.transform.parent.gameObject.SetActive(false);
                     break;
                 case 1:
+                    rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
                     rightCharSlot.sprite = char1Sprite;
                     rightCharSlot.color = Color.white;
                     rightCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
                 case 2:
+                    rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
                     rightCharSlot.sprite = char2Sprite;
+                    rightCharSlot.color = Color.white;
+                    rightCharSlot.transform.parent.gameObject.SetActive(true);
+                    break;
+                case 3:
+                    rightCharSlot.transform.localRotation = Quaternion.Euler(0,0,0);
+                    rightCharSlot.sprite = char3Sprite;
                     rightCharSlot.color = Color.white;
                     rightCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
