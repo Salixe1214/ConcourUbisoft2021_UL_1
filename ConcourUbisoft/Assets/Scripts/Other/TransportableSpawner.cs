@@ -35,7 +35,6 @@ public class TransportableSpawner : MonoBehaviour
 
 	private void Start()
 	{
-		Debug.Log("Calling Start Spawners");
 		levelController = LevelControl.GetComponent<LevelController>();
 		_networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
 	}
@@ -56,12 +55,11 @@ public class TransportableSpawner : MonoBehaviour
 	private void Spawn()
 	{
 		Color[] possibleColors = levelController.GetColors();
-
 		GameObject randomPrefab = TransportablesPrefab[_random.Next(0, TransportablesPrefab.Length)];
-
 		Vector3 randomPoint = PointA.position + _random.Next(0, 100) / 100.0f * (PointB.position - PointA.position);
+        Quaternion randomRotation = Quaternion.Euler(0, _random.Next(0, 360), 0);
 
-		GameObject transportable;
+        GameObject transportable;
 
 		if (canSpawnNextRequiredItem)
 		{
@@ -70,9 +68,9 @@ public class TransportableSpawner : MonoBehaviour
 			{
 				if (t.GetComponent<Pickable>().GetType() == currentSequenceTypes[sequenceIndex])
 				{
-					transportable = PhotonNetwork.Instantiate(t.name, randomPoint, Quaternion.identity);
+					transportable = PhotonNetwork.Instantiate(t.name, randomPoint, randomRotation);
 					Pickable pickable = transportable.GetComponent<Arm.Pickable>();
-					pickable.Color = currentSequenceColors[sequenceIndex];
+                    pickable.Color = currentSequenceColors[sequenceIndex];
 					pickable.Furnace = _furnace;
 					pickable.SetEmissionVisibleBy(_emissionVisibleBy);
 					requiredItemHasSpawned?.Invoke();
@@ -83,7 +81,7 @@ public class TransportableSpawner : MonoBehaviour
 		else
 		{
 			Color randomColor = possibleColors[_random.Next(0, possibleColors.Length)];
-			transportable = PhotonNetwork.Instantiate(randomPrefab.name, randomPoint, Quaternion.identity);
+			transportable = PhotonNetwork.Instantiate(randomPrefab.name, randomPoint, randomRotation);
 			Pickable pickable = transportable.GetComponent<Arm.Pickable>();
 			pickable.Color = randomColor;
 			pickable.Furnace = _furnace;

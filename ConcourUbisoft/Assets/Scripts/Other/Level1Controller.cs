@@ -209,34 +209,27 @@ public class Level1Controller : MonoBehaviour , LevelController
     IEnumerator waitBeforeSpawningRequiredItem(int nextSpawnerIndex)
     {
         yield return new WaitForSeconds(delayBeforeNextRequiredItem);
-        Debug.Log(nextSpawnerIndex + "is true");
         TransportableSpawners[nextSpawnerIndex].canSpawnNextRequiredItem = true;
-        Debug.Log(TransportableSpawners[nextSpawnerIndex].canSpawnNextRequiredItem);
     }
 
     IEnumerator SpawnFreshItems(float seconds)
     {
         currentListIndex = 0;
-        Debug.Log("SpawnFreshItems");
         if (!firstWave)
         {
-            Debug.Log("ClearItems");
             imageList.Clean();
             yield return waitForItemsToClear(ClearItemsTimeSeconds);
         }      
         SetDelayBetweenItemSpawns(DelayItemSpawnsLowestInteriorConveyor,DelayItemSpawnsLowestExteriorConveyor);
-        Debug.Log("Lowest Spawning Delay");
         
         setItemsImageList();
         ActivateItemSpawning(true);
-        Debug.Log("Items are spawning");
         yield return new WaitForSeconds(seconds);
         SetDelayBetweenItemSpawns(DelayItemSpawnsHighestInteriorConveyor,DelayItemSpawnsHighestExteriorConveyor);
         if (firstWave)
         {
             SetConveyorSpeed(conveyorOperatingSpeed,conveyorOperatingSpeed);
 
-            Debug.Log("ConveyorSpeed Normal");
             firstWave = false;
         }
         else
@@ -244,9 +237,7 @@ public class Level1Controller : MonoBehaviour , LevelController
             conveyorOperatingSpeed += ConveyorSpeedIncrement;
             SetConveyorSpeed(conveyorOperatingSpeed,conveyorOperatingSpeed);
             
-            Debug.Log("ConveyorSpeed Normal");
         }
-        Debug.Log("Highest Spawning Delay");
     }
 
     IEnumerator EndLevel()

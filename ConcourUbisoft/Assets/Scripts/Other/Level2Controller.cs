@@ -89,18 +89,18 @@ public class Level2Controller : MonoBehaviour, LevelController
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _cameraOriginalPosition = AreaCamera.transform.position;
         _dialogSystem = GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>();
+
+        _furnace.GenerateNewColorSequences(_possibleColors);
+
+        if (_networkController.GetLocalRole() == GameController.Role.SecurityGuard)
+        {
+            SpawnObjects();
+        }
     }
 
     public void StartLevel()
     {
         _soundController.PlayArea2Music();
-        _furnace.GenerateNewColorSequences(_possibleColors);
-
-        if(_networkController.GetLocalRole() == GameController.Role.SecurityGuard)
-        {
-            SpawnObjects();
-        }
-
         _techUI.GetList().Clean();
 
         _imageList = new GameObject().AddComponent<ImageLayout>();
@@ -154,7 +154,8 @@ public class Level2Controller : MonoBehaviour, LevelController
     private void SpawnObject(Bounds solution, Color color)
     {
         GameObject randomPrefab = _transportablesPrefab[_random.Next(0, _transportablesPrefab.Length)];
-        GameObject gameObject = PhotonNetwork.Instantiate(randomPrefab.name, solution.center, Quaternion.identity);
+        Quaternion randomRotation = Quaternion.Euler(0, _random.Next(0, 360), 0);
+        GameObject gameObject = PhotonNetwork.Instantiate(randomPrefab.name, solution.center, randomRotation);
         Pickable pickable = gameObject.GetComponent<Arm.Pickable>();
         pickable.Color = color;
         pickable.Furnace = _furnace;
@@ -167,7 +168,8 @@ public class Level2Controller : MonoBehaviour, LevelController
         {
             if (t.GetComponent<Arm.Pickable>().GetType() == type)
             {
-                GameObject gameobject = PhotonNetwork.Instantiate(t.name, solution.center, Quaternion.identity);
+                Quaternion randomRotation = Quaternion.Euler(0, _random.Next(0, 360), 0);
+                GameObject gameobject = PhotonNetwork.Instantiate(t.name, solution.center, randomRotation);
                 Pickable pickable = gameobject.GetComponent<Arm.Pickable>();
                 pickable.Color = color;
                 pickable.Furnace = _furnace;
