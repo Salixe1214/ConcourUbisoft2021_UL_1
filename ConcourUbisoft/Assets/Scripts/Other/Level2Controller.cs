@@ -50,7 +50,6 @@ public class Level2Controller : MonoBehaviour, LevelController
     private Coroutine timerCoroutine;
     private int _nextWarningIndex;
     
-    //TODO start the timer after one correct item is dropped on the conveyor.
     //TODO respawn items when sequence failed.
     
     public event Action<float> OnTimeChanged;
