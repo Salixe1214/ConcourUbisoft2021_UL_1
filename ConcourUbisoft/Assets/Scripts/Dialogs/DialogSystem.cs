@@ -312,7 +312,6 @@ public class DialogSystem : MonoBehaviour
         _isReading = false;
         if (pSkipAfter)
         {
-            Debug.LogWarning("Skip for " + skipTime);
             yield return new WaitForSeconds(skipTime);
             ReadLine();
         }
