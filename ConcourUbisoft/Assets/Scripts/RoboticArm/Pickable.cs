@@ -126,17 +126,17 @@ namespace Arm
                 }
             }
 
-            //if (!_photonView.IsMine && _conveyorSpeed == 0.0f)
-            //{
-            //    if(Vector3.Distance(transform.position, _newPosition) > 3)
-            //    {
-            //        transform.position = _newPosition;
-            //    }
-            //    else
-            //    {
-            //        transform.position = Vector3.MoveTowards(transform.position, _newPosition, (_grabbed ? 4 : 10) * Time.deltaTime);
-            //    }
-            //}
+            if (!_photonView.IsMine && _conveyorSpeed == 0.0f)
+            {
+                if(Vector3.Distance(transform.position, _newPosition) > 3)
+                {
+                    transform.position = _newPosition;
+                }
+                else
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, _newPosition, (_grabbed ? 4 : 10) * Time.deltaTime);
+                }
+            }
 
             if (_outline.enabled && !hovered)
                 _outline.enabled = false;
@@ -210,17 +210,16 @@ namespace Arm
                 stream.SendNext(Color.b);
                 stream.SendNext(Color.a);
                 stream.SendNext(_isRightColor);
-                //if(_transportableByConveyor.ConveyorSpeed() == 0.0f)
-                //{
-                //    stream.SendNext(transform.position.x);
-                //    stream.SendNext(transform.position.y);
-                //    stream.SendNext(transform.position.z);
-                //    stream.SendNext(transform.rotation.x);
-                //    stream.SendNext(transform.rotation.y);
-                //    stream.SendNext(transform.rotation.z);
-                //    stream.SendNext(transform.rotation.w);
-                //}
-                
+                if(_transportableByConveyor.ConveyorSpeed() == 0.0f)
+                {
+                    stream.SendNext(transform.position.x);
+                    stream.SendNext(transform.position.y);
+                    stream.SendNext(transform.position.z);
+                    stream.SendNext(transform.rotation.x);
+                    stream.SendNext(transform.rotation.y);
+                    stream.SendNext(transform.rotation.z);
+                    stream.SendNext(transform.rotation.w);
+                }
             }
             else
             {
@@ -228,11 +227,11 @@ namespace Arm
                 _grabbed = (bool)stream.ReceiveNext();
                 Color = new Color((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
                 _isRightColor = (bool)stream.ReceiveNext();
-                //if (_conveyorSpeed == 0.0f)
-                //{
-                //    _newPosition = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
-                //    transform.rotation = new Quaternion((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
-                //}
+                if (_conveyorSpeed == 0.0f)
+                {
+                    _newPosition = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+                    transform.rotation = new Quaternion((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+                }
 
                 Rigidbody.isKinematic = _conveyorSpeed == 0.0f;
             }
