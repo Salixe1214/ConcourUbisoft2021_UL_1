@@ -88,17 +88,16 @@ public class Level2Controller : MonoBehaviour, LevelController
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _cameraOriginalPosition = AreaCamera.transform.position;
         _dialogSystem = GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>();
+    }
 
+    public void StartLevel()
+    {
         _furnace.GenerateNewColorSequences(_possibleColors);
 
         if (_networkController.GetLocalRole() == GameController.Role.SecurityGuard)
         {
             SpawnObjects();
         }
-    }
-
-    public void StartLevel()
-    {
         _soundController.PlayArea2Music();
         _techUI.GetList().Clean();
 
