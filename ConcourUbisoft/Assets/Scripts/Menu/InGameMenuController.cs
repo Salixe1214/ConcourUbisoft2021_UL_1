@@ -17,6 +17,8 @@ public class InGameMenuController : MonoBehaviour
     [SerializeField] private GameObject _optionBackSelected;
     [SerializeField] private GameObject _returnButton;
     [SerializeField] private GameObject _exitButton;
+    [SerializeField] private GameObject _creditMenu;
+    [SerializeField] private GameObject _creditFirstSelected;
 
     private NetworkController _networkController = null;
     private GameController _gameController = null;
@@ -76,6 +78,35 @@ public class InGameMenuController : MonoBehaviour
         _inGameMenu.SetActive(false);
         _eventSystem.SetSelectedGameObject(null);
         _gameController.ToggleCursorLock();
+    }
+
+    public void OpenCredits()
+    {
+        _soundController.PlayButtonSound();
+        _creditMenu.SetActive(true);
+        _inGameMenu.SetActive(false);
+        _currentMenu = Menus.Credits;
+        if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
+        {
+            _eventSystem.SetSelectedGameObject(null);
+            _eventSystem.SetSelectedGameObject(_creditFirstSelected);
+        }
+    }
+
+    public void CloseCredits()
+    {
+        if(_gameController.IsGameStart)
+        {
+            _soundController.PlayButtonSound();
+            _creditMenu.SetActive(false);
+            _optionMenu.SetActive(true);
+            _currentMenu = Menus.Options;
+            if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
+            {
+                _eventSystem.SetSelectedGameObject(null);
+                _eventSystem.SetSelectedGameObject(_optionsFirstSelected);
+            }
+        }
     }
     #endregion
     #region Unity Callbacks

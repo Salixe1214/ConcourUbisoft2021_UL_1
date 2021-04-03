@@ -1721,6 +1721,8 @@ MonoBehaviour:
   _optionBackSelected: {fileID: 1064576553}
   _returnButton: {fileID: 1356723713}
   _exitButton: {fileID: 1788711322}
+  _creditMenu: {fileID: 597669395}
+  _creditFirstSelected: {fileID: 744225559}
 --- !u!1 &312541825
 GameObject:
   m_ObjectHideFlags: 0
@@ -2386,9 +2388,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 714943646}
-        m_TargetAssemblyTypeName: Credits, Assembly-CSharp
-        m_MethodName: Open
+      - m_Target: {fileID: 1786033421}
+        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_MethodName: OpenCredits
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2883,6 +2885,11 @@ MonoBehaviour:
   _roomNameInput: {fileID: 2022626340}
   _backButton: {fileID: 1380651167}
   _lobbyListHeader: {fileID: 1032738344}
+--- !u!1 &597669395 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7152677851335927638, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+  m_PrefabInstance: {fileID: 1526052237}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &602999729
 GameObject:
   m_ObjectHideFlags: 0
@@ -3400,17 +3407,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1854226954582392720, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
   m_PrefabInstance: {fileID: 1526052237}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &714943646 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8674543709215120996, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+--- !u!1 &744225559 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4382372581205506204, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
   m_PrefabInstance: {fileID: 1526052237}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b557fd0de4769c943bcd7c720d4d1b3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &745613866
 GameObject:
   m_ObjectHideFlags: 0
@@ -6907,7 +6908,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1854226954582392720, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1854226954582392720, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
       propertyPath: m_AnchorMax.x
@@ -6991,7 +6992,47 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4030806936211845220, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5035967096288297438, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5035967096288297438, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5035967096288297438, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1786033421}
+    - target: {fileID: 5035967096288297438, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 286970534}
+    - target: {fileID: 5035967096288297438, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5035967096288297438, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CloseCredits
+      objectReference: {fileID: 0}
+    - target: {fileID: 5035967096288297438, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: CloseCredits
+      objectReference: {fileID: 0}
+    - target: {fileID: 5035967096288297438, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MenuController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5035967096288297438, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: InGameMenuController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5035967096288297438, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6906364778684078350, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -7007,7 +7048,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7152677851335927638, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674543709215120996, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8674543709215120996, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
       propertyPath: openButtun
@@ -7318,9 +7363,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 714943646}
-        m_TargetAssemblyTypeName: Credits, Assembly-CSharp
-        m_MethodName: Open
+      - m_Target: {fileID: 1786033421}
+        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_MethodName: OpenCredits
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9116,6 +9161,8 @@ MonoBehaviour:
   _lobbyPanelRoomNameInputField: {fileID: 2022626340}
   _lobbyPanelBackButton: {fileID: 1380651167}
   _lobbyListHeader: {fileID: 1032738344}
+  _creditMenu: {fileID: 597669395}
+  _creditFirstSelected: {fileID: 744225559}
 --- !u!1 &1788711322
 GameObject:
   m_ObjectHideFlags: 0
