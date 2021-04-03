@@ -40,7 +40,7 @@ public class DialogSystem : MonoBehaviour
      * 1;0;Hi, my name is john!
      *
      * IDS:
-     * 1 or 2 for character 1 or 2 (defined by the sprites)
+     * 1 ,2 or 3 for character 1 , 2  or 3(defined by the sprites)
      * 0 for none
      */
 
