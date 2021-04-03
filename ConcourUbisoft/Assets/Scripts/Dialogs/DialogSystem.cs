@@ -58,6 +58,8 @@ public class DialogSystem : MonoBehaviour
     private IEnumerator _slowReadCoroutine;
     private Controller _actualController;
 
+    private bool _skipAfter = false;
+
     private void Awake()
     {
 
@@ -221,7 +223,7 @@ public class DialogSystem : MonoBehaviour
                     break;
             }
 
-            _slowReadCoroutine = SlowRead(parsedLine[2]);
+            _slowReadCoroutine = SlowRead(parsedLine[2], _skipAfter);
             StartCoroutine(_slowReadCoroutine);
         }
         else
@@ -243,8 +245,10 @@ public class DialogSystem : MonoBehaviour
         }
     }
     
-    public void StartDialog(string pFile)
+    public void StartDialog(string pFile, bool pSkipAfter = false)
     {
+        _skipAfter = pSkipAfter;
+        
         // Loading text file
         TextAsset txtAsset = Resources.Load("Dialog/" + pFile) as TextAsset;
         string rawTxt = "";
@@ -288,7 +292,7 @@ public class DialogSystem : MonoBehaviour
         }
     }
     
-    IEnumerator SlowRead(string text)
+    IEnumerator SlowRead(string text, bool pSkipAfter = false)
     {
         _isReading = true;
         int i = 0;
@@ -305,6 +309,11 @@ public class DialogSystem : MonoBehaviour
         }
         textSlot.text = text;
         _isReading = false;
+        if (pSkipAfter)
+        {
+            yield return new WaitForSeconds(15);
+            ReadLine();
+        }
     }
 
     public void StartCustomLine(string pLine, int pIdLeft, int pIdRight = 0)
@@ -340,6 +349,105 @@ public class DialogSystem : MonoBehaviour
         }
     }
 
+    public void StartSingleLine(string pFile)
+    {
+        // Loading text file
+        TextAsset txtAsset = Resources.Load("Dialog/" + pFile) as TextAsset;
+        string rawTxt = "";
+        if(txtAsset != null)
+            rawTxt = txtAsset.ToString();
+        
+        // Read only the first line
+        string line = rawTxt.Split(lineSep)[0];
+        _lines.Clear();
+
+        isEmpty = false;
+        
+        leftCharSlot.enabled = true;
+        rightCharSlot.enabled = true;
+        textSlot.enabled = true;
+        panel.SetActive(true);
+
+        leftCharSlot.color = Color.clear;
+        rightCharSlot.color = Color.clear;
+        textSlot.text = "";
+        
+        string currentLine = line; //< Extracting the first line of the list
+        string[] parsedLine = currentLine.Split(itemSep);
+        _lines.Remove(currentLine);
+        
+        int leftCharacterID, rightCharacterID; //< IDs of the left and right character (according to sprites)
+        int.TryParse(parsedLine[0], out leftCharacterID); //< Extracting ID of the left character
+        int.TryParse(parsedLine[1], out rightCharacterID);//< Extracting ID of the right character
+    
+        // Left slot
+        switch (leftCharacterID)
+        {
+            case 0:
+                leftCharSlot.sprite = null;
+                leftCharSlot.color = Color.clear;
+                leftCharSlot.transform.parent.gameObject.SetActive(false);
+                break;
+            case 1:
+                leftCharSlot.sprite = char1Sprite;
+                leftCharSlot.color = Color.white;
+                leftCharSlot.transform.parent.gameObject.SetActive(true);
+                break;
+            case 2:
+                leftCharSlot.sprite = char2Sprite;
+                leftCharSlot.color = Color.white;
+                leftCharSlot.transform.parent.gameObject.SetActive(true);
+                break;
+            case 3:
+                leftCharSlot.sprite = char3Sprite;
+                leftCharSlot.color = Color.white;
+                leftCharSlot.transform.parent.gameObject.SetActive(true);
+                break;
+            default:
+                leftCharSlot.sprite = null;
+                leftCharSlot.color = Color.clear;
+                leftCharSlot.transform.parent.gameObject.SetActive(false);
+                break;
+        }
+        
+        // Right slot
+        switch (rightCharacterID)
+        {
+            case 0:
+                rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
+                rightCharSlot.sprite = null;
+                rightCharSlot.color = Color.clear;
+                rightCharSlot.transform.parent.gameObject.SetActive(false);
+                break;
+            case 1:
+                rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
+                rightCharSlot.sprite = char1Sprite;
+                rightCharSlot.color = Color.white;
+                rightCharSlot.transform.parent.gameObject.SetActive(true);
+                break;
+            case 2:
+                rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
+                rightCharSlot.sprite = char2Sprite;
+                rightCharSlot.color = Color.white;
+                rightCharSlot.transform.parent.gameObject.SetActive(true);
+                break;
+            case 3:
+                rightCharSlot.transform.localRotation = Quaternion.Euler(0,0,0);
+                rightCharSlot.sprite = char3Sprite;
+                rightCharSlot.color = Color.white;
+                rightCharSlot.transform.parent.gameObject.SetActive(true);
+                break;
+            default:
+                rightCharSlot.sprite = null;
+                rightCharSlot.color = Color.clear;
+                rightCharSlot.transform.parent.gameObject.SetActive(false);
+                break;
+        }
+
+        _slowReadCoroutine = SlowRead(parsedLine[2], true);
+        StartCoroutine(_slowReadCoroutine);
+    }
+
     /*IEnumerator ReadAll(float pTimeBetweenLines)
     {
         while (!isEmpty)
@@ -367,5 +475,10 @@ public class DialogSystem : MonoBehaviour
             ReadLine();
             
         }
+        if(_slowReadCoroutine != null)
+            StopCoroutine(_slowReadCoroutine);
+        
+        _isReading = false;
+        ReadLine();
     }
 }
