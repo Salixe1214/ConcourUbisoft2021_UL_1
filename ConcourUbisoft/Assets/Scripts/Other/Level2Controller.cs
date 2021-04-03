@@ -346,6 +346,13 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     private void OnCorrectItemDropped()
     {
+        if (_furnace.SucceedSequences == 1
+            && _furnace.GetAllSequences()[_furnace.SucceedSequences].SucceedColors == 1)
+        {
+            _armController.InverseX();
+            _armController.InverseZ();
+        }
+
         _timeLeft += SuccessBonusTime;
         OnBonusTime?.Invoke(SuccessBonusTime);
         _soundController.PlayLevelPartialSequenceSuccessSound();
@@ -357,12 +364,19 @@ public class Level2Controller : MonoBehaviour, LevelController
         _currentSequenceFailed = true;
         _furnace.ResetCurrentSequenceSuccess();
         StopCoroutine(timerCoroutine);
-        _timeLeft = currentSequenceNumber switch
+        switch (currentSequenceNumber)
         {
-            0 => TimeLeftIfFirstSequenceFailed,
-            1 => TimeLeftIfSecondSequenceFailed,
-            2 => TimeLeftIfThirdSequenceFailed,
-            _ => _timeLeft
+            case 0:
+                _timeLeft = TimeLeftIfFirstSequenceFailed;
+                break;
+            case 1:
+                _timeLeft = TimeLeftIfSecondSequenceFailed;
+                    break;
+            case 2:
+                _timeLeft = TimeLeftIfThirdSequenceFailed;
+                break;
+            default:
+                    break;
         };
         InitiateNextSequence();
         timerCoroutine = StartCoroutine(StartTimer());

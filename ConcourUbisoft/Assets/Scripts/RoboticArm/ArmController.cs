@@ -19,7 +19,6 @@ namespace Arm
 		[SerializeField] private ArmSound _armSound = null;
 		[SerializeField] private Bounds boundingBox;
         [SerializeField] private ParticleSystem[] _particleSystems = null;
-        [SerializeField] private float _durationPariculeEffect = 1.0f;
 
 		public float ControlSpeed => controlSpeed;
 		public Transform Head => armIKSolver.transform;
@@ -35,6 +34,9 @@ namespace Arm
 		private bool initialialized = false;
         private Matrix4x4 aligment = new Matrix4x4(new Vector4(1,0,0,0),new Vector4(0,1,0,0), new Vector4(0,0,1,0), new Vector4(0,0,0,0));
 
+        private bool _inversedX = false;
+        private bool _inversedZ = false;
+        private bool _inversed => _inversedX || _inversedZ;
 
 		private void Awake()
 		{
@@ -131,24 +133,46 @@ namespace Arm
         public void InverseX()
         {
             aligment.SetRow(0, aligment.GetRow(0) * -1);
+            _inversedX = !_inversedX;
             foreach (ParticleSystem particleSystem in _particleSystems)
             {
-                particleSystem.Play();
+                if (_inversed)
+                {
+                    if (!particleSystem.isPlaying)
+                    {
+                        particleSystem.Play();
+                    }
+                }
+                else
+                {
+                    if (!particleSystem.isStopped)
+                    {
+                        particleSystem.Stop();
+                    }
+                }
             }
-            StartCoroutine(DisableParticuleSystem());
         }
 
         public void InverseZ()
         {
             aligment.SetRow(2, aligment.GetRow(2) * -1);
-        }
-
-        private IEnumerator DisableParticuleSystem()
-        {
-            yield return new WaitForSeconds(_durationPariculeEffect);
-            foreach(ParticleSystem particleSystem in _particleSystems)
+            _inversedZ = !_inversedZ;
+            foreach (ParticleSystem particleSystem in _particleSystems)
             {
-                particleSystem.Stop();
+                if (_inversed)
+                {
+                    if(!particleSystem.isPlaying)
+                    {
+                        particleSystem.Play();
+                    }
+                }
+                else
+                {
+                    if (!particleSystem.isStopped)
+                    {
+                        particleSystem.Stop();
+                    }
+                }
             }
         }
 

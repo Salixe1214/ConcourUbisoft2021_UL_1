@@ -33,6 +33,8 @@ public class CircleConveyor : Conveyor
 
         Vector3 newPosition = center + new Vector3(rotateVector.x, rigidbody.position.y - center.y, rotateVector.y);
 
+        //Quaternion.LookRotation(newPosition - rigidbody.transform.position);
+
         rigidbody.transform.LookAt(newPosition, Vector3.up);
         rigidbody.MovePosition(newPosition);
     }

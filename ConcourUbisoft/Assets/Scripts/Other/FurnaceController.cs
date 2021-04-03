@@ -26,6 +26,7 @@ public class FurnaceController : MonoBehaviour
     [SerializeField] private float TimeToConsume = 0.0f;
     [SerializeField] private GameController.Role _owner = GameController.Role.None;
     [SerializeField] private bool _finishAfterOnce = false;
+    [SerializeField] private float _destroyTime = 5f;
 
     public UnityEvent WhenFurnaceConsumedAll;
     public UnityEvent WhenFurnaceConsumeWrong;
@@ -56,7 +57,7 @@ public class FurnaceController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Pickable pickable = null;
-        if (other.gameObject.TryGetComponent(out pickable) && _owner == _networkController.GetLocalRole())
+        if (other.gameObject.TryGetComponent(out pickable) && _owner == _networkController.GetLocalRole() && !pickable.Consumed)
         {
             Consume(pickable);
         }
@@ -67,6 +68,13 @@ public class FurnaceController : MonoBehaviour
         object[] parameters = new object[] { (int)pickable.GetType(), pickable.Color.r, pickable.Color.g, pickable.Color.b, pickable.Color.a, };
         _photonView.RPC("Consumed", RpcTarget.All, parameters as object);
 
+        pickable.Consumed = true;
+        StartCoroutine(DestroyConsumed(pickable));
+    }
+
+    private IEnumerator DestroyConsumed(Pickable pickable)
+    {
+        yield return new WaitForSeconds(_destroyTime);
         PhotonNetwork.Destroy(pickable.gameObject);
     }
 
@@ -78,7 +86,6 @@ public class FurnaceController : MonoBehaviour
 
     private void ValidateConsumed(PickableType type, Color color)
     {
-        Debug.Log("Consume");
         SequenceOfColor currentSequence = SequencesOfColor[SucceedSequences];
 
         Color currentSequenceColor = currentSequence.ColorsSequence[currentSequence.SucceedColors];

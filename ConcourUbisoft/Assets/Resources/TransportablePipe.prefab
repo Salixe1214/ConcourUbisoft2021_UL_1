@@ -149,8 +149,8 @@ MonoBehaviour:
   _isRightColor: 0
   _intensity: 0
   _directionIntensity: 1
-  _intensityGainSpeed: 0.2
-  _intensityUpperBound: 0.4
+  _intensityGainSpeed: 2
+  _intensityUpperBound: 2
   _intensityBottomBound: 0
 --- !u!114 &5905518934942538558
 MonoBehaviour:
