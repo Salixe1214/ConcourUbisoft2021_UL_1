@@ -59,7 +59,7 @@ public class DialogSystem : MonoBehaviour
     private Controller _actualController;
 
     private bool _skipAfter = false;
-    [SerializeField] private float skipTime = 15;
+    [SerializeField] private float skipTime = 5;
 
     private void Awake()
     {
@@ -312,6 +312,7 @@ public class DialogSystem : MonoBehaviour
         _isReading = false;
         if (pSkipAfter)
         {
+            Debug.LogWarning("Skip for " + skipTime);
             yield return new WaitForSeconds(skipTime);
             ReadLine();
         }
@@ -352,6 +353,7 @@ public class DialogSystem : MonoBehaviour
 
     public void StartSingleLine(string pFile)
     {
+        _skipAfter = true;
         // Loading text file
         TextAsset txtAsset = Resources.Load("Dialog/" + pFile) as TextAsset;
         string rawTxt = "";
@@ -361,6 +363,18 @@ public class DialogSystem : MonoBehaviour
         // Read only the first line
         string line = rawTxt.Split(lineSep)[0];
         _lines.Clear();
+        if(_slowReadCoroutine != null)
+            StopCoroutine(_slowReadCoroutine);
+        
+        // Formating the lines in a list
+        string[] tmpLines = rawTxt.Split(lineSep);
+        
+        // Adding each line to _lines (except the last, which is empty
+        for(int i = 0 ; i < tmpLines.Length ; i++)
+            if (tmpLines[i].Length > 4)
+            {
+                _lines.Add(tmpLines[i]);
+            }
 
         isEmpty = false;
         
@@ -372,81 +386,17 @@ public class DialogSystem : MonoBehaviour
         leftCharSlot.color = Color.clear;
         rightCharSlot.color = Color.clear;
         textSlot.text = "";
-        
-        string currentLine = line; //< Extracting the first line of the list
-        string[] parsedLine = currentLine.Split(itemSep);
-        _lines.Remove(currentLine);
-        
-        int leftCharacterID, rightCharacterID; //< IDs of the left and right character (according to sprites)
-        int.TryParse(parsedLine[0], out leftCharacterID); //< Extracting ID of the left character
-        int.TryParse(parsedLine[1], out rightCharacterID);//< Extracting ID of the right character
-    
-        // Left slot
-        switch (leftCharacterID)
-        {
-            case 0:
-                leftCharSlot.sprite = null;
-                leftCharSlot.color = Color.clear;
-                leftCharSlot.transform.parent.gameObject.SetActive(false);
-                break;
-            case 1:
-                leftCharSlot.sprite = char1Sprite;
-                leftCharSlot.color = Color.white;
-                leftCharSlot.transform.parent.gameObject.SetActive(true);
-                break;
-            case 2:
-                leftCharSlot.sprite = char2Sprite;
-                leftCharSlot.color = Color.white;
-                leftCharSlot.transform.parent.gameObject.SetActive(true);
-                break;
-            case 3:
-                leftCharSlot.sprite = char3Sprite;
-                leftCharSlot.color = Color.white;
-                leftCharSlot.transform.parent.gameObject.SetActive(true);
-                break;
-            default:
-                leftCharSlot.sprite = null;
-                leftCharSlot.color = Color.clear;
-                leftCharSlot.transform.parent.gameObject.SetActive(false);
-                break;
-        }
-        
-        // Right slot
-        switch (rightCharacterID)
-        {
-            case 0:
-                rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
-                rightCharSlot.sprite = null;
-                rightCharSlot.color = Color.clear;
-                rightCharSlot.transform.parent.gameObject.SetActive(false);
-                break;
-            case 1:
-                rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
-                rightCharSlot.sprite = char1Sprite;
-                rightCharSlot.color = Color.white;
-                rightCharSlot.transform.parent.gameObject.SetActive(true);
-                break;
-            case 2:
-                rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
-                rightCharSlot.sprite = char2Sprite;
-                rightCharSlot.color = Color.white;
-                rightCharSlot.transform.parent.gameObject.SetActive(true);
-                break;
-            case 3:
-                rightCharSlot.transform.localRotation = Quaternion.Euler(0,0,0);
-                rightCharSlot.sprite = char3Sprite;
-                rightCharSlot.color = Color.white;
-                rightCharSlot.transform.parent.gameObject.SetActive(true);
-                break;
-            default:
-                rightCharSlot.sprite = null;
-                rightCharSlot.color = Color.clear;
-                rightCharSlot.transform.parent.gameObject.SetActive(false);
-                break;
-        }
 
-        _slowReadCoroutine = SlowRead(parsedLine[2], true);
-        StartCoroutine(_slowReadCoroutine);
+        _isReading = false;
+        
+        if(!_isReading)
+        {
+            ReadLine();
+        }
+        else
+        {
+            _isReading = false;
+        }
     }
 
     /*IEnumerator ReadAll(float pTimeBetweenLines)
