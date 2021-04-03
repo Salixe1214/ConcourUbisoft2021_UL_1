@@ -59,6 +59,7 @@ public class DialogSystem : MonoBehaviour
     private Controller _actualController;
 
     private bool _skipAfter = false;
+    [SerializeField] private float skipTime = 15;
 
     private void Awake()
     {
@@ -311,7 +312,7 @@ public class DialogSystem : MonoBehaviour
         _isReading = false;
         if (pSkipAfter)
         {
-            yield return new WaitForSeconds(15);
+            yield return new WaitForSeconds(skipTime);
             ReadLine();
         }
     }
