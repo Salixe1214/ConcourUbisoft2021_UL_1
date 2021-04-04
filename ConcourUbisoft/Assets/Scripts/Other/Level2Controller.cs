@@ -191,13 +191,13 @@ public class Level2Controller : MonoBehaviour, LevelController
     {
         if(_furnace.SucceedSequences == 1 && !_currentSequenceFailed)
         {
-            _dialogSystem.StartDialog("Area02_first_sequence_done");
+            _dialogSystem.StartSingleLine("Area02_first_sequence_done");
             _armController.InverseX();
             _armController.InverseZ();
         }
         else if (_furnace.SucceedSequences ==2 && !_currentSequenceFailed)
         {
-            _dialogSystem.StartDialog("Area02_second_sequence_done");
+            _dialogSystem.StartSingleLine("Area02_second_sequence_done");
         }
         
         if (!_currentSequenceFailed)
