@@ -27,6 +27,7 @@ public class FurnaceController : MonoBehaviour
     [SerializeField] private GameController.Role _owner = GameController.Role.None;
     [SerializeField] private bool _finishAfterOnce = false;
     [SerializeField] private float _destroyTime = 5f;
+    [SerializeField] private bool _destroyGameObject = true;
 
     public UnityEvent WhenFurnaceConsumedAll;
     public UnityEvent WhenFurnaceConsumeWrong;
@@ -75,7 +76,14 @@ public class FurnaceController : MonoBehaviour
     private IEnumerator DestroyConsumed(Pickable pickable)
     {
         yield return new WaitForSeconds(_destroyTime);
-        PhotonNetwork.Destroy(pickable.gameObject);
+        if(_destroyGameObject)
+        {
+            PhotonNetwork.Destroy(pickable.gameObject);
+        }
+        else
+        {
+            pickable.SetActiveNetwork(false);
+        }
     }
 
     [PunRPC]

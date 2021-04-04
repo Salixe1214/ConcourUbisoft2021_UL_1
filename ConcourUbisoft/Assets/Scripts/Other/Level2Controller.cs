@@ -37,6 +37,8 @@ public class Level2Controller : MonoBehaviour, LevelController
     [SerializeField] private TimerController _timerController;
     [SerializeField] private GameObject TimerPanel;
     [SerializeField] private List<float> TimeLeftWhenWarningPlays;
+    [SerializeField] private CameraEffectDisabled _cameraEffectDisabled = null;
+    [SerializeField] private float _durationCameraEffectDisabled = 2.0f;
 
     [Tooltip("Intensity of the AreaCamera Shake Effect")]
     [SerializeField] private float cameraShakeForce = 0.3f;
@@ -80,7 +82,9 @@ public class Level2Controller : MonoBehaviour, LevelController
     private int _currentListIndex;
     private NetworkController _networkController = null;
     private float _lastTimeInverseControl = 0;
+    private PhotonView _photonView = null;
 
+    private List<Tuple<Vector3, Quaternion, Pickable>> _spawnedPickable = new List<Tuple<Vector3, Quaternion, Pickable>>();
 
     private void Awake()
     {
@@ -88,6 +92,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _cameraOriginalPosition = AreaCamera.transform.position;
         _dialogSystem = GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>();
+        _photonView = GetComponent<PhotonView>();
     }
 
     public void StartLevel()
@@ -135,18 +140,53 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     public void SpawnObjects()
     {
-        List<Bounds> solutions = new List<Bounds>();
-        foreach(SpawnObjectOnLineConveyor spawner in _spawners)
-        {
-            solutions.AddRange(spawner.GetSpawnPosition());
-        }
-        
-        SpawnSequences(solutions);
+        _photonView.RPC("CameraEffect", RpcTarget.All);
 
-        foreach (Bounds solution in solutions)
+        if(_spawnedPickable.Count == 0)
         {
-            SpawnObject(solution, _possibleColors[_random.Next(0, _possibleColors.Length)]);
+            List<Bounds> solutions = new List<Bounds>();
+            foreach (SpawnObjectOnLineConveyor spawner in _spawners)
+            {
+                solutions.AddRange(spawner.GetSpawnPosition());
+            }
+
+            SpawnSequences(solutions);
+
+            foreach (Bounds solution in solutions)
+            {
+                SpawnObject(solution, _possibleColors[_random.Next(0, _possibleColors.Length)]);
+            }
         }
+        else
+        {
+            foreach(Tuple<Vector3, Quaternion, Pickable> tuple in _spawnedPickable)
+            {
+                if(!tuple.Item3.IsGrabbed)
+                {
+                    tuple.Item3.SetActiveNetwork(true);
+                    tuple.Item3.transform.position = tuple.Item1;
+                    tuple.Item3.transform.rotation = tuple.Item2;
+                    tuple.Item3.SetConsumedNetwork(false);
+                }
+            }
+        }
+
+    }
+
+    [PunRPC]
+    private void CameraEffect()
+    {
+        if(_networkController.GetLocalRole() == GameController.Role.Technician)
+        {
+            _cameraEffectDisabled.Enable();
+            StartCoroutine(DisableCameraEffectSpawnObject(_durationCameraEffectDisabled));
+        }
+    }
+
+    private IEnumerator DisableCameraEffectSpawnObject(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        _cameraEffectDisabled.Disable();
     }
 
     private void SpawnObject(Bounds solution, Color color)
@@ -158,6 +198,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         pickable.Color = color;
         pickable.Furnace = _furnace;
         pickable.SetEmissionVisibleBy(_emissionVisibleBy);
+        _spawnedPickable.Add(new Tuple<Vector3, Quaternion, Pickable>(solution.center, randomRotation, pickable));
     }
 
     private void SpawnSequenceObject(Bounds solution, Color color, Other.PickableType type)
@@ -172,6 +213,7 @@ public class Level2Controller : MonoBehaviour, LevelController
                 pickable.Color = color;
                 pickable.Furnace = _furnace;
                 pickable.SetEmissionVisibleBy(_emissionVisibleBy);
+                _spawnedPickable.Add(new Tuple<Vector3, Quaternion, Pickable>(solution.center, randomRotation, pickable));
                 break;
             }
         }
@@ -379,6 +421,10 @@ public class Level2Controller : MonoBehaviour, LevelController
                     break;
         };
         InitiateNextSequence();
+        if (_networkController.GetLocalRole() == GameController.Role.SecurityGuard)
+        {
+            SpawnObjects();
+        }
         timerCoroutine = StartCoroutine(StartTimer());
     }
 

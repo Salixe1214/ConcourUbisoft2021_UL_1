@@ -145,13 +145,13 @@ MonoBehaviour:
   volumeMultiplier: 0.3
   magnetCollisionSound: {fileID: 8300000, guid: d0cbf4c91bdfaf9449032b32781825e8, type: 3}
   onHitSound: {fileID: 8300000, guid: 260993b617ac50b4881e97a77fa0d733, type: 3}
-  _emissionVisibleBy: 2
-  _isRightColor: 0
   _intensity: 0
   _directionIntensity: 1
   _intensityGainSpeed: 2
   _intensityUpperBound: 2
   _intensityBottomBound: 0
+  _emissionVisibleBy: 2
+  _isRightColor: 0
 --- !u!114 &2337986934944574126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19675,7 +19675,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300002, guid: 496b9a23679f0bf448e2a6493228c304, type: 2}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
