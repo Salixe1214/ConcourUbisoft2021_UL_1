@@ -333,6 +333,11 @@ public class Level2Controller : MonoBehaviour, LevelController
             _armController.InverseZ();
         }
 
+        if (Input.GetKey(KeyCode.Q) && Input.GetKey(KeyCode.R) && Input.GetKeyUp(KeyCode.LeftAlt))
+        {
+            StartLevel();
+        }
+
         #endregion
     }
 
