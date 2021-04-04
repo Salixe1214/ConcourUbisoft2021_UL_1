@@ -18,11 +18,17 @@ namespace Arm
         [SerializeField] private float volumeMultiplier = 0.3f;
         [SerializeField] private AudioClip magnetCollisionSound;
         [SerializeField] private AudioClip onHitSound;
+        [SerializeField] private float _intensity = 0.0f;
+        [SerializeField] private int _directionIntensity = 1;
+        [SerializeField] private float _intensityGainSpeed = 0.2f;
+        [SerializeField] private float _intensityUpperBound = 0.4f;
+        [SerializeField] private float _intensityBottomBound = 0.0f;
 
         public Color Color { get { return _renderer.material.color; } set { _renderer.material.color = value; } }
         public Rigidbody Rigidbody { get; private set; }
         public bool Consumed { get; set; } = false;        
         public FurnaceController Furnace { get; set; } = null;
+        public bool IsGrabbed { get { return _grabbed; } }
 
         private Renderer _renderer = null;
         private AudioSource _audioSource;
@@ -40,13 +46,8 @@ namespace Arm
         public GameController.Role _emissionVisibleBy = GameController.Role.None;
         private Vector3 _newPosition = new Vector3();
         public bool _isRightColor = false;
-        [SerializeField] private float _intensity = 0.0f;
-        [SerializeField] private int _directionIntensity = 1;
-        [SerializeField] private float _intensityGainSpeed = 0.2f;
-        [SerializeField] private float _intensityUpperBound = 0.4f;
-        [SerializeField] private float _intensityBottomBound = 0.0f;
 
-        private bool _altGrab = false;
+        private bool grabbedAtleastOnce = false;
 
         private void Awake()
         {
@@ -70,7 +71,7 @@ namespace Arm
 
         private void OnCollisionEnter(Collision other)
         {
-            if (_altGrab)
+            if (grabbedAtleastOnce && gameObject.activeInHierarchy)
             {
                 _audioSource.clip = onHitSound;
                 _audioSource.volume = volumeMultiplier;
@@ -147,7 +148,7 @@ namespace Arm
 
         public void OnGrab()
         {
-            _altGrab = true;
+            grabbedAtleastOnce = true;
             if (_photonView.IsMine)
             {
                 Rigidbody.useGravity = false;
@@ -174,6 +175,29 @@ namespace Arm
             _audioSource.clip = magnetCollisionSound;
             _audioSource.volume = volumeMultiplier;
             _audioSource.Play();
+        }
+
+        public void SetActiveNetwork(bool active)
+        {
+            _photonView.RPC("SetActiveGameObject", RpcTarget.All, new object[] { (bool)active } as object);
+        }
+
+        [PunRPC]
+        private void SetActiveGameObject(object[] parameters)
+        {
+            this.gameObject.SetActive((bool)parameters[0]);
+            grabbedAtleastOnce = false;
+        }
+
+        public void SetConsumedNetwork(bool consumed)
+        {
+            _photonView.RPC("SetConsumed", RpcTarget.All, new object[] { (bool)consumed } as object);
+        }
+
+        [PunRPC]
+        private void SetConsumed(object[] parameters)
+        {
+            Consumed = (bool)parameters[0];
         }
 
         public void OnHover()
