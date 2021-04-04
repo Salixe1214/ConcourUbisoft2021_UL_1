@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Arm;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,7 +12,11 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] private GameController.Role _playerRole;
 
-    public GameController.Role PlayerRole { get => _playerRole; set => _playerRole = value; }
+    public GameController.Role PlayerRole { get => _playerRole; set
+    {
+        _playerRole = value;
+        Debug.Log("Role modified in local");
+    } }
     public string Name { set; get; }
     public string Id { get { return _photonView.Owner.UserId; } }
 
@@ -89,11 +94,11 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     #region RPC Functions
 
     [PunRPC]
-    private void StartGame()
+    private void StartGame(bool colorBlindMode)
     {
         if (!(_gameController.IsGameLoading || _gameController.IsGameStart))
         {
-            _gameController.StartGame(_networkController.GetLocalRole());
+            _gameController.StartGame(_networkController.GetLocalRole(), colorBlindMode);
         }
     }
 
@@ -102,7 +107,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 
     private void OnLoadGameEvent()
     {
-        _photonView.RPC("StartGame", RpcTarget.Others);
+        _photonView.RPC("StartGame", RpcTarget.Others, _gameController.ColorBlindMode);
     }
 
     private void OnFinishLoadGameEvent()

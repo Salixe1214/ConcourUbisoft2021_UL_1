@@ -12,6 +12,7 @@ public class RoomMenu : MonoBehaviour
     [SerializeField] private GameObject _roomMenuElementPrefab = null;
     [SerializeField] private GameObject _waitingForAnotherPlayer = null;
     [SerializeField] private GameObject _startButton = null;
+    [SerializeField] private Toggle _colorBlindToggle = null;
     [SerializeField] private Text _errorText = null;
     [SerializeField] private GameObject _speaking = null;
     [SerializeField] private GameObject _lobbyPanelCreateButton;
@@ -55,7 +56,7 @@ public class RoomMenu : MonoBehaviour
         //}
 
         _errorText.text = "";
-        _gameController.StartGame(_networkController.GetLocalRole());
+        _gameController.StartGame(_networkController.GetLocalRole(), _colorBlindToggle.isOn);
     }
     #endregion
     #region Unity Callbacks
@@ -82,6 +83,7 @@ public class RoomMenu : MonoBehaviour
     private void Update()
     {
         _startButton.SetActive(_networkController.IsMasterClient());
+        _colorBlindToggle.gameObject.SetActive(_networkController.IsMasterClient());
     }
     #endregion
     #region Event Callbacks
