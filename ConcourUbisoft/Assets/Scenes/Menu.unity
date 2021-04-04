@@ -5160,6 +5160,7 @@ MonoBehaviour:
   _roomMenuElementPrefab: {fileID: 3891741303075574222, guid: 93955d5fee63bc34a9e3e8ab65c29858, type: 3}
   _waitingForAnotherPlayer: {fileID: 3891741303075574222, guid: d750bfcd680f4e14e826171f6317d916, type: 3}
   _startButton: {fileID: 1527438760}
+  _colorBlindToggle: {fileID: 1146186507}
   _errorText: {fileID: 1454352098}
   _speaking: {fileID: 1322349464}
   _lobbyPanelCreateButton: {fileID: 926528961}
@@ -5253,7 +5254,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &1146186508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5577,7 +5578,6 @@ MonoBehaviour:
     _name: Purple
   - _color: {r: 0, g: 1, b: 0.7647059, a: 1}
     _name: Teal
-  ColorBlindMode: 1
 --- !u!4 &1209276559
 Transform:
   m_ObjectHideFlags: 0
@@ -7241,6 +7241,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -57.5
       objectReference: {fileID: 0}
+    - target: {fileID: 2518951235177834653, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2518951235177834653, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.0026855469
+      objectReference: {fileID: 0}
     - target: {fileID: 2564988845049060527, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -57.5
@@ -7264,6 +7272,10 @@ PrefabInstance:
     - target: {fileID: 4030806936211845220, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4177765246839036553, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.0126953125
       objectReference: {fileID: 0}
     - target: {fileID: 5035967096288297438, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size

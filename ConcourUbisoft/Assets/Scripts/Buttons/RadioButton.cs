@@ -14,6 +14,19 @@ namespace Buttons
         private RadioGroup _group;
         private TextColor _text;
         [SerializeField] private int value;
+
+        public bool Interactable
+        {
+            get => interactable;
+            set
+            {
+                interactable = value;
+                if (!value && isOn)
+                {
+                    graphic.color = colors.disabledColor;
+                }
+            }
+        }
         
         protected override void Awake()
         {
@@ -26,7 +39,6 @@ namespace Buttons
 
         private void OnValueChange(bool newValue)
         {
-            Debug.Log("OnValueChanged called from button with a value " + value);
             if (newValue)
             {
                 OnSelected();
@@ -41,7 +53,7 @@ namespace Buttons
         public override void OnPointerEnter(PointerEventData eventData)
         {
             base.OnPointerEnter(eventData);
-            if (isOn || !interactable) return;
+//            if (isOn || !interactable) return;
             _text.OnSelectedEnter();
             graphic.color = colors.highlightedColor;
         }

@@ -35,7 +35,6 @@ public class GameController : MonoBehaviour
     [SerializeField] private InGameMenuController _inGameMenuController = null;
     [SerializeField] private GameObject _speaking = null;
     [SerializeField] private ColorName[] _colorNames = null;
-    [SerializeField] public bool ColorBlindMode = false;
 
     private SoundController _soundController = null;
     private NetworkController _networkController = null;
@@ -44,6 +43,7 @@ public class GameController : MonoBehaviour
     public bool IsGameLoading { get; private set; }
     public bool IsGameStart { get; set; }
     public Role GameRole { get; set; }
+    public bool ColorBlindMode { get; set; }
     public OptionController OptionController { get => _optionController; }
     public bool IsGameMenuOpen { get => _inGameMenuController.IsGameMenuOpen; }
     
@@ -165,10 +165,11 @@ public class GameController : MonoBehaviour
         return _colorNames.Where(x => x.IsColor(color)).FirstOrDefault()?.Name ?? "Undefined";
     }
 
-    public void StartGame(Role role)
+    public void StartGame(Role role, bool colorBlindMode)
     {
         Debug.Log($"Start Game with role {role}");
         GameRole = role;
+        ColorBlindMode = colorBlindMode;
         _soundController.SetSound(GameRole);
         StartCoroutine("LoadAsyncLevel");
     }

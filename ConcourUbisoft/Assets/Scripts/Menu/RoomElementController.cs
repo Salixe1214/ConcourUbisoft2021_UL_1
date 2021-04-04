@@ -13,7 +13,6 @@ public class RoomElementController : MonoBehaviour
     private Text _playerName = null;
     private Button _kickButton = null;
     private RawImage _ownerImage = null;
-    private Dropdown _dropdownRole = null;
     private RadioGroup _radioGroup = null;
     private SoundController _menuSoundController = null;
 
@@ -22,7 +21,6 @@ public class RoomElementController : MonoBehaviour
     {
         PlayerNetwork.PlayerRole = (GameController.Role)gameObject.transform.Find("RadioRole").GetComponent<RadioGroup>().Value;
         _menuSoundController.PlayButtonSound();
-        Debug.Log("Role modified: " + Time.time);
     }
     #endregion
     #region Unity Callbacks
@@ -33,7 +31,6 @@ public class RoomElementController : MonoBehaviour
         _playerName = gameObject.transform.Find("PlayerName").GetComponent<Text>();
         _kickButton = gameObject.transform.Find("KickButton").GetComponent<Button>();
         _ownerImage = gameObject.transform.Find("OwnerImage").GetComponent<RawImage>();
-        _dropdownRole = gameObject.transform.Find("DropdownRole").GetComponent<Dropdown>();
         _radioGroup = gameObject.transform.Find("RadioRole").GetComponent<RadioGroup>();
     }
     private void Update()

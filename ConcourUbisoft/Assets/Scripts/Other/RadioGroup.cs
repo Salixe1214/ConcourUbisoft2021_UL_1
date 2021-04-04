@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Buttons;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Other
@@ -52,7 +51,7 @@ namespace Other
 
         [SerializeField]
         private RadioEvent onValueChanged = new RadioEvent();
-        public int Value { get; private set; } = 0;
+        public int Value { get; private set; } = (int) GameController.Role.None;
 
         private bool _interactable = true;
         public bool Interactable
@@ -63,7 +62,7 @@ namespace Other
                 _interactable = value;
                 options.ForEach(action =>
                 {
-                    action.Button.interactable = value;
+                    action.Button.Interactable = value;
                 });
             }
         }
@@ -75,10 +74,10 @@ namespace Other
 
             Value = value;
 
+            OnValueChange(value);
             if (sendCallback)
             {
                 onValueChanged?.Invoke(Value);
-                OnValueChange(value);
             }
         }
 
