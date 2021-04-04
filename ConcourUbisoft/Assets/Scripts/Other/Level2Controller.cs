@@ -324,6 +324,16 @@ public class Level2Controller : MonoBehaviour, LevelController
         {
             AreaCamera.transform.position = _cameraOriginalPosition + Random.insideUnitSphere * cameraShakeForce;
         }
+
+        #region Cheats
+
+        if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.E) && Input.GetKeyUp(KeyCode.LeftAlt))
+        {
+            _armController.InverseX();
+            _armController.InverseZ();
+        }
+
+        #endregion
     }
 
     private void UpdateSpriteColorInList()

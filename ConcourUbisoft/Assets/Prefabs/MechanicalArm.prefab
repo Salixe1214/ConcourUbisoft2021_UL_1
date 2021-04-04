@@ -1236,4 +1236,5 @@ MonoBehaviour:
     m_Center: {x: 0, y: 6.5, z: 0}
     m_Extent: {x: 15, y: 7, z: 15}
   _particleSystems: []
-  _durationPariculeEffect: 1
+  audioSource: {fileID: 0}
+  electricitySound: {fileID: 8300000, guid: 33a053f9d738ed9478f0078bcf57710c, type: 3}
