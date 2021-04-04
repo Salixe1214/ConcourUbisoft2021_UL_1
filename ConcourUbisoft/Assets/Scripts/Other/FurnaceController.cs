@@ -138,6 +138,7 @@ public class FurnaceController : MonoBehaviour
             {
                 if (!_firstFailPlayed)
                 {
+                    _firstFailPlayed = true;
                     OnFirstWrongItemDropped?.Invoke();
                 }
                 WhenFurnaceConsumeWrong?.Invoke();

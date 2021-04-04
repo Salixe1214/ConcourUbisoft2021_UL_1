@@ -273,6 +273,7 @@ public class DialogSystem : MonoBehaviour
             leftCharSlot.enabled = true;
             rightCharSlot.enabled = true;
             textSlot.enabled = true;
+            skipKey.enabled = true;
             panel.SetActive(true);
 
             leftCharSlot.color = Color.clear;
@@ -380,6 +381,8 @@ public class DialogSystem : MonoBehaviour
         leftCharSlot.enabled = true;
         rightCharSlot.enabled = true;
         textSlot.enabled = true;
+        skipKey.enabled = false;
+        
         panel.SetActive(true);
 
         leftCharSlot.color = Color.clear;
