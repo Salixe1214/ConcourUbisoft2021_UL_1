@@ -35,11 +35,13 @@ public class FurnaceController : MonoBehaviour
     public UnityEvent WhenFurnaceConsumeAWholeSequenceWithoutFinishing;
     public event Action CheckItemOffList;
     public event Action OnFirstSuccessfulItemDropped;
+    public event Action OnFirstWrongItemDropped;
 
     private SoundController soundController;
     private PhotonView _photonView = null;
     private NetworkController _networkController = null;
     private bool _firstSuccessPlayed;
+    private bool _firstFailPlayed;
 
     public int SucceedSequences { get; private set; } = 0;
 
@@ -52,6 +54,7 @@ public class FurnaceController : MonoBehaviour
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _photonView = GetComponent<PhotonView>();
         _firstSuccessPlayed = false;
+        _firstFailPlayed = false;
     }
 
 
@@ -133,6 +136,11 @@ public class FurnaceController : MonoBehaviour
             }
             else
             {
+                if (!_firstFailPlayed)
+                {
+                    _firstFailPlayed = true;
+                    OnFirstWrongItemDropped?.Invoke();
+                }
                 WhenFurnaceConsumeWrong?.Invoke();
             }
         }

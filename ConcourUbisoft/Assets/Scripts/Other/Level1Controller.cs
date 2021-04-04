@@ -114,6 +114,8 @@ public class Level1Controller : MonoBehaviour , LevelController
         FurnaceController.WhenFurnaceConsumeWrong.AddListener(ShakeCamera);
         FurnaceController.CheckItemOffList += UpdateSpriteColorInList;
         FurnaceController.WhenFurnaceConsumeRight.AddListener(OnCorrectItemDropped);
+        FurnaceController.OnFirstSuccessfulItemDropped += OnFirstCorrectItemDropped;
+        FurnaceController.OnFirstWrongItemDropped += OnFisrtWrongItemDropped;
         InteriorConveyorSpawner.requiredItemHasSpawned += SpawnNextRequiredItem;
         ExteriorConveyorSpawner.requiredItemHasSpawned += SpawnNextRequiredItem;
     }
@@ -125,6 +127,8 @@ public class Level1Controller : MonoBehaviour , LevelController
         FurnaceController.WhenFurnaceConsumeWrong.RemoveListener(ShakeCamera);
         FurnaceController.CheckItemOffList -= UpdateSpriteColorInList;
         FurnaceController.WhenFurnaceConsumeRight.RemoveListener(OnCorrectItemDropped);
+        FurnaceController.OnFirstSuccessfulItemDropped -= OnFirstCorrectItemDropped;
+        FurnaceController.OnFirstWrongItemDropped -= OnFisrtWrongItemDropped;
         InteriorConveyorSpawner.requiredItemHasSpawned -= SpawnNextRequiredItem;
         ExteriorConveyorSpawner.requiredItemHasSpawned -= SpawnNextRequiredItem;
     }
@@ -337,5 +341,15 @@ public class Level1Controller : MonoBehaviour , LevelController
     {
         soundController.PlayLevelPartialSequenceSuccessSound();
         actualDelayNextRequiredItem += 1;
+    }
+
+    private void OnFirstCorrectItemDropped()
+    {
+        _dialogSystem.StartSingleLine("Area01_first_success");
+    }
+
+    private void OnFisrtWrongItemDropped()
+    {
+        _dialogSystem.StartSingleLine("Area01_first_failure");
     }
 }

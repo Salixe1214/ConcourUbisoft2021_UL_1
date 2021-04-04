@@ -25,7 +25,7 @@ namespace TechSupport.Informations
             base.Awake();
             childAlignment = TextAnchor.MiddleCenter;
             gameObject.SetActive(true);
-            gameObject.name = "Image Layout";
+            name = "Image Layout";
         }
 
         #region GameObject Relative

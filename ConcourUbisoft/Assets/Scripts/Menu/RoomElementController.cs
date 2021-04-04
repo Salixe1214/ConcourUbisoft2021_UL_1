@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Other;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -12,13 +13,13 @@ public class RoomElementController : MonoBehaviour
     private Text _playerName = null;
     private Button _kickButton = null;
     private RawImage _ownerImage = null;
-    private Dropdown _dropdownRole = null;
+    private RadioGroup _radioGroup = null;
     private SoundController _menuSoundController = null;
 
     #region UI Actions
     public void OnRoleModify()
     {
-        PlayerNetwork.PlayerRole = (GameController.Role)gameObject.transform.Find("DropdownRole").GetComponent<Dropdown>().value;
+        PlayerNetwork.PlayerRole = (GameController.Role)gameObject.transform.Find("RadioRole").GetComponent<RadioGroup>().Value;
         _menuSoundController.PlayButtonSound();
     }
     #endregion
@@ -30,7 +31,7 @@ public class RoomElementController : MonoBehaviour
         _playerName = gameObject.transform.Find("PlayerName").GetComponent<Text>();
         _kickButton = gameObject.transform.Find("KickButton").GetComponent<Button>();
         _ownerImage = gameObject.transform.Find("OwnerImage").GetComponent<RawImage>();
-        _dropdownRole = gameObject.transform.Find("DropdownRole").GetComponent<Dropdown>();
+        _radioGroup = gameObject.transform.Find("RadioRole").GetComponent<RadioGroup>();
     }
     private void Update()
     {
@@ -58,14 +59,14 @@ public class RoomElementController : MonoBehaviour
 
             if(PlayerNetwork.IsMine())
             {
-                _dropdownRole.GetComponent<Dropdown>().interactable = true;
+                _radioGroup.Interactable = true;
             }
             else
             {
-                _dropdownRole.GetComponent<Dropdown>().interactable = false;
+                _radioGroup.Interactable = false;
             }
 
-            _dropdownRole.GetComponent<Dropdown>().value = (int)PlayerNetwork.PlayerRole;
+            _radioGroup.Set((int)PlayerNetwork.PlayerRole, false);
         }
         else
         {
