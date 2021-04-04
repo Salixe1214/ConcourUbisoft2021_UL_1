@@ -11,7 +11,6 @@ namespace Buttons
     [RequireComponent(typeof(Image))]
     public class RadioButton : Toggle
     {
-        private IEnumerable<RadioButton> _buttons;
         private RadioGroup _group;
         private TextColor _text;
         [SerializeField] private int value;
@@ -22,13 +21,12 @@ namespace Buttons
             RadioButton[] me = {this};
             _text = GetComponentInChildren<TextColor>();
             _group = group.GetComponent<RadioGroup>();
-            _buttons = _group.gameObject.GetComponentsInChildren<RadioButton>().Except(me);
             onValueChanged.AddListener(OnValueChange);
         }
 
         private void OnValueChange(bool newValue)
         {
-            Debug.Log("OnValueChanged called");
+            Debug.Log("OnValueChanged called from button with a value " + value);
             if (newValue)
             {
                 OnSelected();
@@ -43,7 +41,7 @@ namespace Buttons
         public override void OnPointerEnter(PointerEventData eventData)
         {
             base.OnPointerEnter(eventData);
-            if (isOn) return;
+            if (isOn || !interactable) return;
             _text.OnSelectedEnter();
             graphic.color = colors.highlightedColor;
         }
@@ -51,23 +49,24 @@ namespace Buttons
         public override void OnPointerExit(PointerEventData eventData)
         {
             base.OnPointerExit(eventData);
-            if (isOn) return;
+            if (isOn || !interactable) return;
             _text.OnSelectedExit();
             graphic.color = colors.normalColor;
         }
 
-        private void OnSelected()
+        public void OnSelected()
         {
-            foreach (RadioButton button in _buttons)
-            {
-                button.isOn = false;
-            }
             _text.OnSelectedEnter();
         }
 
-        private void OnDeselected()
+        public void OnDeselected()
         {
             _text.OnSelectedExit();
         }
-    }
+
+        public int GetValue()
+        {
+            return value;
+        }
+   }
 }

@@ -54,17 +54,40 @@ namespace Other
         private RadioEvent onValueChanged = new RadioEvent();
         public int Value { get; private set; } = 0;
 
+        private bool _interactable = true;
+        public bool Interactable
+        {
+            get => _interactable;
+            set
+            {
+                _interactable = value;
+                options.ForEach(action =>
+                {
+                    action.Button.interactable = value;
+                });
+            }
+        }
+
         public void Set(int value, bool sendCallback = true)
         {
-            if (Application.isPlaying && (value == Value || options.Count == 0))
+            if (value == Value || options.Count == 0)
                 return;
 
-            Value = Mathf.Clamp(value, 0, options.Count - 1);
+            Value = value;
 
             if (sendCallback)
             {
-                onValueChanged.Invoke(Value);
+                onValueChanged?.Invoke(Value);
+                OnValueChange(value);
             }
         }
+
+        private void OnValueChange(int value)
+        {
+            options.ForEach(actions =>
+            {
+                actions.Button.isOn = (actions.Button.GetValue() == value);
+            });
+        } 
     }
 }
