@@ -19,6 +19,8 @@ namespace Arm
 		[SerializeField] private ArmSound _armSound = null;
 		[SerializeField] private Bounds boundingBox;
         [SerializeField] private ParticleSystem[] _particleSystems = null;
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip electricityContinueSound;
 
 		public float ControlSpeed => controlSpeed;
 		public Transform Head => armIKSolver.transform;
@@ -135,6 +137,10 @@ namespace Arm
                     if (!particleSystem.isPlaying)
                     {
                         particleSystem.Play();
+                        audioSource.loop = true;
+                        audioSource.clip = electricityContinueSound;
+                        audioSource.volume = 0.25f;
+                        audioSource.Play();
                     }
                 }
                 else
@@ -142,6 +148,8 @@ namespace Arm
                     if (!particleSystem.isStopped)
                     {
                         particleSystem.Stop();
+                        audioSource.Stop();
+                        audioSource.loop = false;
                     }
                 }
             }
@@ -158,6 +166,10 @@ namespace Arm
                     if(!particleSystem.isPlaying)
                     {
                         particleSystem.Play();
+                        audioSource.loop = true;
+                        audioSource.clip = electricityContinueSound;
+                        audioSource.volume = 0.25f;
+                        audioSource.Play();
                     }
                 }
                 else
@@ -165,6 +177,8 @@ namespace Arm
                     if (!particleSystem.isStopped)
                     {
                         particleSystem.Stop();
+                        audioSource.Stop();
+                        audioSource.loop = false;
                     }
                 }
             }

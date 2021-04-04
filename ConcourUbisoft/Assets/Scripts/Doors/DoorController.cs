@@ -18,6 +18,8 @@ public class DoorController : MonoBehaviour
     }
 
     [SerializeField] public int Id = 0;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip audioClip;
     private List<Direction> _inputSequences;
     private List<Direction> _currentSequences = new List<Direction>();
     private Animation _animation = null;
@@ -66,6 +68,9 @@ public class DoorController : MonoBehaviour
         Debug.Log("Play");
         IsUnlock = true;
         _animation.Play();
+        audioSource.clip = audioClip;
+        audioSource.volume = 2;
+        audioSource.Play();
         OnSuccess?.Invoke();
     }
 
