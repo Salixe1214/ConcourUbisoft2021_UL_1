@@ -120,7 +120,7 @@ public class InGameMenuController : MonoBehaviour
     }
     private void Update()
     {
-        if (_gameController.IsGameStart && Input.GetButtonDown("Cancel"))
+        if (_gameController.IsGameStart && (Input.GetButtonDown("Cancel")||Input.GetButtonDown("InGameMenuPS")||Input.GetButtonDown("InGameMenuXBO")))
         {
             if (IsGameMenuOpen)
             {

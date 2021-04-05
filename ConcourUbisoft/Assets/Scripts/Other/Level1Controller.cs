@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using ExitGames.Client.Photon.StructWrapping;
+using Inputs;
 using JetBrains.Annotations;
 using Other;
 using TechSupport.Informations;
@@ -268,6 +269,7 @@ public class Level1Controller : MonoBehaviour , LevelController
     IEnumerator StartLevelDialog(float waitDuration)
     {
         yield return new WaitForSeconds(waitDuration);
+        Debug.Log("Controller Type First Dialog: " + InputManager.GetController());
         _dialogSystem.StartDialog("Area01_start");
     }
 

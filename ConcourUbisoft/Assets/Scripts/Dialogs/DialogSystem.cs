@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using Inputs;
+using Photon.Voice;
 using UnityEngine.UI;
 
 public class DialogSystem : MonoBehaviour
@@ -15,8 +16,8 @@ public class DialogSystem : MonoBehaviour
     [SerializeField] private GameObject panel = null;
     [SerializeField] private float _delayBetweenCharReveal = 0.1f;
     [SerializeField] private Sprite[] originalKeys;
-    [SerializeField] private Sprite altKey;
     [SerializeField] private Image skipKey;
+    private Sprite altKey;
     private Sprite _altSkipKey;
     private Sprite _originalSkipKey;
 
@@ -57,6 +58,7 @@ public class DialogSystem : MonoBehaviour
 
     private IEnumerator _slowReadCoroutine;
     private Controller _actualController;
+    private InputManager _inputManager;
 
     private bool _skipAfter = false;
     [SerializeField] private float skipTime = 5;
@@ -66,16 +68,16 @@ public class DialogSystem : MonoBehaviour
 
     private void Awake()
     {
-        _originalSkipKey = originalKeys[0];
-        _altSkipKey = altKey;
-        skipKey.sprite = _originalSkipKey;
+        //_originalSkipKey = originalKeys[0];
+        //_altSkipKey = altKey;
         _audioSource = GetComponent<AudioSource>();
-
+        _inputManager = GameObject.FindWithTag("InputManager")?.GetComponent<InputManager>();
+        OnControllerTypeChanged();
         rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
         leftCharSlot.enabled = false;
         rightCharSlot.enabled = false;
         textSlot.enabled = false;
-        // textSlot.resizeTextForBestFit = true; //< Have a nice effect but math doesn't like it. Yeah I dont -Mat
+        // textSlot.resizeTextForBestFit = true; //< Have a nice effect but math doesn't like it. Yeah, I dont -Mat
 
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
 
@@ -93,33 +95,14 @@ public class DialogSystem : MonoBehaviour
 
     void Update()
     {
-        KeyCode key;
-        if (_actualController != InputManager.GetController())
-        {
-            switch (InputManager.GetController())
-            {
-                case Controller.Playstation:
-                    _originalSkipKey = originalKeys[1];
-                    _altSkipKey = originalKeys[1];
-                    break;
-                case Controller.Xbox:
-                    _originalSkipKey = originalKeys[2];
-                    _altSkipKey = originalKeys[2];
-                    break;
-                default:
-                    _originalSkipKey = originalKeys[0];
-                    _altSkipKey = altKey;
-                    break;
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.Joystick1Button4))
+        if (Input.GetKeyDown(KeyCode.Q) || Input.GetButtonDown("ConfirmDialogPS")||Input.GetButtonDown("ConfirmDialogXBO"))
         {
             bDownTime = 0;
             bIsPressed = true;
             
         }
 
-        if (bIsPressed && (Input.GetKey(KeyCode.Q) || Input.GetKeyDown(KeyCode.Joystick1Button4)))
+        if (bIsPressed && (Input.GetKey(KeyCode.Q) || Input.GetButton("ConfirmDialogPS")||Input.GetButton("ConfirmDialogXBO")))
         {
             bDownTime += Time.deltaTime;
 
@@ -136,7 +119,7 @@ public class DialogSystem : MonoBehaviour
             }
         }
 
-        if (bIsPressed && (Input.GetKeyUp(KeyCode.Q) || Input.GetKeyDown(KeyCode.Joystick1Button4)))
+        if (bIsPressed && (Input.GetKeyUp(KeyCode.Q) || Input.GetButtonUp("ConfirmDialogPS")||Input.GetButtonUp("ConfirmDialogXBO")))
         {
             bIsPressed = false;
             
@@ -152,6 +135,16 @@ public class DialogSystem : MonoBehaviour
                 _isReading = false;
             }
         }
+    }
+
+    private void OnEnable()
+    {
+        _inputManager.OnControllerTypeChanged += OnControllerTypeChanged;
+    }
+
+    private void OnDisable()
+    {
+        _inputManager.OnControllerTypeChanged -= OnControllerTypeChanged;
     }
 
     public void ReadLine()
@@ -222,7 +215,7 @@ public class DialogSystem : MonoBehaviour
                     rightCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
                 case 3:
-                    rightCharSlot.transform.localRotation = Quaternion.Euler(0, rotationRight, 0);
+                    rightCharSlot.transform.localRotation = Quaternion.Euler(0, rotationLeft, 0);
                     rightCharSlot.sprite = char3Sprite;
                     rightCharSlot.color = Color.white;
                     rightCharSlot.transform.parent.gameObject.SetActive(true);
@@ -443,5 +436,30 @@ public class DialogSystem : MonoBehaviour
         
         _isReading = false;
         ReadLine();
+    }
+
+    private void OnControllerTypeChanged()
+    {
+        _actualController = InputManager.GetController();
+        switch (_actualController)
+        {
+            case Controller.Playstation:
+                _originalSkipKey = originalKeys[1];
+                _altSkipKey = originalKeys[1];
+                skipKey.sprite = _originalSkipKey;
+                break;
+            case Controller.Xbox:
+                _originalSkipKey = originalKeys[2];
+                _altSkipKey = originalKeys[2];
+                skipKey.sprite = _originalSkipKey;
+                break;
+            case Controller.Other:
+                _originalSkipKey = originalKeys[0];
+                _altSkipKey = originalKeys[0];
+                skipKey.sprite = _originalSkipKey;
+                break;
+        }
+        Debug.Log("ControllerTypeChanged Called From Dialog");
+        Debug.Log(_actualController);
     }
 }
