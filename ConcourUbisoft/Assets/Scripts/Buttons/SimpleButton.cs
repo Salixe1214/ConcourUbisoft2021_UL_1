@@ -24,8 +24,12 @@ public class SimpleButton : MonoBehaviour
     private GameObject _player = null;
     private bool _isPress = false;
 
+    private PlayerNetwork _playerNetwork;
+
     private void Awake()
     {
+        _playerNetwork = GameObject.FindWithTag("PlayerNetwork").GetComponent<PlayerNetwork>();
+        
         _audioSource = GetComponent<AudioSource>();
         _animator = GetComponentInChildren<Animator>();
         _outline = GetComponentInChildren<Outline>();
@@ -44,49 +48,53 @@ public class SimpleButton : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (!_reachable && Vector3.Distance(_player.transform.position, gameObject.transform.position) < maxDistance)
+        if (_playerNetwork.GetRole() == GameController.Role.SecurityGuard)
         {
-            if (_inPerimeter)
+            if (!_reachable && Vector3.Distance(_player.transform.position, gameObject.transform.position) < maxDistance)
             {
-                _animator.SetBool("hover", true);
-                _isHover = true;
-                _outline.enabled = true;
+                if (_inPerimeter)
+                {
+                    _animator.SetBool("hover", true);
+                    _isHover = true;
+                    _outline.enabled = true;
+                }
+                _reachable = true;
             }
-            _reachable = true;
-        }
 
-        if (_reachable && Vector3.Distance(_player.transform.position, gameObject.transform.position) >= maxDistance)
-        {
+            if (_reachable && Vector3.Distance(_player.transform.position, gameObject.transform.position) >= maxDistance)
+            {
+                if (_isHover)
+                {
+                    _isHover = false;
+                    _animator.SetBool("hover", false);
+                    _outline.enabled = false;
+                }
+                _reachable = false;
+            }
+        
             if (_isHover)
             {
-                _isHover = false;
-                _animator.SetBool("hover", false);
-                _outline.enabled = false;
+                if (GetInput())
+                {
+                    PressButton();
+                }
+                else
+                {
+                    if(_isPress)
+                    {
+                        AfterActions?.Invoke();
+                    }
+                    _isPress = false;
+                    soundPlayed = false;
+                }
             }
-            _reachable = false;
+            else if(_isPress)
+            {
+                AfterActions?.Invoke();
+                _isPress = false;
+            }
         }
         
-        if (_isHover)
-        {
-            if (GetInput())
-            {
-                PressButton();
-            }
-            else
-            {
-                if(_isPress)
-                {
-                    AfterActions?.Invoke();
-                }
-                _isPress = false;
-                soundPlayed = false;
-            }
-        }
-        else if(_isPress)
-        {
-            AfterActions?.Invoke();
-            _isPress = false;
-        }
     }
 
     protected virtual void PressButton()
