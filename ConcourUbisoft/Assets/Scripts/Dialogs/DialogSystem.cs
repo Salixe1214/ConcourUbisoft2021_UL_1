@@ -222,13 +222,13 @@ public class DialogSystem : MonoBehaviour
                     rightCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
                 case 3:
-                    rightCharSlot.transform.localRotation = Quaternion.Euler(0, rotationLeft, 0);
+                    rightCharSlot.transform.localRotation = Quaternion.Euler(0, rotationRight, 0);
                     rightCharSlot.sprite = char3Sprite;
                     rightCharSlot.color = Color.white;
                     rightCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
                 case 4:
-                    rightCharSlot.transform.localRotation = Quaternion.Euler(0, rotationLeft, 0);
+                    rightCharSlot.transform.localRotation = Quaternion.Euler(0, rotationRight, 0);
                     rightCharSlot.sprite = char4Sprite;
                     rightCharSlot.color = Color.white;
                     rightCharSlot.transform.parent.gameObject.SetActive(true);
