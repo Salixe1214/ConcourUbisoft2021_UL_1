@@ -61,9 +61,11 @@ public class DialogSystem : MonoBehaviour
     private bool _skipAfter = false;
     [SerializeField] private float skipTime = 5;
 
+    private float rotationLeft = 0;
+    private float rotationRight = 180;
+
     private void Awake()
     {
-
         _originalSkipKey = originalKeys[0];
         _altSkipKey = altKey;
         skipKey.sprite = _originalSkipKey;
@@ -82,6 +84,10 @@ public class DialogSystem : MonoBehaviour
             var temp = leftCharSlot;
             leftCharSlot = rightCharSlot;
             rightCharSlot = temp;
+
+            var tempRotation = rotationLeft;
+            rotationLeft = rotationRight;
+            rotationRight = tempRotation;
         }
     }
 
@@ -164,21 +170,25 @@ public class DialogSystem : MonoBehaviour
             switch (leftCharacterID)
             {
                 case 0:
+                    leftCharSlot.transform.localRotation = Quaternion.Euler(0, rotationLeft, 0);
                     leftCharSlot.sprite = null;
                     leftCharSlot.color = Color.clear;
                     leftCharSlot.transform.parent.gameObject.SetActive(false);
                     break;
                 case 1:
+                    leftCharSlot.transform.localRotation = Quaternion.Euler(0, rotationLeft, 0);
                     leftCharSlot.sprite = char1Sprite;
                     leftCharSlot.color = Color.white;
                     leftCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
                 case 2:
+                    leftCharSlot.transform.localRotation = Quaternion.Euler(0, rotationLeft, 0);
                     leftCharSlot.sprite = char2Sprite;
                     leftCharSlot.color = Color.white;
                     leftCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
                 case 3:
+                    leftCharSlot.transform.localRotation = Quaternion.Euler(0, rotationLeft, 0);
                     leftCharSlot.sprite = char3Sprite;
                     leftCharSlot.color = Color.white;
                     leftCharSlot.transform.parent.gameObject.SetActive(true);
@@ -194,25 +204,25 @@ public class DialogSystem : MonoBehaviour
             switch (rightCharacterID)
             {
                 case 0:
-                    rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
+                    rightCharSlot.transform.localRotation = Quaternion.Euler(0,rotationRight,0);
                     rightCharSlot.sprite = null;
                     rightCharSlot.color = Color.clear;
                     rightCharSlot.transform.parent.gameObject.SetActive(false);
                     break;
                 case 1:
-                    rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
+                    rightCharSlot.transform.localRotation = Quaternion.Euler(0, rotationRight, 0);
                     rightCharSlot.sprite = char1Sprite;
                     rightCharSlot.color = Color.white;
                     rightCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
                 case 2:
-                    rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
+                    rightCharSlot.transform.localRotation = Quaternion.Euler(0, rotationRight, 0);
                     rightCharSlot.sprite = char2Sprite;
                     rightCharSlot.color = Color.white;
                     rightCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
                 case 3:
-                    rightCharSlot.transform.localRotation = Quaternion.Euler(0,0,0);
+                    rightCharSlot.transform.localRotation = Quaternion.Euler(0, rotationRight, 0);
                     rightCharSlot.sprite = char3Sprite;
                     rightCharSlot.color = Color.white;
                     rightCharSlot.transform.parent.gameObject.SetActive(true);

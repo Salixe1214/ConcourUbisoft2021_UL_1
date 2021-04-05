@@ -6220,8 +6220,8 @@ MonoBehaviour:
   _playerTwoSound: {fileID: 263800377}
   _playerOneImage: {fileID: 86654269}
   _playerTwoImage: {fileID: 802908531}
-  _guardSprite: {fileID: 21300000, guid: ab4ec86dcdc47a54bbbdb9fa02a5de2a, type: 3}
-  _techSprite: {fileID: 21300000, guid: 0ea0a2c4c45c3d5439501c1b21bc219c, type: 3}
+  _guardSprite: {fileID: 21300000, guid: 9e3a1a9cdc50ac0468fe3fbf085f9009, type: 3}
+  _techSprite: {fileID: 21300000, guid: 4d7fe3250b6cf0a4f8c44f3110c8840a, type: 3}
 --- !u!1 &1326840101
 GameObject:
   m_ObjectHideFlags: 0
