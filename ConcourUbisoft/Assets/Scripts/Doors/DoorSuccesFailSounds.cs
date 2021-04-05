@@ -18,7 +18,6 @@ public class DoorSuccesFailSounds : MonoBehaviour
 
     public void OnSuccess()
     {
-        Debug.LogWarning("Playing: ");
         _audioSource.clip = successSound;
         _audioSource.Play();
     }
