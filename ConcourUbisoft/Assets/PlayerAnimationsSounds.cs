@@ -19,10 +19,9 @@ public class PlayerAnimationsSounds : MonoBehaviour
         
     }
 
-    public void Step(float pVolumeModif)
+    public void Step()
     {
         _audioSource.clip = _walkClip;
-        _audioSource.volume = 0.5f;
         _audioSource.Play();
     }
 }
