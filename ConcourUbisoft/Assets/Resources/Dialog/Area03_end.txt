@@ -1,7 +1,7 @@
 0;2;Done. I sure hope it worked. See anything on your side?
 1;0; ...
 0;2;Hello?
-0;0;R.W.P. Inc. thanks you for your call. How would you rate our support bot today? Press 1 for Great. Press 2 for Great. Press 3 for Great.
+0;0;R.W.P. Inc. thanks you for your call. How would you rate our support bot today? Press 1 for Great. Press 2 for Great.
 0;2;THE GUY WAS A BOT??? I guess I'll press one for Great then.
 3;0;SYSTEM INITIALISATION SEQUENCE SUCCESSFUL. LAUNCHING AUTONOMOUS PROTOCOLS.
 0;2;This again? What the hell is going on? Hello?
