@@ -41,6 +41,7 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject _lobbyListHeader;
     [SerializeField] private GameObject _creditMenu;
     [SerializeField] private GameObject _creditFirstSelected;
+    [SerializeField] private GameObject _speakingIcon = null;
 
     private NetworkController _networkController = null;
     private GameController _gameController = null;
@@ -284,6 +285,7 @@ public class MenuController : MonoBehaviour
     private void OnLeftRoom()
     {
         _lobbyMenu.SetActive(true);
+        _speakingIcon.SetActive(false);
         _currentMenu = Menus.Lobby;
         if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
         {

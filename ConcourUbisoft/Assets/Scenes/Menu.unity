@@ -6220,8 +6220,8 @@ MonoBehaviour:
   _playerTwoSound: {fileID: 263800377}
   _playerOneImage: {fileID: 86654269}
   _playerTwoImage: {fileID: 802908531}
-  _guardSprite: {fileID: 21300000, guid: a3e3a91c1fc159342b5631a712dc01fc, type: 3}
-  _techSprite: {fileID: 21300000, guid: 2bab8cb6eb1d80c4a9602b08c9ca57ad, type: 3}
+  _guardSprite: {fileID: 21300000, guid: ab4ec86dcdc47a54bbbdb9fa02a5de2a, type: 3}
+  _techSprite: {fileID: 21300000, guid: 0ea0a2c4c45c3d5439501c1b21bc219c, type: 3}
 --- !u!1 &1326840101
 GameObject:
   m_ObjectHideFlags: 0
@@ -9257,6 +9257,7 @@ MonoBehaviour:
   _lobbyListHeader: {fileID: 1032738344}
   _creditMenu: {fileID: 1080486826}
   _creditFirstSelected: {fileID: 0}
+  _speakingIcon: {fileID: 1322349464}
 --- !u!222 &1786033423
 CanvasRenderer:
   m_ObjectHideFlags: 0
