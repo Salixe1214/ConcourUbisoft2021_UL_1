@@ -25,6 +25,7 @@ public class DialogSystem : MonoBehaviour
     [SerializeField] private Sprite char1Sprite;
     [SerializeField] private Sprite char2Sprite;
     [SerializeField] private Sprite char3Sprite;
+    [SerializeField] private Sprite char4Sprite;
     
     // Line separators
     [SerializeField] private char lineSep = '\n';
@@ -186,6 +187,12 @@ public class DialogSystem : MonoBehaviour
                     leftCharSlot.color = Color.white;
                     leftCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
+                case 4:
+                    leftCharSlot.transform.localRotation = Quaternion.Euler(0, rotationLeft, 0);
+                    leftCharSlot.sprite = char4Sprite;
+                    leftCharSlot.color = Color.white;
+                    leftCharSlot.transform.parent.gameObject.SetActive(true);
+                    break;
                 default:
                     leftCharSlot.sprite = null;
                     leftCharSlot.color = Color.clear;
@@ -217,6 +224,12 @@ public class DialogSystem : MonoBehaviour
                 case 3:
                     rightCharSlot.transform.localRotation = Quaternion.Euler(0, rotationLeft, 0);
                     rightCharSlot.sprite = char3Sprite;
+                    rightCharSlot.color = Color.white;
+                    rightCharSlot.transform.parent.gameObject.SetActive(true);
+                    break;
+                case 4:
+                    rightCharSlot.transform.localRotation = Quaternion.Euler(0, rotationLeft, 0);
+                    rightCharSlot.sprite = char4Sprite;
                     rightCharSlot.color = Color.white;
                     rightCharSlot.transform.parent.gameObject.SetActive(true);
                     break;
