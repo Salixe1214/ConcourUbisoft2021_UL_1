@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Inputs;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -39,6 +40,7 @@ public class GameController : MonoBehaviour
     private SoundController _soundController = null;
     private NetworkController _networkController = null;
     private DialogSystem _dialogSystem = null;
+    private InputManager _inputManager;
 
     public bool IsGameLoading { get; private set; }
     public bool IsGameStart { get; set; }
@@ -58,14 +60,17 @@ public class GameController : MonoBehaviour
         UnityEngine.Random.InitState(0);
         _soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+        _inputManager = GameObject.FindWithTag("InputManager")?.GetComponent<InputManager>();
     }
     private void OnEnable()
     {
         _networkController.OnPlayerLeftEvent += OnPlayerLeftEvent;
+        _inputManager.OnControllerTypeChanged += OnControllerTypeChanged;
     }
     private void OnDisable()
     {
         _networkController.OnPlayerLeftEvent -= OnPlayerLeftEvent;
+        _inputManager.OnControllerTypeChanged -= OnControllerTypeChanged;
     }
     #endregion
     #region Private Functions
@@ -87,6 +92,7 @@ public class GameController : MonoBehaviour
         _dialogSystem.StartDialog("Introduction");
         OnFinishLoadGameEvent?.Invoke();
         _speaking.SetActive(true);
+        OnControllerTypeChanged();
         //_soundController.PlayAmbientSound();
         if (GameRole == Role.SecurityGuard)
         {
@@ -155,6 +161,28 @@ public class GameController : MonoBehaviour
         if (IsGameStart)
         {
             StartCoroutine("UnloadAsyncLevel");
+        }
+    }
+
+    private void OnControllerTypeChanged()
+    {
+        Debug.Log("Controller Type Changed GameController:");
+        Inputs.Controller _newControllerType = InputManager.GetController();
+
+        if (_newControllerType == Controller.Playstation || _newControllerType == Controller.Xbox)
+        {
+            if (GameRole == Role.Technician)
+            {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+        }
+        else
+        {
+            if (GameRole == Role.Technician)
+            {
+                Cursor.visible = true;
+            }
         }
     }
 
