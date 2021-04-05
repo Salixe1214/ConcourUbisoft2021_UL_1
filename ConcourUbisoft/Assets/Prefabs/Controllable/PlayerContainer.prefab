@@ -15619,7 +15619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c743d3282d5194599f5a4d70371ff3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerMovementSpeed: 5
+  playerMovementSpeed: 6
   _owner: 0
   _animator: {fileID: 2181269547397559183}
   _camera: {fileID: 8197004576664571489}
