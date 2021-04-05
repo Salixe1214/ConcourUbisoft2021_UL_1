@@ -90,6 +90,11 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         return _photonView.IsMine;
     }
 
+    public GameController.Role GetRole()
+    {
+        return _playerRole;
+    }
+
     #endregion
     #region RPC Functions
 
