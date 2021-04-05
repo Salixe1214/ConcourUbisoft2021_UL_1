@@ -65,11 +65,9 @@ public class DoorController : MonoBehaviour
 
     public void Unlock()
     {
-        Debug.Log("Play");
         IsUnlock = true;
         _animation.Play();
         audioSource.clip = audioClip;
-        audioSource.volume = 2;
         audioSource.Play();
         OnSuccess?.Invoke();
     }
