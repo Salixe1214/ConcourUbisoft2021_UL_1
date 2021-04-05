@@ -22,9 +22,9 @@ namespace Other
         {
             if (!_endButtonPressed)
             {
-                _endButtonPressed = true;
                 _dialogSystem.StartDialog("Area03_end");
             }
+            _endButtonPressed = true;
         }
 
     }

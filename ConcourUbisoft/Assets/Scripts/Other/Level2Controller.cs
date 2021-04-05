@@ -131,7 +131,7 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     private void StartLevelTimer()
     {
-        _dialogSystem.StartDialog("Area02_start_timer");
+        _dialogSystem.StartSingleLine("Area02_start_timer");
         _nextWarningIndex = 0;
         timerCoroutine = StartCoroutine(StartTimer());
         TimerPanel.SetActive(true);
