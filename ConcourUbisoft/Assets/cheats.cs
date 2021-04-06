@@ -16,7 +16,7 @@ public class cheats : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F1) && Input.GetKey(KeyCode.LeftControl))
         {
-            _dialogSystem.StartSingleLine("Introduction");
+            _dialogSystem.StartEndDialogue("Area03_end_part2");
         }
         if (Input.GetKeyDown(KeyCode.F2) && Input.GetKey(KeyCode.LeftControl))
         {

@@ -715,6 +715,9 @@ MonoBehaviour:
   itemSep: 59
   longPressDuration: 1
   skipTime: 3
+  normalColor: black
+  altColor: blue
+  endClip: {fileID: 8300000, guid: 2e19970ba36daa84589a4e3cd57cdb11, type: 3}
 --- !u!82 &8400330247450512978
 AudioSource:
   m_ObjectHideFlags: 0
