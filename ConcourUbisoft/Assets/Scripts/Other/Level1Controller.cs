@@ -116,7 +116,7 @@ public class Level1Controller : MonoBehaviour , LevelController
         FurnaceController.CheckItemOffList += UpdateSpriteColorInList;
         FurnaceController.WhenFurnaceConsumeRight.AddListener(OnCorrectItemDropped);
         FurnaceController.OnFirstSuccessfulItemDropped += OnFirstCorrectItemDropped;
-        FurnaceController.OnFirstWrongItemDropped += OnFisrtWrongItemDropped;
+        FurnaceController.OnFirstWrongItemDropped += OnFirstWrongItemDropped;
         InteriorConveyorSpawner.requiredItemHasSpawned += SpawnNextRequiredItem;
         ExteriorConveyorSpawner.requiredItemHasSpawned += SpawnNextRequiredItem;
     }
@@ -129,7 +129,7 @@ public class Level1Controller : MonoBehaviour , LevelController
         FurnaceController.CheckItemOffList -= UpdateSpriteColorInList;
         FurnaceController.WhenFurnaceConsumeRight.RemoveListener(OnCorrectItemDropped);
         FurnaceController.OnFirstSuccessfulItemDropped -= OnFirstCorrectItemDropped;
-        FurnaceController.OnFirstWrongItemDropped -= OnFisrtWrongItemDropped;
+        FurnaceController.OnFirstWrongItemDropped -= OnFirstWrongItemDropped;
         InteriorConveyorSpawner.requiredItemHasSpawned -= SpawnNextRequiredItem;
         ExteriorConveyorSpawner.requiredItemHasSpawned -= SpawnNextRequiredItem;
     }
@@ -347,11 +347,11 @@ public class Level1Controller : MonoBehaviour , LevelController
 
     private void OnFirstCorrectItemDropped()
     {
-        _dialogSystem.StartSingleLine("Area01_first_success");
+        _dialogSystem.StartSingleLine("Area01_first_success","green");
     }
 
-    private void OnFisrtWrongItemDropped()
+    private void OnFirstWrongItemDropped()
     {
-        _dialogSystem.StartSingleLine("Area01_first_failure");
+        _dialogSystem.StartSingleLine("Area01_first_failure","red");
     }
 }

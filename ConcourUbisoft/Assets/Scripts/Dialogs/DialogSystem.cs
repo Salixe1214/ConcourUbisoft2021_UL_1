@@ -265,7 +265,7 @@ public class DialogSystem : MonoBehaviour
         }
     }
     
-    public void StartDialog(string pFile, string pAltColor = "red", string pNormalColor = "black", bool pSkipAfter = false)
+    public void StartDialog(string pFile, string pAltColor = "blue", string pNormalColor = "black", bool pSkipAfter = false)
     {
         _skipAfter = pSkipAfter;
 

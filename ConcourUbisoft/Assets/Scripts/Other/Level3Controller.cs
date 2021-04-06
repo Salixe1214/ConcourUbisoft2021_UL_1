@@ -42,7 +42,7 @@ namespace Other
         [PunRPC]
         private void StartFirstDialog()
         {
-            _dialogSystem.StartDialog("Area03_start");
+            _dialogSystem.StartDialog("Area03_start","green");
         }
 
         [PunRPC]
