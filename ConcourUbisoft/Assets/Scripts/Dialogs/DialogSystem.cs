@@ -576,7 +576,7 @@ public class DialogSystem : MonoBehaviour
         
         endMusic.time = _endTime[6];
         ReadLine(true);
-        yield return new WaitForSeconds(_endTime[6+1] - _endTime[6]);
+        yield return new WaitForSeconds(_endTime[6+1] - _endTime[6] - 2);
         
         _isReading = false;
         ReadLine(true);
