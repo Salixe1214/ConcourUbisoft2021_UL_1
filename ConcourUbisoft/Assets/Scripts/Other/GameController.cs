@@ -193,6 +193,11 @@ public class GameController : MonoBehaviour
         return _colorNames.Where(x => x.IsColor(color)).FirstOrDefault()?.Name ?? "Undefined";
     }
 
+    public void InitiateStartGame(Role role, bool colorBlindMode)
+    {
+        _networkController.GetOwnNetworkPlayer().StartGameNetwork(colorBlindMode);
+    }
+
     public void StartGame(Role role, bool colorBlindMode)
     {
         Debug.Log($"Start Game with role {role}");
@@ -201,6 +206,7 @@ public class GameController : MonoBehaviour
         _soundController.SetSound(GameRole);
         StartCoroutine("LoadAsyncLevel");
     }
+ 
     public void UnLoadGame()
     {
         StartCoroutine("UnloadAsyncLevel");

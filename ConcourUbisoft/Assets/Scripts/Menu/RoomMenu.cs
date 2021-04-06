@@ -56,7 +56,7 @@ public class RoomMenu : MonoBehaviour
         //}
 
         _errorText.text = "";
-        _gameController.StartGame(_networkController.GetLocalRole(), _colorBlindToggle.isOn);
+        _gameController.InitiateStartGame(_networkController.GetLocalRole(), _colorBlindToggle.isOn);
     }
     #endregion
     #region Unity Callbacks

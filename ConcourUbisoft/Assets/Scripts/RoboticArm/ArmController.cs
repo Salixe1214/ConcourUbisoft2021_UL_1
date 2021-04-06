@@ -44,6 +44,11 @@ namespace Arm
 		{
             _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
 			_photonView = GetComponentInParent<PhotonView>();
+
+            if (_networkController.GetLocalRole() == _owner && !_photonView.IsMine)
+            {
+                _photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+            }
         }
 
 		private void Start()
@@ -60,10 +65,7 @@ namespace Arm
             ClampTarget();
 			FaceTarget();
 
-            if (_networkController.GetLocalRole() == _owner && !_photonView.IsMine)
-            {
-                _photonView.RequestOwnership();
-            }
+
 
             if (_photonView.IsMine)
 			{

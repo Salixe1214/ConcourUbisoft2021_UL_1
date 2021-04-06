@@ -1,8 +1,10 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
@@ -47,9 +49,9 @@ public class CharacterControl : MonoBehaviour, IPunObservable
             button.AfterActions.AddListener(() => _animator.SetBool("PressingButton", false));
         }
 
-        if (_networkController.GetLocalRole() == _owner)
+        if (_networkController.GetLocalRole() == _owner && !_photonView.IsMine)
         {
-            _photonView.RequestOwnership();
+            _photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
         }
     }
 
@@ -60,7 +62,7 @@ public class CharacterControl : MonoBehaviour, IPunObservable
     
     void Update()
     {
-        if(_owner == _networkController.GetLocalRole())
+        if (_owner == _networkController.GetLocalRole())
         {
             keyboardHorizontal = Input.GetAxis("Horizontal");
             keyBoardVertical = Input.GetAxis("Vertical");
