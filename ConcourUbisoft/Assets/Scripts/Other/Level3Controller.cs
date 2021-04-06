@@ -1,5 +1,6 @@
 using Photon.Pun;
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Other
@@ -17,11 +18,12 @@ namespace Other
         private void Awake()
         {
             _photonView = GetComponent<PhotonView>();
+            _dialogSystem = GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>();
         }
 
         private void Start()
         {
-            _dialogSystem = GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>();
+           // _dialogSystem = GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>();
             _endButtonPressed = false;
         }
 
@@ -65,8 +67,11 @@ namespace Other
 
         private void WakeRobots()
         {
-            RightRobot.transform.rotation = Quaternion.Slerp(RightRobot.transform.rotation,new Quaternion(0,90,0,0), 0.5f);
-            LeftRobot.transform.rotation = Quaternion.Slerp(RightRobot.transform.rotation,new Quaternion(0,90,0,0), 0.5f);
+            RightRobot.transform.Rotate(Vector3.right,-20f);
+            LeftRobot.transform.Rotate(Vector3.right,-20f);
+            
+            RightRobot.transform.Rotate(Vector3.up,180f);
+            LeftRobot.transform.Rotate(Vector3.up,180f);
         }
 
     }
