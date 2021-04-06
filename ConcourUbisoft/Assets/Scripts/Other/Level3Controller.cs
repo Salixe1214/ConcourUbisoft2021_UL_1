@@ -38,18 +38,17 @@ namespace Other
                 _endButtonPressed = true;
             }
         }
-
-        [PunRPC]
+        
         private void StartFirstDialog()
         {
             _dialogSystem.StartDialog("Area03_start","green");
-            _dialogSystem.StartEndDialogue("Area3_end_part2");
         }
 
         [PunRPC]
         private void StartEndDialog()
         {
             _dialogSystem.StartDialog("Area03_end");
+            _dialogSystem.StartEndDialogue("Area3_end_part2");
         }
 
     }
