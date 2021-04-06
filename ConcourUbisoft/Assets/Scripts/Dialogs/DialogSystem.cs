@@ -554,7 +554,7 @@ private void Awake()
     IEnumerator dialogueEndCoroutine()
     {
         _audioSource.clip = endClip;
-        for (int i = 0 ; i < 7 ; i++)
+        for (int i = 0 ; i < 6 ; i++)
         {
             for (int j = 0; j < 3; j++)
             {
@@ -564,6 +564,10 @@ private void Awake()
                 yield return new WaitForSeconds(_endTime[i+1] - _endTime[i]);
             }
         }
+        
+        _audioSource.time = _endTime[6];
+        ReadLine();
+        yield return new WaitForSeconds(_endTime[6+1] - _endTime[6]);
         
         _isReading = false;
         ReadLine();
