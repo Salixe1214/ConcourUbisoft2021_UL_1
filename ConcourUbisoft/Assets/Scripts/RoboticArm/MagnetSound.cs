@@ -12,8 +12,6 @@ public class MagnetSound : MonoBehaviour, IPunObservable
     private MagnetController magnetController;
     private AudioSource audioSource;
 
-    private bool _objOn = false;
-
     public bool IsOn { get; set; } = false;
 
     private void Start()
@@ -45,16 +43,5 @@ public class MagnetSound : MonoBehaviour, IPunObservable
         {
             IsOn = (bool)stream.ReceiveNext();
         }
-    }
-
-    private void OnCollisionEnter(Collision other)
-    {
-        audioSource.Stop();
-        Debug.LogWarning("On");
-    }
-
-    private void OnCollisionExit(Collision other)
-    {
-        Debug.LogWarning("Off");
     }
 }
