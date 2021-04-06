@@ -106,22 +106,9 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     [PunRPC]
     private void StartGame(bool colorBlindMode)
     {
-        if(_photonView.IsMine)
-        {
-            _gameController.StartGame(_networkController.GetLocalRole(), colorBlindMode);
-        }
-        else
-        {
-            StartCoroutine(WaitBeforeStart(colorBlindMode));
-        }
-    }
-
-    private IEnumerator WaitBeforeStart(bool colorBlindMode)
-    {
-        yield return new WaitForSeconds(2);
-        Debug.Log("StartGame");
         _gameController.StartGame(_networkController.GetLocalRole(), colorBlindMode);
     }
+
 
     #endregion
     #region Private Functions

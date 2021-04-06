@@ -147,10 +147,13 @@ public class InGameMenuController : MonoBehaviour
     {
         Debug.Log("Subscribed to controller type changed event");
         _inputManager.OnControllerTypeChanged += OnControllerTypeChanged;
+        _networkController.OnDisconnectEvent += OnDisconnectEvent;
     }
+
     private void OnDisable()
     {
         _inputManager.OnControllerTypeChanged -= OnControllerTypeChanged;
+        _networkController.OnDisconnectEvent -= OnDisconnectEvent;
     }
 
     private void OnControllerTypeChanged()
@@ -185,5 +188,12 @@ public class InGameMenuController : MonoBehaviour
         _exitButton.GetComponentInChildren<TextColor>().OnExit();
     }
 
+    #endregion
+
+    #region Private
+    private void OnDisconnectEvent()
+    {
+        _inGameMenu.SetActive(false);
+    }
     #endregion
 }

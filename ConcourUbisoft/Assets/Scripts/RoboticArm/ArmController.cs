@@ -65,8 +65,6 @@ namespace Arm
             ClampTarget();
 			FaceTarget();
 
-
-
             if (_photonView.IsMine)
 			{
 				if (translation.magnitude >= float.Epsilon)
