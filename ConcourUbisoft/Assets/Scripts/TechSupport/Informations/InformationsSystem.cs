@@ -18,6 +18,7 @@ namespace TechSupport.Informations
     {
         [Header("List")] 
         [SerializeField] private Vector2 sizeList;
+        [SerializeField] private GameObject _checkImagePrefabs;
         private ImageLayout _imageLayout;
 
         [Header("Accordion")]
@@ -76,6 +77,8 @@ namespace TechSupport.Informations
         {
             _imageLayout = new GameObject().AddComponent<ImageLayout>();
             _imageLayout.Font = _font;
+            if (_checkImagePrefabs != null)
+                _imageLayout.SetCheckImage(_checkImagePrefabs);
             _listRectTransform = _imageLayout.GetComponent<RectTransform>();
             _listRectTransform.SetParent(transform);
             SetSize(_listRectTransform, sizeList);

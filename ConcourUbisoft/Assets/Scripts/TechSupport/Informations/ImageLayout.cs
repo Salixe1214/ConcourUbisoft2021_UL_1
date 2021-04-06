@@ -8,10 +8,12 @@ namespace TechSupport.Informations
     public class ImageLayout : HorizontalLayoutGroup
     {
         private readonly List<Image> _images;
+        private GameObject _checkAnimation = null;
         public Font Font { get; set; }
         public float TextOffset { get; set; } = -40.0f;
 
         private GameController _gameController = null;
+        private static readonly int Checked = Animator.StringToHash("Checked");
 
         public ImageLayout()
         {
@@ -67,6 +69,27 @@ namespace TechSupport.Informations
         }
         
         #endregion
+
+        public void SetCheckImage(GameObject prefabs)
+        {
+            _checkAnimation = prefabs;
+        }
+
+        public void CheckSprite(int index)
+        {
+            if (index >= _images.Count || _checkAnimation == null)
+                return;
+            Animator animator = Instantiate(_checkAnimation, _images[index].transform).GetComponent<Animator>();
+            Debug.Log("CheckSprite: Check object instantiated");
+            if (!animator)
+            {
+                Debug.LogError("An errors occurs when on tryng to get animator component");
+            }
+            animator.enabled = true;
+            Debug.Log("CheckSprite: Check object enabled");
+            animator.SetBool(Checked, true);
+            Debug.Log("CheckSprite: Animation played for the check object");
+        }
 
         public void DeleteSprite(int at)
         {
@@ -137,5 +160,6 @@ namespace TechSupport.Informations
                 i++;
             }
         }
+
     }
 }

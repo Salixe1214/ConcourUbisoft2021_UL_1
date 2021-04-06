@@ -275,7 +275,7 @@ public class Level1Controller : MonoBehaviour , LevelController
 
     private void UpdateSpriteColorInList()
     {
-        imageList.UpdateSpriteColor(currentListIndex, Color.black);
+        imageList.CheckSprite(currentListIndex);
         currentListIndex++;
     }
 
