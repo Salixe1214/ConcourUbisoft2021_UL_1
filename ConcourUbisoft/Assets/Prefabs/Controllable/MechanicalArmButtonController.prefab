@@ -8646,6 +8646,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MechanicalArm
       objectReference: {fileID: 0}
+    - target: {fileID: 7780099111703666920, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
+      propertyPath: pullForce
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca99795d8ec4cda42bfffc5a029f37ba, type: 3}
 --- !u!114 &5821403858211477913 stripped

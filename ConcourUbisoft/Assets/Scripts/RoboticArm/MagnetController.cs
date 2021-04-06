@@ -21,8 +21,8 @@ namespace Arm
 
 
 		private MagnetTrigger _magnetTrigger;
-		private Pickable _currentPickable = null;
-		private bool _grabbed = false;
+		[SerializeField]private Pickable _currentPickable = null;
+		[SerializeField]private bool _grabbed = false;
 		private NetworkController _networkController = null;
 		private bool _magnetActive = false;
 
@@ -110,7 +110,7 @@ namespace Arm
 			_currentPickable.OnGrab();
 			_currentPickable.Rigidbody.velocity = Vector3.zero;
 			_currentPickable.transform.parent = this.transform;
-
+			Debug.LogWarning("GRAB");
 			Grabbed = true;
 		}
 
