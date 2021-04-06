@@ -1,4 +1,4 @@
-1;0;Thank you for calling R.W.P. Inc. You’ve reached the internal remote support line. May I please get your location and ID.
+1;0;Thank you for calling R.W.P. Inc. $You’ve reached the internal %remote%$ support %line%. May I please get your location and ID.
 0;2;Employee ID: 404. Location: West Coast. I’m calling regarding the system crash.
 1;0;West Coast, right? And you’re a guard? Isn’t anyone from the maintenance team around?
 0;2;Almost everyone left when the A.I took over. I’m pretty much alone here most of the time.

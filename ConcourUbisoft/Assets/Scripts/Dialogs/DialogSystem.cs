@@ -67,6 +67,9 @@ public class DialogSystem : MonoBehaviour
     private float rotationLeft = 0;
     private float rotationRight = 180;
 
+    [SerializeField] private string normalColor = "black";
+    [SerializeField] private string altColor = "red";
+
     private void Awake()
     {
         //_originalSkipKey = originalKeys[0];
@@ -262,9 +265,12 @@ public class DialogSystem : MonoBehaviour
         }
     }
     
-    public void StartDialog(string pFile, bool pSkipAfter = false)
+    public void StartDialog(string pFile, string pAltColor = "red", string pNormalColor = "black", bool pSkipAfter = false)
     {
         _skipAfter = pSkipAfter;
+
+        altColor = pAltColor;
+        normalColor = pNormalColor;
         
         // Loading text file
         TextAsset txtAsset = Resources.Load("Dialog/" + pFile) as TextAsset;
@@ -313,19 +319,51 @@ public class DialogSystem : MonoBehaviour
     IEnumerator SlowRead(string text, bool pSkipAfter = false)
     {
         _isReading = true;
+        textSlot.text = "";
+        
+        string newText = "";
+        bool bold = false;
+        string color = normalColor;
         int i = 0;
-        while (i < text.Length && _isReading)
+        
+        while (i < text.Length)
         {
-            textSlot.text = text.Substring(0, i + 1);
+            switch (text.ToCharArray()[i])
+            {
+                case '%':
+                    if (color == normalColor)
+                        color = altColor;
+                    else if (color == altColor)
+                        color = normalColor;
+                    break;
+                case '$':
+                    bold = !bold;
+                    break;
+                default:
+                    if (bold)
+                    {
+                        newText += "<b><color="+color+">"+text.ToCharArray()[i] + "</color></b>";
+                        textSlot.text += "<b><color="+color+">"+text.ToCharArray()[i] + "</color></b>";
+                    }
+                    else
+                    {
+                        newText += "<color="+color+">"+text.ToCharArray()[i] + "</color>";
+                        textSlot.text += "<color="+color+">"+text.ToCharArray()[i] + "</color>";
+                    }
+                    break;
+            }
+            
+            
             if (_audioSource.isPlaying == false)
             {
                 _audioSource.Play();
             }
             
             i++;
-            yield return new WaitForSeconds(_delayBetweenCharReveal);
+            if(_isReading)
+                yield return new WaitForSeconds(_delayBetweenCharReveal);
         }
-        textSlot.text = text;
+        textSlot.text = newText;
         _isReading = false;
         if (pSkipAfter)
         {
@@ -367,9 +405,13 @@ public class DialogSystem : MonoBehaviour
         }
     }
 
-    public void StartSingleLine(string pFile)
+    public void StartSingleLine(string pFile, string pAltColor = "red", string pNormalColor = "black")
     {
+        normalColor = pNormalColor;
+        altColor = pAltColor;
+        
         _skipAfter = true;
+        
         // Loading text file
         TextAsset txtAsset = Resources.Load("Dialog/" + pFile) as TextAsset;
         string rawTxt = "";
