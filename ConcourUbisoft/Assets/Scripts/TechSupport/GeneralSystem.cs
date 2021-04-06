@@ -207,7 +207,7 @@ namespace TechSupport
             {
                 _exitMethods[mode]?.Invoke();
             }
-            _informationsSystem.ActvivateInformation(newMode == SurveillanceMode.Focused);
+            _informationsSystem.ActivateInformation(newMode == SurveillanceMode.Focused);
             _onSwitchMethods[mode = newMode]?.Invoke();
             OnModeSwitched?.Invoke();
         }

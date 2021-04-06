@@ -1,8 +1,9 @@
-Shader "Hidden/Blur"
+Shader "Custom/Blur"
 {
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _KernelSize("Kernel Size (N)", Int) = 3
     }
     SubShader
     {
@@ -21,12 +22,14 @@ Shader "Hidden/Blur"
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                fixed4 color : COLOR;
             };
 
             struct v2f
             {
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
+                fixed4 color : COLOR;
             };
 
             v2f vert (appdata v)
@@ -34,26 +37,32 @@ Shader "Hidden/Blur"
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
+                o.color = v.color;
                 return o;
             }
-
+            
+            float2 _MainTex_TexelSize;
+            int _KernelSize;
             sampler2D _MainTex;
-            float _Samples;
-            float _EffectAmount;
-            float _CenterX;
-            float _CenterY;
-            float _Radius;
- 
+
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed4 col = fixed4(0,0,0,0);
-                float2 dist = i.uv - float2(_CenterX, _CenterY);
-                for(int j = 0; j < _Samples; j++) {
-                    float scale = 1 - _EffectAmount * (j / _Samples)* (saturate(length(dist) / _Radius));
-                    col += tex2D(_MainTex, dist * scale + float2(_CenterX, _CenterY));
+                fixed3 sum = fixed3(0.0, 0.0, 0.0);
+
+                const int upper = ((_KernelSize - 1) / 2);
+                const int lower = -upper;
+
+                for (int x = lower; x <= upper; ++x)
+                {
+                    for (int y = lower; y <= upper; ++y)
+                    {
+                        const fixed2 offset = fixed2(_MainTex_TexelSize.x * x, _MainTex_TexelSize.y * y);
+                        sum += tex2D(_MainTex, i.uv + offset);
+                    }
                 }
-                col /= _Samples;
-                return col;
+
+                sum /= (_KernelSize * _KernelSize);
+                return fixed4(sum + i.color, 1.0);
             }
             ENDCG
         }
