@@ -23,7 +23,7 @@ public class MagnetSound : MonoBehaviour, IPunObservable
 
     private void Update()
     {
-        if (IsOn)
+        if (IsOn && !magnetController.Grabbed)
         {
             audioSource.volume = 1 * volumeMultiplier;
         }

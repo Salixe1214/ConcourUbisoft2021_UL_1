@@ -75,29 +75,42 @@ public class DoorController : MonoBehaviour
     [PunRPC]
     public void TiggerLeftNetwork()
     {
-        _currentSequences.Add(Direction.Left);
-        OnEntry.Invoke();
+        if (_currentSequences.Count < _inputSequences.Count)
+        {
+            _currentSequences.Add(Direction.Left);
+            OnEntry.Invoke();
+        }
     }
 
     [PunRPC]
     public void TriggerRightNetwork()
     {
-        _currentSequences.Add(Direction.Right);
-        OnEntry.Invoke();
+        if (_currentSequences.Count < _inputSequences.Count)
+        {
+            _currentSequences.Add(Direction.Right);
+            OnEntry.Invoke();
+        }
     }
 
     [PunRPC]
     public void TriggerBottomNetwork()
     {
-        _currentSequences.Add(Direction.Bottom);
-        OnEntry.Invoke();
+        if (_currentSequences.Count < _inputSequences.Count)
+        {
+            _currentSequences.Add(Direction.Bottom);
+            OnEntry.Invoke(); 
+        }
+        
     }
 
     [PunRPC]
     public void TriggerUpNetwork()
     {
-        _currentSequences.Add(Direction.Up);
-        OnEntry.Invoke();
+        if (_currentSequences.Count < _inputSequences.Count)
+        {
+            _currentSequences.Add(Direction.Up);
+            OnEntry.Invoke();
+        }
     }
 
     [PunRPC]
