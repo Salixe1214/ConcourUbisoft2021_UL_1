@@ -38,8 +38,7 @@ namespace Other
                 _endButtonPressed = true;
             }
         }
-
-        [PunRPC]
+        
         private void StartFirstDialog()
         {
             _dialogSystem.StartDialog("Area03_start","green");
@@ -48,7 +47,7 @@ namespace Other
         [PunRPC]
         private void StartEndDialog()
         {
-            _dialogSystem.StartDialog("Area03_end");
+            _dialogSystem.StartEndDialogue("Area03_end");
         }
 
     }

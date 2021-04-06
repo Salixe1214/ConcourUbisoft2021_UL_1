@@ -10,9 +10,9 @@ using UnityEngine.UI;
 public class DialogSystem : MonoBehaviour
 {
     // UI components
-    [SerializeField] private Image leftCharSlot;  //< Character slot at the left
+    [SerializeField] private Image leftCharSlot; //< Character slot at the left
     [SerializeField] private Image rightCharSlot; //< Character slot at the right
-    [SerializeField] private Text textSlot;       //< Text slot
+    [SerializeField] private Text textSlot; //< Text slot
     [SerializeField] private GameObject panel = null;
     [SerializeField] private float _delayBetweenCharReveal = 0.1f;
     [SerializeField] private Sprite[] originalKeys;
@@ -26,12 +26,13 @@ public class DialogSystem : MonoBehaviour
     [SerializeField] private Sprite char2Sprite;
     [SerializeField] private Sprite char3Sprite;
     [SerializeField] private Sprite char4Sprite;
-    
+
     // Line separators
     [SerializeField] private char lineSep = '\n';
     [SerializeField] private char itemSep = ';';
-    
-    private List<string> _lines = new List<string>(); //< Contains all the lines (and the informations of the characters shown)
+
+    private List<string>
+        _lines = new List<string>(); //< Contains all the lines (and the informations of the characters shown)
     /*
      * Script text format:
      * -------------------
@@ -70,7 +71,11 @@ public class DialogSystem : MonoBehaviour
     [SerializeField] private string normalColor = "black";
     [SerializeField] private string altColor = "blue";
 
-    private void Awake()
+    [SerializeField] private AudioClip endClip;
+    private float[] _endTime =  {0f, 2.179f, 4.278f, 6.449f, 8.658f, 10.857f, 13.055f, 23.567f };
+    private bool isEnd = false;
+
+private void Awake()
     {
         //_originalSkipKey = originalKeys[0];
         //_altSkipKey = altKey;
@@ -99,7 +104,7 @@ public class DialogSystem : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q) || Input.GetButtonDown("ConfirmDialogPS")||Input.GetButtonDown("ConfirmDialogXBO"))
+        if ((Input.GetKeyDown(KeyCode.Q) || Input.GetButtonDown("ConfirmDialogPS")||Input.GetButtonDown("ConfirmDialogXBO")) && !isEnd)
         {
             bDownTime = 0;
             bIsPressed = true;
@@ -458,22 +463,6 @@ public class DialogSystem : MonoBehaviour
             _isReading = false;
         }
     }
-
-    /*IEnumerator ReadAll(float pTimeBetweenLines)
-    {
-        while (!isEmpty)
-        {
-            yield return new WaitForSeconds(pTimeBetweenLines);
-            if(_lines.Count > 0)
-            {
-                ReadLine();
-            }
-            else
-            {
-                _isReading = false;
-            }
-        }
-    }*/
     
     IEnumerator SkipAll()
     {
@@ -516,5 +505,80 @@ public class DialogSystem : MonoBehaviour
         }
         Debug.Log("ControllerTypeChanged Called From Dialog");
         Debug.Log(_actualController);
+    }
+
+    public void StartEndDialogue(string pFile)
+    {
+        isEnd = true;
+        normalColor = "black";
+        altColor = "blue";
+        
+        // Loading text file
+        TextAsset txtAsset = Resources.Load("Dialog/" + pFile) as TextAsset;
+        string rawTxt = "";
+        if(txtAsset != null)
+            rawTxt = txtAsset.ToString();
+        
+        // Read only the first line
+        string line = rawTxt.Split(lineSep)[0];
+        _lines.Clear();
+        if(_slowReadCoroutine != null)
+            StopCoroutine(_slowReadCoroutine);
+        
+        // Formating the lines in a list
+        string[] tmpLines = rawTxt.Split(lineSep);
+        
+        // Adding each line to _lines (except the last, which is empty
+        for(int i = 0 ; i < tmpLines.Length ; i++)
+            if (tmpLines[i].Length > 4)
+            {
+                _lines.Add(tmpLines[i]);
+            }
+
+        isEmpty = false;
+        
+        leftCharSlot.enabled = true;
+        rightCharSlot.enabled = true;
+        textSlot.enabled = true;
+        skipKey.enabled = false;
+        
+        panel.SetActive(true);
+
+        leftCharSlot.color = Color.clear;
+        rightCharSlot.color = Color.clear;
+        textSlot.text = "";
+
+        _isReading = false;
+        
+        StartCoroutine(dialogueEndCoroutine());
+    }
+
+    IEnumerator dialogueEndCoroutine()
+    {
+        _audioSource.clip = endClip;
+        _audioSource.Stop();
+        for (int i = 0; i < 5; i++)
+        {
+            ReadLine();
+            yield return new WaitForSeconds(_endTime[0+1] - _endTime[0]);
+        }
+        _audioSource.Play();
+        for (int i = 0 ; i < 6 ; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                _audioSource.time = _endTime[i];
+                if(j == 0)
+                    ReadLine();
+                yield return new WaitForSeconds(_endTime[i+1] - _endTime[i]);
+            }
+        }
+        
+        _audioSource.time = _endTime[6];
+        ReadLine();
+        yield return new WaitForSeconds(_endTime[6+1] - _endTime[6]);
+        
+        _isReading = false;
+        ReadLine();
     }
 }

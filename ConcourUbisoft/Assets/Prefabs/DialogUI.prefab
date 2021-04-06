@@ -596,7 +596,6 @@ GameObject:
   - component: {fileID: 6604083769676665215}
   - component: {fileID: 6604083769676665091}
   - component: {fileID: 8400330247450512978}
-  - component: {fileID: 1115947278}
   m_Layer: 5
   m_Name: DialogUI
   m_TagString: DialogSystem
@@ -715,6 +714,9 @@ MonoBehaviour:
   itemSep: 59
   longPressDuration: 1
   skipTime: 3
+  normalColor: black
+  altColor: blue
+  endClip: {fileID: 8300000, guid: 2e19970ba36daa84589a4e3cd57cdb11, type: 3}
 --- !u!82 &8400330247450512978
 AudioSource:
   m_ObjectHideFlags: 0
@@ -811,18 +813,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1115947278
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6604083769676665214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0c7dd5a26747694f9a3b964148ba417, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6604083769862731142
 GameObject:
   m_ObjectHideFlags: 0
