@@ -68,7 +68,7 @@ public class DialogSystem : MonoBehaviour
     private float rotationRight = 180;
 
     [SerializeField] private string normalColor = "black";
-    [SerializeField] private string altColor = "red";
+    [SerializeField] private string altColor = "blue";
 
     private void Awake()
     {
@@ -265,7 +265,7 @@ public class DialogSystem : MonoBehaviour
         }
     }
     
-    public void StartDialog(string pFile, string pAltColor = "red", string pNormalColor = "black", bool pSkipAfter = false)
+    public void StartDialog(string pFile, string pAltColor = "blue", string pNormalColor = "black", bool pSkipAfter = false)
     {
         _skipAfter = pSkipAfter;
 
@@ -405,7 +405,7 @@ public class DialogSystem : MonoBehaviour
         }
     }
 
-    public void StartSingleLine(string pFile, string pAltColor = "red", string pNormalColor = "black")
+    public void StartSingleLine(string pFile, string pAltColor = "blue", string pNormalColor = "black")
     {
         normalColor = pNormalColor;
         altColor = pAltColor;
