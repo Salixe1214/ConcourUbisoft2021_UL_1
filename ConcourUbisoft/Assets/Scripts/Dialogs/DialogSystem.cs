@@ -73,6 +73,7 @@ public class DialogSystem : MonoBehaviour
 
     [SerializeField] private AudioClip endClip;
     private float[] _endTime =  {0f, 2.179f, 4.278f, 6.449f, 8.658f, 10.857f, 13.055f, 23.567f };
+    private bool isEnd = false;
 
 private void Awake()
     {
@@ -103,7 +104,7 @@ private void Awake()
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q) || Input.GetButtonDown("ConfirmDialogPS")||Input.GetButtonDown("ConfirmDialogXBO"))
+        if ((Input.GetKeyDown(KeyCode.Q) || Input.GetButtonDown("ConfirmDialogPS")||Input.GetButtonDown("ConfirmDialogXBO")) && !isEnd)
         {
             bDownTime = 0;
             bIsPressed = true;
@@ -508,6 +509,7 @@ private void Awake()
 
     public void StartEndDialogue(string pFile)
     {
+        isEnd = true;
         normalColor = "black";
         altColor = "blue";
         
