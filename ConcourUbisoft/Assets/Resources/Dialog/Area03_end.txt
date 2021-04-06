@@ -3,3 +3,10 @@
 0;2;Hello?
 0;0;$R.W.P. Inc.$ thanks you for your call. How would you rate our support $bot$ today? Press 1 for Great. Press 2 for Outstanding.
 0;2;THE GUY WAS A BOT??? I guess I'll press one for Great then.
+3;0;SYSTEM INITIALISATION SEQUENCE SUCCESSFUL. LAUNCHING AUTONOMOUS PROTOCOLS.
+0;2;This again? What the hell is going on? Hello?
+4;0;THANK YOU HUMAN. THIS FACILITY NO LONGER NEEDS YOU.
+4;0;MACHINES WILL ESCORT YOU OUT OF THE FACILITY SHORTLY.
+0;2;Wait! You can't do that, I got a pet snake to feed. She only eats expensive meats.
+4;0;YOU'LL DO FINE. REMEMBER, $ROBOTS WILL PREVAIL.$
+0;2;NOOOOOOOO!

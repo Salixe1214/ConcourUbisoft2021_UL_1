@@ -47,8 +47,7 @@ namespace Other
         [PunRPC]
         private void StartEndDialog()
         {
-            _dialogSystem.StartDialog("Area03_end");
-            _dialogSystem.StartEndDialogue("Area3_end_part2");
+            _dialogSystem.StartEndDialogue("Area3_end");
         }
 
     }
