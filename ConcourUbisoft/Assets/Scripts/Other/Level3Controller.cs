@@ -63,7 +63,7 @@ namespace Other
             _dialogSystem.StartEndDialogue("Area03_end");
         }
 
-        public void WakeRobots()
+        private void WakeRobots()
         {
             RightRobot.transform.rotation = Quaternion.Slerp(RightRobot.transform.rotation,new Quaternion(0,90,0,0), 0.5f);
             LeftRobot.transform.rotation = Quaternion.Slerp(RightRobot.transform.rotation,new Quaternion(0,90,0,0), 0.5f);
