@@ -1051,7 +1051,7 @@ AudioSource:
   MinDistance: 1
   MaxDistance: 30
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 2
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -1059,23 +1059,59 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
+      time: 0.033333335
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: -0.12021271
+      outSlope: -0.12021271
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0.9186167
+    - serializedVersion: 3
+      time: 0.66429543
+      value: 0.98327637
+      inSlope: -0.090261094
+      outSlope: -0.090261094
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.7642794
+      value: 0.4089203
+      inSlope: -7.5029984
+      outSlope: -7.5029984
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.8071371
+      value: 0.1816101
+      inSlope: -4.7723866
+      outSlope: -4.7723866
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.72207916
+      outWeight: 0.62154055
+    - serializedVersion: 3
+      time: 0.8690587
+      value: 0.018798828
+      inSlope: -0.11674003
+      outSlope: -0.11674003
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 1
     - serializedVersion: 3
       time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
+      value: 0.005287681
+      inSlope: -0.033346657
+      outSlope: -0.033346657
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -1237,4 +1273,4 @@ MonoBehaviour:
     m_Extent: {x: 15, y: 7, z: 15}
   _particleSystems: []
   audioSource: {fileID: 0}
-  electricitySound: {fileID: 8300000, guid: 33a053f9d738ed9478f0078bcf57710c, type: 3}
+  electricityContinueSound: {fileID: 0}
