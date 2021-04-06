@@ -53,6 +53,7 @@ public class CharacterControl : MonoBehaviour, IPunObservable
     void Start()
     {
         playerBody = GetComponent<Rigidbody>();
+        Physics.IgnoreLayerCollision(7,3);
     }
     
     void Update()
