@@ -70,7 +70,7 @@ namespace Arm
 				if (translation.magnitude >= float.Epsilon)
 				{
 					ArmTarget.transform.Translate(Time.deltaTime * aligment.MultiplyVector(translation.normalized) * controlSpeed);
-					_armSound.Volume = 0.3f; //translate.magnitude / (ControlSpeed * Time.deltaTime);
+					_armSound.Volume = translation.magnitude / (ControlSpeed * Time.deltaTime);
 				}
 				else
 				{

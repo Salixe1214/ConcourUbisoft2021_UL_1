@@ -51,7 +51,7 @@ public class DialogSystem : MonoBehaviour
     private bool _isReading = false;
 
     private NetworkController _networkController = null;
-    private AudioSource _audioSource = null;
+    [SerializeField] private AudioSource _audioSource;
 
     // Long press parameters
     [SerializeField] private float longPressDuration = 1;
@@ -71,15 +71,15 @@ public class DialogSystem : MonoBehaviour
     [SerializeField] private string normalColor = "black";
     [SerializeField] private string altColor = "blue";
 
+    [SerializeField] private AudioSource endMusic;
     [SerializeField] private AudioClip endClip;
     private float[] _endTime =  {0f, 2.179f, 4.278f, 6.449f, 8.658f, 10.857f, 13.055f, 23.567f };
     private bool isEnd = false;
 
-private void Awake()
+    private void Awake()
     {
         //_originalSkipKey = originalKeys[0];
         //_altSkipKey = altKey;
-        _audioSource = GetComponent<AudioSource>();
         _inputManager = GameObject.FindWithTag("InputManager")?.GetComponent<InputManager>();
         OnControllerTypeChanged();
         rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
@@ -156,7 +156,7 @@ private void Awake()
         _inputManager.OnControllerTypeChanged -= OnControllerTypeChanged;
     }
 
-    public void ReadLine()
+    public void ReadLine(bool pSilence = false)
     {
         if (_lines.Count > 0)
         {
@@ -248,7 +248,7 @@ private void Awake()
                     break;
             }
 
-            _slowReadCoroutine = SlowRead(parsedLine[2], _skipAfter);
+            _slowReadCoroutine = SlowRead(parsedLine[2], pSilence, _skipAfter);
             StartCoroutine(_slowReadCoroutine);
         }
         else
@@ -321,7 +321,7 @@ private void Awake()
         }
     }
     
-    IEnumerator SlowRead(string text, bool pSkipAfter = false)
+    IEnumerator SlowRead(string text, bool pSilence, bool pSkipAfter = false)
     {
         _isReading = true;
         textSlot.text = "";
@@ -359,7 +359,7 @@ private void Awake()
             }
             
             
-            if (_audioSource.isPlaying == false)
+            if (_audioSource.isPlaying == false && !pSilence)
             {
                 _audioSource.Play();
             }
@@ -555,30 +555,30 @@ private void Awake()
 
     IEnumerator dialogueEndCoroutine()
     {
-        _audioSource.clip = endClip;
-        _audioSource.Stop();
+        endMusic.clip = endClip;
+        endMusic.Stop();
         for (int i = 0; i < 5; i++)
         {
-            ReadLine();
-            yield return new WaitForSeconds(_endTime[0+1] - _endTime[0]);
+            ReadLine(false);
+            yield return new WaitForSeconds(2 * (_endTime[0+1] - _endTime[0]));
         }
-        _audioSource.Play();
+        endMusic.Play();
         for (int i = 0 ; i < 6 ; i++)
         {
             for (int j = 0; j < 3; j++)
             {
-                _audioSource.time = _endTime[i];
+                endMusic.time = _endTime[i];
                 if(j == 0)
-                    ReadLine();
+                    ReadLine(true);
                 yield return new WaitForSeconds(_endTime[i+1] - _endTime[i]);
             }
         }
         
-        _audioSource.time = _endTime[6];
-        ReadLine();
-        yield return new WaitForSeconds(_endTime[6+1] - _endTime[6]);
+        endMusic.time = _endTime[6];
+        ReadLine(true);
+        yield return new WaitForSeconds(_endTime[6+1] - _endTime[6] - 2);
         
         _isReading = false;
-        ReadLine();
+        ReadLine(true);
     }
 }
