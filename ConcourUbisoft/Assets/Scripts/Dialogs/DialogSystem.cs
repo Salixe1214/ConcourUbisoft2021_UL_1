@@ -556,6 +556,13 @@ private void Awake()
     IEnumerator dialogueEndCoroutine()
     {
         _audioSource.clip = endClip;
+        _audioSource.Stop();
+        for (int i = 0; i < 5; i++)
+        {
+            ReadLine();
+            yield return new WaitForSeconds(_endTime[0+1] - _endTime[0]);
+        }
+        _audioSource.Play();
         for (int i = 0 ; i < 6 ; i++)
         {
             for (int j = 0; j < 3; j++)
