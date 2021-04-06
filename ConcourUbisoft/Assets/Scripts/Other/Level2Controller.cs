@@ -39,6 +39,8 @@ public class Level2Controller : MonoBehaviour, LevelController
     [SerializeField] private List<float> TimeLeftWhenWarningPlays;
     [SerializeField] private CameraEffectDisabled _cameraEffectDisabled = null;
     [SerializeField] private float _durationCameraEffectDisabled = 2.0f;
+    [Tooltip("Number of times each sequence item is spawned")]
+    [SerializeField] private int _requiredItemsSpawningMultiplier;
 
     [Tooltip("Intensity of the AreaCamera Shake Effect")]
     [SerializeField] private float cameraShakeForce = 0.3f;
@@ -382,16 +384,19 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     private void SpawnSequences(List<Bounds> solutions)
     {
-        if (solutions.Count >= _furnace.GetItemCount())
+        if (solutions.Count >= _furnace.GetItemCount()*_requiredItemsSpawningMultiplier)
         {
             FurnaceController.SequenceOfColor[] sequences = _furnace.GetAllSequences();
             foreach (var sequence in sequences)
             {
                 for (int i = 0; i < sequence.ColorsSequence.Length; i++)
                 {
-                    int solutionIndex = _random.Next(0, solutions.Count);
-                    SpawnSequenceObject(solutions[solutionIndex],sequence.ColorsSequence[i],sequence.types[i]);
-                    solutions.RemoveAt(solutionIndex);
+                    for (int j = 0; j < _requiredItemsSpawningMultiplier; j++)
+                    {
+                        int solutionIndex = _random.Next(0, solutions.Count);
+                        SpawnSequenceObject(solutions[solutionIndex],sequence.ColorsSequence[i],sequence.types[i]);
+                        solutions.RemoveAt(solutionIndex);
+                    }
                 }
             }
         }
