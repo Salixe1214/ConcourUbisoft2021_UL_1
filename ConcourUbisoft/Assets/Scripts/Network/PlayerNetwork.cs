@@ -112,14 +112,14 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         }
         else
         {
-            _gameController.StartGame(_networkController.GetLocalRole(), colorBlindMode);
-            //StartCoroutine(WaitBeforeStart(colorBlindMode));
+            //_gameController.StartGame(_networkController.GetLocalRole(), colorBlindMode);
+            StartCoroutine(WaitBeforeStart(colorBlindMode));
         }
     }
 
     private IEnumerator WaitBeforeStart(bool colorBlindMode)
     {
-        yield return new WaitForSeconds(0);
+        yield return new WaitForSeconds(2);
         _gameController.StartGame(_networkController.GetLocalRole(), colorBlindMode);
     }
 
