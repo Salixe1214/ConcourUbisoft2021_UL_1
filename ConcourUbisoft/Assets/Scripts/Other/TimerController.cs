@@ -37,16 +37,16 @@ public class TimerController : MonoBehaviour, IPunObservable
         _levelController = LevelControl.GetComponent<LevelController>();
         _photonView = GetComponent<PhotonView>();
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
-
-        if (_networkController.GetLocalRole() == GameController.Role.Technician && !_photonView.IsMine)
-        {
-            _photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
-        }
     }
 
     void Start()
     {
-        if(_networkController.GetLocalRole() == GameController.Role.Technician)
+        if (_networkController.GetLocalRole() == GameController.Role.Technician && !_photonView.IsMine)
+        {
+            _photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+        }
+
+        if (_networkController.GetLocalRole() == GameController.Role.Technician)
         {
             BonusTimeTextField.text = "";
             TimeTextField.text = "";
