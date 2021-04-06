@@ -44,16 +44,16 @@ namespace Arm
 		{
             _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
 			_photonView = GetComponentInParent<PhotonView>();
-
-            if (_networkController.GetLocalRole() == _owner && !_photonView.IsMine)
-            {
-                _photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
-            }
         }
 
 		private void Start()
 		{
-			boundingBox.center = this.transform.position + boundingBox.center;
+            if (_networkController.GetLocalRole() == _owner && !_photonView.IsMine)
+            {
+                _photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+            }
+
+            boundingBox.center = this.transform.position + boundingBox.center;
 			initialialized = true;
 			maxRange = armIKSolver.TotalLength - 0.01f;
 			ArmTarget = armIKSolver.Target;
