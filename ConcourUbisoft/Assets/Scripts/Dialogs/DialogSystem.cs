@@ -559,8 +559,8 @@ public class DialogSystem : MonoBehaviour
         endMusic.Stop();
         for (int i = 0; i < 5; i++)
         {
-            ReadLine(true);
-            yield return new WaitForSeconds(3 * (_endTime[0+1] - _endTime[0]));
+            ReadLine(false);
+            yield return new WaitForSeconds(2 * (_endTime[0+1] - _endTime[0]));
         }
         endMusic.Play();
         for (int i = 0 ; i < 6 ; i++)
