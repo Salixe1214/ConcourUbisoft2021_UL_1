@@ -8,7 +8,7 @@ public class MagnetIndicator : MonoBehaviour
 {
 	[SerializeField] private float emmisionIntensity = 10.0f;
 	[SerializeField] private Color grabbedColor = Color.green;
-	[SerializeField] private Color magnetActiveColor = Color.green;
+	[SerializeField] private Color magnetActiveColor = Color.red;
 	[SerializeField] private Color magnetInactiveColor = Color.black;
 	[SerializeField] private MagnetController magnet;
 	private Renderer _renderer;
