@@ -2,6 +2,7 @@ using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Voice.Unity;
 using UnityEngine;
 
 public class DoorLight : MonoBehaviour
@@ -10,6 +11,9 @@ public class DoorLight : MonoBehaviour
     private List<Color> _color = new List<Color>();
     [SerializeField] private List<GameObject> _indicatorLights;
     private List<Renderer> _renderers = new List<Renderer>();
+    [SerializeField] private GameObject topLight;
+    private Renderer topLightRenderer;
+    
     
     private int _numYellowLights = 0;
 
@@ -20,6 +24,10 @@ public class DoorLight : MonoBehaviour
             _color.Insert(i, defaultColor);
             _renderers.Insert(i, _indicatorLights[i].GetComponent<Renderer>());
         }
+
+        topLightRenderer = topLight.GetComponent<Renderer>();
+        topLightRenderer.material.color = defaultColor;
+        topLightRenderer.material.SetColor("_EmissionColor", defaultColor * 15);
     }
 
     private void Update()
@@ -48,12 +56,15 @@ public class DoorLight : MonoBehaviour
     public void OnSuccess()
     {
         _numYellowLights = 0;
+        defaultColor = Color.green;
         for(int i = 0 ; i < _indicatorLights.Count ; i++)
         {
             _color[i] = Color.green;
             _renderers[i].material.color = _color[i];
             _renderers[i].material.SetColor("_EmissionColor", _color[i] * 15);
         }
+        topLightRenderer.material.color = Color.green;
+        topLightRenderer.material.SetColor("_EmissionColor", Color.green * 15);
     }
 
     public void onPressDir()
@@ -70,6 +81,8 @@ public class DoorLight : MonoBehaviour
         {
             _color[i] = pColor;
         }
+        topLightRenderer.material.color = pColor;
+        topLightRenderer.material.SetColor("_EmissionColor", pColor * 15);
         yield return new WaitForSeconds(4);
         if (_color[0] == Color.red) {
             for (int i = 0; i < _indicatorLights.Count; i++)
@@ -77,5 +90,8 @@ public class DoorLight : MonoBehaviour
                 _color[i] = defaultColor;
             }
         }
+        
+        topLightRenderer.material.color = defaultColor;
+        topLightRenderer.material.SetColor("_EmissionColor", defaultColor * 15);
     }
 }

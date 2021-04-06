@@ -1,1 +1,1 @@
-1;0;Correct item dropped! Let's keep doing that.
+1;0;%Correct item% dropped! Let's keep doing that.

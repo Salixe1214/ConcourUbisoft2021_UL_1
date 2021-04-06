@@ -1,6 +1,6 @@
-0;2;Looks like the crash affected the arm. It completely stopped dropping parts into the furnace.
+0;2;Looks like the crash affected the %arm%. It completely stopped $dropping$ parts into the furnace.
 1;0;We’ll have to teach the A.I how it’s supposed to work again.
 0;2;I sure hope you know how to do that. This arm’s control panel was removed from here a while ago.
 1;0;I’ve heard corporate found out about some employees using it to play baseball.
 0;2;Never heard of it …
-1;0;Let me see if I can operate the arm from here.
+1;0;Let me see if I can $operate$ the %arm% from here.

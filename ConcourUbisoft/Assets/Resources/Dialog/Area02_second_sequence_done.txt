@@ -1,2 +1,2 @@
 0;2;OUCH! The controls are acting up again. 
-1;0;The control chip seems to be unstable. We have to hurry up.
+1;0;The control chip seems to be unstable. We have to hurry up!

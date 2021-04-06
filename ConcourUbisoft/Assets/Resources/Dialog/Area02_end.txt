@@ -1,4 +1,4 @@
 0;2;I really hope I don’t have to keep doing this. My heart can’t take much more.
 1;0;The control chip stopped responding. This will have to do.
-1;0;Let’s head to Area 03 and get this place up and running again.
-1;0;Oh, and while you’re still alive, please look around for two other symbols.
+1;0;Let’s head to %Area 03% and get this place up and running again.
+1;0;Oh, and while you’re still alive, $please look around for two other symbols.$

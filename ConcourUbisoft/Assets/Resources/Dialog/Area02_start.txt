@@ -1,6 +1,6 @@
 0;2;I’ll have a quick look around.
 1;0;This area sure looks more colorful to me than the previous one.
-1;0;*Sigh* I don’t seem to be able to operate the arm from my end. It's network chip must be fried.
-1;0;There must be way to control the arm from your side. Have a look around.
+1;0;*Sigh* I don’t seem to be able to operate the %arm% from my end. It's network chip must be fried.
+1;0;There must be way to control the %arm% from your side. Have a look around.
 
 

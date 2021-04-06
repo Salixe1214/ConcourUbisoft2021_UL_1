@@ -1,8 +1,8 @@
-1;0;Thank you for calling R.W.P. Inc. You’ve reached the internal remote support line. May I please get your location and ID.
+1;0;Thank you for calling $R.W.P. Inc.$ You’ve reached the internal remote support line. May I please get your location and ID.
 0;2;Employee ID: 404. Location: West Coast. I’m calling regarding the system crash.
 1;0;West Coast, right? And you’re a guard? Isn’t anyone from the maintenance team around?
 0;2;Almost everyone left when the A.I took over. I’m pretty much alone here most of the time.
-1;0;*Sigh* I guess you’ll do for today. Let’s hold the left shift key or the right trigger to use the voice channel.
-1;0;Start by heading to Area 01. I’ll have an eye on you through the surveillance feed.
+1;0;*Sigh* I guess you’ll do for today. Let’s hold the $left shift key$ or the $right trigger$ to use the %voice channel%.
+1;0;Start by heading to %Area 01%. I’ll have an eye on you through the surveillance feed.
 0;2;You can do that?? I mean that's great, but all of the doors are locked. My access key stopped working.
-1;0;I can help you get in Area 01, but I’ll need 2 symbols to restore the access code. Any idea of what they might be?
+1;0;I can help you get in %Area 01%, but $I’ll need 2 symbols to restore the access code.$ Any idea of what they might be?
