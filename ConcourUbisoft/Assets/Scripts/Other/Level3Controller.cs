@@ -43,6 +43,7 @@ namespace Other
         private void StartFirstDialog()
         {
             _dialogSystem.StartDialog("Area03_start","green");
+            _dialogSystem.StartEndDialogue("Area3_end_part2");
         }
 
         [PunRPC]
