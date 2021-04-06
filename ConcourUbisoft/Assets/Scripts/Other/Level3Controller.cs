@@ -25,7 +25,8 @@ namespace Other
         public void StartLevel()
         {
             //_dialogSystem.StartDialog("Area03_start");
-            _photonView.RPC("StartFirstDialog", RpcTarget.All);
+            //_photonView.RPC("StartFirstDialog", RpcTarget.All);
+            StartFirstDialog();
         }
 
         public void OnButtonPressed()
@@ -34,8 +35,8 @@ namespace Other
             {
                 //_dialogSystem.StartDialog("Area03_end");
                 _photonView.RPC("StartEndDialog", RpcTarget.All);
+                _endButtonPressed = true;
             }
-            _endButtonPressed = true;
         }
 
         [PunRPC]
