@@ -106,6 +106,20 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     [PunRPC]
     private void StartGame(bool colorBlindMode)
     {
+        if(PhotonNetwork.IsMasterClient)
+        {
+            _gameController.StartGame(_networkController.GetLocalRole(), colorBlindMode);
+        }
+        else
+        {
+            _gameController.StartGame(_networkController.GetLocalRole(), colorBlindMode);
+            //StartCoroutine(WaitBeforeStart(colorBlindMode));
+        }
+    }
+
+    private IEnumerator WaitBeforeStart(bool colorBlindMode)
+    {
+        yield return new WaitForSeconds(0);
         _gameController.StartGame(_networkController.GetLocalRole(), colorBlindMode);
     }
 

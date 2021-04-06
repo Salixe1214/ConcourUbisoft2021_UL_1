@@ -48,11 +48,6 @@ public class CharacterControl : MonoBehaviour, IPunObservable
             button.BeforeActions.AddListener(() => _animator.SetBool("PressingButton", true));
             button.AfterActions.AddListener(() => _animator.SetBool("PressingButton", false));
         }
-
-        if (_networkController.GetLocalRole() == _owner && !_photonView.IsMine)
-        {
-            _photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
-        }
     }
 
     void Start()
@@ -62,6 +57,11 @@ public class CharacterControl : MonoBehaviour, IPunObservable
     
     void Update()
     {
+        if (_networkController.GetLocalRole() == _owner && !_photonView.IsMine)
+        {
+            _photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+        }
+
         if (_owner == _networkController.GetLocalRole())
         {
             keyboardHorizontal = Input.GetAxis("Horizontal");
