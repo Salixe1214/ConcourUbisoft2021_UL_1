@@ -6,6 +6,9 @@ namespace Other
 {
     public class Level3Controller : MonoBehaviour
     {
+        [SerializeField] private GameObject RightRobot;
+        [SerializeField] private GameObject LeftRobot;
+
         private DialogSystem _dialogSystem;
         private bool _endButtonPressed;
 
@@ -20,6 +23,16 @@ namespace Other
         {
             _dialogSystem = GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>();
             _endButtonPressed = false;
+        }
+
+        private void OnEnable()
+        {
+            _dialogSystem.OnFinalDialog += WakeRobots;
+        }
+
+        private void OnDisable()
+        {
+            _dialogSystem.OnFinalDialog -= WakeRobots;
         }
 
         public void StartLevel()
@@ -48,6 +61,12 @@ namespace Other
         private void StartEndDialog()
         {
             _dialogSystem.StartEndDialogue("Area03_end");
+        }
+
+        public void WakeRobots()
+        {
+            RightRobot.transform.rotation = Quaternion.Slerp(RightRobot.transform.rotation,new Quaternion(0,90,0,0), 0.5f);
+            LeftRobot.transform.rotation = Quaternion.Slerp(RightRobot.transform.rotation,new Quaternion(0,90,0,0), 0.5f);
         }
 
     }

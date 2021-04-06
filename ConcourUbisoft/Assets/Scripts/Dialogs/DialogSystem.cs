@@ -76,6 +76,8 @@ public class DialogSystem : MonoBehaviour
     private float[] _endTime =  {0f, 2.179f, 4.278f, 6.449f, 8.658f, 10.857f, 13.055f, 23.567f };
     private bool isEnd = false;
 
+    public event Action OnFinalDialog;
+
     private void Awake()
     {
         //_originalSkipKey = originalKeys[0];
@@ -576,6 +578,7 @@ public class DialogSystem : MonoBehaviour
         
         endMusic.time = _endTime[6];
         ReadLine(true);
+        OnFinalDialog?.Invoke();
         yield return new WaitForSeconds(_endTime[6+1] - _endTime[6] - 2);
         
         _isReading = false;
