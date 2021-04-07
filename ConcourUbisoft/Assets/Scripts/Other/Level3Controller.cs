@@ -60,8 +60,7 @@ namespace Other
                 //_dialogSystem.StartDialog("Area03_end");
                 _photonView.RPC("StartEndDialog", RpcTarget.All);
                 _endButtonPressed = true;
-                CameraEffect.Enable();
-                
+                _photonView.RPC("EnableCameraEffect", RpcTarget.All);
             }
         }
         
@@ -74,6 +73,18 @@ namespace Other
         private void StartEndDialog()
         {
             _dialogSystem.StartEndDialogue("Area03_end");
+            _photonView.RPC("DisableCameraEffect", RpcTarget.All);
+        }
+
+        [PunRPC]
+        private void EnableCameraEffect()
+        {
+            CameraEffect.Enable();
+        }
+
+        [PunRPC]
+        private void DisableCameraEffect()
+        {
             CameraEffect.Disable();
         }
 
