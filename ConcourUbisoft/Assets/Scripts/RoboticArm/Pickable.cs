@@ -81,7 +81,7 @@ namespace Arm
 		{
 			if (grabbedAtleastOnce && gameObject.activeInHierarchy)
 			{
-				PlayHitSoundNetwork();
+                _photonView.RPC("PlayHitSoundNetwork", RpcTarget.All);
 			}
 		}
 
