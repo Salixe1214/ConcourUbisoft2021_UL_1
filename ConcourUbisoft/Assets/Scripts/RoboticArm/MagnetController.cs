@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Photon.Pun;
 using UnityEngine;
 
 namespace Arm
@@ -71,7 +72,7 @@ namespace Arm
 					}
 				}
 
-				_magnetSound.IsOn = MagnetActive;
+				_magnetSound.IsOn = MagnetActive && !_grabbed;
 			}
 
 			if (_outlineViewer == localRole)
