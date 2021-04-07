@@ -11,6 +11,7 @@ namespace Other
         [SerializeField] private GameObject LeftRobot;
         [SerializeField] private float xRobotRotationSpeed =20f;
         [SerializeField] private float yRobotRotationSpeed = 50f;
+        [SerializeField] private CameraEffectDisabled CameraEffect;
 
         private DialogSystem _dialogSystem;
         private bool _endButtonPressed;
@@ -59,6 +60,8 @@ namespace Other
                 //_dialogSystem.StartDialog("Area03_end");
                 _photonView.RPC("StartEndDialog", RpcTarget.All);
                 _endButtonPressed = true;
+                CameraEffect.Enable();
+                
             }
         }
         
@@ -71,6 +74,7 @@ namespace Other
         private void StartEndDialog()
         {
             _dialogSystem.StartEndDialogue("Area03_end");
+            CameraEffect.Disable();
         }
 
         private void WakeRobots()
