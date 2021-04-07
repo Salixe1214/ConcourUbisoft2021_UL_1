@@ -8,7 +8,6 @@ public class MagnetIndicator : MonoBehaviour
 {
 	[SerializeField] private float emmisionIntensity = 10.0f;
 	[SerializeField] private Color grabbedColor = Color.green;
-	[SerializeField] private Color magnetActiveColor = Color.red;
 	[SerializeField] private Color magnetInactiveColor = Color.black;
 	[SerializeField] private MagnetController magnet;
 	private Renderer _renderer;
@@ -21,31 +20,20 @@ public class MagnetIndicator : MonoBehaviour
 	private void OnEnable()
 	{
 		magnet.OnMagnetActiveChange += HandleMagnetStateChange;
-		magnet.OnGrabStateChange += HandleMagnetStateChange;
 	}
 
 	private void OnDisable()
 	{
 		magnet.OnMagnetActiveChange -= HandleMagnetStateChange;
-		magnet.OnGrabStateChange -= HandleMagnetStateChange;
 	}
 
 	private void HandleMagnetStateChange()
 	{
 		if (magnet.MagnetActive)
 		{
-			if (magnet.Grabbed)
-			{
-				_renderer.material.color = grabbedColor;
-				_renderer.material.SetColor("_EmissionColor", grabbedColor * emmisionIntensity);
-				_renderer.material.EnableKeyword("_EMISSION");
-			}
-			else
-			{
-				_renderer.material.color = magnetActiveColor;
-				_renderer.material.SetColor("_EmissionColor", magnetActiveColor * emmisionIntensity);
-				_renderer.material.EnableKeyword("_EMISSION");
-			}
+			_renderer.material.color = grabbedColor;
+			_renderer.material.SetColor("_EmissionColor", grabbedColor * emmisionIntensity);
+			_renderer.material.EnableKeyword("_EMISSION");
 		}
 		else
 		{
