@@ -25,6 +25,8 @@ public class CameraMovement : MonoBehaviour
     private CharacterControl _characterControl = null;
     private GameController _gameController = null;
 
+    public bool invetedY { get; set; } = false;
+
     private void Awake()
     {
         _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
@@ -61,11 +63,19 @@ public class CameraMovement : MonoBehaviour
     {
         float mouseX = Input.GetAxisRaw("Mouse X") *mouseSensitivityX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivityY;
+        if (invetedY)
+            mouseY *= -1;
         
         float controllerX_PS = Input.GetAxis("RightJoystickHorizontalPS")*controllerSensitivityX;
         float controllerY_PS = Input.GetAxis("RightJoystickVerticalPS")*controllerSensitivityY;
+        if (invetedY)
+            controllerY_PS *= -1;
+        
         float controllerX_XBO = Input.GetAxis("RightJoystickHorizontalXBO")*controllerSensitivityX;
         float controllerY_XBO = Input.GetAxis("RightJoystickVerticalXBO") * controllerSensitivityY;
+        if (invetedY)
+            controllerY_XBO *= -1;
+        
         
         if (joysticks.Contains("Controller (Xbox One For Windows)"))
         {
