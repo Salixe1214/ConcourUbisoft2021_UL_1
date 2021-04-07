@@ -72,7 +72,7 @@ namespace Arm
 					}
 				}
 
-				_magnetSound.IsOn = MagnetActive;
+				_magnetSound.IsOn = MagnetActive && !_grabbed;
 			}
 
 			if (_outlineViewer == localRole)
