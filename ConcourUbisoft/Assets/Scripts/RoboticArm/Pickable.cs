@@ -79,8 +79,9 @@ namespace Arm
 
 		private void OnCollisionEnter(Collision other)
 		{
-			if (grabbedAtleastOnce && gameObject.activeInHierarchy)
+			if (grabbedAtleastOnce && gameObject.activeInHierarchy && !other.gameObject.CompareTag("Magnet"))
 			{
+				Debug.LogWarning(other.gameObject.name);
                 _photonView.RPC("PlayHitSoundNetwork", RpcTarget.All);
 			}
 		}
