@@ -18,6 +18,7 @@ TagManager:
   - InputManager
   - DialogSystem
   - ColorBlind
+  - EndZoneCollider
   layers:
   - Default
   - TransparentFX

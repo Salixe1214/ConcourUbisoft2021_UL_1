@@ -35,6 +35,8 @@ public class CharacterControl : MonoBehaviour, IPunObservable
     private float _verticalMovement = 0.0f;
     private GameController _gameController = null;
 
+    [SerializeField] private DoorController door3;
+
     private void Awake()
     {
         _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
@@ -165,6 +167,14 @@ public class CharacterControl : MonoBehaviour, IPunObservable
                 this.newPosition = newPosition;
             }
             newQuartenion = new Quaternion((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("EndZoneCollider"))
+        {
+            door3.CloseDoor();
         }
     }
 }

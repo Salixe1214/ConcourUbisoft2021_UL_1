@@ -75,6 +75,16 @@ public class DoorLight : MonoBehaviour
         }
     }
 
+    public void OnCLose()
+    {
+        for(int i = 0 ; i < _indicatorLights.Count ; i++)
+        {
+            _color[i] = Color.black;
+        }
+        topLightRenderer.material.color = Color.black;
+        topLightRenderer.material.SetColor("_EmissionColor", Color.black * 15);
+    }
+
     IEnumerator Flash(Color pColor)
     {
         for(int i = 0 ; i < _indicatorLights.Count ; i++)
