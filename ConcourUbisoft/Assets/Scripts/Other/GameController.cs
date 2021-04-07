@@ -112,7 +112,7 @@ public class GameController : MonoBehaviour
         while (!operation.isDone)
         {
             yield return null;
-        } 
+        }
         _soundController.StopAmbientSound();
         _soundController.StopAreaMusic();
        _networkController.LeaveLobby();
@@ -194,13 +194,13 @@ public class GameController : MonoBehaviour
         return _colorNames.Where(x => x.IsColor(color)).FirstOrDefault()?.Name ?? "Undefined";
     }
 
-    public void InitiateStartGame(Role role, bool colorBlindMode)
+    public void InitiateStartGame(Role role)
     {
         if (_randomSeed)
         {
             Seed = new System.Random().Next();
         }
-        _networkController.GetOwnNetworkPlayer().StartGameNetwork(colorBlindMode);
+        _networkController.GetOwnNetworkPlayer().StartGameNetwork();
     }
 
     public void StartGame(Role role, bool colorBlindMode, int seed)
@@ -212,7 +212,7 @@ public class GameController : MonoBehaviour
         Seed = seed;
         StartCoroutine("LoadAsyncLevel");
     }
- 
+
     public void UnLoadGame()
     {
         StartCoroutine("UnloadAsyncLevel");

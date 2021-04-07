@@ -7,6 +7,8 @@ using Arm;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 {
@@ -15,7 +17,6 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     public GameController.Role PlayerRole { get => _playerRole; set
     {
         _playerRole = value;
-        Debug.Log("Role modified in local");
     } }
     public string Name { set; get; }
     public string Id { get { return _photonView.Owner.UserId; } }
@@ -23,7 +24,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     private PhotonView _photonView = null;
     private NetworkController _networkController = null;
     private GameController _gameController = null;
-
+    
     #region Unity Callbacks
 
     private void Awake()
@@ -98,7 +99,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     #endregion
     #region RPC Functions
 
-    public void StartGameNetwork(bool colorBlindMode)
+    public void StartGameNetwork()
     {
         _photonView.RPC("StartGame", RpcTarget.All, new object[] { _gameController.ColorBlindMode, _gameController.Seed } as object);
     }
@@ -129,12 +130,12 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 
     private void OnLoadGameEvent()
     {
-        
+
     }
 
     private void OnFinishLoadGameEvent()
     {
-        
+
     }
 
     private void OnFinishGameEvent()

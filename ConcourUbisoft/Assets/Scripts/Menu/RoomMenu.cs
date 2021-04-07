@@ -26,6 +26,7 @@ public class RoomMenu : MonoBehaviour
     private SoundController _menuSoundController = null;
 
     #region UI Action
+
     public void LeaveRoom()
     {
         _menuSoundController.PlayButtonSound();
@@ -56,7 +57,7 @@ public class RoomMenu : MonoBehaviour
         //}
 
         _errorText.text = "";
-        _gameController.InitiateStartGame(_networkController.GetLocalRole(), _colorBlindToggle.isOn);
+        _gameController.InitiateStartGame(_networkController.GetLocalRole());
     }
     #endregion
     #region Unity Callbacks

@@ -8,7 +8,7 @@ namespace Other
     public class TextColor : MonoBehaviour
     {
         private Text _text;
-        private Color _defaultColor;
+        private Color _defaultColor = new Color(255,255,255,255);
         [SerializeField] private Color onChangeColor;
 
         private void Awake()
@@ -28,12 +28,14 @@ namespace Other
 
         public void OnSelectedEnter()
         {
-            _text.color = onChangeColor;
+            if (_text)
+                _text.color = onChangeColor;
         }
 
         public void OnSelectedExit()
         {
-            _text.color = _defaultColor;
+            if (_text)
+                _text.color = _defaultColor;
         }
     }
 }

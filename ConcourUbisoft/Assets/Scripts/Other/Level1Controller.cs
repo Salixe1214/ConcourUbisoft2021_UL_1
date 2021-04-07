@@ -284,8 +284,8 @@ public class Level1Controller : MonoBehaviour , LevelController
 
     private void UpdateSpriteColorInList()
     {
-        imageList.UpdateSpriteColor(currentListIndex, Color.black);
         currentListIndex++;
+        imageList.SelectItem(currentListIndex);
     }
 
     private void SetConveyorSpeed(float interiorConveyorSpeed, float exteriorConveyorSpeed)
