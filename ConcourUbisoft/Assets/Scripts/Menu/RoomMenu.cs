@@ -40,9 +40,9 @@ public class RoomMenu : MonoBehaviour
     }
     public void StartGame()
     {
-        _menuSoundController.PlayButtonSound();
-        IEnumerable<PlayerNetwork> playerNetworks = GameObject.FindGameObjectsWithTag("Player").Select(x => x.GetComponent<PlayerNetwork>());
-
+        IEnumerable<PlayerNetwork> playerNetworks = GameObject.FindGameObjectsWithTag("PlayerNetwork").Select(x => x.GetComponent<PlayerNetwork>());
+        
+        Debug.LogWarning("num p: " + playerNetworks.Count());
         if (_gameController.ForceTwoPlayers)
         {
             if (playerNetworks.Count() != 2)
@@ -50,8 +50,10 @@ public class RoomMenu : MonoBehaviour
                 _errorText.text = "You must have two players to proceed.";
                 return;
             }
-
+            
             IEnumerable<PlayerNetwork> playerNetworksDistinctRole = playerNetworks.GroupBy(x => x.PlayerRole).Select(x => x.First());
+            Debug.LogWarning(playerNetworksDistinctRole.Count());
+
             if (playerNetworksDistinctRole.Count() != playerNetworks.Count())
             {
                 _errorText.text = "You cannot have players with the same role.";
@@ -59,6 +61,7 @@ public class RoomMenu : MonoBehaviour
             } 
         }
 
+        _menuSoundController.PlayButtonSound();
         _errorText.text = "";
         _gameController.InitiateStartGame(_networkController.GetLocalRole());
     }
