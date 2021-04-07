@@ -73,7 +73,8 @@ namespace Other
         private void StartEndDialog()
         {
             _dialogSystem.StartEndDialogue("Area03_end");
-            _photonView.RPC("DisableCameraEffect", RpcTarget.All);
+            //_photonView.RPC("DisableCameraEffect", RpcTarget.All);
+            DisableCameraEffect();
         }
 
         [PunRPC]
