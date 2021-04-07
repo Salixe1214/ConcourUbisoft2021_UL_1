@@ -34,6 +34,7 @@ public class DoorController : MonoBehaviour
     public UnityEvent OnClose;
 
     public bool IsUnlock { get; private set; } = false;
+    [SerializeField] private bool isActive = false;
 
     private void Awake()
     {
@@ -47,27 +48,32 @@ public class DoorController : MonoBehaviour
 
     public void TriggerLeft()
     {
-        _photonView.RPC("TiggerLeftNetwork", RpcTarget.AllBuffered);
+        if(isActive)
+            _photonView.RPC("TiggerLeftNetwork", RpcTarget.AllBuffered);
     }
 
     public void TriggerRight()
     {
-        _photonView.RPC("TriggerRightNetwork", RpcTarget.AllBuffered);
+        if(isActive)
+            _photonView.RPC("TriggerRightNetwork", RpcTarget.AllBuffered);
     }
 
     public void TriggerBottom()
     {
-        _photonView.RPC("TriggerBottomNetwork", RpcTarget.AllBuffered);
+        if(isActive)
+            _photonView.RPC("TriggerBottomNetwork", RpcTarget.AllBuffered);
     }
 
     public void TriggerUp()
     {
-        _photonView.RPC("TriggerUpNetwork", RpcTarget.AllBuffered);
+        if(isActive)
+            _photonView.RPC("TriggerUpNetwork", RpcTarget.AllBuffered);
     }
 
     public void CheckSequence()
     {
-        _photonView.RPC("CheckSequenceNetwork", RpcTarget.AllBuffered);
+        if(isActive)
+            _photonView.RPC("CheckSequenceNetwork", RpcTarget.AllBuffered);
     }
 
     public void Unlock()
@@ -77,12 +83,23 @@ public class DoorController : MonoBehaviour
         _animation.Play("open");
         audioSource.clip = audioClip;
         audioSource.Play();
+        SetInnactive();
         OnSuccess?.Invoke();
     }
 
     public void CloseDoor()
     {
         _photonView.RPC("CloseDoorNetwork", RpcTarget.AllBuffered);
+    }
+
+    public void SetActive()
+    {
+        isActive = true;
+    }
+
+    public void SetInnactive()
+    {
+        isActive = false;
     }
 
     [PunRPC]
@@ -168,6 +185,7 @@ public class DoorController : MonoBehaviour
     {
         if (IsUnlock)
         {
+            SetActive();
             IsUnlock = false;
             _currentSequences.Clear();
             _animation.clip = _closeAnimation;
