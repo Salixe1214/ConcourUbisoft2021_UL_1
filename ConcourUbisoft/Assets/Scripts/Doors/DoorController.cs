@@ -177,16 +177,4 @@ public class DoorController : MonoBehaviour
             OnClose.Invoke();
         }
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.LeftAlt))
-        {
-            CloseDoor();
-        }
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            Unlock();
-        }
-    }
 }
