@@ -84,25 +84,27 @@ namespace TechSupport.Informations
 
         public void CheckSprite(int index)
         {
-            if (_checkAnimation == null)
+            if (!_checkAnimation)
                 return;
+            Debug.Log("Sprite checked for: " + index);
             Animator animator = Instantiate(_checkAnimation, _images[index].transform).GetComponent<Animator>();
             animator.SetBool(Checked, true);
         }
 
         public void BlurImage(int index, bool blur)
         {
-            if (_blurMaterial == null)
+            if (!_blurMaterial)
                 return;
             _images[index].material = blur ? _blurMaterial : null;
         }
 
         public void ZoomImage(int index, bool zoom)
         {
+            Debug.Log("Zoom Image for index: " + index);
             _images[index].rectTransform.sizeDelta = zoom ? _zoomScale : Vector2.one;
         }
 
-        public void Select(int index)
+        public void SelectItem(int index)
         {
             if (index > 0)
             {
@@ -163,7 +165,7 @@ namespace TechSupport.Informations
             {
                 AddSprite(images.ElementAt(i),colors[i]);
             }
-            Select(0);
+            SelectItem(0);
         }
 
         public void UpdateLayout(IEnumerable<Sprite> images)
