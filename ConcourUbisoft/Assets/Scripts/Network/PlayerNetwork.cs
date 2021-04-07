@@ -105,27 +105,27 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 
     public void StartGameNetwork()
     {
-        _photonView.RPC("StartGame", RpcTarget.All);
+        _photonView.RPC("StartGame", RpcTarget.All, new object[] { _gameController.ColorBlindMode, _gameController.Seed } as object);
     }
 
     [PunRPC]
-    private void StartGame()
+    private void StartGame(object[] parameters)
     {
         if(PhotonNetwork.IsMasterClient)
         {
-            _gameController.StartGame(_networkController.GetLocalRole(), _colorBlind.isOn);
+            _gameController.StartGame(_networkController.GetLocalRole(), (bool)parameters[0], (int)parameters[1]);
         }
         else
         {
             //_gameController.StartGame(_networkController.GetLocalRole(), colorBlindMode);
-            StartCoroutine(WaitBeforeStart(_colorBlind.isOn));
+            StartCoroutine(WaitBeforeStart((bool)parameters[0], (int)parameters[1]));
         }
     }
 
-    private IEnumerator WaitBeforeStart(bool colorBlindMode)
+    private IEnumerator WaitBeforeStart(bool colorBlindMode, int seed)
     {
         yield return new WaitForSeconds(2);
-        _gameController.StartGame(_networkController.GetLocalRole(), colorBlindMode);
+        _gameController.StartGame(_networkController.GetLocalRole(), colorBlindMode, seed);
     }
 
 
@@ -134,12 +134,12 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 
     private void OnLoadGameEvent()
     {
-        
+
     }
 
     private void OnFinishLoadGameEvent()
     {
-        
+
     }
 
     private void OnFinishGameEvent()
