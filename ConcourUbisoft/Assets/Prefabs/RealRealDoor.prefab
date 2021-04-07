@@ -1010,6 +1010,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+  isActive: 0
 --- !u!114 &8948978638033349432
 MonoBehaviour:
   m_ObjectHideFlags: 0
