@@ -3497,8 +3497,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 286970534}
-        m_TargetAssemblyTypeName: InGameMenuController, Assembly-CSharp
+      - m_Target: {fileID: 1533351715}
+        m_TargetAssemblyTypeName: Menu.EndGameMenuController, Assembly-CSharp
         m_MethodName: CancelTrigger
         m_Mode: 1
         m_Arguments:
@@ -6001,8 +6001,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 286970534}
-        m_TargetAssemblyTypeName: InGameMenuController, Assembly-CSharp
+      - m_Target: {fileID: 1533351715}
+        m_TargetAssemblyTypeName: Menu.EndGameMenuController, Assembly-CSharp
         m_MethodName: TriggerReturnToMenu
         m_Mode: 1
         m_Arguments:
@@ -6148,9 +6148,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 286970534}
-        m_TargetAssemblyTypeName: InGameMenuController, Assembly-CSharp
-        m_MethodName: ExitGame
+      - m_Target: {fileID: 1533351715}
+        m_TargetAssemblyTypeName: Menu.EndGameMenuController, Assembly-CSharp
+        m_MethodName: OnExitClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8517,9 +8517,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 286970534}
-        m_TargetAssemblyTypeName: InGameMenuController, Assembly-CSharp
-        m_MethodName: ReturnToMenu
+      - m_Target: {fileID: 1533351715}
+        m_TargetAssemblyTypeName: Menu.EndGameMenuController, Assembly-CSharp
+        m_MethodName: OnReturnMenuClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10124,6 +10124,9 @@ MonoBehaviour:
   _eventSystem: {fileID: 1311755604}
   _confirmationPanel: {fileID: 1476998712}
   _loadScreenMenuController: {fileID: 1651900166}
+  _confirmationText: {fileID: 1036656226}
+  _confirmExitButton: {fileID: 996918867}
+  _confirmReturnButton: {fileID: 1343158838}
 --- !u!1 &1549704403
 GameObject:
   m_ObjectHideFlags: 0
@@ -13372,8 +13375,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 286970534}
-        m_TargetAssemblyTypeName: InGameMenuController, Assembly-CSharp
+      - m_Target: {fileID: 1533351715}
+        m_TargetAssemblyTypeName: Menu.EndGameMenuController, Assembly-CSharp
         m_MethodName: TriggerExit
         m_Mode: 1
         m_Arguments:

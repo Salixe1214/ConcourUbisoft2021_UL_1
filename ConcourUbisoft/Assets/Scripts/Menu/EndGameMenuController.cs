@@ -2,6 +2,7 @@ using System;
 using Inputs;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Menu
 {
@@ -12,6 +13,9 @@ namespace Menu
         [SerializeField] private EventSystem _eventSystem;
         [SerializeField] private GameObject _confirmationPanel;
         [SerializeField] private LoadScreenMenuController _loadScreenMenuController = null;
+        [SerializeField] private Text _confirmationText;
+        [SerializeField] private GameObject _confirmExitButton;
+        [SerializeField] private GameObject _confirmReturnButton;
         
         private Inputs.Controller _currentController;
         private InputManager _inputManager;
@@ -45,7 +49,7 @@ namespace Menu
             _networkController.OnDisconnectEvent -= OnDisconnectEvent;
         }
 
-        private void ShowEndGameMenu()
+        public void ShowEndGameMenu()
         {
             EndGameMenu.SetActive(true);
             _isEndMenuOpen = true;
@@ -56,7 +60,7 @@ namespace Menu
             }
         }
 
-        private void OnReturnMenuClicked()
+        public void OnReturnMenuClicked()
         {
             _soundController.PlayButtonSound();
             _confirmationPanel.SetActive(false);
@@ -66,11 +70,35 @@ namespace Menu
             EndGameMenu.SetActive(false);
         }
 
-        private void OnExitClicked()
+        public void OnExitClicked()
         {
             _confirmationPanel.SetActive(false);
             _soundController.PlayButtonSound();
             Application.Quit();
+        }
+        
+        public void TriggerReturnToMenu()
+        {
+            _soundController.PlayButtonSound();
+            _confirmationText.text = "Return to menu";
+            _confirmReturnButton.SetActive(true);
+            _confirmExitButton.SetActive(false);
+            _confirmationPanel.SetActive(true);
+        }
+
+        public void TriggerExit()
+        {
+            _soundController.PlayButtonSound();
+            _confirmationText.text = "Exit the game";
+            _confirmReturnButton.SetActive(false);
+            _confirmExitButton.SetActive(true);
+            _confirmationPanel.SetActive(true);
+        }
+
+        public void CancelTrigger()
+        {
+            _soundController.PlayButtonSound();
+            _confirmationPanel.SetActive(false);
         }
 
         private void OnControllerTypeChanged()
