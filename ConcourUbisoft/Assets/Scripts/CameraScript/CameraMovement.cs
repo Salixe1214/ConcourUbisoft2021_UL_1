@@ -5,6 +5,7 @@ using System.Linq;
 using Photon.Voice;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CameraMovement : MonoBehaviour
 {
@@ -30,6 +31,9 @@ public class CameraMovement : MonoBehaviour
     private void Awake()
     {
         _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        invetedY = _gameController.invertedY;
+        _gameController.changeInverted.AddListener(changeInvertY);
+        
         _characterControl = playerBody.GetComponent<CharacterControl>();
 
         mouseXAccumulator = transform.rotation.eulerAngles.y;
@@ -115,5 +119,10 @@ public class CameraMovement : MonoBehaviour
             //transform.rotation = (Quaternion.Slerp(transform.rotation,Quaternion.Euler(transform.rotation.x,mouseXAccumulator, transform.rotation.z),cameraRotationSmoothingSpeed));
            
         }
+    }
+
+    private void changeInvertY()
+    {
+        invetedY = _gameController.invertedY;
     }
 }

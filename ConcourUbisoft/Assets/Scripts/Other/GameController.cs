@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Inputs;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
@@ -42,6 +43,9 @@ public class GameController : MonoBehaviour
     private NetworkController _networkController = null;
     private DialogSystem _dialogSystem = null;
     private InputManager _inputManager;
+    
+    public bool invertedY { get; set; } = false;
+    public UnityEvent changeInverted;
 
     public bool IsGameLoading { get; private set; }
     public bool IsGameStart { get; set; }
@@ -189,6 +193,12 @@ public class GameController : MonoBehaviour
 
     #endregion
     #region Public Functions
+
+    public void InvertY()
+    {
+        invertedY = !invertedY;
+        changeInverted.Invoke();
+    }
     public string GetColorName(Color color)
     {
         return _colorNames.Where(x => x.IsColor(color)).FirstOrDefault()?.Name ?? "Undefined";
