@@ -100,27 +100,27 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
 
     public void StartGameNetwork(bool colorBlindMode)
     {
-        _photonView.RPC("StartGame", RpcTarget.All, _gameController.ColorBlindMode);
+        _photonView.RPC("StartGame", RpcTarget.All, new object[] { _gameController.ColorBlindMode, _gameController.Seed } as object);
     }
 
     [PunRPC]
-    private void StartGame(bool colorBlindMode)
+    private void StartGame(object[] parameters)
     {
         if(PhotonNetwork.IsMasterClient)
         {
-            _gameController.StartGame(_networkController.GetLocalRole(), colorBlindMode);
+            _gameController.StartGame(_networkController.GetLocalRole(), (bool)parameters[0], (int)parameters[1]);
         }
         else
         {
             //_gameController.StartGame(_networkController.GetLocalRole(), colorBlindMode);
-            StartCoroutine(WaitBeforeStart(colorBlindMode));
+            StartCoroutine(WaitBeforeStart((bool)parameters[0], (int)parameters[1]));
         }
     }
 
-    private IEnumerator WaitBeforeStart(bool colorBlindMode)
+    private IEnumerator WaitBeforeStart(bool colorBlindMode, int seed)
     {
         yield return new WaitForSeconds(2);
-        _gameController.StartGame(_networkController.GetLocalRole(), colorBlindMode);
+        _gameController.StartGame(_networkController.GetLocalRole(), colorBlindMode, seed);
     }
 
 

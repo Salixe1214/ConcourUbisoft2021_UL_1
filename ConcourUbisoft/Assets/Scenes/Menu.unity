@@ -6080,6 +6080,7 @@ MonoBehaviour:
     _name: Purple
   - _color: {r: 0, g: 1, b: 0.7647059, a: 1}
     _name: Teal
+  _randomSeed: 0
 --- !u!4 &1209276559
 Transform:
   m_ObjectHideFlags: 0

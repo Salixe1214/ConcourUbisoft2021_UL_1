@@ -79,18 +79,22 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     private ImageLayout _imageList;
     private List<Sprite> _itemSprites = new List<Sprite>();
-    private System.Random _random = new System.Random(0);
+    private System.Random _random;
     private SoundController _soundController;
     private Vector3 _cameraOriginalPosition;
     private int _currentListIndex;
     private NetworkController _networkController = null;
     private float _lastTimeInverseControl = 0;
     private PhotonView _photonView = null;
+    private GameController _gameController = null;
 
     private List<Tuple<Vector3, Quaternion, Pickable>> _spawnedPickable = new List<Tuple<Vector3, Quaternion, Pickable>>();
 
     private void Awake()
     {
+        _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        _random = new System.Random(_gameController.Seed);
+
         _soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _cameraOriginalPosition = AreaCamera.transform.position;

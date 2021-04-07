@@ -40,15 +40,20 @@ public class FurnaceController : MonoBehaviour
     private SoundController soundController;
     private PhotonView _photonView = null;
     private NetworkController _networkController = null;
+    private GameController _gameController = null;
+
     private bool _firstSuccessPlayed;
     private bool _firstFailPlayed;
 
     public int SucceedSequences { get; private set; } = 0;
 
-    System.Random _random = new System.Random(0);
+    System.Random _random;
 
     private void Awake()
     {
+        _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        _random = new System.Random(_gameController.Seed);
+
         SequencesOfColor = new SequenceOfColor[nbColorSequences];
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
