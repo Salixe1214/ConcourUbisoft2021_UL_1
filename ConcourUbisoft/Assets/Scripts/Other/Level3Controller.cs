@@ -39,11 +39,13 @@ namespace Other
         private void OnEnable()
         {
             _dialogSystem.OnFinalDialog += WakeRobots;
+            _dialogSystem.OnFinalDialogMusicStart += DisableCameraEffect;
         }
 
         private void OnDisable()
         {
             _dialogSystem.OnFinalDialog -= WakeRobots;
+            _dialogSystem.OnFinalDialogMusicStart -= DisableCameraEffect;
         }
 
         public void StartLevel()
@@ -74,7 +76,6 @@ namespace Other
         {
             _dialogSystem.StartEndDialogue("Area03_end");
             //_photonView.RPC("DisableCameraEffect", RpcTarget.All);
-            DisableCameraEffect();
         }
 
         [PunRPC]
