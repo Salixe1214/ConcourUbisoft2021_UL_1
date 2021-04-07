@@ -26,6 +26,7 @@ public class RoomMenu : MonoBehaviour
     private SoundController _menuSoundController = null;
 
     #region UI Action
+
     public void LeaveRoom()
     {
         _menuSoundController.PlayButtonSound();
@@ -83,7 +84,7 @@ public class RoomMenu : MonoBehaviour
     private void Update()
     {
         _startButton.SetActive(_networkController.IsMasterClient());
-        _colorBlindToggle.interactable = _networkController.IsMasterClient();
+        _colorBlindToggle.gameObject.SetActive(_networkController.IsMasterClient());
     }
     #endregion
     #region Event Callbacks

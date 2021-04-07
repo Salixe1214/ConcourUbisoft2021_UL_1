@@ -7,6 +7,7 @@ using Arm;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class PlayerNetwork : MonoBehaviourPun, IPunObservable
@@ -23,9 +24,7 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     private PhotonView _photonView = null;
     private NetworkController _networkController = null;
     private GameController _gameController = null;
-
-    private Toggle _colorBlind = null;
-
+    
     #region Unity Callbacks
 
     private void Awake()
@@ -39,7 +38,6 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
     private void Start()
     {
         _networkController.InvokePlayerNetworkInstantiate();
-        _colorBlind = GameObject.FindWithTag("ColorBlind").GetComponent<Toggle>();
     }
 
     private void OnEnable()
@@ -72,13 +70,11 @@ public class PlayerNetwork : MonoBehaviourPun, IPunObservable
         {
             stream.SendNext((int)PlayerRole);
             stream.SendNext(Name);
-            stream.SendNext(_colorBlind.isOn);
         }
         else
         {
             this.PlayerRole = (GameController.Role)(int)stream.ReceiveNext();
             this.Name = (string)stream.ReceiveNext();
-            this._colorBlind.isOn = (bool) stream.ReceiveNext();
         }
     }
 
