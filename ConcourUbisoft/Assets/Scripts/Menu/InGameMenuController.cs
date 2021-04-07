@@ -19,6 +19,10 @@ public class InGameMenuController : MonoBehaviour
     [SerializeField] private GameObject _exitButton;
     [SerializeField] private GameObject _creditMenu;
     [SerializeField] private GameObject _creditFirstSelected;
+    [SerializeField] private GameObject _confirmationPanel;
+    [SerializeField] private Text _confirmationText;
+    [SerializeField] private GameObject _confirmExitButton;
+    [SerializeField] private GameObject _confirmReturnButton;
 
     private NetworkController _networkController = null;
     private GameController _gameController = null;
@@ -36,6 +40,7 @@ public class InGameMenuController : MonoBehaviour
         _soundController.PlayButtonSound();
         _inGameMenu.SetActive(false);
         _optionMenu.SetActive(true);
+        _confirmationPanel.SetActive(false);
         _currentMenu = Menus.Options;
         if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
         {
@@ -58,9 +63,34 @@ public class InGameMenuController : MonoBehaviour
             }
         }
     }
+
+    public void TriggerReturnToMenu()
+    {
+        _soundController.PlayButtonSound();
+        _confirmationText.text = "Return to menu";
+        _confirmReturnButton.SetActive(true);
+        _confirmExitButton.SetActive(false);
+        _confirmationPanel.SetActive(true);
+    }
+
+    public void TriggerExit()
+    {
+        _soundController.PlayButtonSound();
+        _confirmationText.text = "Exit the game";
+        _confirmReturnButton.SetActive(false);
+        _confirmExitButton.SetActive(true);
+        _confirmationPanel.SetActive(true);
+    }
+
+    public void CancelTrigger()
+    {
+        _soundController.PlayButtonSound();
+        _confirmationPanel.SetActive(false);
+    }
     public void ReturnToMenu()
     {
         _soundController.PlayButtonSound();
+        _confirmationPanel.SetActive(false);
         _loadScreenMenuController.Show("Returning to menu");
         IsGameMenuOpen = false;
         _gameController.UnLoadGame();
@@ -68,6 +98,7 @@ public class InGameMenuController : MonoBehaviour
     }
     public void ExitGame()
     {
+        _confirmationPanel.SetActive(false);
         _soundController.PlayButtonSound();
         Application.Quit();
     }
@@ -186,6 +217,8 @@ public class InGameMenuController : MonoBehaviour
         _optionBackSelected.GetComponentInChildren<TextColor>().OnExit();
         _returnButton.GetComponentInChildren<TextColor>().OnExit();
         _exitButton.GetComponentInChildren<TextColor>().OnExit();
+        _confirmExitButton.GetComponentInChildren<TextColor>().OnExit();
+        _confirmReturnButton.GetComponentInChildren<TextColor>().OnExit();
     }
 
     #endregion
