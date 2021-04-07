@@ -1,6 +1,7 @@
 using Photon.Pun;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Other
@@ -13,6 +14,7 @@ namespace Other
         [SerializeField] private float yRobotRotationSpeed = 50f;
         [SerializeField] private CameraEffectDisabled CameraEffect;
         [SerializeField] private GameObject TargetText;
+        [SerializeField] private float DelayBeforeEndMenu = 3;
 
         private DialogSystem _dialogSystem;
         private bool _endButtonPressed;
@@ -100,6 +102,7 @@ namespace Other
         {
             LeftRobot.GetComponentInChildren<RobotLight>().LightItUp();
             RightRobot.GetComponentInChildren<RobotLight>().LightItUp();
+            StartCoroutine(WaitBeforeShowingEndMenu());
         }
 
         IEnumerator RotateBots()
@@ -124,6 +127,12 @@ namespace Other
                 yield return null;
             }
             LightUpBots();
+        }
+
+        IEnumerator WaitBeforeShowingEndMenu()
+        {
+            yield return new WaitForSeconds(DelayBeforeEndMenu);
+            
         }
     }
 }
