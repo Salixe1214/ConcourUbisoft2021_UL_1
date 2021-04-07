@@ -27,6 +27,7 @@ public class DoorController : MonoBehaviour
     [SerializeField] private AnimationClip _openAnimation;
     [SerializeField] private AnimationClip _closeAnimation;
     private PhotonView _photonView = null;
+    private GameController _gameController;
 
     public UnityEvent OnError;
     public UnityEvent OnSuccess;
@@ -38,6 +39,10 @@ public class DoorController : MonoBehaviour
 
     private void Awake()
     {
+        _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        if (!_gameController.forceOrder)
+            isActive = true;
+        
         _animation = GetComponent<Animation>();
         _animation.clip = _openAnimation;
         _animation.AddClip(_openAnimation, "open");

@@ -38,6 +38,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject _speaking = null;
     [SerializeField] private ColorName[] _colorNames = null;
     [SerializeField] private bool _randomSeed = false;
+    [SerializeField] public bool forceOrder = false;
 
     private SoundController _soundController = null;
     private NetworkController _networkController = null;
