@@ -152,7 +152,7 @@ public class InGameMenuController : MonoBehaviour
     private void Update()
     {
         if (_gameController.IsGameStart &&
-            (_currentController == Controller.Playstation && Input.GetButtonDown("Cancel")||
+            (_currentController == Controller.Other && Input.GetButtonDown("Cancel")||
                                             (_currentController == Controller.Playstation &&Input.GetButtonDown("InGameMenuPS"))||
                                             (_currentController == Controller.Xbox&& Input.GetButtonDown("InGameMenuXBO"))))
         {
