@@ -16,6 +16,7 @@ public abstract class Conveyor : MonoBehaviour
 
     [SerializeField] protected float Speed = 0.0f;
     [SerializeField] protected int Priority = 0;
+    [SerializeField] private TextureAnimator[] textureAnimators = null;
 
     private Dictionary<TransportableByConveyor, ConveyorObjectData> objectsOnConveyor = new Dictionary<TransportableByConveyor, ConveyorObjectData>();
     private List<TransportableByConveyor> toRemoveNullReference = new List<TransportableByConveyor>();
@@ -78,6 +79,11 @@ public abstract class Conveyor : MonoBehaviour
     public void SetSpeed(float speed)
     {
         Speed = speed;
+
+        foreach (TextureAnimator ta in textureAnimators)
+        {
+            ta.SetTranslation(new Vector2(speed, 0));
+        }
     }
 
     public float GetSpeed()

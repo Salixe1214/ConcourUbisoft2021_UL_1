@@ -13,8 +13,8 @@ public class randomCodePicker : MonoBehaviour
         One = 0,
         Two = 1,
         Three = 2,
-        Four = 4,
-        Five = 5
+        Four = 3,
+        Five = 4
     }
 
     [SerializeField] private int _seedTemp = 0;

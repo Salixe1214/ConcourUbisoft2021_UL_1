@@ -13,6 +13,7 @@ using Random = UnityEngine.Random;
 public class Level2Controller : MonoBehaviour, LevelController
 {
     [SerializeField] private Color[] _possibleColors = null;
+    [SerializeField] private Conveyor _conveyor = null;
     [SerializeField] private GameObject[] _transportablesPrefab = null;
     [SerializeField] private SpawnObjectOnLineConveyor[] _spawners = null;
     [SerializeField] private FurnaceController _furnace = null;
@@ -225,10 +226,25 @@ public class Level2Controller : MonoBehaviour, LevelController
     {
         _levelInProgress = false;
         TimerPanel.SetActive(false);
+        StartCoroutine(DisableConveyor());
         _soundController.PlayLevelSequenceClearedSuccessSound();
         _imageList.Clean();
         _soundController.StopAreaMusic();
         _dialogSystem.StartDialog("Area02_end");
+        if(_armController.IsInversedX())
+        {
+            _armController.InverseX();
+        }
+        if (_armController.IsInversedZ())
+        {
+            _armController.InverseZ();
+        }
+    }
+
+    private IEnumerator DisableConveyor()
+    {
+        yield return new WaitForSeconds(5);
+        _conveyor.SetSpeed(0);
     }
 
     public void InitiateNextSequence()
@@ -312,7 +328,7 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     private void Update()
     {
-        if (_furnace.SucceedSequences >= 2)
+        if (_levelInProgress && _furnace.SucceedSequences >= 2)
         {
             if(Time.time - _lastTimeInverseControl > _delayInverse)
             {

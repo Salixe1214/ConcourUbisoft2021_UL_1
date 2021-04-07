@@ -135,15 +135,14 @@ public class CharacterControl : MonoBehaviour, IPunObservable
             _isMoving = (bool)stream.ReceiveNext();
             _verticalMovement = (float)stream.ReceiveNext();
             _horizontalMovement = (float)stream.ReceiveNext();
-            Vector3 newPostion = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
-            if (Vector3.Distance(newPostion, transform.position) > 3)
+            Vector3 newPosition = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+            if (Vector3.Distance(newPosition, transform.position) > 3)
             {
-                newPosition = newPostion;
+                transform.position = newPosition;
             }
             else
             {
-                newPosition = newPostion;
-               
+                this.newPosition = newPosition;
             }
             newQuartenion = new Quaternion((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
         }

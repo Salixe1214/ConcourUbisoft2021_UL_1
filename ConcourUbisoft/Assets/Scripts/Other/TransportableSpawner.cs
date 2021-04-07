@@ -105,11 +105,6 @@ public class TransportableSpawner : MonoBehaviour
 		{
 			c.SetSpeed(speed);
 		}
-
-		foreach (TextureAnimator ta in textureAnimators)
-		{
-			ta.SetTranslation(new Vector2(speed, 0));
-		}
 	}
 
 	public void SetDelayBetweenSpawns(Vector2 delay)
