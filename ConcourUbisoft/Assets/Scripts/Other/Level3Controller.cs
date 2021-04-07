@@ -12,6 +12,7 @@ namespace Other
         [SerializeField] private float xRobotRotationSpeed =20f;
         [SerializeField] private float yRobotRotationSpeed = 50f;
         [SerializeField] private CameraEffectDisabled CameraEffect;
+        [SerializeField] private GameObject TargetText;
 
         private DialogSystem _dialogSystem;
         private bool _endButtonPressed;
@@ -87,6 +88,7 @@ namespace Other
         private void DisableCameraEffect()
         {
             CameraEffect.Disable();
+            TargetText.SetActive(true);
         }
 
         private void WakeRobots()
