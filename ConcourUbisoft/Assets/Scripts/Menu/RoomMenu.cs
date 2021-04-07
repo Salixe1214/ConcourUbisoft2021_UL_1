@@ -56,7 +56,7 @@ public class RoomMenu : MonoBehaviour
         //}
 
         _errorText.text = "";
-        _gameController.InitiateStartGame(_networkController.GetLocalRole(), _colorBlindToggle.isOn);
+        _gameController.InitiateStartGame(_networkController.GetLocalRole());
     }
     #endregion
     #region Unity Callbacks
@@ -83,7 +83,7 @@ public class RoomMenu : MonoBehaviour
     private void Update()
     {
         _startButton.SetActive(_networkController.IsMasterClient());
-        _colorBlindToggle.gameObject.SetActive(_networkController.IsMasterClient());
+        _colorBlindToggle.interactable = _networkController.IsMasterClient();
     }
     #endregion
     #region Event Callbacks

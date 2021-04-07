@@ -193,9 +193,9 @@ public class GameController : MonoBehaviour
         return _colorNames.Where(x => x.IsColor(color)).FirstOrDefault()?.Name ?? "Undefined";
     }
 
-    public void InitiateStartGame(Role role, bool colorBlindMode)
+    public void InitiateStartGame(Role role)
     {
-        _networkController.GetOwnNetworkPlayer().StartGameNetwork(colorBlindMode);
+        _networkController.GetOwnNetworkPlayer().StartGameNetwork();
     }
 
     public void StartGame(Role role, bool colorBlindMode)

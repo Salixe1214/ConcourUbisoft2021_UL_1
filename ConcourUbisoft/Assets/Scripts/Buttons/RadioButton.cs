@@ -53,7 +53,7 @@ namespace Buttons
         public override void OnPointerEnter(PointerEventData eventData)
         {
             base.OnPointerEnter(eventData);
-//            if (isOn || !interactable) return;
+            if (isOn || !interactable) return;
             _text.OnSelectedEnter();
             graphic.color = colors.highlightedColor;
         }
