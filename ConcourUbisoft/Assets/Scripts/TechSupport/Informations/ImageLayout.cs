@@ -8,7 +8,6 @@ namespace TechSupport.Informations
     public class ImageLayout : HorizontalLayoutGroup
     {
         private static readonly int Checked = Animator.StringToHash("Checked");
-        private static readonly Vector2 _zoomScale = new Vector2(1.2f, 1.2f);
         
         private readonly List<Image> _images;
         private GameObject _checkAnimation = null;
@@ -98,24 +97,16 @@ namespace TechSupport.Informations
             _images[index].material = blur ? _blurMaterial : null;
         }
 
-        public void ZoomImage(int index, bool zoom)
-        {
-            Debug.Log("Zoom Image for index: " + index);
-            _images[index].rectTransform.sizeDelta = zoom ? _zoomScale : Vector2.one;
-        }
-
         public void SelectItem(int index)
         {
             if (index > 0)
             {
                 CheckSprite(index - 1);
                 BlurImage(index - 1, true);
-                ZoomImage(index - 1, false);
             }
             if (index >= _images.Count)
                 return;
             BlurImage(index, false);
-            ZoomImage(index, true);
         }
 
         public void DeleteSprite(int at)
