@@ -9,6 +9,8 @@ namespace Other
     {
         [SerializeField] private GameObject RightRobot;
         [SerializeField] private GameObject LeftRobot;
+        [SerializeField] private float xRobotRotationSpeed =10f;
+        [SerializeField] private float yRobotRotationSpeed = 10f;
 
         private DialogSystem _dialogSystem;
         private bool _endButtonPressed;
@@ -25,6 +27,14 @@ namespace Other
         {
            // _dialogSystem = GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>();
             _endButtonPressed = false;
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyUp(KeyCode.V))
+            {
+                StartCoroutine(RotateBots());
+            }
         }
 
         private void OnEnable()
@@ -67,12 +77,37 @@ namespace Other
 
         private void WakeRobots()
         {
-            RightRobot.transform.Rotate(Vector3.right,-20f);
-            LeftRobot.transform.Rotate(Vector3.right,-20f);
-            
-            RightRobot.transform.Rotate(Vector3.up,180f);
-            LeftRobot.transform.Rotate(Vector3.up,180f);
+            StartCoroutine(RotateBots());
         }
 
+        private void LightUpBots()
+        {
+            
+        }
+
+        IEnumerator RotateBots()
+        {
+            float XRotationAccumulator = 20;
+            float YRotationAccumulator = 0;
+            while (XRotationAccumulator >=0.1f && YRotationAccumulator <= 179f)
+            {
+                if (XRotationAccumulator >= 0.1f)
+                {
+                    float _rotation = -xRobotRotationSpeed * Time.deltaTime;
+                    RightRobot.transform.Rotate(Vector3.right,_rotation);
+                    LeftRobot.transform.Rotate(Vector3.right,_rotation);
+                    XRotationAccumulator -= _rotation;
+                }
+
+                if (YRotationAccumulator <= 179f)
+                {
+                    float _rotation = yRobotRotationSpeed * Time.deltaTime;
+                    RightRobot.transform.Rotate(Vector3.up,_rotation);
+                    LeftRobot.transform.Rotate(Vector3.up,_rotation);
+                    YRotationAccumulator += _rotation;
+                }
+                yield return null;
+            }
+        }
     }
 }
