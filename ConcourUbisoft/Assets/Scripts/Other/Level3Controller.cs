@@ -80,7 +80,8 @@ namespace Other
 
         private void LightUpBots()
         {
-            
+            LeftRobot.GetComponentInChildren<RobotLight>().LightItUp();
+            RightRobot.GetComponentInChildren<RobotLight>().LightItUp();
         }
 
         IEnumerator RotateBots()
@@ -104,6 +105,7 @@ namespace Other
                 }
                 yield return null;
             }
+            LightUpBots();
         }
     }
 }
