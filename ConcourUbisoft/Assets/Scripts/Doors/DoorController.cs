@@ -40,7 +40,7 @@ public class DoorController : MonoBehaviour
     private void Awake()
     {
         _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        if (!_gameController.forceOrder)
+        if (!_gameController.ForceOrder)
             isActive = true;
         
         _animation = GetComponent<Animation>();

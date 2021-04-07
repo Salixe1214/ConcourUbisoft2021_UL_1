@@ -37,8 +37,10 @@ public class GameController : MonoBehaviour
     [SerializeField] private InGameMenuController _inGameMenuController = null;
     [SerializeField] private GameObject _speaking = null;
     [SerializeField] private ColorName[] _colorNames = null;
+    [SerializeField] private GameObject _pauseMenu;
     [SerializeField] private bool _randomSeed = false;
-    [SerializeField] public bool forceOrder = false;
+    [SerializeField] private bool forceOrder = false;
+    
 
     private SoundController _soundController = null;
     private NetworkController _networkController = null;
@@ -55,6 +57,10 @@ public class GameController : MonoBehaviour
     public OptionController OptionController { get => _optionController; }
     public bool IsGameMenuOpen { get => _inGameMenuController.IsGameMenuOpen; }
     public int Seed { get; private set; }
+    
+    public bool ForceOrder { get; private set; }
+
+    public GameObject PauseMenu { get ; private set; }
 
     #region Events
     public event Action OnLoadGameEvent;
@@ -67,6 +73,8 @@ public class GameController : MonoBehaviour
         _soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _inputManager = GameObject.FindWithTag("InputManager")?.GetComponent<InputManager>();
+        ForceOrder = forceOrder;
+        PauseMenu = _pauseMenu;
     }
     private void OnEnable()
     {

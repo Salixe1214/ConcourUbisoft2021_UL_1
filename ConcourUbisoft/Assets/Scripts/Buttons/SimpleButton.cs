@@ -26,10 +26,13 @@ public class SimpleButton : MonoBehaviour
 
     private PlayerNetwork _playerNetwork;
 
-    private void Awake()
+    private GameObject _pauseMenu;
+
+    private void Start()
     {
         _playerNetwork = GameObject.FindWithTag("PlayerNetwork").GetComponent<PlayerNetwork>();
-        
+        _pauseMenu = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().PauseMenu;
+
         _audioSource = GetComponent<AudioSource>();
         _animator = GetComponentInChildren<Animator>();
         _outline = GetComponentInChildren<Outline>();
@@ -48,7 +51,7 @@ public class SimpleButton : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (_playerNetwork.GetRole() == GameController.Role.SecurityGuard)
+        if (_playerNetwork.GetRole() == GameController.Role.SecurityGuard && !_pauseMenu.activeSelf)
         {
             if (!_reachable && Vector3.Distance(_player.transform.position, gameObject.transform.position) < maxDistance)
             {
