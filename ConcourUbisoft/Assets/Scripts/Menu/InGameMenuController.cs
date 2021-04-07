@@ -155,9 +155,9 @@ public class InGameMenuController : MonoBehaviour
         {
             if (IsGameMenuOpen)
             {
+                ResetButtonTextColor();
                 _inGameMenu.SetActive(false);
                 _optionMenu.SetActive(false);
-                ResetButtonTextColor();
             }
             else
             {
@@ -217,8 +217,6 @@ public class InGameMenuController : MonoBehaviour
         _optionBackSelected.GetComponentInChildren<TextColor>().OnExit();
         _returnButton.GetComponentInChildren<TextColor>().OnExit();
         _exitButton.GetComponentInChildren<TextColor>().OnExit();
-        _confirmExitButton.GetComponentInChildren<TextColor>().OnExit();
-        _confirmReturnButton.GetComponentInChildren<TextColor>().OnExit();
     }
 
     #endregion

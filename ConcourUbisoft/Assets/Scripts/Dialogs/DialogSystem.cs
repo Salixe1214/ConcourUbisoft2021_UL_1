@@ -77,6 +77,7 @@ public class DialogSystem : MonoBehaviour
     private bool isEnd = false;
 
     public event Action OnFinalDialog;
+    public event Action OnFinalDialogMusicStart;
 
     private void Awake()
     {
@@ -565,6 +566,7 @@ public class DialogSystem : MonoBehaviour
             yield return new WaitForSeconds(2 * (_endTime[0+1] - _endTime[0]));
         }
         endMusic.Play();
+        OnFinalDialogMusicStart?.Invoke();
         for (int i = 0 ; i < 6 ; i++)
         {
             for (int j = 0; j < 3; j++)

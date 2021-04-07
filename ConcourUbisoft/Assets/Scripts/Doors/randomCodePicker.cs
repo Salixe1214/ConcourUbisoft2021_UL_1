@@ -25,6 +25,8 @@ public class randomCodePicker : MonoBehaviour
     private Random _random;
     private GameController _gameController = null;
 
+    // private static int seedModif = 0;
+
     // When the object awake, it randomly compose a combination of two different symbols of two different colors
     private void Awake()
     {
