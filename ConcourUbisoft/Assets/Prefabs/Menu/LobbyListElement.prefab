@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbcdfd7783cb00f419622e915ec0515b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onChangeColor: {r: 0.90588236, g: 0.68235296, b: 0.24705882, a: 1}
+  onChangeColor: {r: 0.6784314, g: 0.6745098, b: 0.6784314, a: 1}
 --- !u!1 &136469698328638472
 GameObject:
   m_ObjectHideFlags: 0

@@ -28,12 +28,14 @@ namespace Other
 
         public void OnSelectedEnter()
         {
-            _text.color = onChangeColor;
+            if (_text)
+                _text.color = onChangeColor;
         }
 
         public void OnSelectedExit()
         {
-            _text.color = _defaultColor;
+            if (_text)
+                _text.color = _defaultColor;
         }
     }
 }
