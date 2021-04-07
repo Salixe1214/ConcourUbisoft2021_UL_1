@@ -900,6 +900,8 @@ MonoBehaviour:
   Id: 0
   audioSource: {fileID: 4192941093743104213}
   audioClip: {fileID: 8300000, guid: 659f3224e0f77444d8a93b120d92c906, type: 3}
+  _openAnimation: {fileID: 7400000, guid: c3e3a55680438824a94b4b897bd53bda, type: 2}
+  _closeAnimation: {fileID: 7400000, guid: f1a3444eb5997ab4e9740fff7132da47, type: 2}
   OnError:
     m_PersistentCalls:
       m_Calls:
@@ -980,6 +982,33 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+  OnClose:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8892310260985401137}
+        m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1080062190}
+        m_TargetAssemblyTypeName: DoorLight, Assembly-CSharp
+        m_MethodName: OnCLose
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &8948978638033349432
 MonoBehaviour:

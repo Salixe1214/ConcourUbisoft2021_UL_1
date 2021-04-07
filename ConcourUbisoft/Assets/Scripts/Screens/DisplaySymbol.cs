@@ -31,6 +31,7 @@ public class DisplaySymbol : MonoBehaviour
                 throw new Exception("This pannel ID doesn't exist!\nChoices are: 1 or 2");
         }
 
+        Debug.Log(_symbol);
         _renderer.material.mainTexture = spritesList[(int)_symbol].texture;
     }
 

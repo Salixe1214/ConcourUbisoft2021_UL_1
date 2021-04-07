@@ -27,7 +27,6 @@ public class ArmSound : MonoBehaviour, IPunObservable
     {
         guardAudio.volume = Mathf.Lerp(0,1, Volume)*0.3f;
         techAudio.volume = Mathf.Lerp(0,1, Volume)*0.3f;
-        Debug.LogWarning(techAudio.volume + " From sound controller.");
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

@@ -7,7 +7,11 @@ namespace TechSupport.Informations
 {
     public class ImageLayout : HorizontalLayoutGroup
     {
+        private static readonly int Checked = Animator.StringToHash("Checked");
+        
         private readonly List<Image> _images;
+        private GameObject _checkAnimation = null;
+        private Material _blurMaterial = null;
         public Font Font { get; set; }
         public float TextOffset { get; set; } = -40.0f;
 
@@ -45,6 +49,7 @@ namespace TechSupport.Informations
             text.transform.Translate(new Vector3(0, TextOffset, 0));
 
             image.preserveAspect = true;
+            image.material = _blurMaterial;
             image.GetComponent<RectTransform>()?.SetParent(gameObject.transform);
 
             RectTransform imageTransform = image.GetComponent<RectTransform>();
@@ -55,9 +60,7 @@ namespace TechSupport.Informations
             imageTransform.localPosition = new Vector3(0, 0, 0);
             imageTransform.localRotation = Quaternion.identity;
             imageTransform.anchoredPosition = new Vector2(0, 0);
-
-
-
+            
             return image;
         }
 
@@ -67,6 +70,44 @@ namespace TechSupport.Informations
         }
         
         #endregion
+
+        public void SetCheckImage(GameObject prefabs)
+        {
+            _checkAnimation = prefabs;
+        }
+
+        public void SetBlurMaterial(Material material)
+        {
+            _blurMaterial = material;
+        }
+
+        public void CheckSprite(int index)
+        {
+            if (!_checkAnimation)
+                return;
+            Debug.Log("Sprite checked for: " + index);
+            Animator animator = Instantiate(_checkAnimation, _images[index].transform).GetComponent<Animator>();
+            animator.SetBool(Checked, true);
+        }
+
+        public void BlurImage(int index, bool blur)
+        {
+            if (!_blurMaterial)
+                return;
+            _images[index].material = blur ? _blurMaterial : null;
+        }
+
+        public void SelectItem(int index)
+        {
+            if (index > 0)
+            {
+                CheckSprite(index - 1);
+                BlurImage(index - 1, true);
+            }
+            if (index >= _images.Count)
+                return;
+            BlurImage(index, false);
+        }
 
         public void DeleteSprite(int at)
         {
@@ -81,13 +122,6 @@ namespace TechSupport.Informations
             if (at >= _images.Count)
                 return;
             _images[at].sprite = sprite;
-        }
-
-        public void HighlightSprite(int index)
-        {
-            if (index >= _images.Count)
-                return;
-            //_images[index].;
         }
 
         public void UpdateSpriteColor(int index, Color color)
@@ -122,6 +156,7 @@ namespace TechSupport.Informations
             {
                 AddSprite(images.ElementAt(i),colors[i]);
             }
+            SelectItem(0);
         }
 
         public void UpdateLayout(IEnumerable<Sprite> images)
@@ -137,5 +172,6 @@ namespace TechSupport.Informations
                 i++;
             }
         }
+
     }
 }

@@ -13,6 +13,7 @@ using Random = UnityEngine.Random;
 public class Level2Controller : MonoBehaviour, LevelController
 {
     [SerializeField] private Color[] _possibleColors = null;
+    [SerializeField] private Conveyor _conveyor = null;
     [SerializeField] private GameObject[] _transportablesPrefab = null;
     [SerializeField] private SpawnObjectOnLineConveyor[] _spawners = null;
     [SerializeField] private FurnaceController _furnace = null;
@@ -78,18 +79,22 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     private ImageLayout _imageList;
     private List<Sprite> _itemSprites = new List<Sprite>();
-    private System.Random _random = new System.Random(0);
+    private System.Random _random;
     private SoundController _soundController;
     private Vector3 _cameraOriginalPosition;
     private int _currentListIndex;
     private NetworkController _networkController = null;
     private float _lastTimeInverseControl = 0;
     private PhotonView _photonView = null;
+    private GameController _gameController = null;
 
     private List<Tuple<Vector3, Quaternion, Pickable>> _spawnedPickable = new List<Tuple<Vector3, Quaternion, Pickable>>();
 
     private void Awake()
     {
+        _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        _random = new System.Random(_gameController.Seed);
+
         _soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _cameraOriginalPosition = AreaCamera.transform.position;
@@ -225,10 +230,25 @@ public class Level2Controller : MonoBehaviour, LevelController
     {
         _levelInProgress = false;
         TimerPanel.SetActive(false);
+        StartCoroutine(DisableConveyor());
         _soundController.PlayLevelSequenceClearedSuccessSound();
         _imageList.Clean();
         _soundController.StopAreaMusic();
         _dialogSystem.StartDialog("Area02_end");
+        if(_armController.IsInversedX())
+        {
+            _armController.InverseX();
+        }
+        if (_armController.IsInversedZ())
+        {
+            _armController.InverseZ();
+        }
+    }
+
+    private IEnumerator DisableConveyor()
+    {
+        yield return new WaitForSeconds(5);
+        _conveyor.SetSpeed(0);
     }
 
     public void InitiateNextSequence()
@@ -312,7 +332,7 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     private void Update()
     {
-        if (_furnace.SucceedSequences >= 2)
+        if (_levelInProgress && _furnace.SucceedSequences >= 2)
         {
             if(Time.time - _lastTimeInverseControl > _delayInverse)
             {

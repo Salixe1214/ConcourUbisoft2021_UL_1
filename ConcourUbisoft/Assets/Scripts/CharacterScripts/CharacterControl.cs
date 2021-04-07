@@ -35,6 +35,8 @@ public class CharacterControl : MonoBehaviour, IPunObservable
     private float _verticalMovement = 0.0f;
     private GameController _gameController = null;
 
+    [SerializeField] private DoorController door3;
+
     private void Awake()
     {
         _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
@@ -45,8 +47,8 @@ public class CharacterControl : MonoBehaviour, IPunObservable
         SimpleButton[] buttons = GameObject.FindObjectsOfType<SimpleButton>();
         foreach (SimpleButton button in buttons)
         {
-            button.BeforeActions.AddListener(() => _animator.SetBool("PressingButton", true));
-            button.AfterActions.AddListener(() => _animator.SetBool("PressingButton", false));
+            button.BeforeActions.AddListener(() => _photonView.RPC("SetAnimatorPressButton", RpcTarget.All, new object[] { true } as object));
+            button.AfterActions.AddListener(() => _photonView.RPC("SetAnimatorPressButton", RpcTarget.All, new object[] { false } as object));
         }
     }
 
@@ -115,6 +117,26 @@ public class CharacterControl : MonoBehaviour, IPunObservable
         }
     }
 
+    [PunRPC]
+    private void SetAnimatorPressButton(object[] parameters)
+    {
+        Debug.Log($"Set Press {(bool)parameters[0]}");
+        if((bool)parameters[0])
+        {
+            _animator.SetBool("PressingButton", true);
+        }
+        else
+        {
+            StartCoroutine(TurnOffPressButton());
+        }
+    }
+
+    IEnumerator TurnOffPressButton()
+    {
+        yield return 0;
+        _animator.SetBool("PressingButton", false);
+    }
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
@@ -135,17 +157,24 @@ public class CharacterControl : MonoBehaviour, IPunObservable
             _isMoving = (bool)stream.ReceiveNext();
             _verticalMovement = (float)stream.ReceiveNext();
             _horizontalMovement = (float)stream.ReceiveNext();
-            Vector3 newPostion = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
-            if (Vector3.Distance(newPostion, transform.position) > 3)
+            Vector3 newPosition = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+            if (Vector3.Distance(newPosition, transform.position) > 3)
             {
-                newPosition = newPostion;
+                transform.position = newPosition;
             }
             else
             {
-                newPosition = newPostion;
-               
+                this.newPosition = newPosition;
             }
             newQuartenion = new Quaternion((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("EndZoneCollider"))
+        {
+            door3.CloseDoor();
         }
     }
 }

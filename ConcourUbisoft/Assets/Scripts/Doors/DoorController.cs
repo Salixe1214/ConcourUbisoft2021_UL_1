@@ -1,3 +1,4 @@
+using System;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,18 +23,24 @@ public class DoorController : MonoBehaviour
     [SerializeField] private AudioClip audioClip;
     private List<Direction> _inputSequences;
     private List<Direction> _currentSequences = new List<Direction>();
-    private Animation _animation = null;
+    private Animation _animation;
+    [SerializeField] private AnimationClip _openAnimation;
+    [SerializeField] private AnimationClip _closeAnimation;
     private PhotonView _photonView = null;
 
     public UnityEvent OnError;
     public UnityEvent OnSuccess;
     public UnityEvent OnEntry;
+    public UnityEvent OnClose;
 
     public bool IsUnlock { get; private set; } = false;
 
     private void Awake()
     {
         _animation = GetComponent<Animation>();
+        _animation.clip = _openAnimation;
+        _animation.AddClip(_openAnimation, "open");
+        _animation.AddClip(_closeAnimation, "close");
         _photonView = GetComponent<PhotonView>();
         _inputSequences = GetComponent<randomCodePicker>().GetSequence();
     }
@@ -66,10 +73,16 @@ public class DoorController : MonoBehaviour
     public void Unlock()
     {
         IsUnlock = true;
-        _animation.Play();
+        _animation.clip = _openAnimation;
+        _animation.Play("open");
         audioSource.clip = audioClip;
         audioSource.Play();
         OnSuccess?.Invoke();
+    }
+
+    public void CloseDoor()
+    {
+        _photonView.RPC("CloseDoorNetwork", RpcTarget.AllBuffered);
     }
 
     [PunRPC]
@@ -147,5 +160,33 @@ public class DoorController : MonoBehaviour
         }
 
         _currentSequences.Clear();
+    }
+
+    [PunRPC]
+
+    public void CloseDoorNetwork()
+    {
+        if (IsUnlock)
+        {
+            IsUnlock = false;
+            _currentSequences.Clear();
+            _animation.clip = _closeAnimation;
+            _animation.Play("close");
+            audioSource.clip = audioClip;
+            audioSource.Play();
+            OnClose.Invoke();
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftAlt))
+        {
+            CloseDoor();
+        }
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            Unlock();
+        }
     }
 }

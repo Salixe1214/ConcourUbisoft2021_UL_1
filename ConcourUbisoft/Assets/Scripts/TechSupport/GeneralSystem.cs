@@ -41,7 +41,6 @@ namespace TechSupport
         [Header("Surveillance System")]
         [SerializeField] private SurveillanceMode mode = SurveillanceMode.Grid; // Default mode : grid
         [SerializeField] private List<OrderedItems> cameras;
-        [SerializeField] [NotNull] public GameObject tabulationIndicationButton;
         
         [Header("Button to Select camera")]
         [SerializeField] private Sprite outlineSprite;
@@ -98,14 +97,6 @@ namespace TechSupport
             _currentController = InputManager.GetController();
         }
 
-        private void Update()
-        {
-            if (Input.GetButtonUp(InputManager.GetInputNameByController("CameraEscape")))
-            {
-                FocusBack();
-            }
-        }
-
         private void OnEnable()
         {
             _inputManager.OnControllerTypeChanged += OnControllerTypeChanged;
@@ -122,6 +113,10 @@ namespace TechSupport
             if (mode == SurveillanceMode.Focused)
             {
                 SystemSwitch(SurveillanceMode.Grid);
+            }
+            else
+            {
+                FocusBack();
             }
         }
 
@@ -178,10 +173,6 @@ namespace TechSupport
             }*/
         }
 
-        private void HideGeneralInformation(bool hide)
-        {
-            //_informationsSystem.GetInformationDisplay().gameObject.SetActive(!hide);
-        }
 
         private void ActivateGridInterface(bool activate)
         {
@@ -207,14 +198,14 @@ namespace TechSupport
             {
                 _exitMethods[mode]?.Invoke();
             }
-            _informationsSystem.ActvivateInformation(newMode == SurveillanceMode.Focused);
+            // TODO: Uncomment if the information must be hide
+            // _informationsSystem.ActivateInformation(newMode == SurveillanceMode.Focused);
             _onSwitchMethods[mode = newMode]?.Invoke();
             OnModeSwitched?.Invoke();
         }
 
         private void ExitFullScreen()
         {
-            tabulationIndicationButton.SetActive(false);
             _fullScreenSystem.EscapeFullScreen();
         }
 
@@ -224,7 +215,6 @@ namespace TechSupport
             _eventSystem.SetSelectedGameObject(null);
             
             ActivateGridInterface(false);
-            HideGeneralInformation(true);
 
         }
 
@@ -241,14 +231,12 @@ namespace TechSupport
             {
                 _eventSystem.SetSelectedGameObject(null);
             }
-            HideGeneralInformation(false);
             _gridSystem.Grid(cameras.Select(input => input.items.GetCamera()));
         }
 
         private void OnFullScreen()
         {
             EnableAll(false);
-            tabulationIndicationButton.SetActive(true);
             _fullScreenSystem.RenderFullScreen();
         }
 

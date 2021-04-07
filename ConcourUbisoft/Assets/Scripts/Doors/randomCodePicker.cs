@@ -13,8 +13,8 @@ public class randomCodePicker : MonoBehaviour
         One = 0,
         Two = 1,
         Three = 2,
-        Four = 4,
-        Five = 5
+        Four = 3,
+        Five = 4
     }
 
     [SerializeField] private int _seedTemp = 0;
@@ -23,11 +23,14 @@ public class randomCodePicker : MonoBehaviour
     private Symbol _secondSymbol;
     private List<DoorController.Direction> _sequence = new List<DoorController.Direction>();
     private Random _random;
+    private GameController _gameController = null;
 
     // When the object awake, it randomly compose a combination of two different symbols of two different colors
     private void Awake()
     {
-        _random = new Random(_seedTemp);
+        _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+
+        _random = new Random(_gameController.Seed - 99 + _seedTemp);
 
         #region choosing Symbol
 

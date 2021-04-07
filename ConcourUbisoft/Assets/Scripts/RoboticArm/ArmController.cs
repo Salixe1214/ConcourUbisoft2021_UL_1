@@ -130,6 +130,16 @@ namespace Arm
 			}
 		}
 
+        public bool IsInversedX()
+        {
+            return aligment.GetRow(0).x == -1;
+        }
+
+        public bool IsInversedZ()
+        {
+            return aligment.GetRow(2).z == -1;
+        }
+
         public void InverseX()
         {
             aligment.SetRow(0, aligment.GetRow(0) * -1);

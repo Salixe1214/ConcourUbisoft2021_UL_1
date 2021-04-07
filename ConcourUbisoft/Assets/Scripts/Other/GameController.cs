@@ -36,6 +36,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private InGameMenuController _inGameMenuController = null;
     [SerializeField] private GameObject _speaking = null;
     [SerializeField] private ColorName[] _colorNames = null;
+    [SerializeField] private bool _randomSeed = false;
 
     private SoundController _soundController = null;
     private NetworkController _networkController = null;
@@ -48,7 +49,8 @@ public class GameController : MonoBehaviour
     public bool ColorBlindMode { get; set; }
     public OptionController OptionController { get => _optionController; }
     public bool IsGameMenuOpen { get => _inGameMenuController.IsGameMenuOpen; }
-    
+    public int Seed { get; private set; }
+
     #region Events
     public event Action OnLoadGameEvent;
     public event Action OnFinishLoadGameEvent;
@@ -57,7 +59,6 @@ public class GameController : MonoBehaviour
     #region Unity Callbacks
     private void Awake()
     {
-        UnityEngine.Random.InitState(0);
         _soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
         _inputManager = GameObject.FindWithTag("InputManager")?.GetComponent<InputManager>();
@@ -111,7 +112,7 @@ public class GameController : MonoBehaviour
         while (!operation.isDone)
         {
             yield return null;
-        } 
+        }
         _soundController.StopAmbientSound();
         _soundController.StopAreaMusic();
        _networkController.LeaveLobby();
@@ -193,20 +194,25 @@ public class GameController : MonoBehaviour
         return _colorNames.Where(x => x.IsColor(color)).FirstOrDefault()?.Name ?? "Undefined";
     }
 
-    public void InitiateStartGame(Role role, bool colorBlindMode)
+    public void InitiateStartGame(Role role)
     {
-        _networkController.GetOwnNetworkPlayer().StartGameNetwork(colorBlindMode);
+        if (_randomSeed)
+        {
+            Seed = new System.Random().Next();
+        }
+        _networkController.GetOwnNetworkPlayer().StartGameNetwork();
     }
 
-    public void StartGame(Role role, bool colorBlindMode)
+    public void StartGame(Role role, bool colorBlindMode, int seed)
     {
         Debug.Log($"Start Game with role {role}");
         GameRole = role;
         ColorBlindMode = colorBlindMode;
         _soundController.SetSound(GameRole);
+        Seed = seed;
         StartCoroutine("LoadAsyncLevel");
     }
- 
+
     public void UnLoadGame()
     {
         StartCoroutine("UnloadAsyncLevel");

@@ -26,16 +26,20 @@ public class TransportableSpawner : MonoBehaviour
 	private float lastSpawnTime = 0.0f;
 	private float currentDelay = 0.0f;
 	private LevelController levelController;
-	private System.Random _random = new System.Random(0);
+	private System.Random _random;
 	private PickableType[] currentSequenceTypes;
 	private Color[] currentSequenceColors;
 
 	public bool canSpawnNextRequiredItem = false;
 	public event Action requiredItemHasSpawned;
+    private GameController _gameController = null;
 
-	private void Start()
+    private void Start()
 	{
-		levelController = LevelControl.GetComponent<LevelController>();
+        _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        _random = new System.Random(_gameController.Seed);
+
+        levelController = LevelControl.GetComponent<LevelController>();
 		_networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
 	}
 
@@ -104,11 +108,6 @@ public class TransportableSpawner : MonoBehaviour
 		foreach (Conveyor c in conveyors)
 		{
 			c.SetSpeed(speed);
-		}
-
-		foreach (TextureAnimator ta in textureAnimators)
-		{
-			ta.SetTranslation(new Vector2(speed, 0));
 		}
 	}
 
