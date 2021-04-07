@@ -81,10 +81,16 @@ namespace Arm
 		{
 			if (grabbedAtleastOnce && gameObject.activeInHierarchy)
 			{
-				_audioSource.clip = onHitSound;
-				_audioSource.volume = volumeMultiplier;
-				_audioSource.Play();
+				PlayHitSoundNetwork();
 			}
+		}
+
+		[PunRPC]
+		private void PlayHitSoundNetwork()
+		{
+			_audioSource.clip = onHitSound;
+			_audioSource.volume = volumeMultiplier;
+			_audioSource.Play();
 		}
 
 		public bool Contains(Vector3 point)
