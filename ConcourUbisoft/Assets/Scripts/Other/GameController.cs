@@ -40,7 +40,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject _pauseMenu;
     [SerializeField] private bool _randomSeed = false;
     [SerializeField] private bool forceOrder = false;
-    
+    [SerializeField] private bool forceTwoPlayers = false;
 
     private SoundController _soundController = null;
     private NetworkController _networkController = null;
@@ -62,6 +62,8 @@ public class GameController : MonoBehaviour
 
     public GameObject PauseMenu { get ; private set; }
 
+    public bool ForceTwoPlayers { get; private set; }
+
     #region Events
     public event Action OnLoadGameEvent;
     public event Action OnFinishLoadGameEvent;
@@ -75,6 +77,7 @@ public class GameController : MonoBehaviour
         _inputManager = GameObject.FindWithTag("InputManager")?.GetComponent<InputManager>();
         ForceOrder = forceOrder;
         PauseMenu = _pauseMenu;
+        ForceTwoPlayers = forceTwoPlayers;
     }
     private void OnEnable()
     {

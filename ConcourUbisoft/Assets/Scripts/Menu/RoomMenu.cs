@@ -43,18 +43,21 @@ public class RoomMenu : MonoBehaviour
         _menuSoundController.PlayButtonSound();
         IEnumerable<PlayerNetwork> playerNetworks = GameObject.FindGameObjectsWithTag("Player").Select(x => x.GetComponent<PlayerNetwork>());
 
-        //if (playerNetworks.Count() != 2)
-        //{
-        //    errorText.text = "You must have two players to proceed.";
-        //    return;
-        //}
+        if (_gameController.ForceTwoPlayers)
+        {
+            if (playerNetworks.Count() != 2)
+            {
+                _errorText.text = "You must have two players to proceed.";
+                return;
+            }
 
-        //IEnumerable<PlayerNetwork> playerNetworksDistinctRole = playerNetworks.GroupBy(x => x.PlayerRole).Select(x => x.First());
-        //if (playerNetworksDistinctRole.Count() != playerNetworks.Count())
-        //{
-        //    errorText.text = "You cannot have players with the same role.";
-        //    return;
-        //}
+            IEnumerable<PlayerNetwork> playerNetworksDistinctRole = playerNetworks.GroupBy(x => x.PlayerRole).Select(x => x.First());
+            if (playerNetworksDistinctRole.Count() != playerNetworks.Count())
+            {
+                _errorText.text = "You cannot have players with the same role.";
+                return;
+            } 
+        }
 
         _errorText.text = "";
         _gameController.InitiateStartGame(_networkController.GetLocalRole());
