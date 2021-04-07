@@ -45,8 +45,8 @@ public class CharacterControl : MonoBehaviour, IPunObservable
         SimpleButton[] buttons = GameObject.FindObjectsOfType<SimpleButton>();
         foreach (SimpleButton button in buttons)
         {
-            button.BeforeActions.AddListener(() => _animator.SetBool("PressingButton", true));
-            button.AfterActions.AddListener(() => _animator.SetBool("PressingButton", false));
+            button.BeforeActions.AddListener(() => _photonView.RPC("SetAnimatorPressButton", RpcTarget.All, new object[] { true } as object));
+            button.AfterActions.AddListener(() => _photonView.RPC("SetAnimatorPressButton", RpcTarget.All, new object[] { false } as object));
         }
     }
 
@@ -113,6 +113,26 @@ public class CharacterControl : MonoBehaviour, IPunObservable
             transform.position = Vector3.MoveTowards(transform.position, newPosition, Time.fixedDeltaTime * playerMovementSpeed);
             _mesh.rotation = newQuartenion;
         }
+    }
+
+    [PunRPC]
+    private void SetAnimatorPressButton(object[] parameters)
+    {
+        Debug.Log($"Set Press {(bool)parameters[0]}");
+        if((bool)parameters[0])
+        {
+            _animator.SetBool("PressingButton", true);
+        }
+        else
+        {
+            StartCoroutine(TurnOffPressButton());
+        }
+    }
+
+    IEnumerator TurnOffPressButton()
+    {
+        yield return 0;
+        _animator.SetBool("PressingButton", false);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
