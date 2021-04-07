@@ -40,6 +40,8 @@ namespace Arm
         private bool _inversedZ = false;
         private bool _inversed => _inversedX || _inversedZ;
 
+        private float _magn = 0.0f;
+
 		private void Awake()
 		{
             _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
@@ -70,10 +72,12 @@ namespace Arm
 				if (translation.magnitude >= float.Epsilon)
 				{
 					ArmTarget.transform.Translate(Time.deltaTime * aligment.MultiplyVector(translation.normalized) * controlSpeed);
-					_armSound.Volume = translation.magnitude / (ControlSpeed * Time.deltaTime);
+					_armSound.Volume = _magn;
+					_magn += Time.deltaTime;
 				}
 				else
 				{
+					_magn = 0.0f;
 					_armSound.Volume = 0;
 				}
 

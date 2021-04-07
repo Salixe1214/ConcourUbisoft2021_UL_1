@@ -12,13 +12,12 @@ public class ArmSound : MonoBehaviour, IPunObservable
     [SerializeField] private AudioSource techAudio;
 
     public float Volume { get; set; } = 0.0f;
+    public float StartTime { get; set; } = 0.0f;
     private float smoothSound;
     void Start()
 	{
-        guardAudio = GetComponent<AudioSource>();
         guardAudio.loop = true;
         guardAudio.Play();
-        techAudio = GetComponent<AudioSource>();
         techAudio.loop = true;
         techAudio.Play();
 
@@ -26,8 +25,9 @@ public class ArmSound : MonoBehaviour, IPunObservable
 
     private void Update()
     {
-        guardAudio.volume = Volume*0.3f;
-        techAudio.volume = Volume*0.3f;
+        guardAudio.volume = Mathf.Lerp(0,1, Volume)*0.3f;
+        techAudio.volume = Mathf.Lerp(0,1, Volume)*0.3f;
+        Debug.LogWarning(techAudio.volume + " From sound controller.");
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
