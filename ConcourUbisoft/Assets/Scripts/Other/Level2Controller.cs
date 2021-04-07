@@ -28,6 +28,8 @@ public class Level2Controller : MonoBehaviour, LevelController
     [SerializeField] private float _delayInverse = 10;
     [SerializeField] private Canvas _information = null;
     [SerializeField] private Font _font;
+    [SerializeField] private GameObject _checkPrefabs;
+    [SerializeField] private Material _blurMaterial;
     [SerializeField] private GameController.Role _emissionVisibleBy = GameController.Role.None;
     [SerializeField] private float LevelMaxAmountOfTimeSeconds = 120;
     [SerializeField] private float TimeLeftIfFirstSequenceFailed = 120;
@@ -114,6 +116,8 @@ public class Level2Controller : MonoBehaviour, LevelController
         _techUI.GetList().Clean();
 
         _imageList = new GameObject().AddComponent<ImageLayout>();
+        _imageList.SetBlurMaterial(_blurMaterial);
+        _imageList.SetCheckImage(_checkPrefabs);
         _imageList.GetComponent<RectTransform>().SetParent(_information.transform);
         _imageList.Font = _font;
         _imageList.TextOffset = -75.0f;
@@ -351,8 +355,7 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     private void UpdateSpriteColorInList()
     {
-        _imageList.UpdateSpriteColor(_currentListIndex, Color.black);
-        _currentListIndex++;
+        _imageList.SelectItem(_currentListIndex++);
     }
 
     private void setItemsImageList()
@@ -385,6 +388,7 @@ public class Level2Controller : MonoBehaviour, LevelController
                     break;
             }
         }
+
         _imageList.CreateLayout(_itemSprites, sequenceOfColor.ColorsSequence);
     }
 
