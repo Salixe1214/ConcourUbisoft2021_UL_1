@@ -9,7 +9,14 @@ public class SpawnObjectOnLineConveyor : MonoBehaviour
     [SerializeField] private float _padding = 0;
     [SerializeField] private Vector2 _objectSpace = new Vector2();
 
-    private System.Random _random = new System.Random(0);
+    private System.Random _random;
+    private GameController _gameController = null;
+
+    private void Awake()
+    {
+        _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        _random = new System.Random(_gameController.Seed);
+    }
 
     public IEnumerable<Bounds> GetSpawnPosition()
     {

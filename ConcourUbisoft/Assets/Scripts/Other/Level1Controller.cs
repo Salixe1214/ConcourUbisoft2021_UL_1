@@ -158,6 +158,8 @@ public class Level1Controller : MonoBehaviour , LevelController
         Debug.Log("ConveyorSpeed Max");
         StartCoroutine(SpawnFreshItems(FastItemSpawningTimeSeconds));
         StartCoroutine(StartLevelDialog(2));
+
+        //FinishLevel();
     }
 
     private void InitiateNextSequence()
@@ -248,6 +250,7 @@ public class Level1Controller : MonoBehaviour , LevelController
     {
         imageList.Clean();
         StartCoroutine(waitForItemsToClear(ClearItemsTimeSeconds));
+        StartCoroutine(DisableConveyor());
         soundController.PlayLevelSequenceClearedSuccessSound();
         FurnaceController.enabled = false;
         soundController.StopAreaMusic();
@@ -256,7 +259,13 @@ public class Level1Controller : MonoBehaviour , LevelController
         yield return null;
         _dialogSystem.StartDialog("Area01_end");
     }
-    
+
+    IEnumerator DisableConveyor()
+    {
+        yield return new WaitForSeconds(ClearItemsTimeSeconds*2);
+        SetConveyorSpeed(0,0);
+    }
+
     IEnumerator StartCameraShake(float duration)
     {
         cameraMustShake = true;
