@@ -19,6 +19,7 @@ TagManager:
   - DialogSystem
   - ColorBlind
   - EndZoneCollider
+  - EndMenu
   layers:
   - Default
   - TransparentFX

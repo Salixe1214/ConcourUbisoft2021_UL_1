@@ -2,6 +2,7 @@ using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Menu;
 using UnityEngine;
 
 namespace Other
@@ -132,6 +133,7 @@ namespace Other
         IEnumerator WaitBeforeShowingEndMenu()
         {
             yield return new WaitForSeconds(DelayBeforeEndMenu);
+            GameObject.FindWithTag("EndMenu").GetComponent<EndGameMenuController>().ShowEndGameMenu();
             
         }
     }

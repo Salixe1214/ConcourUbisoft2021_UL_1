@@ -10082,7 +10082,7 @@ GameObject:
   - component: {fileID: 1533351715}
   m_Layer: 5
   m_Name: EndMenu
-  m_TagString: Untagged
+  m_TagString: EndMenu
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
