@@ -51,6 +51,7 @@ namespace TechSupport
         private Inputs.Controller _currentController;
         private EventSystem _eventSystem;
         private InputManager _inputManager;
+        private bool _gridIsOpened;
 
         #region Callbacks
 
@@ -88,6 +89,7 @@ namespace TechSupport
             _gridSystem.Init(cameras.Count());
             _fullScreenSystem.SetTarget(cameras.First().items);
             GridInterface();
+            _gridIsOpened = false;
             _informationsSystem.Init();
             SystemSwitch(mode);
         }
@@ -100,11 +102,13 @@ namespace TechSupport
         private void OnEnable()
         {
             _inputManager.OnControllerTypeChanged += OnControllerTypeChanged;
+            _gameController.OnInGameMenuClosed += OnInGameMenuClosed;
         }
 
         private void OnDisable()
         {
             _inputManager.OnControllerTypeChanged -= OnControllerTypeChanged;
+            _gameController.OnInGameMenuClosed -= OnInGameMenuClosed;
         }
 
         public void Escape()
@@ -122,7 +126,7 @@ namespace TechSupport
 
         public void Focus()
         {
-            if (_gameController && _gameController.IsGameMenuOpen) return;
+            if (_gameController && (_gameController.IsGameMenuOpen || _gameController.IsEndGameMenuOpen)) return;
             if (mode == SurveillanceMode.Grid)
             {
                 SurveillanceCamera selected;
@@ -215,6 +219,7 @@ namespace TechSupport
             _eventSystem.SetSelectedGameObject(null);
             
             ActivateGridInterface(false);
+            _gridIsOpened = false;
 
         }
 
@@ -222,6 +227,7 @@ namespace TechSupport
         {
             EnableAll(true);
             ActivateGridInterface(true);
+            _gridIsOpened = true;
             if (_currentController == Inputs.Controller.Playstation || _currentController == Inputs.Controller.Xbox)
             {
                 _eventSystem.SetSelectedGameObject(null);
@@ -263,6 +269,14 @@ namespace TechSupport
                 _eventSystem.SetSelectedGameObject(null);
             }
             _currentController = newController;
+        }
+
+        private void OnInGameMenuClosed()
+        {
+            if (_gridIsOpened)
+            {
+                OnGrid();
+            }
         }
 
         #endregion

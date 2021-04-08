@@ -74,6 +74,9 @@ public class GameController : MonoBehaviour
     public event Action OnLoadGameEvent;
     public event Action OnFinishLoadGameEvent;
     public event Action OnFinishGameEvent;
+
+    public event Action OnInGameMenuClosed;
+    
     #endregion
     #region Unity Callbacks
     private void Awake()
@@ -90,11 +93,13 @@ public class GameController : MonoBehaviour
     {
         _networkController.OnPlayerLeftEvent += OnPlayerLeftEvent;
         _inputManager.OnControllerTypeChanged += OnControllerTypeChanged;
+        _inGameMenuController.OnInGameMenuClosed += OnInGameMenuClosedInvoked;
     }
     private void OnDisable()
     {
         _networkController.OnPlayerLeftEvent -= OnPlayerLeftEvent;
         _inputManager.OnControllerTypeChanged -= OnControllerTypeChanged;
+        _inGameMenuController.OnInGameMenuClosed -= OnInGameMenuClosedInvoked;
     }
     #endregion
     #region Private Functions
@@ -194,6 +199,11 @@ public class GameController : MonoBehaviour
         {
             StartCoroutine("UnloadAsyncLevel");
         }
+    }
+
+    private void OnInGameMenuClosedInvoked()
+    {
+        OnInGameMenuClosed?.Invoke();
     }
 
     private void OnControllerTypeChanged()

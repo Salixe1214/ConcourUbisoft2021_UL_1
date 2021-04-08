@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Inputs;
@@ -33,6 +34,8 @@ public class InGameMenuController : MonoBehaviour
     
 
     public bool IsGameMenuOpen { get; set; } = false;
+
+    public event Action OnInGameMenuClosed;
 
     #region UI Actions
     public void EnterOptionMenu()
@@ -161,6 +164,7 @@ public class InGameMenuController : MonoBehaviour
                 ResetButtonTextColor();
                 _inGameMenu.SetActive(false);
                 _optionMenu.SetActive(false);
+                OnInGameMenuClosed?.Invoke();
             }
             else
             {
