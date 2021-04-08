@@ -20,6 +20,7 @@ public class DialogSystem : MonoBehaviour
     private Sprite altKey;
     private Sprite _altSkipKey;
     private Sprite _originalSkipKey;
+    private GameController _gameController;
 
     // Sprites
     [SerializeField] private Sprite char1Sprite;
@@ -84,6 +85,7 @@ public class DialogSystem : MonoBehaviour
         //_originalSkipKey = originalKeys[0];
         //_altSkipKey = altKey;
         _inputManager = GameObject.FindWithTag("InputManager")?.GetComponent<InputManager>();
+        _gameController = GameObject.FindWithTag("GameController")?.GetComponent<GameController>();
         OnControllerTypeChanged();
         rightCharSlot.transform.localRotation = Quaternion.Euler(0,180,0);
         leftCharSlot.enabled = false;
@@ -107,11 +109,10 @@ public class DialogSystem : MonoBehaviour
 
     void Update()
     {
-        if ((Input.GetKeyDown(KeyCode.Q) || Input.GetButtonDown("ConfirmDialogPS")||Input.GetButtonDown("ConfirmDialogXBO")) && !isEnd)
+        if (!_gameController.IsGameMenuOpen && !_gameController.IsEndGameMenuOpen&&(Input.GetKeyDown(KeyCode.Q) || Input.GetButtonDown("ConfirmDialogPS")||Input.GetButtonDown("ConfirmDialogXBO")) && !isEnd)
         {
             bDownTime = 0;
             bIsPressed = true;
-            
         }
 
         if (bIsPressed && (Input.GetKey(KeyCode.Q) || Input.GetButton("ConfirmDialogPS")||Input.GetButton("ConfirmDialogXBO")))

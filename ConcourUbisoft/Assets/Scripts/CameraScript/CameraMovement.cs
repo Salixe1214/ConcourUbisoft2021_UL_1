@@ -81,7 +81,7 @@ public class CameraMovement : MonoBehaviour
             controllerY_XBO *= -1;
         
         
-        if (joysticks.Contains("Controller (Xbox One For Windows)"))
+        if (joysticks.Contains("Controller (Xbox One For Windows)")&& !_gameController.IsEndGameMenuOpen)
         {
             controllerYAccumulator -= controllerY_XBO;
             controllerXAccumulator += controllerX_XBO;
@@ -94,7 +94,7 @@ public class CameraMovement : MonoBehaviour
 
             //playerBody.MoveRotation(Quaternion.Euler(playerBody.rotation.x,controllerXAccumulator,playerBody.rotation.z));
         }
-        else if (joysticks.Contains("Wireless Controller"))
+        else if (joysticks.Contains("Wireless Controller") && !_gameController.IsEndGameMenuOpen)
         {
             controllerYAccumulator -= controllerY_PS;
             controllerXAccumulator += controllerX_PS;
@@ -107,7 +107,7 @@ public class CameraMovement : MonoBehaviour
             // playerBody.MoveRotation(Quaternion.Euler(playerBody.rotation.x,controllerXAccumulator,playerBody.rotation.z));
             //transform.rotation = Quaternion.Slerp(playerBody.rotation, Quaternion.Euler(playerBody.rotation.x, controllerXAccumulator, playerBody.rotation.z), cameraRotationSmoothingSpeed);
         }
-        else
+        else if(!_gameController.IsEndGameMenuOpen)
         {
             mouseXAccumulator += mouseX;
             float previousMouseY = mouseYAccumulator;

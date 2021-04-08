@@ -168,6 +168,7 @@ public class InGameMenuController : MonoBehaviour
                 _optionMenu.SetActive(false);
                 if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
                 {
+                    Cursor.visible = false;
                     _eventSystem.SetSelectedGameObject(null);
                     _eventSystem.SetSelectedGameObject(_menuFirstSelected);
                 }
