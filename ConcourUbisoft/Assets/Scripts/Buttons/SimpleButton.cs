@@ -51,7 +51,7 @@ public class SimpleButton : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (_playerNetwork.GetRole() == GameController.Role.SecurityGuard && !_pauseMenu.activeSelf)
+        if (_playerNetwork.GetRole() == GameController.Role.SecurityGuard)
         {
             if (!_reachable && Vector3.Distance(_player.transform.position, gameObject.transform.position) < maxDistance)
             {
@@ -123,7 +123,7 @@ public class SimpleButton : MonoBehaviour
     private void OnMouseEnter()
     {
         _inPerimeter = true;
-        if (_reachable)
+        if (_reachable && !_pauseMenu.activeSelf)
         {
             _animator.SetBool("hover", true);
             _isHover = true;
