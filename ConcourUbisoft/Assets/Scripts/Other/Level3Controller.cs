@@ -162,9 +162,12 @@ namespace Other
             int progress = 0;
             while (!_loadingDone)
             {
-                progress += 1;
+                if (progress < 100)
+                {
+                    progress += 1;
+                }
                 _progressTextField.text = progress + " %";
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSeconds(0.4f);
             }
             InfoText.SetActive(false);
             ProgressText.SetActive(false);
