@@ -35,7 +35,6 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject _roomFirstSelected;
     [SerializeField] private GameObject _roomBackFirstSelected;
     [SerializeField] private GameObject _lobbyPanelCreateButton;
-    [SerializeField] private GameObject _lobbyPanelJoinButton;
     [SerializeField] private GameObject _lobbyPanelRoomNameInputField;
     [SerializeField] private GameObject _lobbyPanelBackButton;
     [SerializeField] private GameObject _lobbyListHeader;
@@ -59,7 +58,6 @@ public class MenuController : MonoBehaviour
         _loadScreenMenuController.Show("Joining Lobby...");
         _networkController.JoinLobby();
         _lobbyPanelCreateButton.SetActive(true);
-        _lobbyPanelJoinButton.SetActive(true);
         _lobbyPanelRoomNameInputField.SetActive(true);
         _lobbyPanelBackButton.SetActive(true);
         _lobbyListHeader.SetActive(true);
@@ -305,7 +303,6 @@ public class MenuController : MonoBehaviour
         _lobbyMenu.SetActive(true);
         _currentMenu = Menus.Lobby;
         _lobbyPanelCreateButton.SetActive(true);
-        _lobbyPanelJoinButton.SetActive(true);
         _lobbyPanelRoomNameInputField.SetActive(true);
         _lobbyPanelBackButton.SetActive(true);
         _lobbyListHeader.SetActive(true);
