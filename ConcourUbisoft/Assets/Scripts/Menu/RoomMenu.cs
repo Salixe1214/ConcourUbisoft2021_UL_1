@@ -63,7 +63,7 @@ public class RoomMenu : MonoBehaviour
 
         _menuSoundController.PlayButtonSound();
         _errorText.text = "";
-        _gameController.InitiateStartGame(_networkController.GetLocalRole());
+        _gameController.InitiateStartGame(_networkController.GetLocalRole(), _colorBlindToggle.isOn);
     }
     #endregion
     #region Unity Callbacks

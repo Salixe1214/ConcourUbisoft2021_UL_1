@@ -222,8 +222,9 @@ public class GameController : MonoBehaviour
         return _colorNames.Where(x => x.IsColor(color)).FirstOrDefault()?.Name ?? "Undefined";
     }
 
-    public void InitiateStartGame(Role role)
+    public void InitiateStartGame(Role role, bool colorBlind)
     {
+        ColorBlindMode = colorBlind;
         if (_randomSeed)
         {
             Seed = new System.Random().Next();
