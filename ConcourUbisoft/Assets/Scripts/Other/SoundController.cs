@@ -60,19 +60,20 @@ public class SoundController : MonoBehaviour
         switch (channel)
         {
             case OptionController.SoundChannel.Master:
-                MasterAudioMixer.SetFloat("MasterVolume", MinSoundValue + ((MaxSoundValue - MinSoundValue) * optionController.GetVolume(channel)));
+                MasterAudioMixer.SetFloat("MasterVolume", Mathf.Log10(optionController.GetVolume(channel))*20);
+                Debug.LogWarning(Mathf.Log10(optionController.GetVolume(channel))*20);
                 break;
             case OptionController.SoundChannel.Ambient:
-                MasterAudioMixer.SetFloat("AmbientVolume", MinSoundValue + ((MaxSoundValue - MinSoundValue) * optionController.GetVolume(channel)));
+                MasterAudioMixer.SetFloat("AmbientVolume", Mathf.Log10(optionController.GetVolume(channel))*20);
                 break;
             case OptionController.SoundChannel.Music:
-                MasterAudioMixer.SetFloat("MusicVolume", MinSoundValue + ((MaxSoundValue - MinSoundValue) * optionController.GetVolume(channel)));
+                MasterAudioMixer.SetFloat("MusicVolume", Mathf.Log10(optionController.GetVolume(channel))*20);
                 break;
             case OptionController.SoundChannel.SoundEffect:
-                MasterAudioMixer.SetFloat("SoundEffectVolume", MinSoundValue + ((MaxSoundValue - MinSoundValue) * optionController.GetVolume(channel)));
+                MasterAudioMixer.SetFloat("SoundEffectVolume", Mathf.Log10(optionController.GetVolume(channel))*20);
                 break;
             case OptionController.SoundChannel.VoiceChat:
-                MasterAudioMixer.SetFloat("VoiceChatVolume", MinSoundValue + ((MaxSoundValue - MinSoundValue) * optionController.GetVolume(channel)));
+                MasterAudioMixer.SetFloat("VoiceChatVolume", Mathf.Log10(optionController.GetVolume(channel))*20);
                 break;
         }
         
