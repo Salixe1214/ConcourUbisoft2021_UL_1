@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Inputs;
 using UnityEngine;
 using UnityEngine.Events;
 namespace Arm
@@ -11,11 +13,24 @@ namespace Arm
         [SerializeField] private GameController.Role _owner = GameController.Role.SecurityGuard;
 
         private NetworkController _networkController = null;
+        private InputManager _inputManager;
+        private Controller _currentController;
 
 
         private void Awake()
         {
             _networkController = GameObject.FindGameObjectWithTag("NetworkController")?.GetComponent<NetworkController>();
+            _inputManager = GameObject.FindGameObjectWithTag("InputManager").GetComponent<InputManager>();
+        }
+
+        private void OnEnable()
+        {
+            _inputManager.OnControllerTypeChanged += OnControllerTypeChanged;
+        }
+
+        private void OnDisable()
+        {
+            _inputManager.OnControllerTypeChanged -= OnControllerTypeChanged;
         }
 
         private void Update()
@@ -27,14 +42,19 @@ namespace Arm
                 
 
                 if ((Input.GetButtonDown("Grab") ||
-                     Input.GetButtonDown("GrabControllerXBO") ||
-                     Input.GetButtonDown("GrabControllerPS")))
+                     (Input.GetButtonUp("GrabControllerXBO") && _currentController == Controller.Xbox) ||
+                     (Input.GetButtonUp("GrabControllerPS")&& _currentController == Controller.Playstation)))
                 {
                     Debug.Log("Toggle Magnet");
                     _magnetController.MagnetActive = !_magnetController.MagnetActive;
                 }
-                    
+                
             }
+        }
+
+        private void OnControllerTypeChanged()
+        {
+            _currentController = InputManager.GetController();
         }
     }
 }
