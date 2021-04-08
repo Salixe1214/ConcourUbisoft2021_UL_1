@@ -355,7 +355,8 @@ public class Level2Controller : MonoBehaviour, LevelController
 
     private void UpdateSpriteColorInList()
     {
-        _imageList.SelectItem(_currentListIndex++);
+        _currentListIndex++;
+        _imageList.SelectItem(_currentListIndex);
     }
 
     private void setItemsImageList()

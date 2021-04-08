@@ -40,6 +40,7 @@ namespace TechSupport.Informations
 
             Text text = (new GameObject()).AddComponent<Text>();
             text.text = "";
+            text.material = _blurMaterial;
             text.font = Font;
             text.alignment = TextAnchor.UpperCenter;
             text.GetComponent<RectTransform>().SetParent(image.transform);
@@ -95,6 +96,7 @@ namespace TechSupport.Informations
             if (!_blurMaterial)
                 return;
             _images[index].material = blur ? _blurMaterial : null;
+            _images[index].gameObject.GetComponentInChildren<Text>().material = blur ? _blurMaterial : null;
         }
 
         public void SelectItem(int index)
