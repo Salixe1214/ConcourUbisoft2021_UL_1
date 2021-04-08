@@ -32,6 +32,12 @@ public class randomCodePicker : MonoBehaviour
     {
         _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
 
+        
+
+    }
+
+    private void Start()
+    {
         _random = new Random(_gameController.Seed - 99 + _seedTemp);
 
         #region choosing Symbol
@@ -75,7 +81,6 @@ public class randomCodePicker : MonoBehaviour
         Debug.Log("RandomCodePicker: Sequence of " + gameObject.name + ": " + a);
         Debug.Log(("RandomCodePicker: Symbol1: " + _firstSymbol));
         Debug.Log(("RandomCodePicker: Symbol2: " + _secondSymbol));
-
     }
 
     // This class return the sequence associated to a symbol and a color

@@ -7764,7 +7764,7 @@ MonoBehaviour:
   - _color: {r: 0, g: 1, b: 0.7647059, a: 1}
     _name: Teal
   _pauseMenu: {fileID: 1825345722}
-  _randomSeed: 0
+  _randomSeed: 1
   forceOrder: 0
   forceTwoPlayers: 0
   _endGemMenu: {fileID: 1533351715}
