@@ -57,6 +57,16 @@ public class CharacterControl : MonoBehaviour, IPunObservable
         }
     }
 
+    private void OnEnable()
+    {
+        _inputManager.OnControllerTypeChanged += OnControllerTypeChanged;
+    }
+
+    private void OnDisable()
+    {
+        _inputManager.OnControllerTypeChanged -= OnControllerTypeChanged;
+    }
+
     void Start()
     {
         playerBody = GetComponent<Rigidbody>();
