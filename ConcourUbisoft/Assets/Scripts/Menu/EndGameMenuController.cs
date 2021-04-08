@@ -80,15 +80,6 @@ namespace Menu
             _soundController.PlayButtonSound();
             Application.Quit();
         }
-        
-        public void TriggerReturnToMenu()
-        {
-            _soundController.PlayButtonSound();
-            _confirmationText.text = "Return to menu";
-            _confirmReturnButton.SetActive(true);
-            _confirmExitButton.SetActive(false);
-            _confirmationPanel.SetActive(true);
-        }
 
         public void TriggerExit()
         {
