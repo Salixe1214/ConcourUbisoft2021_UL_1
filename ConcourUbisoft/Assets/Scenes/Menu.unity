@@ -1144,6 +1144,14 @@ PrefabInstance:
       propertyPath: m_Colors.m_HighlightedColor.r
       value: 0.5647059
       objectReference: {fileID: 0}
+    - target: {fileID: 1320475477431167769, guid: 6d670a06cbd03f74a8e1bf74593d96dc, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1209276558}
+    - target: {fileID: 1320475477431167769, guid: 6d670a06cbd03f74a8e1bf74593d96dc, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: InvertY
+      objectReference: {fileID: 0}
     - target: {fileID: 1320475477431167770, guid: 6d670a06cbd03f74a8e1bf74593d96dc, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
