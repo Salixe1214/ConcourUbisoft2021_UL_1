@@ -161,10 +161,6 @@ public class InGameMenuController : MonoBehaviour
                 ResetButtonTextColor();
                 _inGameMenu.SetActive(false);
                 _optionMenu.SetActive(false);
-                if (_currentController == Controller.Other)
-                {
-                    _gameController.ToggleCursorLock();
-                }
             }
             else
             {
@@ -176,11 +172,8 @@ public class InGameMenuController : MonoBehaviour
                     _eventSystem.SetSelectedGameObject(null);
                     _eventSystem.SetSelectedGameObject(_menuFirstSelected);
                 }
-                else
-                {
-                    _gameController.ToggleCursorLock();
-                }
             }
+            _gameController.ToggleCursorLock();
             IsGameMenuOpen = !IsGameMenuOpen;
         }
     }
