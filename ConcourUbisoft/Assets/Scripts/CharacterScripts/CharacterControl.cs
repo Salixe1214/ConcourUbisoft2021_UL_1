@@ -72,7 +72,7 @@ public class CharacterControl : MonoBehaviour, IPunObservable
             controllerHorizontal = Input.GetAxis("LeftJoystickHorizontal");
             controllerVertical = Input.GetAxis("LeftJoystickVertical");
 
-            if(_gameController.IsGameMenuOpen)
+            if(_gameController.IsGameMenuOpen || _gameController.IsEndGameMenuOpen)
             {
                 _horizontalMovement = 0;
                 _verticalMovement = 0;

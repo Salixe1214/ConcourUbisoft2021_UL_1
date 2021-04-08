@@ -58,6 +58,10 @@ namespace Menu
                 _eventSystem.SetSelectedGameObject(null);
                 _eventSystem.SetSelectedGameObject(MenuFirstSelected);
             }
+            else
+            {
+                _gameController.ToggleCursorLock();
+            }
         }
 
         public void OnReturnMenuClicked()
@@ -108,6 +112,10 @@ namespace Menu
             {
                 _eventSystem.SetSelectedGameObject(null);
                 _currentController = newController;
+                if (_isEndMenuOpen)
+                {
+                    _gameController.ToggleCursorLock();
+                }
             }
             else
             {
@@ -124,6 +132,11 @@ namespace Menu
         {
             EndGameMenu.SetActive(false);
         }
-        
+
+        public bool IsEndGameMenuOpen()
+        {
+            return _isEndMenuOpen;
+        }
+
     }
 }

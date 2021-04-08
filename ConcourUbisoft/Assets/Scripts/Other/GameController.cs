@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Inputs;
+using Menu;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -41,6 +42,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private bool _randomSeed = false;
     [SerializeField] private bool forceOrder = false;
     [SerializeField] private bool forceTwoPlayers = false;
+    [SerializeField] private EndGameMenuController _endGemMenu= null;
 
     private SoundController _soundController = null;
     private NetworkController _networkController = null;
@@ -56,6 +58,7 @@ public class GameController : MonoBehaviour
     public bool ColorBlindMode { get; set; }
     public OptionController OptionController { get => _optionController; }
     public bool IsGameMenuOpen { get => _inGameMenuController.IsGameMenuOpen; }
+    public bool IsEndGameMenuOpen => _endGemMenu.IsEndGameMenuOpen();
     public int Seed { get; private set; }
     
     public bool ForceOrder { get; private set; }
