@@ -40,6 +40,7 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject _lobbyListHeader;
     [SerializeField] private GameObject _creditMenu;
     [SerializeField] private GameObject _creditFirstSelected;
+    [SerializeField] private GameObject _creditBackFirstSelected;
     [SerializeField] private GameObject _speakingIcon = null;
 
     private NetworkController _networkController = null;
@@ -166,8 +167,6 @@ public class MenuController : MonoBehaviour
                         _eventSystem.SetSelectedGameObject(_roomFirstSelected);
                     }
                     break;
-                case Menus.InGame:
-                    break;
                 case Menus.MainMenu:
                     if (!_gameController.IsGameStart)
                     {
@@ -175,7 +174,7 @@ public class MenuController : MonoBehaviour
                         if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
                         {
                             _eventSystem.SetSelectedGameObject(null);
-                            _eventSystem.SetSelectedGameObject(_menuFirstSelected);
+                            _eventSystem.SetSelectedGameObject(_creditBackFirstSelected);
                         }
                     }
                     else
