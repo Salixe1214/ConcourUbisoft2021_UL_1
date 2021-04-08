@@ -7546,8 +7546,8 @@ MonoBehaviour:
     _name: Red
   - _color: {r: 0, g: 0.52156866, b: 1, a: 1}
     _name: Blue
-  - _color: {r: 0.7254902, g: 0, b: 1, a: 1}
-    _name: Purple
+  - _color: {r: 1, g: 0.1764706, b: 0.9647059, a: 1}
+    _name: Pink
   - _color: {r: 0, g: 1, b: 0.7647059, a: 1}
     _name: Teal
   _pauseMenu: {fileID: 1825345722}
