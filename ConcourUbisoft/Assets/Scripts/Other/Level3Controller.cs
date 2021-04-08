@@ -16,6 +16,8 @@ namespace Other
         [SerializeField] private CameraEffectDisabled CameraEffect;
         [SerializeField] private GameObject TargetText;
         [SerializeField] private float DelayBeforeEndMenu = 3;
+        [SerializeField] private GameObject InfoText;
+        [SerializeField] private GameObject ProgressText;
 
         private DialogSystem _dialogSystem;
         private bool _endButtonPressed;
@@ -43,13 +45,13 @@ namespace Other
         private void OnEnable()
         {
             _dialogSystem.OnFinalDialog += WakeRobots;
-            _dialogSystem.OnFinalDialogMusicStart += DisableCameraEffect;
+           // _dialogSystem.OnFinalDialogMusicStart += DisableCameraEffect;
         }
 
         private void OnDisable()
         {
             _dialogSystem.OnFinalDialog -= WakeRobots;
-            _dialogSystem.OnFinalDialogMusicStart -= DisableCameraEffect;
+            //_dialogSystem.OnFinalDialogMusicStart -= DisableCameraEffect;
         }
 
         public void StartLevel()
@@ -66,7 +68,7 @@ namespace Other
                 //_dialogSystem.StartDialog("Area03_end");
                 _photonView.RPC("StartEndDialog", RpcTarget.All);
                 _endButtonPressed = true;
-                _photonView.RPC("EnableCameraEffect", RpcTarget.All);
+                //_photonView.RPC("EnableCameraEffect", RpcTarget.All);
             }
         }
         
