@@ -2553,10 +2553,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3023417402315145487, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_Text
+      value: Special Thanks To Our Mentors
+      objectReference: {fileID: 0}
     - target: {fileID: 3096118687326755321, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
       propertyPath: m_TargetGraphic
       value: 
       objectReference: {fileID: 406930386}
+    - target: {fileID: 3096118687326755321, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.b
+      value: 0.3207547
+      objectReference: {fileID: 0}
+    - target: {fileID: 3096118687326755321, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.g
+      value: 0.3207547
+      objectReference: {fileID: 0}
+    - target: {fileID: 3096118687326755321, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.r
+      value: 0.3207547
+      objectReference: {fileID: 0}
     - target: {fileID: 3096118687326755321, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -2573,6 +2589,22 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: CloseCredits
       objectReference: {fileID: 0}
+    - target: {fileID: 3962761492985294959, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_Text
+      value: Music
+      objectReference: {fileID: 0}
+    - target: {fileID: 5035722681912910649, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_Name
+      value: IconTitle
+      objectReference: {fileID: 0}
+    - target: {fileID: 5287982491037662163, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_Text
+      value: Icons
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740441451350418504, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
+      propertyPath: m_Text
+      value: Ubisoft Quebec
+      objectReference: {fileID: 0}
     - target: {fileID: 7031109435675794842, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 0
@@ -2583,7 +2615,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7152677851335927638, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a5c635214400d3419ff6342e208a60c, type: 3}
@@ -13801,7 +13833,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2047667590
 RectTransform:
   m_ObjectHideFlags: 0
