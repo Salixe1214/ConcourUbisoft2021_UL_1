@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Menu;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Other
 {
@@ -21,8 +22,10 @@ namespace Other
 
         private DialogSystem _dialogSystem;
         private bool _endButtonPressed;
+        private bool _loadingDone;
         private float XRotationAccumulator = 20;
         private float YRotationAccumulator = 0;
+        private Text _progressTextField;
 
         private PhotonView _photonView = null;
 
@@ -35,6 +38,7 @@ namespace Other
         private void Start()
         {
             _endButtonPressed = false;
+            _loadingDone = false;
         }
 
         private void Update()
@@ -45,13 +49,13 @@ namespace Other
         private void OnEnable()
         {
             _dialogSystem.OnFinalDialog += WakeRobots;
-           // _dialogSystem.OnFinalDialogMusicStart += DisableCameraEffect;
+            _dialogSystem.OnFinalDialogMusicStart += UpdateVisuals;
         }
 
         private void OnDisable()
         {
             _dialogSystem.OnFinalDialog -= WakeRobots;
-            //_dialogSystem.OnFinalDialogMusicStart -= DisableCameraEffect;
+            _dialogSystem.OnFinalDialogMusicStart -= UpdateVisuals;
         }
 
         public void StartLevel()
@@ -96,6 +100,16 @@ namespace Other
             TargetText.SetActive(true);
         }
 
+        private void UpdateVisuals()
+        {
+            TargetText.SetActive(true);
+            InfoText.SetActive(true);
+            _progressTextField =ProgressText.GetComponent<Text>();
+            _progressTextField.text = "";
+            ProgressText.SetActive(true);
+            StartCoroutine(UpdateProgressText());
+        }
+
         private void WakeRobots()
         {
             StartCoroutine(RotateBots());
@@ -105,6 +119,7 @@ namespace Other
         {
             LeftRobot.GetComponentInChildren<RobotLight>().LightItUp();
             RightRobot.GetComponentInChildren<RobotLight>().LightItUp();
+            _loadingDone = true;
             StartCoroutine(WaitBeforeShowingEndMenu());
         }
 
@@ -137,6 +152,19 @@ namespace Other
             yield return new WaitForSeconds(DelayBeforeEndMenu);
             GameObject.FindWithTag("EndMenu").GetComponent<EndGameMenuController>().ShowEndGameMenu();
             
+        }
+
+        IEnumerator UpdateProgressText()
+        {
+            int progress = 0;
+            while (!_loadingDone)
+            {
+                progress += 1;
+                _progressTextField.text = progress + " %";
+                yield return new WaitForSeconds(1);
+            }
+            InfoText.SetActive(false);
+            ProgressText.SetActive(false);
         }
     }
 }
