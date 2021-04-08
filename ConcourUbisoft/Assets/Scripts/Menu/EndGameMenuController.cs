@@ -37,6 +37,14 @@ namespace Menu
             _isEndMenuOpen = false;
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyUp(KeyCode.V))
+            {
+                ShowEndGameMenu();
+            }
+        }
+
         private void OnEnable()
         {
             _inputManager.OnControllerTypeChanged += OnControllerTypeChanged;
@@ -114,7 +122,7 @@ namespace Menu
                 {
                     if (_currentController == Controller.Other)
                     {
-                        Cursor.lockState = CursorLockMode.Locked;
+                       // Cursor.lockState = CursorLockMode.Locked;
                     }
                     _eventSystem.SetSelectedGameObject(null);
                     _eventSystem.SetSelectedGameObject(MenuFirstSelected);
