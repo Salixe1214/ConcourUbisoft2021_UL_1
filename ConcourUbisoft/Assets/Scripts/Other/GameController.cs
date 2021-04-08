@@ -48,6 +48,7 @@ public class GameController : MonoBehaviour
     private NetworkController _networkController = null;
     private DialogSystem _dialogSystem = null;
     private InputManager _inputManager;
+    private Controller _currentController;
     
     public bool invertedY { get; set; } = false;
     public UnityEvent changeInverted;
@@ -83,6 +84,7 @@ public class GameController : MonoBehaviour
         ForceOrder = forceOrder;
         PauseMenu = _pauseMenu;
         ForceTwoPlayers = forceTwoPlayers;
+        _currentController = InputManager.GetController();
     }
     private void OnEnable()
     {
@@ -168,7 +170,14 @@ public class GameController : MonoBehaviour
     }
     private void SetUpTechnician()
     {
-        Cursor.lockState = CursorLockMode.None;
+        if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
         GameObject playerTech = GameObject.FindGameObjectWithTag("PlayerTech");
         playerTech.SetActive(true);
         _soundController.MuteAmbient();
@@ -207,6 +216,8 @@ public class GameController : MonoBehaviour
                 Cursor.visible = true;
             }
         }
+
+        _currentController = _newControllerType;
     }
 
     #endregion
