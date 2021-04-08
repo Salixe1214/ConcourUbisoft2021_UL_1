@@ -1183,8 +1183,8 @@ RectTransform:
   m_Father: {fileID: 755038360}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5586971}
-  m_AnchorMax: {x: 1, y: 0.9999993}
+  m_AnchorMin: {x: 0, y: 0.13429719}
+  m_AnchorMax: {x: 1, y: 0.9999994}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2205,8 +2205,8 @@ RectTransform:
   m_Father: {fileID: 657259908}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5005054}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0.10039271}
+  m_AnchorMax: {x: 1, y: 0.99999976}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3577,19 +3577,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _roomListElementPrefab: {fileID: 136469699152739947, guid: edd496fcd188c1247b664e45e298b7df, type: 3}
   _contentPanel: {fileID: 2125867605}
-  _createRoomPanel: {fileID: 0}
-  _togglePrivate: {fileID: 0}
-  _joinRoomPanel: {fileID: 0}
   _roomNameCreateInputField: {fileID: 2022626340}
   _roomNameJoinInputField: {fileID: 2022626340}
   _loadScreenMenuController: {fileID: 1651900166}
   _eventSystem: {fileID: 1311755604}
   _createRoomPanelFirstSelected: {fileID: 0}
   _createRoomPanelBackFirstSelected: {fileID: 1380651167}
-  _joinRoomPanelFirstSelected: {fileID: 0}
-  _joinRoomPanelBackFirstSelected: {fileID: 1380651167}
   _createButton: {fileID: 926528961}
-  _joinButton: {fileID: 0}
   _roomNameInput: {fileID: 2022626340}
   _backButton: {fileID: 1380651167}
   _lobbyListHeader: {fileID: 1178912529}
@@ -3734,7 +3728,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 51331cd718e6467459074b7d3a866485, type: 3}
-    m_FontSize: 21
+    m_FontSize: 22
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
@@ -3745,12 +3739,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'You are a thechnician in charge of the R.W.P. surveillance system when
-    the guard of the factory calls.
-
-
-    You will be able to move towards surveillance
-    cameras in the factory and know the general system informations.'
+  m_Text: Remote Support Agent. Your task is to use your technical skills and your
+    remote access to the facility's surveillance feed to help the guard get the plant
+    back on it's feet.
 --- !u!222 &610924324
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3947,8 +3938,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 8.5, y: -27.107796}
-  m_SizeDelta: {x: 16.484009, y: 54.215576}
+  m_AnchoredPosition: {x: 0.049987793, y: 0}
+  m_SizeDelta: {x: -0.10000324, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &640920639
 MonoBehaviour:
@@ -3972,7 +3963,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 51331cd718e6467459074b7d3a866485, type: 3}
-    m_FontSize: 21
+    m_FontSize: 22
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
@@ -3983,12 +3974,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'You are the security guard on his beat in the R.W.P. factory when a global
-    disfonctionment happens.
-
-
-    You will be able to move all over the factory
-    and manage manually machines.'
+  m_Text: Security Guard at the West Coast Plant. You're the only one around when
+    the facility came to a stop. Your task is to get the facility working again.
 --- !u!222 &640920640
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4398,7 +4385,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -329.99994, y: -30.379211}
+  m_AnchoredPosition: {x: -330, y: -30.37915}
   m_SizeDelta: {x: -740.0001, y: -196.7599}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &709521402
@@ -5157,7 +5144,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Activate colorblind mode
+  m_Text: Color blind mode
 --- !u!222 &863158008
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7327,7 +7314,6 @@ MonoBehaviour:
   _errorText: {fileID: 1454352098}
   _speaking: {fileID: 1322349464}
   _lobbyPanelCreateButton: {fileID: 926528961}
-  _lobbyPanelJoinButton: {fileID: 0}
   _lobbyPanelRoomNameInputField: {fileID: 2022626340}
   _lobbyPanelBackButton: {fileID: 1380651167}
   _lobbyListHeader: {fileID: 1178912529}
@@ -8063,10 +8049,10 @@ RectTransform:
   m_Father: {fileID: 1970001988}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00012207031, y: 0.000061035156}
-  m_SizeDelta: {x: -1820, y: -956}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1209276557
 GameObject:
@@ -12380,7 +12366,6 @@ MonoBehaviour:
   _roomFirstSelected: {fileID: 1784915761}
   _roomBackFirstSelected: {fileID: 1380651167}
   _lobbyPanelCreateButton: {fileID: 926528961}
-  _lobbyPanelJoinButton: {fileID: 0}
   _lobbyPanelRoomNameInputField: {fileID: 2022626340}
   _lobbyPanelBackButton: {fileID: 1380651167}
   _lobbyListHeader: {fileID: 1178912529}
@@ -12820,10 +12805,10 @@ RectTransform:
   m_Father: {fileID: 1201317423}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 605, y: -65.97177}
-  m_SizeDelta: {x: 530.0002, y: 190.3331}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 605, y: -630}
+  m_SizeDelta: {x: 630.0002, y: 260}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1806384341
 MonoBehaviour:
@@ -12899,7 +12884,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 20, y: 0}
   m_SizeDelta: {x: 10.263, y: -17}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1809166704
@@ -12945,8 +12930,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 132910594}
   m_HandleRect: {fileID: 132910593}
   m_Direction: 2
-  m_Value: 0.99999917
-  m_Size: 0.44130218
+  m_Value: 0.9999965
+  m_Size: 0.86570233
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -13785,7 +13770,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 20, y: 0}
   m_SizeDelta: {x: 9.8012, y: -17}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1936250741
@@ -13831,8 +13816,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 297219570}
   m_HandleRect: {fileID: 297219569}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.49949464
+  m_Value: 0.9999983
+  m_Size: 0.8996071
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -14066,10 +14051,10 @@ RectTransform:
   m_Father: {fileID: 1201317423}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 605, y: 135.60042}
-  m_SizeDelta: {x: 530.0002, y: 190.9116}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 605, y: -350}
+  m_SizeDelta: {x: 630.0002, y: 260}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1986366013
 MonoBehaviour:
