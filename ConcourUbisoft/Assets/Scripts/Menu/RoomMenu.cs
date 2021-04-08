@@ -40,7 +40,6 @@ public class RoomMenu : MonoBehaviour
     {
         IEnumerable<PlayerNetwork> playerNetworks = GameObject.FindGameObjectsWithTag("PlayerNetwork").Select(x => x.GetComponent<PlayerNetwork>());
         
-        Debug.LogWarning("num p: " + playerNetworks.Count());
         if (_gameController.ForceTwoPlayers)
         {
             if (playerNetworks.Count() != 2)
@@ -50,7 +49,6 @@ public class RoomMenu : MonoBehaviour
             }
             
             IEnumerable<PlayerNetwork> playerNetworksDistinctRole = playerNetworks.GroupBy(x => x.PlayerRole).Select(x => x.First());
-            Debug.LogWarning(playerNetworksDistinctRole.Count());
 
             if (playerNetworksDistinctRole.Count() != playerNetworks.Count())
             {
@@ -61,7 +59,7 @@ public class RoomMenu : MonoBehaviour
 
         _menuSoundController.PlayButtonSound();
         _errorText.text = "";
-        _gameController.InitiateStartGame(_networkController.GetLocalRole());
+        _gameController.InitiateStartGame(_networkController.GetLocalRole(), _colorBlindToggle.isOn);
     }
     #endregion
     #region Unity Callbacks
