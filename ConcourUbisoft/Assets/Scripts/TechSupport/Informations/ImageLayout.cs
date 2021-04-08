@@ -12,6 +12,7 @@ namespace TechSupport.Informations
         private readonly List<Image> _images;
         private GameObject _checkAnimation = null;
         private Material _blurMaterial = null;
+        private Material _fontMaterial = null;
         public Font Font { get; set; }
         public float TextOffset { get; set; } = -40.0f;
 
@@ -40,7 +41,7 @@ namespace TechSupport.Informations
 
             Text text = (new GameObject()).AddComponent<Text>();
             text.text = "";
-            text.material = _blurMaterial;
+            text.material = _fontMaterial;
             text.font = Font;
             text.alignment = TextAnchor.UpperCenter;
             text.GetComponent<RectTransform>().SetParent(image.transform);
@@ -82,6 +83,11 @@ namespace TechSupport.Informations
             _blurMaterial = material;
         }
 
+        public void SetFontMaterial(Material material)
+        {
+            _fontMaterial = material;
+        }
+
         public void CheckSprite(int index)
         {
             if (!_checkAnimation)
@@ -96,7 +102,7 @@ namespace TechSupport.Informations
             if (!_blurMaterial)
                 return;
             _images[index].material = blur ? _blurMaterial : null;
-            _images[index].gameObject.GetComponentInChildren<Text>().material = blur ? _blurMaterial : null;
+            _images[index].gameObject.GetComponentInChildren<Text>().material = blur ? _fontMaterial : null;
         }
 
         public void SelectItem(int index)

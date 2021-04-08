@@ -20,6 +20,7 @@ namespace TechSupport.Informations
         [SerializeField] private Vector2 sizeList;
         [SerializeField] private GameObject checkImagePrefabs;
         [SerializeField] private Material blurMaterial;
+        [SerializeField] private Material fontMaterial;
 
         [Header("TechBook")]
         [SerializeField] private Button button;
@@ -56,6 +57,8 @@ namespace TechSupport.Informations
                 _imageLayout.SetCheckImage(checkImagePrefabs);
             if (blurMaterial != null)
                 _imageLayout.SetBlurMaterial(blurMaterial);
+            if (fontMaterial != null)
+                _imageLayout.SetFontMaterial(fontMaterial);
             _listRectTransform = _imageLayout.GetComponent<RectTransform>();
             _listRectTransform.SetParent(transform);
             SetSize(_listRectTransform, sizeList);
