@@ -7805,7 +7805,7 @@ MonoBehaviour:
   _pauseMenu: {fileID: 1825345722}
   _randomSeed: 1
   forceOrder: 1
-  forceTwoPlayers: 0
+  forceTwoPlayers: 1
   _endGemMenu: {fileID: 1533351715}
   changeInverted:
     m_PersistentCalls:
