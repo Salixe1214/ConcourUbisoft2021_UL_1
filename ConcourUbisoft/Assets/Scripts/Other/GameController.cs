@@ -136,6 +136,7 @@ public class GameController : MonoBehaviour
         }
         _soundController.StopAmbientSound();
         _soundController.StopAreaMusic();
+        _soundController.PlayMenuSong();
        _networkController.LeaveLobby();
     }
     private void ResetController()

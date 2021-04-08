@@ -201,7 +201,7 @@ public class MenuController : MonoBehaviour
         _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         _menuSoundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         _inputManager = GameObject.FindWithTag("InputManager")?.GetComponent<InputManager>();
-        //_menuSoundController.PlayMenuSong();
+        _menuSoundController.PlayMenuSong();
     }
 
     private void Start()
@@ -312,6 +312,7 @@ public class MenuController : MonoBehaviour
     }
     private void OnLoadGame()
     {
+        _menuSoundController.StopMenuSong();
         _loadScreenMenuController.Show("Loading Level...");
         _lobbyMenu.SetActive(false);
         _roomMenu.SetActive(false);
