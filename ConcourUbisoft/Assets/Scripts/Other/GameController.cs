@@ -59,6 +59,8 @@ public class GameController : MonoBehaviour
     public OptionController OptionController { get => _optionController; }
     public bool IsGameMenuOpen { get => _inGameMenuController.IsGameMenuOpen; }
     public bool IsEndGameMenuOpen => _endGemMenu.IsEndGameMenuOpen();
+
+    public void CloseInGameMenu() => _inGameMenuController.CloseInGameMenu();
     public int Seed { get; private set; }
     
     public bool ForceOrder { get; private set; }

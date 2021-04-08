@@ -151,7 +151,7 @@ public class InGameMenuController : MonoBehaviour
     }
     private void Update()
     {
-        if (_gameController.IsGameStart &&
+        if (_gameController.IsGameStart&&!_gameController.IsEndGameMenuOpen &&
             (_currentController == Controller.Other && Input.GetButtonDown("Cancel")||
                                             (_currentController == Controller.Playstation &&Input.GetButtonDown("InGameMenuPS"))||
                                             (_currentController == Controller.Xbox&& Input.GetButtonDown("InGameMenuXBO"))))
@@ -161,6 +161,10 @@ public class InGameMenuController : MonoBehaviour
                 ResetButtonTextColor();
                 _inGameMenu.SetActive(false);
                 _optionMenu.SetActive(false);
+                if (_currentController == Controller.Other)
+                {
+                    _gameController.ToggleCursorLock();
+                }
             }
             else
             {
@@ -172,9 +176,12 @@ public class InGameMenuController : MonoBehaviour
                     _eventSystem.SetSelectedGameObject(null);
                     _eventSystem.SetSelectedGameObject(_menuFirstSelected);
                 }
+                else
+                {
+                    _gameController.ToggleCursorLock();
+                }
             }
             IsGameMenuOpen = !IsGameMenuOpen;
-            _gameController.ToggleCursorLock();
         }
     }
     
@@ -221,6 +228,17 @@ public class InGameMenuController : MonoBehaviour
         _optionBackSelected.GetComponentInChildren<TextColor>().OnExit();
         _returnButton.GetComponentInChildren<TextColor>().OnExit();
         _exitButton.GetComponentInChildren<TextColor>().OnExit();
+    }
+
+    public void CloseInGameMenu()
+    {
+        if (IsGameMenuOpen)
+        {
+            ResetButtonTextColor();
+            _inGameMenu.SetActive(false);
+            _optionMenu.SetActive(false);
+            IsGameMenuOpen = !IsGameMenuOpen;
+        }
     }
 
     #endregion

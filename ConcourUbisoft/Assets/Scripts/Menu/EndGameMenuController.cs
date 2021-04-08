@@ -60,7 +60,7 @@ namespace Menu
             }
             else
             {
-                _gameController.ToggleCursorLock();
+                Cursor.lockState = CursorLockMode.None;
             }
         }
 
@@ -105,13 +105,17 @@ namespace Menu
                 _currentController = newController;
                 if (_isEndMenuOpen)
                 {
-                    _gameController.ToggleCursorLock();
+                    Cursor.lockState = CursorLockMode.None;
                 }
             }
             else
             {
                 if (_isEndMenuOpen)
                 {
+                    if (_currentController == Controller.Other)
+                    {
+                        Cursor.lockState = CursorLockMode.Locked;
+                    }
                     _eventSystem.SetSelectedGameObject(null);
                     _eventSystem.SetSelectedGameObject(MenuFirstSelected);
                 }

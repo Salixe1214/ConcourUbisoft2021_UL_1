@@ -26,6 +26,7 @@ namespace Other
         private float XRotationAccumulator = 20;
         private float YRotationAccumulator = 0;
         private Text _progressTextField;
+        private GameController _gameController;
 
         private PhotonView _photonView = null;
 
@@ -33,6 +34,7 @@ namespace Other
         {
             _photonView = GetComponent<PhotonView>();
             _dialogSystem = GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>();
+            _gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
         }
 
         private void Start()
@@ -150,6 +152,7 @@ namespace Other
         IEnumerator WaitBeforeShowingEndMenu()
         {
             yield return new WaitForSeconds(DelayBeforeEndMenu);
+            _gameController.CloseInGameMenu();
             GameObject.FindWithTag("EndMenu").GetComponent<EndGameMenuController>().ShowEndGameMenu();
             
         }
