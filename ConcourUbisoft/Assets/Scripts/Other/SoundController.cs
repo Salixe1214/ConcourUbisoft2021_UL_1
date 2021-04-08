@@ -45,6 +45,12 @@ public class SoundController : MonoBehaviour
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         optionController = gameController.OptionController;
     }
+
+    private void Start()
+    {
+        MasterAudioMixer.SetFloat("MasterVolume", Mathf.Log10(0.33f)*20);
+    }
+
     private void OnEnable()
     {
         optionController.OnOptionVolumeUpdatedEvent += OnOptionVolumeUpdatedEvent;
