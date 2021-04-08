@@ -28,6 +28,7 @@ public class FurnaceController : MonoBehaviour
     [SerializeField] private bool _finishAfterOnce = false;
     [SerializeField] private float _destroyTime = 5f;
     [SerializeField] private bool _destroyGameObject = true;
+    [SerializeField] private bool _spawnRobotHeads;
 
     public UnityEvent WhenFurnaceConsumedAll;
     public UnityEvent WhenFurnaceConsumeWrong;
@@ -161,7 +162,17 @@ public class FurnaceController : MonoBehaviour
             sc.types = new Other.PickableType[currentSequenceLenght];
             for (int j = 0; j < currentSequenceLenght; j++)
             {
-                int nextType = _random.Next(0, 5);
+                int nextType = 0;
+                
+                if (_spawnRobotHeads)
+                {
+                    nextType = _random.Next(0, 5);
+                }
+                else
+                {
+                    nextType = _random.Next(1, 5);
+                }
+                
                 int nextColor = _random.Next(0, allColors.Length);
                 sc.ColorsSequence[j] = allColors[nextColor];
                 sc.types[j] = (Other.PickableType)nextType;
