@@ -1021,13 +1021,13 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 42
-    m_Alignment: 5
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Start game
+  m_Text: Start Game
 --- !u!222 &107608161
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3589,6 +3589,7 @@ MonoBehaviour:
   _joinRoomPanelFirstSelected: {fileID: 0}
   _joinRoomPanelBackFirstSelected: {fileID: 1380651167}
   _createButton: {fileID: 926528961}
+  _joinButton: {fileID: 0}
   _roomNameInput: {fileID: 2022626340}
   _backButton: {fileID: 1380651167}
   _lobbyListHeader: {fileID: 1178912529}
@@ -7326,6 +7327,7 @@ MonoBehaviour:
   _errorText: {fileID: 1454352098}
   _speaking: {fileID: 1322349464}
   _lobbyPanelCreateButton: {fileID: 926528961}
+  _lobbyPanelJoinButton: {fileID: 0}
   _lobbyPanelRoomNameInputField: {fileID: 2022626340}
   _lobbyPanelBackButton: {fileID: 1380651167}
   _lobbyListHeader: {fileID: 1178912529}
@@ -12378,6 +12380,7 @@ MonoBehaviour:
   _roomFirstSelected: {fileID: 1784915761}
   _roomBackFirstSelected: {fileID: 1380651167}
   _lobbyPanelCreateButton: {fileID: 926528961}
+  _lobbyPanelJoinButton: {fileID: 0}
   _lobbyPanelRoomNameInputField: {fileID: 2022626340}
   _lobbyPanelBackButton: {fileID: 1380651167}
   _lobbyListHeader: {fileID: 1178912529}
@@ -14761,13 +14764,13 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 2
     m_MaxSize: 250
-    m_Alignment: 5
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Create room
+  m_Text: Create Room
 --- !u!222 &2091769425
 CanvasRenderer:
   m_ObjectHideFlags: 0
