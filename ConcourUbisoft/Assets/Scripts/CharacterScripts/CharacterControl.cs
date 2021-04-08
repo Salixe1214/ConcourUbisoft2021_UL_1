@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using Inputs;
 using UnityEngine;
 
 public class CharacterControl : MonoBehaviour, IPunObservable
@@ -23,7 +24,9 @@ public class CharacterControl : MonoBehaviour, IPunObservable
     private float keyboardHorizontal ;
     private float keyBoardVertical ;
     private float controllerHorizontal ;
-    private float controllerVertical ;
+    private float controllerVertical;
+    private InputManager _inputManager;
+    private Controller _currentController;
 
     private NetworkController _networkController = null;
     private PhotonView _photonView = null;
@@ -34,6 +37,7 @@ public class CharacterControl : MonoBehaviour, IPunObservable
     private float _horizontalMovement = 0.0f;
     private float _verticalMovement = 0.0f;
     private GameController _gameController = null;
+    
 
     [SerializeField] private DoorController door3;
 
@@ -42,6 +46,7 @@ public class CharacterControl : MonoBehaviour, IPunObservable
         _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         newPosition = transform.position;
         _networkController = GameObject.FindGameObjectWithTag("NetworkController").GetComponent<NetworkController>();
+        _inputManager = GameObject.FindWithTag("InputManager").GetComponent<InputManager>();
         _photonView = GetComponent<PhotonView>();
         transform.Rotate(Vector3.up, Mathf.Deg2Rad * 180);
         SimpleButton[] buttons = GameObject.FindObjectsOfType<SimpleButton>();
@@ -56,6 +61,7 @@ public class CharacterControl : MonoBehaviour, IPunObservable
     {
         playerBody = GetComponent<Rigidbody>();
         Physics.IgnoreLayerCollision(7,3);
+        _currentController = InputManager.GetController();
     }
     
     void Update()
@@ -80,9 +86,18 @@ public class CharacterControl : MonoBehaviour, IPunObservable
             }
             else
             {
-                Vector3 controllerInput = (_camera.transform.right * controllerHorizontal + Vector3.ProjectOnPlane(_camera.transform.forward, Vector3.up).normalized * controllerVertical);
-                Vector3 keyboardInput = (_camera.transform.right * keyboardHorizontal + Vector3.ProjectOnPlane(_camera.transform.forward, Vector3.up).normalized * keyBoardVertical);
-
+                Vector3 controllerInput = Vector3.zero;
+                Vector3 keyboardInput = Vector3.zero;
+                
+                if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
+                {
+                    controllerInput = (_camera.transform.right * controllerHorizontal + Vector3.ProjectOnPlane(_camera.transform.forward, Vector3.up).normalized * controllerVertical);
+                }
+                else if (_currentController == Controller.Other)
+                {
+                    keyboardInput = (_camera.transform.right * keyboardHorizontal + Vector3.ProjectOnPlane(_camera.transform.forward, Vector3.up).normalized * keyBoardVertical);
+                }
+                
                 _horizontalMovement = Mathf.Clamp(Input.GetAxis("Horizontal") + Input.GetAxis("LeftJoystickHorizontal"), -1, 1);
                 _verticalMovement = Mathf.Clamp(Input.GetAxis("Vertical") + Input.GetAxis("LeftJoystickVertical"), -1, 1);
 
@@ -177,4 +192,10 @@ public class CharacterControl : MonoBehaviour, IPunObservable
             door3.CloseDoor();
         }
     }
+
+    private void OnControllerTypeChanged()
+    {
+        _currentController = InputManager.GetController();
+    }
+
 }
