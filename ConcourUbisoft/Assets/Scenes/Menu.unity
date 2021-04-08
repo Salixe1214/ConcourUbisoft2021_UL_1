@@ -7766,6 +7766,7 @@ MonoBehaviour:
   _randomSeed: 0
   forceOrder: 0
   forceTwoPlayers: 0
+  _endGemMenu: {fileID: 1533351715}
   changeInverted:
     m_PersistentCalls:
       m_Calls: []
