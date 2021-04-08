@@ -45,7 +45,7 @@ public class SimpleButton : MonoBehaviour
     {
         string[] joysticks = Input.GetJoystickNames();
         return Input.GetMouseButtonDown(0) ||
-               (joysticks.Contains("Controller (Xbox One For Windows)") && Input.GetButtonDown("ConfirmXBO")) ||
+               ((joysticks.Contains("Controller (Xbox One For Windows)") || joysticks.Contains("Controller (GEM PAD EX)")) && Input.GetButtonDown("ConfirmXBO")) ||
                (joysticks.Contains("Wireless Controller") && Input.GetButtonDown("ConfirmPS"));
     }
 
