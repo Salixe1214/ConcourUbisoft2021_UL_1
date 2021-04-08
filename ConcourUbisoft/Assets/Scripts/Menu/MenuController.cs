@@ -136,37 +136,6 @@ public class MenuController : MonoBehaviour
             Debug.LogWarning(_beforeCredit);
             switch (_beforeCredit)
             {
-                case Menus.Credits:
-                    if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
-                    {
-                        _eventSystem.SetSelectedGameObject(null);
-                        _eventSystem.SetSelectedGameObject(_creditFirstSelected);
-                    }
-                    break;
-                case Menus.Lobby:
-                    _lobbyMenu.SetActive(true);
-                    if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
-                    {
-                        _eventSystem.SetSelectedGameObject(null);
-                        _eventSystem.SetSelectedGameObject(_lobbyFirstSelected);
-                    }
-                    break;
-                case Menus.Options:
-                    _optionMenu.SetActive(true);
-                    if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
-                    {
-                        _eventSystem.SetSelectedGameObject(null);
-                        _eventSystem.SetSelectedGameObject(_optionsFirstSelected);
-                    }
-                    break;
-                case Menus.Room:
-                    _roomMenu.SetActive(true);
-                    if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
-                    {
-                        _eventSystem.SetSelectedGameObject(null);
-                        _eventSystem.SetSelectedGameObject(_roomFirstSelected);
-                    }
-                    break;
                 case Menus.MainMenu:
                     if (!_gameController.IsGameStart)
                     {
