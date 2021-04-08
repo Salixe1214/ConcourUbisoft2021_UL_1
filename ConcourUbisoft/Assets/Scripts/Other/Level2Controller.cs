@@ -58,6 +58,8 @@ public class Level2Controller : MonoBehaviour, LevelController
     private Coroutine timerCoroutine;
     private int _nextWarningIndex;
     
+    [SerializeField] private AudioSource conveyorAudioSource = null;
+
     //TODO respawn items when sequence failed.
     
     public event Action<float> OnTimeChanged;
@@ -241,6 +243,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         _imageList.Clean();
         _soundController.StopAreaMusic();
         _dialogSystem.StartDialog("Area02_end");
+        conveyorAudioSource.Stop();
         if(_armController.IsInversedX())
         {
             _armController.InverseX();

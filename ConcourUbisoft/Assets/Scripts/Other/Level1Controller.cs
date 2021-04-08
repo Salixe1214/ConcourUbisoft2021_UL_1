@@ -61,6 +61,7 @@ public class Level1Controller : MonoBehaviour , LevelController
     [SerializeField] private float cameraShakeDurationSeconds = 0.2f;
     [Tooltip("Duration (Seconds) before next required item is spawned.")]
     [SerializeField] private float delayBeforeNextRequiredItem = 3f;
+    [SerializeField] private AudioSource conveyorAudioSource = null;
     
 
     private float conveyorOperatingSpeed;
@@ -254,6 +255,7 @@ public class Level1Controller : MonoBehaviour , LevelController
         soundController.PlayLevelSequenceClearedSuccessSound();
         FurnaceController.enabled = false;
         soundController.StopAreaMusic();
+        conveyorAudioSource.Stop();
         InteriorConveyorSpawner.gameObject.SetActive(false);
         ExteriorConveyorSpawner.gameObject.SetActive(false);
         yield return null;
