@@ -2,6 +2,7 @@ using Photon.Voice.PUN;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Inputs;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -116,7 +117,7 @@ public class RoomMenu : MonoBehaviour
         {
             GameObject roomElement = Instantiate(_roomMenuElementPrefab, _content.transform);
             roomElement.GetComponent<RoomElementController>().PlayerNetwork = playerNetwork;
-            roomElement.transform.Find("KickButton").GetComponent<Button>().onClick.AddListener(new UnityAction(() => { _menuSoundController.PlayButtonSound(); _networkController.KickPlayer(playerNetwork.Id); }));
+            roomElement.transform.Find("KickButton").GetComponent<Button>().onClick.AddListener(new UnityAction(() => { _menuSoundController.PlayButtonSound(); OnKickClicked(); _networkController.KickPlayer(playerNetwork.Id); }));
         }
 
         if (_networkController.GetNumberOfPlayer() != 2)
@@ -124,6 +125,15 @@ public class RoomMenu : MonoBehaviour
             Instantiate(_waitingForAnotherPlayer, _content.transform);
         }
     }
+
+    private void OnKickClicked()
+    {
+        if (InputManager.GetController() != Controller.Other)
+        {
+            EventSystem.current.SetSelectedGameObject(_startButton);
+        }
+    }
+
     private void OnJoinedRoomEvent()
     {
         _errorText.text = "";
