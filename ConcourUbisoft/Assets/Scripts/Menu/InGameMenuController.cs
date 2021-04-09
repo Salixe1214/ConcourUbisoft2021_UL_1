@@ -71,18 +71,24 @@ public class InGameMenuController : MonoBehaviour
     {
         _soundController.PlayButtonSound();
         _confirmationText.text = "Return to menu";
+        
         _confirmReturnButton.SetActive(true);
         _confirmExitButton.SetActive(false);
         _confirmationPanel.SetActive(true);
+        _eventSystem.SetSelectedGameObject(null);
+        _eventSystem.SetSelectedGameObject(_confirmReturnButton);
     }
 
     public void TriggerExit()
     {
         _soundController.PlayButtonSound();
         _confirmationText.text = "Exit the game";
+        
         _confirmReturnButton.SetActive(false);
         _confirmExitButton.SetActive(true);
         _confirmationPanel.SetActive(true);
+        _eventSystem.SetSelectedGameObject(null);
+        _eventSystem.SetSelectedGameObject(_confirmExitButton);
     }
 
     public void CancelTrigger()
