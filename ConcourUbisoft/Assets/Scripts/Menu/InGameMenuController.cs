@@ -75,8 +75,11 @@ public class InGameMenuController : MonoBehaviour
         _confirmReturnButton.SetActive(true);
         _confirmExitButton.SetActive(false);
         _confirmationPanel.SetActive(true);
-        _eventSystem.SetSelectedGameObject(null);
-        _eventSystem.SetSelectedGameObject(_confirmReturnButton);
+        if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
+        {
+            _eventSystem.SetSelectedGameObject(null);
+            _eventSystem.SetSelectedGameObject(_confirmReturnButton);
+        }
     }
 
     public void TriggerExit()
@@ -87,14 +90,21 @@ public class InGameMenuController : MonoBehaviour
         _confirmReturnButton.SetActive(false);
         _confirmExitButton.SetActive(true);
         _confirmationPanel.SetActive(true);
-        _eventSystem.SetSelectedGameObject(null);
-        _eventSystem.SetSelectedGameObject(_confirmExitButton);
+        if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
+        {
+            _eventSystem.SetSelectedGameObject(null);
+            _eventSystem.SetSelectedGameObject(_confirmExitButton);
+        }
     }
 
     public void CancelTrigger()
     {
         _soundController.PlayButtonSound();
         _confirmationPanel.SetActive(false);
+        if (_currentController == Controller.Xbox || _currentController == Controller.Playstation)
+        {
+            _eventSystem.SetSelectedGameObject(_menuFirstSelected);
+        }
     }
     public void ReturnToMenu()
     {
@@ -117,7 +127,10 @@ public class InGameMenuController : MonoBehaviour
         IsGameMenuOpen = false;
         _inGameMenu.SetActive(false);
         _eventSystem.SetSelectedGameObject(null);
-        _gameController.ToggleCursorLock();
+        if (_currentController == Controller.Other)
+        {
+            _gameController.ToggleCursorLock();
+        }
     }
 
     public void OpenCredits()
@@ -158,33 +171,43 @@ public class InGameMenuController : MonoBehaviour
         _inputManager = GameObject.FindWithTag("InputManager")?.GetComponent<InputManager>();
         _currentController = InputManager.GetController();
     }
+
     private void Update()
     {
-        if (_gameController.IsGameStart&&!_gameController.IsEndGameMenuOpen &&
-            (_currentController == Controller.Other && Input.GetButtonDown("Cancel")||
-                                            (_currentController == Controller.Playstation &&Input.GetButtonDown("InGameMenuPS"))||
-                                            (_currentController == Controller.Xbox&& Input.GetButtonDown("InGameMenuXBO"))))
+        if (_gameController.IsGameStart&&!_gameController.IsEndGameMenuOpen &&(
+            (_currentController == Controller.Other && Input.GetButtonUp("Cancel"))||
+             (_currentController == Controller.Playstation &&Input.GetButtonUp("InGameMenuPS"))||
+             (_currentController == Controller.Xbox&& Input.GetButtonUp("InGameMenuXBO"))))
         {
             if (IsGameMenuOpen)
             {
                 ResetButtonTextColor();
                 _inGameMenu.SetActive(false);
                 _optionMenu.SetActive(false);
+                IsGameMenuOpen = false;
                 OnInGameMenuClosed?.Invoke();
+                EventSystem.current.SetSelectedGameObject(null);
+                if (_currentController == Controller.Other)
+                {
+                    _gameController.ToggleCursorLock();
+                }
             }
             else
             {
                 _inGameMenu.SetActive(true);
-                _optionMenu.SetActive(false);
+                IsGameMenuOpen = true;
+                //_optionMenu.SetActive(false);
                 if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
                 {
-                    Cursor.visible = false;
-                    _eventSystem.SetSelectedGameObject(null);
+                     Cursor.visible = false;
+                     _eventSystem.SetSelectedGameObject(null);
                     _eventSystem.SetSelectedGameObject(_menuFirstSelected);
                 }
+                else
+                {
+                    _gameController.ToggleCursorLock();
+                }
             }
-            _gameController.ToggleCursorLock();
-            IsGameMenuOpen = !IsGameMenuOpen;
         }
     }
     
@@ -193,6 +216,7 @@ public class InGameMenuController : MonoBehaviour
         Debug.Log("Subscribed to controller type changed event");
         _inputManager.OnControllerTypeChanged += OnControllerTypeChanged;
         _networkController.OnDisconnectEvent += OnDisconnectEvent;
+        //_eventSystem.SetSelectedGameObject(_menuFirstSelected);
     }
 
     private void OnDisable()
@@ -240,7 +264,8 @@ public class InGameMenuController : MonoBehaviour
             ResetButtonTextColor();
             _inGameMenu.SetActive(false);
             _optionMenu.SetActive(false);
-            IsGameMenuOpen = !IsGameMenuOpen;
+            IsGameMenuOpen = false;
+            _eventSystem.SetSelectedGameObject(null);
         }
     }
 

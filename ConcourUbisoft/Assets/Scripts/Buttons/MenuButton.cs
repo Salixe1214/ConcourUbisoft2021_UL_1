@@ -48,7 +48,7 @@ namespace Buttons
 
         private void OnControllerTypeChanged()
         {
-            if (InputManager.GetController() == Controller.Other || !_selected)
+            if (InputManager.GetController() == Controller.Other)
             {
                 EventSystem.current.SetSelectedGameObject(null);
             }
@@ -73,12 +73,14 @@ namespace Buttons
         public override void OnSelect(BaseEventData eventData)
         {
             base.OnSelect(eventData);
+            _selected = true;
             _coloredText.OnSelectedEnter();
         }
 
         public override void OnDeselect(BaseEventData eventData)
         {
             base.OnDeselect(eventData);
+            _selected = false;
             _coloredText.OnSelectedExit();
         }
 

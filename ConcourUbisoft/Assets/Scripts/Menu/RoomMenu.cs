@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class RoomMenu : MonoBehaviour
@@ -57,6 +58,7 @@ public class RoomMenu : MonoBehaviour
             } 
         }
 
+        EventSystem.current.SetSelectedGameObject(null);
         _menuSoundController.PlayButtonSound();
         _errorText.text = "";
         _gameController.InitiateStartGame(_networkController.GetLocalRole(), _colorBlindToggle.isOn);
