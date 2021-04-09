@@ -63,7 +63,7 @@ namespace Inputs
         {
             IEnumerable<string> joysticks = Input.GetJoystickNames(); 
             
-            if (joysticks.Contains("Controller (Xbox One For Windows)")||joysticks.Contains("Controller (GEM PAD EX)"))
+            if (joysticks.Contains("Controller (Xbox One For Windows)"))
             {
                 _controller = Controller.Xbox;
             }

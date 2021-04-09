@@ -47,13 +47,13 @@ namespace Menu
 
         private void OnEnable()
         {
-            _inputManager.OnControllerTypeChanged += OnControllerTypeChanged;
+            //_inputManager.OnControllerTypeChanged += OnControllerTypeChanged;
             _networkController.OnDisconnectEvent += OnDisconnectEvent;
         }
 
         private void OnDisable()
         {
-            _inputManager.OnControllerTypeChanged -= OnControllerTypeChanged;
+           // _inputManager.OnControllerTypeChanged -= OnControllerTypeChanged;
             _networkController.OnDisconnectEvent -= OnDisconnectEvent;
         }
 
@@ -61,6 +61,8 @@ namespace Menu
         {
             EndGameMenu.SetActive(true);
             _isEndMenuOpen = true;
+            _currentController = InputManager.GetController();
+            Debug.Log(_currentController + " endMenu controller");
             if (_currentController == Controller.Playstation || _currentController == Controller.Xbox)
             {
                 _eventSystem.SetSelectedGameObject(null);
@@ -105,7 +107,7 @@ namespace Menu
             _confirmationPanel.SetActive(false);
         }
 
-        private void OnControllerTypeChanged()
+       /* private void OnControllerTypeChanged()
         {
             Inputs.Controller newController = InputManager.GetController();
             if (newController == Controller.Other)
@@ -123,14 +125,14 @@ namespace Menu
                 {
                     if (_currentController == Controller.Other)
                     {
-                        Cursor.lockState = CursorLockMode.Locked;
-                    }
+                        //Cursor.lockState = CursorLockMode.Locked;
+                    } 
                     _eventSystem.SetSelectedGameObject(null);
                     _eventSystem.SetSelectedGameObject(MenuFirstSelected);
                 }
                 _currentController = newController;
             }
-        }
+        }*/
         
         private void OnDisconnectEvent()
         {

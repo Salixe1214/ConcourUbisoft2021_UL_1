@@ -81,7 +81,7 @@ public class CameraMovement : MonoBehaviour
             controllerY_XBO *= -1;
         
         
-        if ((joysticks.Contains("Controller (Xbox One For Windows)") || joysticks.Contains("Controller (GEM PAD EX)"))&& !_gameController.IsEndGameMenuOpen)
+        if ((joysticks.Contains("Controller (Xbox One For Windows)"))&& !_gameController.IsEndGameMenuOpen)
         {
             controllerYAccumulator -= controllerY_XBO;
             controllerXAccumulator += controllerX_XBO;
