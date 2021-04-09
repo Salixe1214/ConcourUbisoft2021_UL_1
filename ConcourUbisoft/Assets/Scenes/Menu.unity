@@ -7262,12 +7262,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: -1
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnLeft: {fileID: 6214209459457336400}
+    m_SelectOnRight: {fileID: 6214209459457336400}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
@@ -7637,12 +7637,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnLeft: {fileID: 1162556763}
+    m_SelectOnRight: {fileID: 1162556763}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
@@ -8209,7 +8209,7 @@ GameObject:
   - component: {fileID: 1311755603}
   m_Layer: 0
   m_Name: EventSystem
-  m_TagString: Untagged
+  m_TagString: EventSystem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8232,7 +8232,7 @@ MonoBehaviour:
   m_CancelButton: Cancel
   m_InputActionsPerSecond: 10
   m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
+  m_ForceModuleActive: 1
 --- !u!114 &1311755604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9843,6 +9843,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _title: {fileID: 1036656226}
   _message: {fileID: 0}
+  _CancelButton: {fileID: 560043172}
 --- !u!222 &1476998716
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17675,12 +17676,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnLeft: {fileID: 1162556763}
+    m_SelectOnRight: {fileID: 1162556763}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
@@ -17923,7 +17924,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!222 &6995483397052258855
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -18204,6 +18205,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _title: {fileID: 3775417352792728542}
   _message: {fileID: 0}
+  _CancelButton: {fileID: 1162556760}
 --- !u!222 &7701201737385333495
 CanvasRenderer:
   m_ObjectHideFlags: 0
