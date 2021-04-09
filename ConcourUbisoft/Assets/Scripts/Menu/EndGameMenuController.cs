@@ -37,14 +37,6 @@ namespace Menu
             _isEndMenuOpen = false;
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyUp(KeyCode.V))
-            {
-                ShowEndGameMenu();
-            }
-        }
-
         private void OnEnable()
         {
             //_inputManager.OnControllerTypeChanged += OnControllerTypeChanged;

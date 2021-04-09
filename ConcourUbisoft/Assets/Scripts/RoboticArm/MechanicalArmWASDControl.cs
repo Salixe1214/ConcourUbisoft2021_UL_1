@@ -39,9 +39,10 @@ namespace Arm
                 Vector3 translation = new Vector3(-Input.GetAxisRaw("Vertical"), 0, Input.GetAxisRaw("Horizontal"));
 
                 _armController.Translate(translation);
-                
 
-                if ((Input.GetButtonDown("Grab") ||
+                _currentController = InputManager.GetController();
+                Debug.Log(_currentController + "Arm");
+                if (((Input.GetButtonUp("Grab") && _currentController == Controller.Other)||
                      (Input.GetButtonUp("GrabControllerXBO") && _currentController == Controller.Xbox) ||
                      (Input.GetButtonUp("GrabControllerPS")&& _currentController == Controller.Playstation)))
                 {
