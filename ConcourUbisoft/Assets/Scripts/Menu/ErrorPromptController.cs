@@ -13,6 +13,7 @@ public class ErrorPromptController : MonoBehaviour
 
     [SerializeField] private Text _title = null;
     [SerializeField] private Text _message = null;
+    [SerializeField] private GameObject _CancelButton = null;
 
     private SoundController _menuSoundController = null;
     private EventSystem _eventSystem = null;
@@ -22,10 +23,22 @@ public class ErrorPromptController : MonoBehaviour
     #region Unity Callbacks
     private void Start()
     {
-        _eventSystem = GameObject.FindObjectOfType<EventSystem>();
+        _eventSystem = GameObject.FindWithTag("EventSystem").GetComponent<EventSystem>();
         _menuSoundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
-        _eventSystem.SetSelectedGameObject(null);
-        _eventSystem.SetSelectedGameObject(GameObject.Find("OKButton"));
+        
+
+        if (_CancelButton != null)
+        {
+            //_eventSystem.SetSelectedGameObject(null);
+            _eventSystem.SetSelectedGameObject(_CancelButton);
+        }
+        else
+        {
+            _eventSystem.SetSelectedGameObject(null);
+            _eventSystem.SetSelectedGameObject(GameObject.Find("OKButton"));
+        }
+
+        
     }
     #endregion
     #region UI Actions

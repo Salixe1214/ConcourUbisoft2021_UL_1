@@ -20,6 +20,7 @@ TagManager:
   - ColorBlind
   - EndZoneCollider
   - EndMenu
+  - EventSystem
   layers:
   - Default
   - TransparentFX
