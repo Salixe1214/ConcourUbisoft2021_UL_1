@@ -49,43 +49,7 @@ namespace Buttons
                 OnDeselected();
             }
         }
-
-        public override void OnPointerEnter(PointerEventData eventData)
-        {
-            base.OnPointerEnter(eventData);
-            if (isOn || !interactable) return;
-            _text.OnSelectedEnter();
-            graphic.color = colors.selectedColor;
-        }
-
-        public override void OnPointerExit(PointerEventData eventData)
-        {
-            base.OnPointerExit(eventData);
-            if (isOn || !interactable) return;
-            _text.OnSelectedExit();
-            graphic.color = colors.normalColor;
-        }
-
-        public override void OnSelect(BaseEventData eventData)
-        {
-            base.OnSelect(eventData);
-            if (!interactable) return;
-            graphic.color = colors.highlightedColor;
-        }
-
-        public override void OnDeselect(BaseEventData eventData)
-        {
-            base.OnDeselect(eventData);
-            if (!interactable) return;
-            if (!isOn)
-            {
-                graphic.color = colors.normalColor;
-            }
-            else
-            {
-                graphic.color = colors.selectedColor;
-            }
-        }
+        
 
         public void OnSelected()
         {
