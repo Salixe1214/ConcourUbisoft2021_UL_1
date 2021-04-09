@@ -69,6 +69,7 @@ namespace Menu
             else
             {
                 Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
         }
 

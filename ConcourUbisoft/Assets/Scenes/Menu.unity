@@ -5959,18 +5959,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 992868222}
-          m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
-          m_MethodName: OnDeselect
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!114 &992868222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7805,7 +7793,7 @@ MonoBehaviour:
   _pauseMenu: {fileID: 1825345722}
   _randomSeed: 1
   forceOrder: 1
-  forceTwoPlayers: 1
+  forceTwoPlayers: 0
   _endGemMenu: {fileID: 1533351715}
   changeInverted:
     m_PersistentCalls:
@@ -13725,18 +13713,6 @@ MonoBehaviour:
           m_TargetAssemblyTypeName: Other.TextColor, Assembly-CSharp
           m_MethodName: OnSelectedExit
           m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 1912968278}
-          m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
-          m_MethodName: OnDeselect
-          m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
