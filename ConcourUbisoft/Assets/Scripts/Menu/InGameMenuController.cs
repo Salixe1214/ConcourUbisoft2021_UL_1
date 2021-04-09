@@ -243,7 +243,11 @@ public class InGameMenuController : MonoBehaviour
     #region Private
     private void OnDisconnectEvent()
     {
+        IsGameMenuOpen = false;
         _inGameMenu.SetActive(false);
+        _confirmReturnButton.SetActive(false);
+        _confirmExitButton.SetActive(false);
+        _confirmationPanel.SetActive(false);
     }
     #endregion
 }
