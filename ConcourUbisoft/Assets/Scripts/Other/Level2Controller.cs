@@ -31,6 +31,7 @@ public class Level2Controller : MonoBehaviour, LevelController
     [SerializeField] private GameObject _checkPrefabs;
     [SerializeField] private Material _blurMaterial;
     [SerializeField] private Material _fontMaterial;
+    [SerializeField] private Sprite _questionSprite;
     [SerializeField] private GameController.Role _emissionVisibleBy = GameController.Role.None;
     [SerializeField] private float LevelMaxAmountOfTimeSeconds = 120;
     [SerializeField] private float TimeLeftIfFirstSequenceFailed = 120;
@@ -121,6 +122,7 @@ public class Level2Controller : MonoBehaviour, LevelController
         _imageList = new GameObject().AddComponent<ImageLayout>();
         _imageList.SetBlurMaterial(_blurMaterial);
         _imageList.SetFontMaterial(_fontMaterial);
+        _imageList.SetQuestion(_questionSprite);
         _imageList.SetCheckImage(_checkPrefabs);
         _imageList.GetComponent<RectTransform>().SetParent(_information.transform);
         _imageList.Font = _font;

@@ -146,7 +146,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _InvFade: 1
-    - _KernelSize: 6
+    - _KernelSize: 4
     - _METALNESS: 0
     - _Metallic: 0
     - _Mode: 0

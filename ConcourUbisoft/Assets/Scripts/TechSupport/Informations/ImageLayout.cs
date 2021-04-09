@@ -8,11 +8,12 @@ namespace TechSupport.Informations
     public class ImageLayout : HorizontalLayoutGroup
     {
         private static readonly int Checked = Animator.StringToHash("Checked");
-        
+        private IEnumerable<Sprite> _sprites;
         private readonly List<Image> _images;
         private GameObject _checkAnimation = null;
         private Material _blurMaterial = null;
         private Material _fontMaterial = null;
+        private Sprite _question = null;
         public Font Font { get; set; }
         public float TextOffset { get; set; } = -40.0f;
 
@@ -41,19 +42,18 @@ namespace TechSupport.Informations
 
             Text text = (new GameObject()).AddComponent<Text>();
             text.text = "";
-            text.material = _fontMaterial;
             text.font = Font;
             text.alignment = TextAnchor.UpperCenter;
             text.GetComponent<RectTransform>().SetParent(image.transform);
+            text.enabled = false;
 
             RectTransform textTransform = text.GetComponent<RectTransform>();
             textTransform.sizeDelta = new Vector2(100,20);
             text.transform.Translate(new Vector3(0, TextOffset, 0));
 
             image.preserveAspect = true;
-            image.material = _blurMaterial;
             image.GetComponent<RectTransform>()?.SetParent(gameObject.transform);
-
+            
             RectTransform imageTransform = image.GetComponent<RectTransform>();
             imageTransform.anchorMax = new Vector2(0, 0);
             imageTransform.anchorMin = new Vector2(0, 0);
@@ -62,7 +62,7 @@ namespace TechSupport.Informations
             imageTransform.localPosition = new Vector3(0, 0, 0);
             imageTransform.localRotation = Quaternion.identity;
             imageTransform.anchoredPosition = new Vector2(0, 0);
-            
+
             return image;
         }
 
@@ -88,6 +88,11 @@ namespace TechSupport.Informations
             _fontMaterial = material;
         }
 
+        public void SetQuestion(Sprite question)
+        {
+            _question = question;
+        }
+
         public void CheckSprite(int index)
         {
             if (!_checkAnimation)
@@ -110,11 +115,13 @@ namespace TechSupport.Informations
             if (index > 0)
             {
                 CheckSprite(index - 1);
-                BlurImage(index - 1, true);
+                // BlurImage(index - 1, true);
             }
             if (index >= _images.Count)
                 return;
-            BlurImage(index, false);
+            _images[index].sprite = _sprites.ElementAt(index);
+            _images[index].gameObject.GetComponentInChildren<Text>().enabled = true;
+            // BlurImage(index, false);
         }
 
         public void DeleteSprite(int at)
@@ -139,11 +146,11 @@ namespace TechSupport.Informations
             _images[index].color = color;
         }
 
-        public void AddSprite(Sprite sprite, Color color)
+        public void AddSprite(Color color)
         {
             Image image = CreateImageObject();
             image.color = color;
-            image.sprite = sprite;
+            image.sprite = _question;
             image.gameObject.SetActive(true);
             image.GetComponentInChildren<Text>().text = _gameController.GetColorName(color);
             _images.Add(image);
@@ -160,9 +167,10 @@ namespace TechSupport.Informations
 
         public void CreateLayout(IEnumerable<Sprite> images, Color[] colors)
         {
+            _sprites = images;
             for (int i = 0; i < images.Count(); i++)
             {
-                AddSprite(images.ElementAt(i),colors[i]);
+                AddSprite(colors[i]);
             }
             SelectItem(0);
         }
@@ -171,12 +179,13 @@ namespace TechSupport.Informations
         {
             int i = 0;
 
+            _sprites = images;
             foreach (Sprite image in images)
             {
                 if (i < _images.Count)
                     UpdateSprite(i, image);
                 else
-                    AddSprite(image, Color.white);
+                    AddSprite( Color.white);
                 i++;
             }
         }
