@@ -66,7 +66,6 @@ namespace Buttons
             graphic.color = colors.normalColor;
         }
 
-
         public override void OnSelect(BaseEventData eventData)
         {
             base.OnSelect(eventData);
