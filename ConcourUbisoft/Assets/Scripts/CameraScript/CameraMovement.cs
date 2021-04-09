@@ -70,13 +70,13 @@ public class CameraMovement : MonoBehaviour
         if (invetedY)
             mouseY *= -1;
         
-        float controllerX_PS = Input.GetAxis("RightJoystickHorizontalPS")*controllerSensitivityX;
-        float controllerY_PS = Input.GetAxis("RightJoystickVerticalPS")*controllerSensitivityY;
+        float controllerX_PS = Mathf.Pow(Input.GetAxis("RightJoystickHorizontalPS")*controllerSensitivityX, 5);
+        float controllerY_PS = Mathf.Pow(Input.GetAxis("RightJoystickVerticalPS")*controllerSensitivityY, 5);
         if (invetedY)
             controllerY_PS *= -1;
         
-        float controllerX_XBO = Input.GetAxis("RightJoystickHorizontalXBO")*controllerSensitivityX;
-        float controllerY_XBO = Input.GetAxis("RightJoystickVerticalXBO") * controllerSensitivityY;
+        float controllerX_XBO = Mathf.Pow(Input.GetAxis("RightJoystickHorizontalXBO")*controllerSensitivityX, 5);
+        float controllerY_XBO = Mathf.Pow(Input.GetAxis("RightJoystickVerticalXBO") * controllerSensitivityY, 5);
         if (invetedY)
             controllerY_XBO *= -1;
         
