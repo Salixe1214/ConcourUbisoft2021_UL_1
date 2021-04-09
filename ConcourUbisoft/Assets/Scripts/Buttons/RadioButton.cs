@@ -14,7 +14,8 @@ namespace Buttons
         private RadioGroup _group;
         private TextColor _text;
         [SerializeField] private int value;
-
+        
+        
         public bool Interactable
         {
             get => interactable;
@@ -43,9 +44,17 @@ namespace Buttons
             {
                 OnSelected();
                 _group.Set(value);
+                ColorBlock newColorBlock = colors;
+                newColorBlock.disabledColor = new Color(graphic.color.r, graphic.color.g, graphic.color.b, 1f);
+                colors = newColorBlock;
+                //graphic.color = new Color(graphic.color.r, graphic.color.g, graphic.color.b, 1f);
             }
             else
             {
+                ColorBlock newColorBlock = colors;
+                newColorBlock.disabledColor = new Color(graphic.color.r, graphic.color.g, graphic.color.b, 0f);
+                colors = newColorBlock;
+                //graphic.color = new Color(graphic.color.r, graphic.color.g, graphic.color.b, 0f);
                 OnDeselected();
             }
         }
